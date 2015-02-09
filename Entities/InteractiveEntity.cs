@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using Matcha.Game.Tweens;
 
@@ -12,6 +13,25 @@ public class InteractiveEntity : MonoBehaviour
     public bool alreadyCollided = false;
     public bool disableIfOffScreen = true;
     public int worth;
+
+    void Start()
+    {
+        switch (entityType)
+        {
+        case EntityType.none:
+            break;
+
+        case EntityType.prize:
+                // still buggy
+                // needs to be more succint
+                transform.position = new Vector3(transform.position.x, (float)(Math.Ceiling(transform.position.y) - .623f), transform.position.z);
+            break;
+
+        case EntityType.weapon:
+
+            break;
+        }
+    }
 
     void OnBecameInvisible() 
     {
