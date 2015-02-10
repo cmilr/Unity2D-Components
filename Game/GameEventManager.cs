@@ -6,13 +6,6 @@ using System.Collections;
 
 public class GameEventManager : CacheBehaviour
 {
-    private GameData gameData;
-
-    void Start()
-    {
-        gameData = GetComponent<GameData>();
-    }
-
     // EVENT LISTENERS
     void OnEnable()
     {
@@ -24,11 +17,10 @@ public class GameEventManager : CacheBehaviour
         Messenger.RemoveListener<GameObject, int>( "prize collected", OnPrizeCollected );
     }
 
-
     // EVENT RESPONDERS
     void OnPrizeCollected(GameObject prize, int worth)
     {
-        gameData.currentScore += worth;
-        Messenger.Broadcast<int>("change score", gameData.currentScore);
+        GameData.IncreaseScore(worth);
+        Messenger.Broadcast<int>("change score", GameData.GetScore());
     }
 }
