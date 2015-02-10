@@ -12,7 +12,25 @@ public class GameData : MonoBehaviour
     // level stats.
     private static int _currentLevel;  
 
-	public static int GetScore()
+    // EVENT LISTENERS
+    void OnEnable()
+    {
+        Messenger.AddListener<GameObject, int>( "prize collected", OnPrizeCollected );
+    }
+
+    void OnDisable()
+    {
+        Messenger.RemoveListener<GameObject, int>( "prize collected", OnPrizeCollected );
+    }
+
+    // EVENT RESPONDERS
+    void OnPrizeCollected(GameObject prize, int worth)
+    {
+        _currentScore += worth;
+        Messenger.Broadcast<int>("change score", _currentScore);
+    }
+
+    public static int GetScore()
 	{
 		return _currentScore;
 	}

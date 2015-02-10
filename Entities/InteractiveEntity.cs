@@ -18,10 +18,7 @@ public class InteractiveEntity : CacheBehaviour
     {   
         base.CacheComponents();
 
-        if (entityType == EntityType.prize) 
-        { 
-            AutoAlign(); 
-        }
+        if (entityType == EntityType.prize) AutoAlign();
     }
 
     public void React()
@@ -57,8 +54,8 @@ public class InteractiveEntity : CacheBehaviour
 
     void AutoAlign()
     {
-        float autoYPlacement = (float)(Math.Ceiling(transform.position.y) - .623f);
-        transform.position = new Vector3(transform.position.x, autoYPlacement, transform.position.z);
+        float targetY = (float)(Math.Ceiling(transform.position.y) - .623f);
+        transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
     }
 
     public void SelfDestruct(int inSeconds)
