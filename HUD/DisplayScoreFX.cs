@@ -6,13 +6,13 @@ using Matcha.Game.Tweens;
 
 public class DisplayScoreFX : MonoBehaviour 
 {
-    private Text score;
+    private Text scoreUI;
     private int currentscore;
 
     void Start () 
     {
-        score = gameObject.GetComponent<Text>();
-        score.text = currentscore.ToString();
+        scoreUI = gameObject.GetComponent<Text>();
+        scoreUI.text = currentscore.ToString();
     }
 
     // EVENT LISTENERS
@@ -29,7 +29,7 @@ public class DisplayScoreFX : MonoBehaviour
     // EVENT RESPONDERS
     void OnChangeScore(int newScore)
     {
-        score.text = newScore.ToString();
-        MTween.DisplayScoreFX(gameObject, score);
+        scoreUI.text = newScore.ToString();
+        MTween.DisplayScoreFX(gameObject, scoreUI);
     }
 }
