@@ -17,6 +17,7 @@ public class InteractiveEntity : CacheBehaviour
     void Start()
     {
         float autoY;
+        
         base.CacheComponents();
 
         switch (entityType)
