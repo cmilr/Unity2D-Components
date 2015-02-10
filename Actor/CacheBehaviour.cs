@@ -13,23 +13,23 @@ public class CacheBehaviour : MonoBehaviour
     [HideInInspector]
     public new Collider2D collider2D;
     [HideInInspector]
-    public new Renderer renderer;
-    [HideInInspector]
     public new Rigidbody rigidbody;
     [HideInInspector]
     public new Rigidbody2D rigidbody2D;
+    [HideInInspector]
+    public new Renderer renderer;
     [HideInInspector]
     public new Transform transform;
 
     public void CacheComponents()
     {
         transform = gameObject.transform;
-        if (gameObject.audio) audio = gameObject.audio;
-        if (gameObject.camera) camera = gameObject.camera;
-        if (gameObject.collider) collider = gameObject.collider;
-        if (gameObject.collider2D) collider2D = gameObject.collider2D;
-        if (gameObject.renderer) renderer = gameObject.renderer;
-        if (gameObject.rigidbody) rigidbody = gameObject.rigidbody;
-        if (gameObject.rigidbody2D) rigidbody2D = gameObject.rigidbody2D;
+        audio = gameObject.GetComponent<AudioSource>() as AudioSource;
+        camera = gameObject.GetComponent<Camera>() as Camera;
+        collider = gameObject.GetComponent<Collider>() as Collider;
+        collider2D = gameObject.GetComponent<Collider2D>() as Collider2D;
+        rigidbody = gameObject.GetComponent<Rigidbody>() as Rigidbody;
+        rigidbody2D = gameObject.GetComponent<Rigidbody2D>() as Rigidbody2D;
+        renderer = gameObject.GetComponent<Renderer>() as Renderer;
     }
 }

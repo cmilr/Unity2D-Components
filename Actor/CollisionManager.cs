@@ -8,7 +8,6 @@ public class CollisionManager : CacheBehaviour
 {
     private GameObject coll;
     private InteractiveEntity interEntity;
-    private InteractiveEntity interTemp;
 
     void Start()
     {
@@ -19,8 +18,7 @@ public class CollisionManager : CacheBehaviour
     {
         coll = col.gameObject;
 
-        if (interTemp = coll.GetComponent<InteractiveEntity>())
-            interEntity = interTemp;
+        interEntity = coll.GetComponent<InteractiveEntity>() as InteractiveEntity;
 
         if (coll.tag == "Prize" && !interEntity.alreadyCollided)
         {
