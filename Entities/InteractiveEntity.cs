@@ -15,37 +15,13 @@ public class InteractiveEntity : CacheBehaviour
     public int worth;
 
     void Start()
-    {
-        float autoY;
-        
+    {   
         base.CacheComponents();
 
-        switch (entityType)
-        {
-        case EntityType.none:
-            break;
-
-        case EntityType.prize:
-                autoY = (float)(Math.Ceiling(transform.position.y) - .623f);
-                transform.position = new Vector3(transform.position.x, autoY, transform.position.z);
-            break;
-
-        case EntityType.weapon:
-
-            break;
+        if (entityType == EntityType.prize) 
+        { 
+            AutoAlign(); 
         }
-    }
-
-    void OnBecameInvisible() 
-    {
-        if(disableIfOffScreen)
-            gameObject.SetActive(false);
-    }
-
-    void OnBecameVisible() 
-    {
-        if(disableIfOffScreen)
-            gameObject.SetActive(true);
     }
 
     public void React()
@@ -65,6 +41,24 @@ public class InteractiveEntity : CacheBehaviour
                 MTween.PickupWeapon(gameObject);
             break;
         }
+    }
+
+    void OnBecameInvisible() 
+    {
+        if(disableIfOffScreen)
+            gameObject.SetActive(false);
+    }
+
+    void OnBecameVisible() 
+    {
+        if(disableIfOffScreen)
+            gameObject.SetActive(true);
+    }
+
+    void AutoAlign()
+    {
+        float autoYPlacement = (float)(Math.Ceiling(transform.position.y) - .623f);
+        transform.position = new Vector3(transform.position.x, autoYPlacement, transform.position.z);
     }
 
     public void SelfDestruct(int inSeconds)
