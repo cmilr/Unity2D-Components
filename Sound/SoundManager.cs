@@ -16,17 +16,17 @@ public class SoundManager : CacheBehaviour
     // EVENT LISTENERS
     void OnEnable()
     {
-        Messenger.AddListener<GameObject, int>( "prize collected", OnPrizeCollected );
+        Messenger.AddListener<int>( "prize collected", OnPrizeCollected );
     }
 
     void OnDisable()
     {
-        Messenger.RemoveListener<GameObject, int>( "prize collected", OnPrizeCollected );
+        Messenger.RemoveListener<int>( "prize collected", OnPrizeCollected );
     }
 
 
     // EVENT RESPONDERS
-    void OnPrizeCollected(GameObject prize, int worth)
+    void OnPrizeCollected(int worth)
     {
         audio.PlayOneShot(collectPrize, 0.1F);
     }

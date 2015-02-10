@@ -22,7 +22,7 @@ public class CollisionManager : CacheBehaviour
 
         if (coll.tag == "Prize" && !interEntity.alreadyCollided)
         {
-            Messenger.Broadcast<GameObject, int>("prize collected", coll, interEntity.worth);
+            Messenger.Broadcast<int>("prize collected", interEntity.worth);
             interEntity.React();
         }
     }
