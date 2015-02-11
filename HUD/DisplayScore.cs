@@ -21,7 +21,7 @@ public class DisplayScore : MonoBehaviour
 		Messenger.AddListener<int>("change score", OnChangeScore);
 	}
 
-	void OnDisable()
+	void OnDestroy()
 	{
 		Messenger.RemoveListener<int>("change score", OnChangeScore);
 	}

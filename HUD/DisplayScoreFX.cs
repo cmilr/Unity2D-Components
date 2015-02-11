@@ -9,7 +9,7 @@ public class DisplayScoreFX : MonoBehaviour
 	private Text scoreUI;
 	private int currentscore;
 
-	void Start ()
+	void Start()
 	{
 		scoreUI = gameObject.GetComponent<Text>();
 		scoreUI.text = currentscore.ToString();
@@ -20,8 +20,8 @@ public class DisplayScoreFX : MonoBehaviour
 	{
 		Messenger.AddListener<int>("change score", OnChangeScore);
 	}
-
-	void OnDisable()
+	
+	void OnDestroy()
 	{
 		Messenger.RemoveListener<int>("change score", OnChangeScore);
 	}

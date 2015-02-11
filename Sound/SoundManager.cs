@@ -19,7 +19,7 @@ public class SoundManager : CacheBehaviour
 		Messenger.AddListener<int>( "prize collected", OnPrizeCollected );
 	}
 
-	void OnDisable()
+	void OnDestroy()
 	{
 		Messenger.RemoveListener<int>( "prize collected", OnPrizeCollected );
 	}

@@ -18,7 +18,7 @@ public class GameData : MonoBehaviour
 		Messenger.AddListener<int>( "prize collected", OnPrizeCollected );
 	}
 
-	void OnDisable()
+	void OnDestroy()
 	{
 		Messenger.RemoveListener<int>( "prize collected", OnPrizeCollected );
 	}
@@ -28,6 +28,7 @@ public class GameData : MonoBehaviour
 	{
 		_currentScore += worth;
 		Messenger.Broadcast<int>("change score", _currentScore);
+		Messenger.MarkAsPermanent("change score");
 	}
 
 	public int CurrentScore
