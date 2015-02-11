@@ -17,7 +17,6 @@ public class CollisionManager : CacheBehaviour
 	void OnTriggerEnter2D(Collider2D col)
 	{
 		coll = col.gameObject;
-
 		interEntity = coll.GetComponent<InteractiveEntity>() as InteractiveEntity;
 
 		if (coll.tag == "Prize" && !interEntity.AlreadyCollided)

@@ -10,7 +10,7 @@ public class InteractiveEntity : CacheBehaviour
 	public EntityType entityType;
 	public bool disableIfOffScreen = true;
 	public int worth;
-	
+
 	public bool AlreadyCollided { get; set; }
 
 	void Start()
@@ -18,9 +18,7 @@ public class InteractiveEntity : CacheBehaviour
 		base.CacheComponents();
 
 		if (entityType == EntityType.prize)
-		{
 			AutoAlign();
-		}
 	}
 
 	public void React()
@@ -45,17 +43,13 @@ public class InteractiveEntity : CacheBehaviour
 	void OnBecameInvisible()
 	{
 		if (disableIfOffScreen)
-		{
 			gameObject.SetActive(false);
-		}
 	}
 
 	void OnBecameVisible()
 	{
 		if (disableIfOffScreen)
-		{
 			gameObject.SetActive(true);
-		}
 	}
 
 	void AutoAlign()
