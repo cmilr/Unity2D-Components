@@ -5,48 +5,48 @@ using System.Collections;
 public class GameData : MonoBehaviour
 {
 	// player stats.
-    private static int _currentScore;     	    
-    private static int _lastSavedScore;
-    private static int _lives = 3;
+	private static int _currentScore;
+	private static int _lastSavedScore;
+	private static int _lives = 3;
 
-    // level stats.
-    private static int _currentLevel;  
+	// level stats.
+	private static int _currentLevel;
 
-    // EVENT LISTENERS
-    void OnEnable()
-    {
-        Messenger.AddListener<int>( "prize collected", OnPrizeCollected );
-    }
 
-    void OnDisable()
-    {
-        Messenger.RemoveListener<int>( "prize collected", OnPrizeCollected );
-    }
-
-    // EVENT RESPONDERS
-    void OnPrizeCollected(int worth)
-    {
-        _currentScore += worth;
-        Messenger.Broadcast<int>("change score", _currentScore);
-    }
-
-    public static int GetScore()
+	// EVENT LISTENERS
+	void OnEnable()
 	{
-		return _currentScore;
+		Messenger.AddListener<int>( "prize collected", OnPrizeCollected );
 	}
 
-	public static void IncreaseScore(int addScore)
+	void OnDisable()
 	{
-		_currentScore += addScore;
+		Messenger.RemoveListener<int>( "prize collected", OnPrizeCollected );
 	}
 
-	public static int GetLives()
+
+	// EVENT RESPONDERS
+	void OnPrizeCollected(int worth)
 	{
-		return _lives;
+		_currentScore += worth;
+		Messenger.Broadcast<int>("change score", _currentScore);
 	}
 
-	public static void IncreaseLives(int addLives)
+
+	public int CurrentScore
 	{
-		_lives += addLives;
+		get
+		{
+			return _currentScore;
+		}
+	}
+
+
+	public int Lives
+	{
+		get
+		{
+			return _lives;
+		}
 	}
 }

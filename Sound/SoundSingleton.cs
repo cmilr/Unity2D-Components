@@ -23,7 +23,6 @@ public class SoundSingleton : MonoBehaviour
         }
     }
 
-
     void Awake()
     {
         if (_instance == null)

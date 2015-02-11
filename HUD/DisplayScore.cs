@@ -4,32 +4,32 @@ using System.Collections;
 using Matcha.Game.Tweens;
 
 
-public class DisplayScore : MonoBehaviour 
+public class DisplayScore : MonoBehaviour
 {
 	private Text scoreUI;
 	private int currentscore;
 
-	void Start () 
-    {
+	void Start ()
+	{
 		scoreUI = gameObject.GetComponent<Text>();
 		scoreUI.text = currentscore.ToString();
 	}
 
-    // EVENT LISTENERS
-    void OnEnable()
-    {
-        Messenger.AddListener<int>("change score", OnChangeScore);
-    }
+	// EVENT LISTENERS
+	void OnEnable()
+	{
+		Messenger.AddListener<int>("change score", OnChangeScore);
+	}
 
-    void OnDisable()
-    {
-        Messenger.RemoveListener<int>("change score", OnChangeScore);
-    }
+	void OnDisable()
+	{
+		Messenger.RemoveListener<int>("change score", OnChangeScore);
+	}
 
-    // EVENT RESPONDERS
-    void OnChangeScore(int newScore)
-    {
-    	scoreUI.text = newScore.ToString();
-        MTween.DisplayScore(gameObject, scoreUI);
-    }
+	// EVENT RESPONDERS
+	void OnChangeScore(int newScore)
+	{
+		scoreUI.text = newScore.ToString();
+		MTween.DisplayScore(gameObject, scoreUI);
+	}
 }

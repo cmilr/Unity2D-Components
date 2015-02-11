@@ -6,60 +6,66 @@ using Matcha.Game.Tweens;
 
 public class InteractiveEntity : CacheBehaviour
 {
-    public enum EntityType { none, prize, weapon };
-    public EntityType entityType;
+	public enum EntityType { none, prize, weapon };
+	public EntityType entityType;
+	public bool disableIfOffScreen = true;
+	public int worth;
+	
+	public bool AlreadyCollided { get; set; }
 
-    [HideInInspector]
-    public bool alreadyCollided = false;
-    public bool disableIfOffScreen = true;
-    public int worth;
+	void Start()
+	{
+		base.CacheComponents();
 
-    void Start()
-    {   
-        base.CacheComponents();
+		if (entityType == EntityType.prize)
+		{
+			AutoAlign();
+		}
+	}
 
-        if (entityType == EntityType.prize) AutoAlign();
-    }
+	public void React()
+	{
+		AlreadyCollided = true;
 
-    public void React()
-    {
-        alreadyCollided = true;
+		switch (entityType)
+		{
+		case EntityType.none:
+			break;
 
-        switch (entityType)
-        {
-        case EntityType.none:
-            break;
+		case EntityType.prize:
+			MTween.PickupPrize(gameObject);
+			break;
 
-        case EntityType.prize:
-                MTween.PickupPrize(gameObject);
-            break;
+		case EntityType.weapon:
+			MTween.PickupWeapon(gameObject);
+			break;
+		}
+	}
 
-        case EntityType.weapon:
-                MTween.PickupWeapon(gameObject);
-            break;
-        }
-    }
+	void OnBecameInvisible()
+	{
+		if (disableIfOffScreen)
+		{
+			gameObject.SetActive(false);
+		}
+	}
 
-    void OnBecameInvisible() 
-    {
-        if(disableIfOffScreen)
-            gameObject.SetActive(false);
-    }
+	void OnBecameVisible()
+	{
+		if (disableIfOffScreen)
+		{
+			gameObject.SetActive(true);
+		}
+	}
 
-    void OnBecameVisible() 
-    {
-        if(disableIfOffScreen)
-            gameObject.SetActive(true);
-    }
+	void AutoAlign()
+	{
+		float targetY = (float)(Math.Ceiling(transform.position.y) - .623f);
+		transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
+	}
 
-    void AutoAlign()
-    {
-        float targetY = (float)(Math.Ceiling(transform.position.y) - .623f);
-        transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
-    }
-
-    public void SelfDestruct(int inSeconds)
-    {
-        Destroy(gameObject, inSeconds);
-    }
+	public void SelfDestruct(int inSeconds)
+	{
+		Destroy(gameObject, inSeconds);
+	}
 }

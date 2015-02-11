@@ -21,19 +21,19 @@ public class DontLeaveMap : CacheBehaviour
 	private float leftBound;
 	private float upperBound;
 	private float lowerBound;
-	private TileSystem tileSystem; 
+	private TileSystem tileSystem;
 
 	void Start()
 	{
 		base.CacheComponents();
-		
+
 		tileSystem = tileMap.GetComponent<TileSystem>();
 
 		Vector3 tileSystemSize = new Vector3(
-			tileSystem.ColumnCount * tileSystem.CellSize.x,
-			tileSystem.RowCount * tileSystem.CellSize.y,
-			tileSystem.CellSize.z
-			);
+		    tileSystem.ColumnCount * tileSystem.CellSize.x,
+		    tileSystem.RowCount * tileSystem.CellSize.y,
+		    tileSystem.CellSize.z
+		);
 
 		leftBound = 0f;
 		rightBound = tileSystemSize.x;
@@ -45,18 +45,26 @@ public class DontLeaveMap : CacheBehaviour
 	{
 		// check left bound.
 		if (transform.position.x - (renderer.bounds.size.x / 2 - leftOffset) < leftBound)
-			transform.position = new Vector3(leftBound + (renderer.bounds.size.x / 2  - leftOffset), transform.position.y, transform.position.z);
+		{ 
+			transform.position = new Vector3(leftBound + (renderer.bounds.size.x / 2  - leftOffset), transform.position.y, transform.position.z); 
+		}
 
 		// check right bound.
 		if (transform.position.x + (renderer.bounds.size.x / 2 - rightOffset) > rightBound)
-			transform.position = new Vector3(rightBound - (renderer.bounds.size.x / 2 - rightOffset), transform.position.y, transform.position.z);
+		{ 
+			transform.position = new Vector3(rightBound - (renderer.bounds.size.x / 2 - rightOffset), transform.position.y, transform.position.z); 
+		}
 
 		// check upper bound.
 		if (transform.position.y + (renderer.bounds.size.y - upperOffset) > upperBound)
-			transform.position = new Vector3(transform.position.x, upperBound - (renderer.bounds.size.y - upperOffset), transform.position.z);
+		{ 
+			transform.position = new Vector3(transform.position.x, upperBound - (renderer.bounds.size.y - upperOffset), transform.position.z); 
+		}
 
 		// check lower bound.
 		if (transform.position.y - lowerOffset < lowerBound)
-			transform.position = new Vector3(transform.position.x, lowerBound - lowerOffset, transform.position.z);
+		{ 
+			transform.position = new Vector3(transform.position.x, lowerBound - lowerOffset, transform.position.z); 
+		}
 	}
 }

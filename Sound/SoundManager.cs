@@ -6,29 +6,28 @@ using System.Collections;
 
 public class SoundManager : CacheBehaviour
 {
-    public AudioClip collectPrize;
+	public AudioClip collectPrize;
 
-    void Start()
-    {
-        base.CacheComponents();
-    }
+	void Start()
+	{
+		base.CacheComponents();
+	}
 
-    // EVENT LISTENERS
-    void OnEnable()
-    {
-        Messenger.AddListener<int>( "prize collected", OnPrizeCollected );
-    }
+	// EVENT LISTENERS
+	void OnEnable()
+	{
+		Messenger.AddListener<int>( "prize collected", OnPrizeCollected );
+	}
 
-    void OnDisable()
-    {
-        Messenger.RemoveListener<int>( "prize collected", OnPrizeCollected );
-    }
+	void OnDisable()
+	{
+		Messenger.RemoveListener<int>( "prize collected", OnPrizeCollected );
+	}
 
-
-    // EVENT RESPONDERS
-    void OnPrizeCollected(int worth)
-    {
-        audio.PlayOneShot(collectPrize, 0.1F);
-    }
+	// EVENT RESPONDERS
+	void OnPrizeCollected(int worth)
+	{
+		audio.PlayOneShot(collectPrize, 0.1F);
+	}
 
 }

@@ -6,24 +6,24 @@ using System.Collections;
 
 public class CollisionManager : CacheBehaviour
 {
-    private GameObject coll;
-    private InteractiveEntity interEntity;
+	private GameObject coll;
+	private InteractiveEntity interEntity;
 
-    void Start()
-    {
-        base.CacheComponents();
-    }
+	void Start()
+	{
+		base.CacheComponents();
+	}
 
-    public void OnTriggerEnter2D(Collider2D col)
-    {
-        coll = col.gameObject;
+	void OnTriggerEnter2D(Collider2D col)
+	{
+		coll = col.gameObject;
 
-        interEntity = coll.GetComponent<InteractiveEntity>() as InteractiveEntity;
+		interEntity = coll.GetComponent<InteractiveEntity>() as InteractiveEntity;
 
-        if (coll.tag == "Prize" && !interEntity.alreadyCollided)
-        {
-            Messenger.Broadcast<int>("prize collected", interEntity.worth);
-            interEntity.React();
-        }
-    }
+		if (coll.tag == "Prize" && !interEntity.AlreadyCollided)
+		{
+			Messenger.Broadcast<int>("prize collected", interEntity.worth);
+			interEntity.React();
+		}
+	}
 }
