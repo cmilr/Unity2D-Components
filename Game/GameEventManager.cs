@@ -6,12 +6,5 @@ using System.Collections;
 
 public class GameEventManager : CacheBehaviour
 {
-//     void Awake()
-//     {
-//         Nullify();
-//     }
 
-// public static void Nullify(){
-//     DisplayScoreFX = null;
-// }
 }

@@ -6,13 +6,11 @@ public class SceneManager : MonoBehaviour {
 	// EVENT LISTENERS
 	void OnEnable()
 	{
-		// Messenger.AddListener<bool>( "player touching top of screen", OnPlayerTouchingTopOfScreen);
 		Messenger.AddListener<bool>( "player dead", OnPlayerDead);
 	}
 
 	void OnDestroy()
 	{
-		// Messenger.AddListener<bool>( "player touching top of screen", OnPlayerTouchingTopOfScreen);
 		Messenger.RemoveListener<bool>( "player dead", OnPlayerDead);
 	}
 

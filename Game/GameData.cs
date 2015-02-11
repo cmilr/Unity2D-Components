@@ -31,19 +31,19 @@ public class GameData : MonoBehaviour
 		Messenger.MarkAsPermanent("change score");
 	}
 
-	public int CurrentScore
-	{
-		get
-		{
-			return _currentScore;
-		}
-	}
+	// public int CurrentScore
+	// {
+	// 	get
+	// 	{
+	// 		return _currentScore;
+	// 	}
+	// }
 
-	public int Lives
-	{
-		get
-		{
-			return _lives;
-		}
-	}
+	// public int Lives
+	// {
+	// 	get
+	// 	{
+	// 		return _lives;
+	// 	}
+	// }
 }

@@ -54,7 +54,7 @@ public class InteractiveEntity : CacheBehaviour
 
 	void AutoAlign()
 	{
-		float targetY = (float)(Math.Ceiling(transform.position.y) - .623f);
+		float targetY = (float)(Math.Round(transform.position.y) - .124);
 		transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
 	}
 

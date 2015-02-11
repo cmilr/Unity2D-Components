@@ -8,7 +8,7 @@ public class CharacterEntity : CacheBehaviour
 {
 	public enum EntityType { none, player, enemy };
 	public EntityType entityType;
-	public bool disableIfOffScreen = true;
+	public bool disableIfOffScreen;
 	public int hp;
 	public int ac;
 	public int damage;
@@ -56,7 +56,7 @@ public class CharacterEntity : CacheBehaviour
 
 	void AutoAlign()
 	{
-		float targetY = (float)(Math.Ceiling(transform.position.y) - .124);
+		float targetY = (float)(Math.Round(transform.position.y) - .124);
 		transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
 	}
 
