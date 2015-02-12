@@ -7,7 +7,7 @@ public class GameData : MonoBehaviour
 	// player stats.
 	private static int _currentScore;
 	private static int _lastSavedScore;
-	private static int _lives = 3;
+	private static int _lives;
 
 	// level stats.
 	private static int _currentLevel;
