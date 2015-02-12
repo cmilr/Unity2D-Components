@@ -13,6 +13,8 @@ public class CollisionManager : CacheBehaviour
 	void Start()
 	{
 		base.CacheComponents();
+		Messenger.MarkAsPermanent("prize collected");
+		Messenger.MarkAsPermanent("player dead");
 	}
 
 	void OnTriggerEnter2D(Collider2D col)
@@ -24,15 +26,12 @@ public class CollisionManager : CacheBehaviour
 		if (coll.tag == "Prize" && !interEntity.AlreadyCollided)
 		{
 			Messenger.Broadcast<int>("prize collected", interEntity.worth);
-			Messenger.MarkAsPermanent("prize collected");
-			
 			interEntity.React();
 		}
 
 		if (coll.tag == "Enemy" && !charEntity.AlreadyCollided)
 		{
 		    Messenger.Broadcast<bool>("player dead", true);
-			Messenger.MarkAsPermanent("player dead");
 		}
 	}
 }
