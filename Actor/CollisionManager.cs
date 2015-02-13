@@ -32,4 +32,34 @@ public class CollisionManager : CacheBehaviour
 		    Messenger.Broadcast<bool>("player dead", true);
 		}
 	}
+
+	public void OnWeaponTriggerEnter(GameObject coll)
+	{
+		Debug.Log("Weapon Hit!");
+	}
+
+	public void OnWeaponTriggerStay(GameObject coll)
+	{
+		Debug.Log("Weapon Stay!");
+	}
+
+	public void OnWeaponTriggerExit(GameObject coll)
+	{
+		Debug.Log("Weapon Unhit!");
+	}
+
+	public void OnBodyTriggerEnter(GameObject coll)
+	{
+		Debug.Log("Body Hit!");
+	}
+
+	public void OnBodyTriggerStay(GameObject coll)
+	{
+		Debug.Log("Body Stay!");
+	}
+
+	public void OnBodyTriggerExit(GameObject coll)
+	{
+		Debug.Log("Body Unhit!");
+	}
 }

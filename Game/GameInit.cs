@@ -14,8 +14,14 @@ public class GameInit : MonoBehaviour
 		DOTween.Init(true, true, LogBehaviour.Verbose).SetCapacity(200, 10);
 		DOTween.SetTweensCapacity(2000, 100);
 
-		// Ignore collisions between "one-way platform" 
-        // and "don't collide with one-way platforms."
-        Physics2D.IgnoreLayerCollision(12, 30, true);
+		// ignore collisions between
+        Physics2D.IgnoreLayerCollision(LayerID("BodyCollider"), LayerID("One-Way Platform"), true);
+        Physics2D.IgnoreLayerCollision(LayerID("WeaponCollider"), LayerID("Enemies"), true);
+        Physics2D.IgnoreLayerCollision(LayerID("WeaponCollider"), LayerID("Collectables"), true);
+	}
+
+	int LayerID(string layerName)
+	{
+		return LayerMask.NameToLayer(layerName);
 	}
 }
