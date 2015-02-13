@@ -5,9 +5,9 @@ using System.Collections;
 public class GameData : MonoBehaviour
 {
 	// player stats.
-	private static int _currentScore;
-	private static int _lastSavedScore;
-	private static int _lives;
+	private static int _currentScore = 0;
+	private static int _lastSavedScore = 0;
+	private static int _lives = 3;
 
 	// level stats.
 	private static int _currentLevel;
@@ -16,11 +16,13 @@ public class GameData : MonoBehaviour
 	void OnEnable()
 	{
 		Messenger.AddListener<int>( "prize collected", OnPrizeCollected );
+		Messenger.AddListener<bool>( "player dead", OnPlayerDead );
 	}
 
 	void OnDestroy()
 	{
 		Messenger.RemoveListener<int>( "prize collected", OnPrizeCollected );
+		Messenger.RemoveListener<bool>( "player dead", OnPlayerDead );
 	}
 
 	// EVENT RESPONDERS
@@ -28,6 +30,11 @@ public class GameData : MonoBehaviour
 	{
 		_currentScore += worth;
 		Messenger.Broadcast<int>("change score", _currentScore);
+	}
+
+	void OnPlayerDead(bool status)
+	{
+		_currentScore = _lastSavedScore;
 	}
 
 	// public int CurrentScore

@@ -9,6 +9,7 @@ public class CollisionManager : CacheBehaviour
 	private GameObject coll;
 	private InteractiveEntity interEntity;
 	private CharacterEntity charEntity;
+	
 
 	void Start()
 	{
