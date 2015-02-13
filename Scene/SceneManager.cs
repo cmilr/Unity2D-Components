@@ -13,8 +13,21 @@ public class SceneManager : MonoBehaviour {
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		spriteRenderer.DOKill();
 
+		FadeIn();
+	}
+
+	void FadeIn()
+	{
 		DOTween.Sequence()
 			.Append(spriteRenderer.DOFade(0, timeToFade)
+			.SetEase(Ease.InOutExpo));
+	}
+
+	void FadeOut()
+	{
+		DOTween.Sequence()
+			.AppendInterval(1f)
+			.Append(spriteRenderer.DOFade(100, timeToFade)
 			.SetEase(Ease.InOutExpo));
 	}
 
@@ -32,10 +45,7 @@ public class SceneManager : MonoBehaviour {
 	// EVENT RESPONDERS
 	void OnPlayerDead(bool value)
 	{
-		DOTween.Sequence()
-			.AppendInterval(1f)
-			.Append(spriteRenderer.DOFade(100, timeToFade)
-			.SetEase(Ease.InOutExpo));
+		FadeOut();
 
 		StartCoroutine(Timer.Start(timeToFade + 1, true, () =>
 		{
