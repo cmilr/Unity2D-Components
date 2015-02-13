@@ -16,8 +16,6 @@ public class GameInit : MonoBehaviour
 		DOTween.SetTweensCapacity(2000, 100);
 
 		// ignore collisions between
-		MLib.IgnoreLayerCollision2D("BodyCollider", "One-Way Platform", true);
-		MLib.IgnoreLayerCollision2D("WeaponCollider", "Enemies", true);
-		MLib.IgnoreLayerCollision2D("WeaponCollider", "Collectables", true);
+		// MLib2D.IgnoreLayerCollision("BodyCollider", "One-Way Platform", true);
 	}
 }

@@ -1,27 +1,39 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Matcha.Lib;
 
-public class WeaponCollider : MonoBehaviour {
+[RequireComponent(typeof(BoxCollider2D))]
 
-	private CollisionManager collisionManager;
+
+public class WeaponCollider : CacheBehaviour
+{
+	private GameObject coll;
+	private InteractiveEntity interEntity;
+	private CharacterEntity charEntity;
+	
 
 	void Start()
 	{
-		collisionManager = transform.parent.GetComponent<CollisionManager>();
+		base.CacheComponents();
+
+		MLib2D.IgnoreLayerCollisionWith(gameObject, "Collectables", true);
 	}
 
-	public void OnTriggerEnter2D(Collider2D coll)
+	void OnTriggerEnter2D(Collider2D col)
 	{
-		collisionManager.OnWeaponTriggerEnter(coll.gameObject);
-	}
+		coll = col.gameObject;
+		interEntity = coll.GetComponent<InteractiveEntity>() as InteractiveEntity;
+		charEntity = coll.GetComponent<CharacterEntity>() as CharacterEntity;
 
-	public void OnTriggerStay2D(Collider2D coll)
-	{
-		collisionManager.OnWeaponTriggerStay(coll.gameObject);
-	}
+		if (coll.tag == "Prize" && !interEntity.AlreadyCollided)
+		{
+			Messenger.Broadcast<int>("prize collected", interEntity.worth);
+			interEntity.React();
+		}
 
-	public void OnTriggerExit2D(Collider2D coll)
-	{
-		collisionManager.OnWeaponTriggerExit(coll.gameObject);
+		if (coll.tag == "Enemy" )
+		{
+		    Debug.Log("Weapon hits enemy!");
+		}
 	}
 }
