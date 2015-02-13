@@ -13,8 +13,6 @@ public class CollisionManager : CacheBehaviour
 	void Start()
 	{
 		base.CacheComponents();
-		Messenger.MarkAsPermanent("prize collected");
-		Messenger.MarkAsPermanent("player dead");
 	}
 
 	void OnTriggerEnter2D(Collider2D col)

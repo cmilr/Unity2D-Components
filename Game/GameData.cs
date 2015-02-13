@@ -12,11 +12,6 @@ public class GameData : MonoBehaviour
 	// level stats.
 	private static int _currentLevel;
 
-	void Start()
-	{
-		Messenger.MarkAsPermanent("change score");
-	}
-
 	// EVENT LISTENERS
 	void OnEnable()
 	{
