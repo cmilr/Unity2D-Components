@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using DG.Tweening;
+using Matcha.Lib;
 
 
 public class GameInit : MonoBehaviour
@@ -15,13 +16,8 @@ public class GameInit : MonoBehaviour
 		DOTween.SetTweensCapacity(2000, 100);
 
 		// ignore collisions between
-        Physics2D.IgnoreLayerCollision(LayerID("BodyCollider"), LayerID("One-Way Platform"), true);
-        Physics2D.IgnoreLayerCollision(LayerID("WeaponCollider"), LayerID("Enemies"), true);
-        Physics2D.IgnoreLayerCollision(LayerID("WeaponCollider"), LayerID("Collectables"), true);
-	}
-
-	int LayerID(string layerName)
-	{
-		return LayerMask.NameToLayer(layerName);
+		MLib.IgnoreLayerCollision2D("BodyCollider", "One-Way Platform", true);
+		MLib.IgnoreLayerCollision2D("WeaponCollider", "Enemies", true);
+		MLib.IgnoreLayerCollision2D("WeaponCollider", "Collectables", true);
 	}
 }
