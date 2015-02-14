@@ -11,7 +11,7 @@ public class InteractiveEntity : CacheBehaviour
 	public bool disableIfOffScreen = true;
 	public int worth;
 
-	public bool AlreadyCollided { get; set; }
+	// public bool AlreadyCollided { get; set; }
 
 	void Start()
 	{
@@ -23,7 +23,7 @@ public class InteractiveEntity : CacheBehaviour
 
 	public void React()
 	{
-		AlreadyCollided = true;
+		// AlreadyCollided = true;
 
 		switch (entityType)
 		{

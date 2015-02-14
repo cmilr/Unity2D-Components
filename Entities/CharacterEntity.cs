@@ -13,8 +13,6 @@ public class CharacterEntity : CacheBehaviour
 	public int ac;
 	public int damage;
 
-	public bool AlreadyCollided { get; set; }
-
 	void Start()
 	{
 		base.CacheComponents();
@@ -25,7 +23,6 @@ public class CharacterEntity : CacheBehaviour
 
 	public void React()
 	{
-		AlreadyCollided = true;
 
 		switch (entityType)
 		{

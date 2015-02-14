@@ -17,7 +17,6 @@ public class BodyCollider : CacheBehaviour
 		base.CacheComponents();
 		
 		MLib2D.IgnoreLayerCollisionWith(gameObject, "One-Way Platform", true);
-		MLib2D.IgnoreLayerCollisionWith(gameObject, "Enemies", true);
 	}
 
 	void OnTriggerEnter2D(Collider2D col)
@@ -26,13 +25,13 @@ public class BodyCollider : CacheBehaviour
 		interEntity = coll.GetComponent<InteractiveEntity>() as InteractiveEntity;
 		charEntity = coll.GetComponent<CharacterEntity>() as CharacterEntity;
 
-		if (coll.tag == "Prize" && !interEntity.AlreadyCollided)
+		if (coll.tag == "Prize")
 		{
 			Messenger.Broadcast<int>("prize collected", interEntity.worth);
 			interEntity.React();
 		}
 
-		if (coll.tag == "Enemy" && !charEntity.AlreadyCollided)
+		if (coll.tag == "Enemy")
 		{
 		    Messenger.Broadcast<bool>("player dead", true);
 		}
