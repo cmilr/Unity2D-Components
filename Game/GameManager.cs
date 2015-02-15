@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 
-public class GameManager : MonoBehaviour
+public class GameManager : BaseBehaviour
 {
 	// player stats.
 	private static int _currentScore = 0;

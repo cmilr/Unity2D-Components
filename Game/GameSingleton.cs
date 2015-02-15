@@ -4,7 +4,7 @@ using System.Collections;
 
 // PERSISTENT SINGLETON
 // ~~~~~~~~~~~~~~~~~~~~
-public class GameSingleton : MonoBehaviour
+public class GameSingleton : BaseBehaviour
 {
 	private static GameSingleton _instance;
 	public static GameSingleton instance

@@ -4,7 +4,7 @@ using System.Collections;
 
 // PERSISTENT SINGLETON
 // ~~~~~~~~~~~~~~~~~~~~
-public class SoundSingleton : MonoBehaviour 
+public class SoundSingleton : BaseBehaviour 
 {
     private static SoundSingleton _instance;
     public static SoundSingleton instance

@@ -2,7 +2,7 @@
 using System.Collections;
 
 
-public class PixelArtCamera : MonoBehaviour
+public class PixelArtCamera : BaseBehaviour
 {
     private float s_baseOrthographicSize;
 

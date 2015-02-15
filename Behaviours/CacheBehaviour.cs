@@ -2,8 +2,10 @@
 using System.Collections;
 
 
-public class CacheBehaviour : MonoBehaviour
+public class CacheBehaviour : BaseBehaviour
 {
+	[HideInInspector]
+	public     Animator animator;
 	[HideInInspector]
 	public new AudioSource audio;
 	[HideInInspector]
@@ -24,6 +26,7 @@ public class CacheBehaviour : MonoBehaviour
 	public void CacheComponents()
 	{
 		transform = gameObject.transform;
+		animator = gameObject.GetComponent<Animator>() as Animator;
 		audio = gameObject.GetComponent<AudioSource>() as AudioSource;
 		camera = gameObject.GetComponent<Camera>() as Camera;
 		collider = gameObject.GetComponent<Collider>() as Collider;

@@ -8,10 +8,8 @@ public class InteractiveEntity : CacheBehaviour
 {
 	public enum EntityType { none, prize, weapon };
 	public EntityType entityType;
-	public bool disableIfOffScreen = true;
+	public bool rbodySleepOffScreen = true;
 	public int worth;
-
-	// public bool AlreadyCollided { get; set; }
 
 	void Start()
 	{
@@ -23,7 +21,6 @@ public class InteractiveEntity : CacheBehaviour
 
 	public void React()
 	{
-		// AlreadyCollided = true;
 
 		switch (entityType)
 		{
@@ -42,14 +39,16 @@ public class InteractiveEntity : CacheBehaviour
 
 	void OnBecameInvisible()
 	{
-		if (disableIfOffScreen)
-			gameObject.SetActive(false);
+		if (rbodySleepOffScreen)
+			if (rigidbody2D)
+				rigidbody2D.Sleep();
 	}
 
 	void OnBecameVisible()
 	{
-		if (disableIfOffScreen)
-			gameObject.SetActive(true);
+		if (rbodySleepOffScreen)
+			if (rigidbody2D)
+				rigidbody2D.WakeUp();
 	}
 
 	void AutoAlign()

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 
-public class TileEntity : MonoBehaviour
+public class TileEntity : BaseBehaviour
 {
 	void OnBecameVisible()
 	{

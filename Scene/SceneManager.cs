@@ -3,7 +3,7 @@ using System.Collections;
 using DG.Tweening;
 
 
-public class SceneManager : MonoBehaviour {
+public class SceneManager : BaseBehaviour {
 
 	public float timeToFade = 1f;
 	private SpriteRenderer spriteRenderer;

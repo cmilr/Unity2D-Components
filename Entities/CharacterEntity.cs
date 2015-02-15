@@ -8,7 +8,7 @@ public class CharacterEntity : CacheBehaviour
 {
 	public enum EntityType { none, player, enemy };
 	public EntityType entityType;
-	public bool disableIfOffScreen;
+	public bool rbodySleepOffScreen = true;
 	public int hp;
 	public int ac;
 	public int damage;
@@ -41,14 +41,16 @@ public class CharacterEntity : CacheBehaviour
 
 	void OnBecameInvisible()
 	{
-		if (disableIfOffScreen)
-			gameObject.SetActive(false);
+		if (rbodySleepOffScreen)
+			if (rigidbody2D)
+				rigidbody2D.Sleep();
 	}
 
 	void OnBecameVisible()
 	{
-		if (disableIfOffScreen)
-			gameObject.SetActive(true);
+		if (rbodySleepOffScreen)
+			if (rigidbody2D)
+				rigidbody2D.WakeUp();
 	}
 
 	void AutoAlign()

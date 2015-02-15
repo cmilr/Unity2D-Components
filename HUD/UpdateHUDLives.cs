@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 
 
-public class UpdateHUDLives : MonoBehaviour
+public class UpdateHUDLives : BaseBehaviour
 {
 	public Sprite threeLives;
 	public Sprite twoLives;

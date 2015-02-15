@@ -4,7 +4,7 @@ using System.Collections;
 using Matcha.Game.Tweens;
 
 
-public class DisplayScore : MonoBehaviour
+public class DisplayScore : BaseBehaviour
 {
 	private Text scoreUI;
 	private int currentscore;

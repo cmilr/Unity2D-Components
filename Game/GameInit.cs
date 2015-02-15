@@ -4,7 +4,7 @@ using DG.Tweening;
 using Matcha.Lib;
 
 
-public class GameInit : MonoBehaviour
+public class GameInit : BaseBehaviour
 {
 	void Awake()
 	{
