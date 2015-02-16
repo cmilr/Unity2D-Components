@@ -3,25 +3,18 @@ using System;
 using System.Collections;
 using Matcha.Game.Tweens;
 
-[RequireComponent(typeof(BoxCollider2D))]
 
-
-public class CharacterEntity : EntityBehaviour
+public class PickupEntity : EntityBehaviour
 {
-	public enum EntityType { none, player, enemy };
+	public enum EntityType { none, prize, weapon };
 	public EntityType entityType;
-	public int hp;
-	public int ac;
-	public int damage;
 	public int worth;
 
 	void Start()
 	{
 		base.CacheComponents();
 
-		AlreadyCollided = false;
-
-		if (entityType == EntityType.enemy)
+		if (entityType == EntityType.prize)
 			AutoAlign();
 	}
 
@@ -34,10 +27,12 @@ public class CharacterEntity : EntityBehaviour
 		case EntityType.none:
 			break;
 
-		case EntityType.player:
+		case EntityType.prize:
+			MTween.PickupPrize(gameObject);
 			break;
 
-		case EntityType.enemy:
+		case EntityType.weapon:
+			MTween.PickupWeapon(gameObject);
 			break;
 		}
 	}

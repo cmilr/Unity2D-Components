@@ -7,33 +7,39 @@ using Matcha.Lib;
 
 public class BodyCollider : CacheBehaviour
 {
-	private GameObject coll;
-	private InteractiveEntity interEntity;
+	private bool alreadyCollided;
+	private PickupEntity pickupEntity;
 	private CharacterEntity charEntity;
 	
 
 	void Start()
 	{
 		base.CacheComponents();
-		
 		MLib2D.IgnoreLayerCollisionWith(gameObject, "One-Way Platform", true);
 	}
 
-	void OnTriggerEnter2D(Collider2D col)
+	void OnTriggerEnter2D(Collider2D coll)
 	{
-		coll = col.gameObject;
-		interEntity = coll.GetComponent<InteractiveEntity>() as InteractiveEntity;
-		charEntity = coll.GetComponent<CharacterEntity>() as CharacterEntity;
+		GetColliderComponents(coll);
 
-		if (coll.tag == "Prize")
+		if (coll.tag == "Prize" && !alreadyCollided)
 		{
-			Messenger.Broadcast<int>("prize collected", interEntity.worth);
-			interEntity.React();
+			Messenger.Broadcast<int>("prize collected", pickupEntity.worth);
+			pickupEntity.React();
 		}
 
-		if (coll.tag == "Enemy")
+		if (coll.tag == "Enemy" && !alreadyCollided)
 		{
 		    Messenger.Broadcast<bool>("player dead", true);
 		}
+	}
+
+	void GetColliderComponents(Collider2D coll)
+	{
+		pickupEntity = coll.GetComponent<PickupEntity>() as PickupEntity;
+		charEntity = coll.GetComponent<CharacterEntity>() as CharacterEntity;
+
+		if (coll.GetComponent<EntityBehaviour>())
+			alreadyCollided = coll.GetComponent<EntityBehaviour>().AlreadyCollided;
 	}
 }

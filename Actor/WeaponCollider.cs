@@ -7,33 +7,31 @@ using Matcha.Lib;
 
 public class WeaponCollider : CacheBehaviour
 {
-	private GameObject coll;
-	private InteractiveEntity interEntity;
+	private bool alreadyCollided;
 	private CharacterEntity charEntity;
 	
 
 	void Start()
 	{
 		base.CacheComponents();
-
 		MLib2D.IgnoreLayerCollisionWith(gameObject, "Collectables", true);
 	}
 
-	void OnTriggerEnter2D(Collider2D col)
+	void OnTriggerEnter2D(Collider2D coll)
 	{
-		coll = col.gameObject;
-		// interEntity = coll.GetComponent<InteractiveEntity>() as InteractiveEntity;
-		charEntity = coll.GetComponent<CharacterEntity>() as CharacterEntity;
+		GetColliderComponents(coll);
 
-		// if (coll.tag == "Prize")
-		// {
-		// 	Messenger.Broadcast<int>("prize collected", interEntity.worth);
-		// 	interEntity.React();
-		// }
-
-		if (coll.tag == "Enemy" )
+		if (coll.tag == "Enemy" && !alreadyCollided)
 		{
 		    Debug.Log("Weapon hits enemy!");
 		}
+	}
+
+	void GetColliderComponents(Collider2D coll)
+	{
+		charEntity = coll.GetComponent<CharacterEntity>() as CharacterEntity;
+
+		if (coll.GetComponent<EntityBehaviour>())
+			alreadyCollided = coll.GetComponent<EntityBehaviour>().AlreadyCollided;
 	}
 }
