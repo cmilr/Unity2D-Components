@@ -14,7 +14,6 @@ public class MovingPlatform : EntityBehaviour
 	[Tooltip("How long should the platform pause at each end?")]
 	public float pauseTime = .1f;
 	private bool fastPlatform;
-	private bool playerJumping;
 
 	void Start()
 	{
@@ -64,31 +63,18 @@ public class MovingPlatform : EntityBehaviour
 
 	void OnTriggerEnter2D (Collider2D coll)
 	{
-		// do not collide with player when she's on the upward curve of a jump
-		if (coll.name == "Player" && playerJumping)
-        {
-			return;
-        }
-		else
-        {
-			coll.transform.parent = gameObject.transform;
-        }
+		coll.transform.parent = gameObject.transform;
 
-		// send message if this is a particularly fast moving vertical platform
-		if (fastPlatform && coll.name == "Player")
-        {
+		if (coll.name == "Player" && fastPlatform)
 			Messenger.Broadcast<bool>("riding fast platform", true);
-        }
 	}
 
 	void OnTriggerExit2D (Collider2D coll)
 	{
 		coll.transform.parent = null;
 
-		if (fastPlatform && coll.name == "Player")
-        {
+		if (coll.name == "Player" && fastPlatform)
 			Messenger.Broadcast<bool>("riding fast platform", false);
-        }
 	}
 
 	// if platform is particularly fast and long, send a message to JumpAndRun so it can throttle
@@ -100,22 +86,5 @@ public class MovingPlatform : EntityBehaviour
 			if (distance > 4 && distance / time > 8)
 				fastPlatform = true;
 		}
-	}
-
-	// EVENT LISTENERS
-	void OnEnable()
-	{
-		Messenger.AddListener<bool>( "player jumping (RunAndJump)", OnPlayerJumping);
-	}
-
-	void OnDestroy()
-	{
-		Messenger.RemoveListener<bool>( "player jumping (RunAndJump)", OnPlayerJumping);
-	}
-
-	// EVENT LISTENERS
-	void OnPlayerJumping(bool status)
-	{
-		playerJumping = status;
 	}
 }
