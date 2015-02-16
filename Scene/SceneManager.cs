@@ -3,14 +3,14 @@ using System.Collections;
 using DG.Tweening;
 
 
-public class SceneManager : BaseBehaviour {
+public class SceneManager : CacheBehaviour {
 
 	public float timeToFade = 1f;
-	private SpriteRenderer spriteRenderer;
 
 	void Start() 
 	{
-		spriteRenderer = GetComponent<SpriteRenderer>();
+		base.CacheComponents();
+		
 		spriteRenderer.DOKill();
 
 		FadeIn();

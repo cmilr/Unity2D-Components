@@ -30,6 +30,7 @@ public class BodyCollider : CacheBehaviour
 
 		if (coll.tag == "Enemy" && !alreadyCollided)
 		{
+			Debug.Log("Playerkilled by " + charEntity);
 		    Messenger.Broadcast<bool>("player dead", true);
 		}
 	}

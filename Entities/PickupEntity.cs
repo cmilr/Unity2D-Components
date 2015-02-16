@@ -14,6 +14,8 @@ public class PickupEntity : EntityBehaviour
 	{
 		base.CacheComponents();
 
+		AlreadyCollided = false;
+
 		if (entityType == EntityType.prize)
 			AutoAlign();
 	}

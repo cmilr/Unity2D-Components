@@ -9,7 +9,6 @@ public class WeaponCollider : CacheBehaviour
 {
 	private bool alreadyCollided;
 	private CharacterEntity charEntity;
-	
 
 	void Start()
 	{
@@ -23,7 +22,7 @@ public class WeaponCollider : CacheBehaviour
 
 		if (coll.tag == "Enemy" && !alreadyCollided)
 		{
-		    Debug.Log("Weapon hits enemy!");
+		    Debug.Log("Weapon hits " + charEntity);
 		}
 	}
 

@@ -35,6 +35,7 @@ public class GameManager : BaseBehaviour
 	void OnPlayerDead(bool status)
 	{
 		_currentScore = _lastSavedScore;
+		_lives -= 1;
 	}
 }
 

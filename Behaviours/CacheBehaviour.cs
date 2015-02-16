@@ -17,6 +17,8 @@ public class CacheBehaviour : BaseBehaviour
 	[HideInInspector]
 	public new Renderer renderer;
 	[HideInInspector]
+	public     SpriteRenderer spriteRenderer;
+	[HideInInspector]
 	public new Transform transform;
 
 	public void CacheComponents()
@@ -28,5 +30,6 @@ public class CacheBehaviour : BaseBehaviour
 		collider2D = gameObject.GetComponent<Collider2D>() as Collider2D;
 		rigidbody2D = gameObject.GetComponent<Rigidbody2D>() as Rigidbody2D;
 		renderer = gameObject.GetComponent<Renderer>() as Renderer;
+		spriteRenderer = gameObject.GetComponent<SpriteRenderer>() as SpriteRenderer;
 	}
 }
