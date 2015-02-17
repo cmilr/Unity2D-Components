@@ -22,7 +22,7 @@ public class WeaponCollider : CacheBehaviour
 
 		if (coll.tag == "Enemy" && !alreadyCollided)
 		{
-		    Debug.Log("Weapon hits " + charEntity);
+		    return;
 		}
 	}
 
