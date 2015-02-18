@@ -19,15 +19,13 @@ public class CharacterEntity : EntityBehaviour
 	{
 		base.CacheComponents();
 
-		AlreadyCollided = false;
-
 		if (entityType == EntityType.enemy)
 			AutoAlign();
 	}
 
 	public void React()
 	{
-		AlreadyCollided = true;
+		alreadyCollided = true;
 
 		switch (entityType)
 		{

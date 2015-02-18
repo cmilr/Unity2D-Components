@@ -16,6 +16,7 @@ public class BodyCollider : CacheBehaviour
 	{
 		base.CacheComponents();
 		MLib2D.IgnoreLayerCollisionWith(gameObject, "One-Way Platform", true);
+		MLib2D.IgnoreLayerCollisionWith(gameObject, "Platform", true);
 	}
 
 	void OnTriggerEnter2D(Collider2D coll)
@@ -30,7 +31,14 @@ public class BodyCollider : CacheBehaviour
 
 		if (coll.tag == "Enemy" && !alreadyCollided)
 		{
-		    Messenger.Broadcast<bool>("player dead", true);
+			alreadyCollided = true;
+		    Messenger.Broadcast<string, bool>("player dead", "StruckDown", true);
+		}
+
+		if (coll.tag == "Water" && !alreadyCollided)
+		{
+			alreadyCollided = true;
+		    Messenger.Broadcast<string, bool>("player dead", "Drowned", true);
 		}
 	}
 
@@ -40,6 +48,6 @@ public class BodyCollider : CacheBehaviour
 		charEntity = coll.GetComponent<CharacterEntity>() as CharacterEntity;
 
 		if (coll.GetComponent<EntityBehaviour>())
-			alreadyCollided = coll.GetComponent<EntityBehaviour>().AlreadyCollided;
+			alreadyCollided = coll.GetComponent<EntityBehaviour>().alreadyCollided;
 	}
 }

@@ -4,7 +4,7 @@ using System.Collections;
 
 public class EntityBehaviour : CacheBehaviour {
 
-	public bool AlreadyCollided { get; set; }
+	public bool alreadyCollided = false;
 
 	protected void SelfDestruct(int inSeconds)
 	{

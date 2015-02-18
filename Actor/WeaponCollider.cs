@@ -31,6 +31,6 @@ public class WeaponCollider : CacheBehaviour
 		charEntity = coll.GetComponent<CharacterEntity>() as CharacterEntity;
 
 		if (coll.GetComponent<EntityBehaviour>())
-			alreadyCollided = coll.GetComponent<EntityBehaviour>().AlreadyCollided;
+			alreadyCollided = coll.GetComponent<EntityBehaviour>().alreadyCollided;
 	}
 }

@@ -1,53 +1,39 @@
 ﻿using UnityEngine;
 using System.Collections;
 using DG.Tweening;
+using Matcha.Game.Tweens;
 
 
 public class SceneManager : CacheBehaviour {
 
-	public float timeToFade = 1f;
+	private float timeToFade = 2f;
+	private float timeBeforeLevelReload = 3f;
 
 	void Start() 
 	{
 		base.CacheComponents();
-		
 		spriteRenderer.DOKill();
-
-		FadeIn();
-	}
-
-	void FadeIn()
-	{
-		DOTween.Sequence()
-			.Append(spriteRenderer.DOFade(0, timeToFade)
-			.SetEase(Ease.InOutExpo));
-	}
-
-	void FadeOut()
-	{
-		DOTween.Sequence()
-			.AppendInterval(1f)
-			.Append(spriteRenderer.DOFade(100, timeToFade)
-			.SetEase(Ease.InOutExpo));
+		
+		MTween.FadeIn(spriteRenderer, timeToFade);
 	}
 
 	// EVENT LISTENERS
 	void OnEnable()
 	{
-		Messenger.AddListener<bool>( "player dead", OnPlayerDead);
+		Messenger.AddListener<string, bool>( "player dead", OnPlayerDead);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<bool>( "player dead", OnPlayerDead);
+		Messenger.RemoveListener<string, bool>( "player dead", OnPlayerDead);
 	}
 
 	// EVENT RESPONDERS
-	void OnPlayerDead(bool value)
+	void OnPlayerDead(string methodOfDeath, bool value)
 	{
-		FadeOut();
+		MTween.FadeOut(spriteRenderer, timeToFade);
 
-		StartCoroutine(Timer.Start(timeToFade + 1, true, () =>
+		StartCoroutine(Timer.Start(timeBeforeLevelReload, true, () =>
 		{
 			Application.LoadLevel(Application.loadedLevel);
 		}));

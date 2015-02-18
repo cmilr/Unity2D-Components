@@ -63,7 +63,14 @@ public class MovingPlatform : EntityBehaviour
 
 	void OnTriggerEnter2D (Collider2D coll)
 	{
-		coll.transform.parent = gameObject.transform;
+		if (coll.name == "Player" && coll.transform.position.y - .3f > gameObject.transform.position.y)
+		{
+			coll.transform.parent = gameObject.transform;
+		}
+		else if (coll.name != "Player")
+		{
+			coll.transform.parent = gameObject.transform;
+		}
 
 		if (coll.name == "Player" && fastPlatform)
 			Messenger.Broadcast<bool>("riding fast platform", true);

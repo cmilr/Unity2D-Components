@@ -14,15 +14,13 @@ public class PickupEntity : EntityBehaviour
 	{
 		base.CacheComponents();
 
-		AlreadyCollided = false;
-
 		if (entityType == EntityType.prize)
 			AutoAlign();
 	}
 
 	public void React()
 	{
-		AlreadyCollided = true;
+		alreadyCollided = true;
 
 		switch (entityType)
 		{
