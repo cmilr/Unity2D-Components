@@ -32,13 +32,14 @@ public class BodyCollider : CacheBehaviour
 		if (coll.tag == "Enemy" && !alreadyCollided)
 		{
 			alreadyCollided = true;
-		    Messenger.Broadcast<string, bool>("player dead", "StruckDown", true);
+		    Messenger.Broadcast<string, Collider2D>("player dead", "StruckDown", coll);
 		}
 
 		if (coll.tag == "Water" && !alreadyCollided)
 		{
 			alreadyCollided = true;
-		    Messenger.Broadcast<string, bool>("player dead", "Drowned", true);
+		    Messenger.Broadcast<string, Collider2D>("player dead", "Drowned", coll);
+
 		}
 	}
 

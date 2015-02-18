@@ -16,13 +16,13 @@ public class GameManager : BaseBehaviour
 	void OnEnable()
 	{
 		Messenger.AddListener<int>( "prize collected", OnPrizeCollected );
-		Messenger.AddListener<string, bool>( "player dead", OnPlayerDead);
+		Messenger.AddListener<string, Collider2D>( "player dead", OnPlayerDead);
 	}
 
 	void OnDestroy()
 	{
 		Messenger.RemoveListener<int>( "prize collected", OnPrizeCollected );
-		Messenger.RemoveListener<string, bool>( "player dead", OnPlayerDead);
+		Messenger.RemoveListener<string, Collider2D>( "player dead", OnPlayerDead);
 	}
 
 	// EVENT RESPONDERS
@@ -32,7 +32,7 @@ public class GameManager : BaseBehaviour
 		Messenger.Broadcast<int>("change score", _currentScore);
 	}
 
-	void OnPlayerDead(string methodOfDeath, bool status)
+	void OnPlayerDead(string methodOfDeath, Collider2D coll)
 	{
 		_currentScore = _lastSavedScore;
 		_lives -= 1;

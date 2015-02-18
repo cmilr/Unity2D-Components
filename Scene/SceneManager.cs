@@ -20,16 +20,16 @@ public class SceneManager : CacheBehaviour {
 	// EVENT LISTENERS
 	void OnEnable()
 	{
-		Messenger.AddListener<string, bool>( "player dead", OnPlayerDead);
+		Messenger.AddListener<string, Collider2D>( "player dead", OnPlayerDead);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<string, bool>( "player dead", OnPlayerDead);
+		Messenger.RemoveListener<string, Collider2D>( "player dead", OnPlayerDead);
 	}
 
 	// EVENT RESPONDERS
-	void OnPlayerDead(string methodOfDeath, bool value)
+	void OnPlayerDead(string methodOfDeath, Collider2D coll)
 	{
 		MTween.FadeOut(spriteRenderer, timeToFade);
 
