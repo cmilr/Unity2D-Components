@@ -64,9 +64,6 @@ CameraFollow.cs
 CameraFollow.cs.meta
 CharacterController2D.cs
 CharacterController2D.cs.meta
-ThrowsOfDeath.cs
-ThrowsOfDeath.cs.meta
-DeathManager.cs
-DeathManager.cs.meta
 DeathHandler.cs
 DeathHandler.cs.meta
+
