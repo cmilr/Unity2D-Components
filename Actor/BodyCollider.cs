@@ -39,6 +39,11 @@ public class BodyCollider : CacheBehaviour
 		{
 		    Messenger.Broadcast<string, Collider2D>("player dead", "Drowned", coll);
 		}
+
+		if (coll.tag == "Wall" && !alreadyCollided)
+		{
+		    Debug.Log("Hit Wall!!");
+		}
 	}
 
 	void GetColliderComponents(Collider2D coll)
