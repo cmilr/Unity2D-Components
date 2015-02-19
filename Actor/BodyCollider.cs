@@ -9,7 +9,8 @@ public class BodyCollider : CacheBehaviour
 {
 	private bool alreadyCollided;
 	private PickupEntity pickupEntity;
-	private CharacterEntity charEntity;
+	private EntityBehaviour entityBehaviour;
+	// private CharacterEntity charEntity;
 	
 
 	void Start()
@@ -31,24 +32,24 @@ public class BodyCollider : CacheBehaviour
 
 		if (coll.tag == "Enemy" && !alreadyCollided)
 		{
-			alreadyCollided = true;
 		    Messenger.Broadcast<string, Collider2D>("player dead", "StruckDown", coll);
 		}
 
 		if (coll.tag == "Water" && !alreadyCollided)
 		{
-			alreadyCollided = true;
 		    Messenger.Broadcast<string, Collider2D>("player dead", "Drowned", coll);
-
 		}
 	}
 
 	void GetColliderComponents(Collider2D coll)
 	{
 		pickupEntity = coll.GetComponent<PickupEntity>() as PickupEntity;
-		charEntity = coll.GetComponent<CharacterEntity>() as CharacterEntity;
+		// charEntity = coll.GetComponent<CharacterEntity>() as CharacterEntity;
 
 		if (coll.GetComponent<EntityBehaviour>())
-			alreadyCollided = coll.GetComponent<EntityBehaviour>().alreadyCollided;
+		{
+			entityBehaviour = coll.GetComponent<EntityBehaviour>();
+			alreadyCollided = entityBehaviour.alreadyCollided;
+		}
 	}
 }
