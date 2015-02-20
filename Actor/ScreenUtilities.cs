@@ -8,6 +8,8 @@ public class ScreenUtilities : CacheBehaviour
 	private Transform trackedObject;            // reference to the tracked object's transform.
 	private float vertExtent;                   // half the height of the game screen.
 	private float horizExtent;                  // half the width of the game screen.
+	private int currentScreenWidth;
+    private int currentScreenHeight;
 
 	void Start()
 	{
@@ -16,6 +18,20 @@ public class ScreenUtilities : CacheBehaviour
 
 		vertExtent = Camera.main.camera.orthographicSize;
 		horizExtent = vertExtent * Screen.width / Screen.height;
+
+		currentScreenWidth = Screen.width;
+    	currentScreenHeight = Screen.height;
+	}
+
+	void Update()
+	{
+    	if (Screen.width != currentScreenWidth || Screen.height != currentScreenHeight)
+    	{
+	        vertExtent = Camera.main.camera.orthographicSize;
+			horizExtent = vertExtent * Screen.width / Screen.height;
+
+	        Messenger.Broadcast<float, float>("screen size changed", vertExtent, horizExtent);
+    	}
 	}
 
 	// returns the distance from a gameObject to the edge of the screen on 2D orthographic cameras.
