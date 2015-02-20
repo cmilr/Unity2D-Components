@@ -46,6 +46,14 @@ public class BodyCollider : CacheBehaviour
 		}
 	}
 
+	void OnTriggerExit2D(Collider2D coll)
+	{
+		if (coll.tag == "Wall")
+		{
+		    Messenger.Broadcast<bool>("touching wall", false);
+		}
+	}
+
 	void GetColliderComponents(Collider2D coll)
 	{
 		pickupEntity = coll.GetComponent<PickupEntity>() as PickupEntity;
