@@ -40,9 +40,9 @@ public class BodyCollider : CacheBehaviour
 		    Messenger.Broadcast<string, Collider2D>("player dead", "Drowned", coll);
 		}
 
-		if (coll.tag == "Wall" && !alreadyCollided)
+		if (coll.tag == "Wall")
 		{
-		    Debug.Log("Hit Wall!!");
+		    Messenger.Broadcast<bool>("touching wall", true);
 		}
 	}
 
