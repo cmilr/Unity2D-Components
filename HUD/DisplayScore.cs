@@ -6,8 +6,11 @@ using Matcha.Game.Tweens;
 
 public class DisplayScore : BaseBehaviour
 {
+	public bool topLayer;
 	private Text scoreUI;
 	private int currentscore;
+	private float fadeInAfter = .5f;
+	private float fadeOutAfter = .5f;
 	private float timeToFade = 2f;
 
 	void Start ()
@@ -15,7 +18,7 @@ public class DisplayScore : BaseBehaviour
 		scoreUI = gameObject.GetComponent<Text>();
 		scoreUI.text = currentscore.ToString();
 		MTween.FadeOutText(scoreUI, 0, 0);
-		MTween.FadeInText(scoreUI, 1, timeToFade);
+		MTween.FadeInText(scoreUI, fadeInAfter, timeToFade);
 	}
 
 	// EVENT LISTENERS
@@ -35,11 +38,17 @@ public class DisplayScore : BaseBehaviour
 	void OnChangeScore(int newScore)
 	{
 		scoreUI.text = newScore.ToString();
-		MTween.DisplayScore(gameObject, scoreUI);
+		if (topLayer)
+		{
+			MTween.DisplayScore(gameObject, scoreUI);
+		}
+		else {
+			MTween.DisplayScoreFX(gameObject, scoreUI);			
+		}
 	}
 
 	void OnPlayerDead(string methodOfDeath, Collider2D coll)
 	{
-		MTween.FadeOutText(scoreUI, .5f, timeToFade);
+		MTween.FadeOutText(scoreUI, fadeOutAfter, timeToFade);
 	}
 }

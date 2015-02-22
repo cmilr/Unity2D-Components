@@ -7,6 +7,8 @@ using Matcha.Game.Tweens;
 public class SceneManager : CacheBehaviour {
 
 	private float timeToFade = 2f;
+	private float fadeInAfter = 0f;
+	private float fadeOutAfter = 2f;
 	private float timeBeforeLevelReload = 3f;
 
 	void Start() 
@@ -14,7 +16,7 @@ public class SceneManager : CacheBehaviour {
 		base.CacheComponents();
 		spriteRenderer.DOKill();
 		
-		MTween.FadeIn(spriteRenderer, timeToFade);
+		MTween.FadeInSprite(spriteRenderer, fadeInAfter, timeToFade);
 	}
 
 	// EVENT LISTENERS
@@ -31,7 +33,7 @@ public class SceneManager : CacheBehaviour {
 	// EVENT RESPONDERS
 	void OnPlayerDead(string methodOfDeath, Collider2D coll)
 	{
-		MTween.FadeOut(spriteRenderer, timeToFade);
+		MTween.FadeOutSprite(spriteRenderer, fadeOutAfter, timeToFade);
 
 		StartCoroutine(Timer.Start(timeBeforeLevelReload, true, () =>
 		{
