@@ -4,12 +4,15 @@ using System.Collections;
 
 public class GameManager : BaseBehaviour
 {
-	// player stats.
+	// game stats
+	private static int _difficultyMultiplier = 1;
+
+	// player stats
 	private static int _currentScore = 0;
 	private static int _lastSavedScore = 0;
 	private static int _lives = 3;
 
-	// level stats.
+	// level stats
 	private static int _currentLevel;
 
 	// EVENT LISTENERS
@@ -56,13 +59,5 @@ public class GameManager : BaseBehaviour
 	// 	get
 	// 	{
 	// 		return _currentScore;
-	// 	}
-	// }
-
-	// public int Lives
-	// {
-	// 	get
-	// 	{
-	// 		return _lives;
 	// 	}
 	// }

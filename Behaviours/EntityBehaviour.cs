@@ -5,6 +5,7 @@ using System.Collections;
 public class EntityBehaviour : CacheBehaviour {
 
 	public bool alreadyCollided = false;
+	private float alignTo = .124f;
 
 	protected void SelfDestruct(int inSeconds)
 	{
@@ -25,7 +26,7 @@ public class EntityBehaviour : CacheBehaviour {
 
 	protected void AutoAlign()
 	{
-		float targetY = (float)(Math.Round(transform.position.y) - .124);
+		float targetY = (float)(Math.Round(transform.position.y) - alignTo);
 		transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
 	}
 }
