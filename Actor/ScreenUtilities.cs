@@ -21,9 +21,11 @@ public class ScreenUtilities : CacheBehaviour
 
 		currentScreenWidth = Screen.width;
     	currentScreenHeight = Screen.height;
+
+    	InvokeRepeating("CheckScreenSize", 0f, 0.1F);
 	}
 
-	void Update()
+	void CheckScreenSize()
 	{
     	if (Screen.width != currentScreenWidth || Screen.height != currentScreenHeight)
     	{

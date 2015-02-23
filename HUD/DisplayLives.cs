@@ -5,14 +5,12 @@ using DG.Tweening;
 using Matcha.Game.Tweens;
 
 
-public class UpdateHUDLives : BaseBehaviour
+public class DisplayLives : BaseBehaviour
 {
 	public Sprite threeLives;
 	public Sprite twoLives;
 	public Sprite oneLife;
 	private Image lives;
-	private float fadeInAfter = .5f;
-	private float fadeOutAfter = .5f;
 	private float timeToFade = 2f;
 
 	void Start()
@@ -22,7 +20,7 @@ public class UpdateHUDLives : BaseBehaviour
 		lives.DOKill();
 		
 		MTween.FadeOutImage(lives, 0, 0);
-		MTween.FadeInImage(lives, fadeInAfter, timeToFade);
+		MTween.FadeInImage(lives, HUD_FADE_IN_AFTER, timeToFade);
 	}
 
 	// EVENT LISTENERS
@@ -38,6 +36,6 @@ public class UpdateHUDLives : BaseBehaviour
 
 	void OnPlayerDead(string methodOfDeath, Collider2D coll)
 	{
-		MTween.FadeOutImage(lives, fadeOutAfter, timeToFade);
+		MTween.FadeOutImage(lives, HUD_FADE_OUT_AFTER, timeToFade);
 	}
 }

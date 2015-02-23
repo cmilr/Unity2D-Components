@@ -9,8 +9,6 @@ public class DisplayScore : BaseBehaviour
 	public bool topLayer;
 	private Text scoreUI;
 	private int currentscore;
-	private float fadeInAfter = .5f;
-	private float fadeOutAfter = .5f;
 	private float timeToFade = 2f;
 
 	void Start ()
@@ -18,7 +16,7 @@ public class DisplayScore : BaseBehaviour
 		scoreUI = gameObject.GetComponent<Text>();
 		scoreUI.text = currentscore.ToString();
 		MTween.FadeOutText(scoreUI, 0, 0);
-		MTween.FadeInText(scoreUI, fadeInAfter, timeToFade);
+		MTween.FadeInText(scoreUI, HUD_FADE_IN_AFTER, timeToFade);
 	}
 
 	// EVENT LISTENERS
@@ -49,6 +47,6 @@ public class DisplayScore : BaseBehaviour
 
 	void OnPlayerDead(string methodOfDeath, Collider2D coll)
 	{
-		MTween.FadeOutText(scoreUI, fadeOutAfter, timeToFade);
+		MTween.FadeOutText(scoreUI, HUD_FADE_OUT_AFTER, timeToFade);
 	}
 }

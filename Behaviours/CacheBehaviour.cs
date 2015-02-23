@@ -4,24 +4,16 @@ using System.Collections;
 
 public class CacheBehaviour : BaseBehaviour
 {
-	[HideInInspector]
-	public     Animator animator;
-	[HideInInspector]
-	public new AudioSource audio;
-	[HideInInspector]
-	public new Camera camera;
-	[HideInInspector]
-	public new Collider2D collider2D;
-	[HideInInspector]
-	public new Rigidbody2D rigidbody2D;
-	[HideInInspector]
-	public new Renderer renderer;
-	[HideInInspector]
-	public     SpriteRenderer spriteRenderer;
-	[HideInInspector]
-	public new Transform transform;
+	protected     Animator animator;
+	protected new AudioSource audio;
+	protected new Camera camera;
+	protected new Collider2D collider2D;
+	protected new Rigidbody2D rigidbody2D;
+	protected new Renderer renderer;
+	protected     SpriteRenderer spriteRenderer;
+	protected new Transform transform;
 
-	public void CacheComponents()
+	protected void CacheComponents()
 	{
 		transform = gameObject.transform;
 		animator = gameObject.GetComponent<Animator>() as Animator;
