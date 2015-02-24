@@ -7,7 +7,7 @@ public class EntityBehaviour : CacheBehaviour {
 	public bool alreadyCollided = false;
 	private float alignTo = .124f;
 
-	protected void SelfDestruct(int inSeconds)
+	public void SelfDestruct(int inSeconds)
 	{
 		Destroy(gameObject, inSeconds);
 	}

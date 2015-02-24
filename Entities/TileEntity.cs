@@ -3,13 +3,13 @@
 
 public class TileEntity : BaseBehaviour
 {
-	void OnBecameVisible()
-	{
-		gameObject.SetActive(true);
-	}
+	// void OnBecameVisible()
+	// {
+	// 	collider2D.enabled = true;
+	// }
 
-	void OnBecameInvisible()
-	{
-		gameObject.SetActive(false);
-	}
+	// void OnBecameInvisible()
+	// {
+	// 	collider2D.enabled = false;
+	// }
 }
