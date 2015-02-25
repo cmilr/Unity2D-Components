@@ -66,4 +66,6 @@ CharacterController2D.cs
 CharacterController2D.cs.meta
 DeathHandler.cs
 DeathHandler.cs.meta
+SortingLayerExposed.cs
+SortingLayerExposed.cs.meta
 

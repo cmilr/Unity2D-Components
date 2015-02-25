@@ -38,6 +38,7 @@ public class SceneManager : CacheBehaviour {
 		StartCoroutine(Timer.Start(timeBeforeLevelReload, true, () =>
 		{
 			Application.LoadLevel(Application.loadedLevel);
+			System.GC.Collect();
 		}));
 	}
 }

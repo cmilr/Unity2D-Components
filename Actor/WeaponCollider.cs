@@ -13,7 +13,7 @@ public class WeaponCollider : CacheBehaviour
 	void Start()
 	{
 		base.CacheComponents();
-		MLib2D.IgnoreLayerCollisionWith(gameObject, "Collectables", true);
+		MLib2D.IgnoreLayerCollisionWith(gameObject, "Pickups", true);
 	}
 
 	void OnTriggerEnter2D(Collider2D coll)
