@@ -6,9 +6,9 @@ using System.Collections;
 public class CacheBehaviour : BaseBehaviour
 {
 	[HideInInspector, NonSerialized]
-	protected     Animation animation;
+	protected new Animation animation;
 	[HideInInspector, NonSerialized]
-	protected     Animator animator;
+	protected new Animator animator;
 	[HideInInspector, NonSerialized]
 	protected new AudioSource audio;
 	[HideInInspector, NonSerialized]
@@ -26,7 +26,7 @@ public class CacheBehaviour : BaseBehaviour
 	[HideInInspector, NonSerialized]
 	protected new Renderer renderer;
 	[HideInInspector, NonSerialized]
-	protected     SpriteRenderer spriteRenderer;
+	protected new SpriteRenderer spriteRenderer;
 	[HideInInspector, NonSerialized]
 	protected new Transform transform;
 
