@@ -8,7 +8,7 @@ public class CacheBehaviour : BaseBehaviour
 	[HideInInspector, NonSerialized]
 	protected new Animation animation;
 	[HideInInspector, NonSerialized]
-	protected new Animator animator;
+	protected     Animator animator;
 	[HideInInspector, NonSerialized]
 	protected new AudioSource audio;
 	[HideInInspector, NonSerialized]
@@ -26,7 +26,7 @@ public class CacheBehaviour : BaseBehaviour
 	[HideInInspector, NonSerialized]
 	protected new Renderer renderer;
 	[HideInInspector, NonSerialized]
-	protected new SpriteRenderer spriteRenderer;
+	protected     SpriteRenderer spriteRenderer;
 	[HideInInspector, NonSerialized]
 	protected new Transform transform;
 
