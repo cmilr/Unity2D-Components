@@ -1,19 +1,27 @@
 using UnityEngine;
 using System.Collections;
+using System;
+using System.Runtime.Serialization.Formatters.Binary;
 
 
 public class GameManager : BaseBehaviour
 {
 	// game stats
-	// private static int _difficultyMultiplier = 1;
+	// public static int DifficultyMultiplier = 1;
 
 	// player stats
-	private static int _currentScore = 0;
-	private static int _lastSavedScore = 0;
-	private static int _lives = 3;
+	public int CurrentScore 	{ get; private set; }
+	public int LastSavedScore 	{ get; private set; }
+	public int Lives 			{ get; private set; }
+	public int CurrentLevel 	{ get; private set; }
 
-	// level stats
-	private static int _currentLevel;
+	void Start()
+	{
+		CurrentScore = 0;
+		LastSavedScore = 0;
+		Lives = 3;
+		CurrentLevel = 1;
+	}
 
 	// EVENT LISTENERS
 	void OnEnable()
@@ -31,13 +39,13 @@ public class GameManager : BaseBehaviour
 	// EVENT RESPONDERS
 	void OnPrizeCollected(int worth)
 	{
-		_currentScore += worth;
-		Messenger.Broadcast<int>("change score", _currentScore);
+		CurrentScore += worth;
+		Messenger.Broadcast<int>("change score", CurrentScore);
 	}
 
 	void OnPlayerDead(string methodOfDeath, Collider2D coll)
 	{
-		_currentScore = _lastSavedScore;
+		CurrentScore = _lastSavedScore;
 		_lives -= 1;
 	}
 }
@@ -58,6 +66,6 @@ public class GameManager : BaseBehaviour
 	// {
 	// 	get
 	// 	{
-	// 		return _currentScore;
+	// 		return CurrentScore;
 	// 	}
 	// }
