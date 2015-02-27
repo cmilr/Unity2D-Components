@@ -5,7 +5,7 @@ using System.Collections;
 public class GameManager : BaseBehaviour
 {
 	// game stats
-	private static int _difficultyMultiplier = 1;
+	// private static int _difficultyMultiplier = 1;
 
 	// player stats
 	private static int _currentScore = 0;

@@ -8,7 +8,7 @@ using Matcha.Lib;
 public class WeaponCollider : CacheBehaviour
 {
 	private bool alreadyCollided;
-	private CharacterEntity charEntity;
+	// private CharacterEntity charEntity;
 
 	void Start()
 	{
@@ -28,7 +28,7 @@ public class WeaponCollider : CacheBehaviour
 
 	void GetColliderComponents(Collider2D coll)
 	{
-		charEntity = coll.GetComponent<CharacterEntity>() as CharacterEntity;
+		// charEntity = coll.GetComponent<CharacterEntity>() as CharacterEntity;
 
 		if (coll.GetComponent<EntityBehaviour>())
 			alreadyCollided = coll.GetComponent<EntityBehaviour>().alreadyCollided;
