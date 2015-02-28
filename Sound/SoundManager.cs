@@ -27,7 +27,7 @@ public class SoundManager : CacheBehaviour
 	// EVENT RESPONDERS
 	void OnPrizeCollected(int worth)
 	{
-		audio.PlayOneShot(collectPrize, 0.1F);
+		audio.PlayOneShot(collectPrize, 0F);
 	}
 
 }

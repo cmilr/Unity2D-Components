@@ -7,52 +7,54 @@ using Matcha.Game.Tweens;
 public class DisplayScore : BaseBehaviour
 {
 	public bool topLayer;
-	public GameManager gameManager;
-	private Text scoreUI;
+	private Text HUDScore;
 	private int currentScore;
 	private float timeToFade = 2f;
 
 	void Start ()
 	{
-		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-		currentScore = gameManager.CurrentScore;
+		HUDScore = gameObject.GetComponent<Text>();
+	}
 
-		scoreUI = gameObject.GetComponent<Text>();
-		scoreUI.text = currentScore.ToString();
+	void OnInitScore(int initScore)
+	{
+		HUDScore.text = initScore.ToString();
 
 		// fade score to zero instantly upon start-up, then fade up slowly
-		MTween.FadeOutText(scoreUI, 0, 0);
-		MTween.FadeInText(scoreUI, HUD_FADE_IN_AFTER, timeToFade);
+		MTween.FadeOutText(HUDScore, 0, 0);
+		MTween.FadeInText(HUDScore, HUD_FADE_IN_AFTER, timeToFade);
 	}
 
 	void OnChangeScore(int newScore)
 	{
-		scoreUI.text = newScore.ToString();
+		HUDScore.text = newScore.ToString();
 
 		if (topLayer)
 		{
-			MTween.DisplayScore(gameObject, scoreUI);
+			MTween.DisplayScore(gameObject, HUDScore);
 		}
 		else 
 		{
-			MTween.DisplayScoreFX(gameObject, scoreUI);			
+			MTween.DisplayScoreFX(gameObject, HUDScore);			
 		}
 	}
 
-	void OnPlayerDead(string methodOfDeath, Collider2D coll)
+	void OnFadeHud(bool status)
 	{
-		MTween.FadeOutText(scoreUI, HUD_FADE_OUT_AFTER, timeToFade);
+		MTween.FadeOutText(HUDScore, HUD_FADE_OUT_AFTER, timeToFade);
 	}
 
 	void OnEnable()
 	{
+		Messenger.AddListener<int>("init score", OnInitScore);
 		Messenger.AddListener<int>("change score", OnChangeScore);
-		Messenger.AddListener<string, Collider2D>( "player dead", OnPlayerDead);
+		Messenger.AddListener<bool>("fade hud", OnFadeHud);
 	}
 	
 	void OnDestroy()
 	{
+		Messenger.RemoveListener<int>("init score", OnInitScore);
 		Messenger.RemoveListener<int>("change score", OnChangeScore);
-		Messenger.RemoveListener<string, Collider2D>( "player dead", OnPlayerDead);
+		Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
 	}
 }

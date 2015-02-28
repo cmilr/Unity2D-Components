@@ -44,6 +44,14 @@ public class BodyCollider : CacheBehaviour
 		{
 		    Messenger.Broadcast<bool>("touching wall", true);
 		}
+
+		if (coll.tag == "LevelUp")
+		{
+			Messenger.Broadcast<int>("prize collected", pickupEntity.worth);
+			pickupEntity.React();
+			
+		    Messenger.Broadcast<bool>("level completed", true);
+		}
 	}
 
 	void OnTriggerExit2D(Collider2D coll)

@@ -26,15 +26,15 @@ public class DisplayLives : BaseBehaviour
 	// EVENT LISTENERS
 	void OnEnable()
 	{
-		Messenger.AddListener<string, Collider2D>( "player dead", OnPlayerDead);
+		Messenger.AddListener<bool>("fade hud", OnFadeHud);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<string, Collider2D>( "player dead", OnPlayerDead);
+		Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
 	}
 
-	void OnPlayerDead(string methodOfDeath, Collider2D coll)
+	void OnFadeHud(bool status)
 	{
 		MTween.FadeOutImage(lives, HUD_FADE_OUT_AFTER, timeToFade);
 	}

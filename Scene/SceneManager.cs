@@ -19,26 +19,26 @@ public class SceneManager : CacheBehaviour {
 		MTween.FadeInSprite(spriteRenderer, fadeInAfter, timeToFade);
 	}
 
-	// EVENT LISTENERS
-	void OnEnable()
-	{
-		Messenger.AddListener<string, Collider2D>( "player dead", OnPlayerDead);
-	}
-
-	void OnDestroy()
-	{
-		Messenger.RemoveListener<string, Collider2D>( "player dead", OnPlayerDead);
-	}
-
-	// EVENT RESPONDERS
-	void OnPlayerDead(string methodOfDeath, Collider2D coll)
+	void OnLoadLevel(int newLevel)
 	{
 		MTween.FadeOutSprite(spriteRenderer, fadeOutAfter, timeToFade);
 
 		StartCoroutine(Timer.Start(timeBeforeLevelReload, true, () =>
 		{
-			Application.LoadLevel(Application.loadedLevel);
+			Application.LoadLevel("Scene" + newLevel);
 			System.GC.Collect();
 		}));
+	}
+
+	void OnEnable()
+	{
+		// Messenger.AddListener<string, Collider2D>( "player dead", OnPlayerDead);
+		Messenger.AddListener<int>( "load level", OnLoadLevel);	
+	}
+
+	void OnDestroy()
+	{
+		// Messenger.RemoveListener<string, Collider2D>( "player dead", OnPlayerDead);
+		Messenger.RemoveListener<int>( "load level", OnLoadLevel);	
 	}
 }

@@ -1,52 +1,55 @@
 using UnityEngine;
 using System.Collections;
-using System;
-using System.Runtime.Serialization.Formatters.Binary;
 
 
 public class GameManager : BaseBehaviour
 {
-	// game stats
-	// public static int DifficultyMultiplier = 1;
-
-	// player stats
-	public int CurrentScore 	{ get; private set; }
-	public int LastSavedScore 	{ get; private set; }
-	public int Lives 			{ get; private set; }
-	public int CurrentLevel 	{ get; private set; }
+	private GameData data;
 
 	void Start()
 	{
-		CurrentScore = 0;
-		LastSavedScore = 0;
-		Lives = 3;
-		CurrentLevel = 1;
+		data = GameObject.Find("_GameData").GetComponent<GameData>();
+
+		Messenger.Broadcast<int>("init score", data.CurrentScore);
 	}
 
 	// EVENT LISTENERS
 	void OnEnable()
 	{
-		Messenger.AddListener<int>( "prize collected", OnPrizeCollected );
+		Messenger.AddListener<int>( "prize collected", OnPrizeCollected);
 		Messenger.AddListener<string, Collider2D>( "player dead", OnPlayerDead);
+		Messenger.AddListener<bool>( "level completed", OnLevelCompleted);
 	}
 
 	void OnDestroy()
 	{
 		Messenger.RemoveListener<int>( "prize collected", OnPrizeCollected );
 		Messenger.RemoveListener<string, Collider2D>( "player dead", OnPlayerDead);
+		Messenger.RemoveListener<bool>( "level completed", OnLevelCompleted);
 	}
 
 	// EVENT RESPONDERS
 	void OnPrizeCollected(int worth)
 	{
-		CurrentScore += worth;
-		Messenger.Broadcast<int>("change score", CurrentScore);
+		data.CurrentScore += worth;
+		Messenger.Broadcast<int>("change score", data.CurrentScore);
 	}
 
 	void OnPlayerDead(string methodOfDeath, Collider2D coll)
 	{
-		CurrentScore = _lastSavedScore;
-		_lives -= 1;
+		data.CurrentScore = data.LastSavedScore;
+		data.Lives -= 1;
+		Messenger.Broadcast<bool>("fade hud", true);
+		Messenger.Broadcast<int>("load level", data.CurrentLevel);
+	}
+
+	void OnLevelCompleted(bool status)
+	{
+		data.LastSavedScore = data.CurrentScore;
+		data.CurrentLevel = data.CurrentLevel;
+		Messenger.Broadcast<bool>("fade hud", true);
+		Messenger.Broadcast<int>("load level", data.CurrentLevel);
+		Debug.Log("LEVEL COMPLETED!!");
 	}
 }
 
@@ -62,10 +65,10 @@ public class GameManager : BaseBehaviour
 
 
 
-	// public int CurrentScore
+	// public int data.CurrentScore
 	// {
 	// 	get
 	// 	{
-	// 		return CurrentScore;
+	// 		return data.CurrentScore;
 	// 	}
 	// }
