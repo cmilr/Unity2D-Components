@@ -8,7 +8,6 @@ using Matcha.Lib;
 
 public class PlayerMovement : CacheBehaviour
 {
-	public int groundLine = -50;						// y coordinate where aboveground ends
 	public float gravity = -35f;                        // set gravity for player
 	public float runSpeed = 8f;                         // set player's run speed
 	public float groundDamping = 20f;                   // how fast do we change direction? higher means faster
@@ -16,7 +15,6 @@ public class PlayerMovement : CacheBehaviour
 	public float jumpHeight = 2.6f;                     // player's jump height
 	public float maxFallingSpeed = 100f;                // max falling speed, for throttling falls, etc
 	public float maxRisingSpeed = 2f;                   // max rising speed, for throttling player on moving platforms, etc
-	public bool FacingRight { get; private set; }
 
 	private float previousX;							// previous update's x position, for horizontal movement comparisons
 	private float previousY;                            // previous update's y position, for speed comparisons
@@ -24,6 +22,7 @@ public class PlayerMovement : CacheBehaviour
 	private float h;                                    // input horizontal axis
 	private bool ridingFastPlatform;                    // this is set in response to a message from MovingPlatform
 	private bool touchingWall;
+	private bool facingRight;
 	private bool moveRight;
 	private bool moveLeft;
 	private bool jump;
@@ -31,12 +30,14 @@ public class PlayerMovement : CacheBehaviour
 	private Vector3 velocity;
 	private Player playerControls;
 	private CharacterController2D controller;
+	private PlayerState state;
 	private float normalizedHorizontalSpeed;
 
 
 	void Start()
 	{
 		base.CacheComponents();
+		state = GetComponent<PlayerState>();
 		controller = GetComponent<CharacterController2D>();
 		playerControls = ReInput.players.GetPlayer(0);
 	}
@@ -81,9 +82,9 @@ public class PlayerMovement : CacheBehaviour
 			if (controller.isGrounded)
 				animator.Play(Animator.StringToHash("Run"));
 
-			FacingRight = true;
-
 			moveRight = false;
+
+			state.FacingRight = true;
 		}
 		else if (moveLeft)
 		{
@@ -95,9 +96,9 @@ public class PlayerMovement : CacheBehaviour
 			if (controller.isGrounded)
 				animator.Play(Animator.StringToHash("Run"));
 
-			FacingRight = false;
-
 			moveLeft = false;
+
+			state.FacingRight = false;
 		}
 		else if (controller.isGrounded)
 		{
@@ -107,7 +108,7 @@ public class PlayerMovement : CacheBehaviour
 				animator.Play(Animator.StringToHash("Idle"));
 		}
 		
-		if (MLib2D.Equals(transform.position.x, previousX) && touchingWall)
+		if (MLib2D.Equals(transform.position.x, previousX) && state.TouchingWall)
 		{
 			// flush horizontal axis if player is falling or jumping while pressed against a wall
 			normalizedHorizontalSpeed = 0;
@@ -130,8 +131,6 @@ public class PlayerMovement : CacheBehaviour
 		ClampYMovement();
 
 		controller.move(velocity * Time.deltaTime);
-
-		CheckPlayerLocation();
 
 		SaveCurrentPosition();
 	}
@@ -160,48 +159,31 @@ public class PlayerMovement : CacheBehaviour
 		}
 	}
 
-	void CheckPlayerLocation()
-	{
-		if (transform.position.y > groundLine)
-			Messenger.Broadcast<bool>("player above ground", true);
-		else 
-			Messenger.Broadcast<bool>("player above ground", false);
-	}
-
 	void SaveCurrentPosition()
 	{
 		previousX = transform.position.x;
 		previousY = transform.position.y;
 	}
 
-	// EVENT LISTENERS
-	void OnEnable()
-	{
-		Messenger.AddListener<bool>( "touching wall", OnTouchingWall);
-		Messenger.AddListener<bool>( "riding fast platform", OnRidingFastPlatform);
-		Messenger.AddListener<string, Collider2D>( "player dead", OnPlayerDead);
-	}
-
-	void OnDestroy()
-	{
-		Messenger.RemoveListener<bool>( "touching wall", OnTouchingWall);		
-		Messenger.RemoveListener<bool>( "riding fast platform", OnRidingFastPlatform);
-		Messenger.RemoveListener<string, Collider2D>( "player dead", OnPlayerDead);
-	}
-
-	// EVENT RESPONDERS
 	void OnRidingFastPlatform(bool status)
 	{
 		ridingFastPlatform = status;
 	}
 
-	void OnPlayerDead(string methodOfDeath, Collider2D coll)
+	void OnDisableMovement(bool status)
 	{
 		this.enabled = false;
 	}
 
-	void OnTouchingWall(bool status)
+	void OnEnable()
 	{
-		touchingWall = status;
+		Messenger.AddListener<bool>( "disable movement", OnDisableMovement);
+		Messenger.AddListener<bool>( "riding fast platform", OnRidingFastPlatform);
+	}
+
+	void OnDestroy()
+	{
+		Messenger.RemoveListener<bool>( "disable movement", OnDisableMovement);	
+		Messenger.RemoveListener<bool>( "riding fast platform", OnRidingFastPlatform);
 	}
 }
