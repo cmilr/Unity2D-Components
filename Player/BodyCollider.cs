@@ -7,16 +7,18 @@ using Matcha.Lib;
 
 public class BodyCollider : CacheBehaviour
 {
-	private bool alreadyCollided;
-	private bool alive;
 	private PickupEntity pickupEntity;
-	private EntityBehaviour entityBehaviour;
+	private EntityBehaviour entity;
+	private PlayerState state;
 	// private CharacterEntity charEntity;
+	private bool colliderDisabled;
 	
 
 	void Start()
 	{
 		base.CacheComponents();
+		state = transform.parent.GetComponent<PlayerState>();
+
 		MLib2D.IgnoreLayerCollisionWith(gameObject, "One-Way Platform", true);
 		MLib2D.IgnoreLayerCollisionWith(gameObject, "Platform", true);
 	}
@@ -25,38 +27,62 @@ public class BodyCollider : CacheBehaviour
 	{
 		GetColliderComponents(coll);
 
-		if (coll.tag == "Prize" && !alreadyCollided)
+		if (coll.tag == "Prize" && !entity.alreadyCollided && !state.Dead && !colliderDisabled)
 		{
+			entity.alreadyCollided = true;
 			Messenger.Broadcast<int>("prize collected", pickupEntity.worth);
 			pickupEntity.ReactToCollision();
 		}
 
-		if (coll.tag == "Enemy" && !alreadyCollided)
+		if (coll.tag == "Enemy" && !entity.alreadyCollided && !state.Dead && !colliderDisabled)
 		{
-		    Messenger.Broadcast<string, Collider2D>("player dead", "StruckDown", coll);
+			entity.alreadyCollided = true;
+		    Messenger.Broadcast<string, Collider2D>("has died", "StruckDown", coll);
 		}
 
-		if (coll.tag == "Water" && !alreadyCollided)
+		if (coll.tag == "LevelUp" && !entity.alreadyCollided && !state.Dead && !colliderDisabled)
 		{
-		    Messenger.Broadcast<string, Collider2D>("player dead", "Drowned", coll);
+			entity.alreadyCollided = true;
+			colliderDisabled = true;
+			Messenger.Broadcast<int>("prize collected", pickupEntity.worth);
+			pickupEntity.ReactToCollision();
+		    Messenger.Broadcast<bool>("level completed", true);
+		}
+
+		if (coll.tag == "Water" && !entity.alreadyCollided && !colliderDisabled)
+		{
+			entity.alreadyCollided = true;
+		    Messenger.Broadcast<string, Collider2D>("has died", "Drowned", coll);
 		}
 
 		if (coll.tag == "Wall")
 		{
 		    Messenger.Broadcast<bool>("touching wall", true);
 		}
+	}
 
-		if (coll.tag == "LevelUp")
+	void OnTriggerStay2D(Collider2D coll)
+	{
+		if (coll.tag == "Wall")
 		{
-			Messenger.Broadcast<int>("prize collected", pickupEntity.worth);
-			pickupEntity.ReactToCollision();
-
-		    Messenger.Broadcast<bool>("level completed", true);
+		    Messenger.Broadcast<bool>("touching wall", true);
 		}
 	}
 
 	void OnTriggerExit2D(Collider2D coll)
 	{
+		GetColliderComponents(coll);
+
+		if (coll.tag == "Enemy")
+		{
+			entity.alreadyCollided = true;
+		}
+
+		if (coll.tag == "Water")
+		{
+			entity.alreadyCollided = true;
+		}
+
 		if (coll.tag == "Wall")
 		{
 		    Messenger.Broadcast<bool>("touching wall", false);
@@ -70,8 +96,7 @@ public class BodyCollider : CacheBehaviour
 
 		if (coll.GetComponent<EntityBehaviour>())
 		{
-			entityBehaviour = coll.GetComponent<EntityBehaviour>();
-			alreadyCollided = entityBehaviour.alreadyCollided;
+			entity = coll.GetComponent<EntityBehaviour>();
 		}
 	}
 }

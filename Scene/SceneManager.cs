@@ -6,7 +6,7 @@ using Matcha.Game.Tweens;
 
 public class SceneManager : CacheBehaviour {
 
-	// private SceneData sd;
+	// private SceneData data;
 	private float timeToFade = 2f;
 	private float fadeInAfter = 0f;
 	private float fadeOutAfter = 2f;
@@ -15,10 +15,12 @@ public class SceneManager : CacheBehaviour {
 	void Start() 
 	{
 		base.CacheComponents();
-		// sd = GameObject.Find("_SceneData").GetComponent<SceneData>();
+		// data = GameObject.Find("_SceneData").GetComponent<SceneData>();
 		spriteRenderer.DOKill();
 		
 		MTween.FadeInSprite(spriteRenderer, fadeInAfter, timeToFade);
+
+		Messenger.Broadcast<int>("set groundline", -50);
 	}
 
 	void OnLoadLevel(int newLevel)
@@ -34,13 +36,11 @@ public class SceneManager : CacheBehaviour {
 
 	void OnEnable()
 	{
-		// Messenger.AddListener<string, Collider2D>( "player dead", OnPlayerDead);
 		Messenger.AddListener<int>( "load level", OnLoadLevel);	
 	}
 
 	void OnDestroy()
 	{
-		// Messenger.RemoveListener<string, Collider2D>( "player dead", OnPlayerDead);
 		Messenger.RemoveListener<int>( "load level", OnLoadLevel);	
 	}
 }

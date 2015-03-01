@@ -20,8 +20,6 @@ public class PlayerMovement : CacheBehaviour
 	private float previousY;                            // previous update's y position, for speed comparisons
 	private float speedCheck = .08f;                    // compare against to see if we need to throttle rising speed
 	private float h;                                    // input horizontal axis
-	private bool ridingFastPlatform;                    // this is set in response to a message from MovingPlatform
-	private bool touchingWall;
 	private bool facingRight;
 	private bool moveRight;
 	private bool moveLeft;
@@ -149,7 +147,7 @@ public class PlayerMovement : CacheBehaviour
 	{
 		// clamp to maxRisingSpeed to eliminate jitteriness when rising too fast,
 		// otherwise, clamp to maxFallingSpeed to prevent player leaving screen
-		if (ridingFastPlatform && MovingTooFast()) 
+		if (MovingTooFast() && state.RidingFastPlatform) 
 		{
 			velocity.y = Mathf.Clamp(velocity.y, -maxFallingSpeed, maxRisingSpeed);
 		} 
@@ -165,11 +163,6 @@ public class PlayerMovement : CacheBehaviour
 		previousY = transform.position.y;
 	}
 
-	void OnRidingFastPlatform(bool status)
-	{
-		ridingFastPlatform = status;
-	}
-
 	void OnDisableMovement(bool status)
 	{
 		this.enabled = false;
@@ -178,12 +171,10 @@ public class PlayerMovement : CacheBehaviour
 	void OnEnable()
 	{
 		Messenger.AddListener<bool>( "disable movement", OnDisableMovement);
-		Messenger.AddListener<bool>( "riding fast platform", OnRidingFastPlatform);
 	}
 
 	void OnDestroy()
 	{
 		Messenger.RemoveListener<bool>( "disable movement", OnDisableMovement);	
-		Messenger.RemoveListener<bool>( "riding fast platform", OnRidingFastPlatform);
 	}
 }

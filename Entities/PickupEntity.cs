@@ -22,8 +22,6 @@ public class PickupEntity : EntityBehaviour
 
 	public void ReactToCollision()
 	{
-		alreadyCollided = true;
-
 		switch (entityType)
 		{
 		case EntityType.none:

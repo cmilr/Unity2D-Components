@@ -3,7 +3,7 @@ using System.Collections;
 using DG.Tweening;
 
 
-public class Water : EntityBehaviour
+public class Water : CacheBehaviour
 {
     private float distance = 2f;
     private float time = 1.5f;
