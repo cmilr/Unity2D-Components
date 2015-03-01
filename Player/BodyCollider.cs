@@ -7,10 +7,10 @@ using Matcha.Lib;
 
 public class BodyCollider : CacheBehaviour
 {
-	private PickupEntity pickupEntity;
-	private EntityBehaviour entity;
+	private PickupEntity pickup;
+	private CreatureEntity creature;
+	private WaterEntity water;
 	private PlayerState state;
-	// private CharacterEntity charEntity;
 	private bool colliderDisabled;
 	
 
@@ -23,80 +23,86 @@ public class BodyCollider : CacheBehaviour
 		MLib2D.IgnoreLayerCollisionWith(gameObject, "Platform", true);
 	}
 
+	void GetColliderComponents(Collider2D coll)
+	{
+		pickup = coll.GetComponent<PickupEntity>() as PickupEntity;
+		creature = coll.GetComponent<CreatureEntity>() as CreatureEntity;
+		water = coll.GetComponent<WaterEntity>() as WaterEntity;
+	}
+
 	void OnTriggerEnter2D(Collider2D coll)
 	{
-		GetColliderComponents(coll);
-
-		if (coll.tag == "Prize" && !entity.alreadyCollided && !state.Dead && !colliderDisabled)
+		if (!colliderDisabled)
 		{
-			entity.alreadyCollided = true;
-			Messenger.Broadcast<int>("prize collected", pickupEntity.worth);
-			pickupEntity.ReactToCollision();
-		}
+			GetColliderComponents(coll);
 
-		if (coll.tag == "Enemy" && !entity.alreadyCollided && !state.Dead && !colliderDisabled)
-		{
-			entity.alreadyCollided = true;
-		    Messenger.Broadcast<string, Collider2D>("has died", "StruckDown", coll);
-		}
+			if (coll.tag == "Prize" && !pickup.HasCollidedWithBody() && !state.Dead)
+			{
+				pickup.SetCollidedWithBody(true);
+				Messenger.Broadcast<int>("prize collected", pickup.Worth());
+				pickup.ReactToCollision();
+			}
 
-		if (coll.tag == "LevelUp" && !entity.alreadyCollided && !state.Dead && !colliderDisabled)
-		{
-			entity.alreadyCollided = true;
-			colliderDisabled = true;
-			Messenger.Broadcast<int>("prize collected", pickupEntity.worth);
-			pickupEntity.ReactToCollision();
-		    Messenger.Broadcast<bool>("level completed", true);
-		}
+			if (coll.tag == "Enemy" && !creature.HasCollidedWithBody() && !state.Dead)
+			{
+				creature.SetCollidedWithBody(true);
+			    Messenger.Broadcast<string, Collider2D>("has died", "StruckDown", coll);
+			}
 
-		if (coll.tag == "Water" && !entity.alreadyCollided && !colliderDisabled)
-		{
-			entity.alreadyCollided = true;
-		    Messenger.Broadcast<string, Collider2D>("has died", "Drowned", coll);
-		}
+			if (coll.tag == "LevelUp" && !pickup.HasCollidedWithBody() && !state.Dead)
+			{
+				pickup.SetCollidedWithBody(true);
+				Messenger.Broadcast<int>("prize collected", pickup.Worth());
+				pickup.ReactToCollision();
+			    Messenger.Broadcast<bool>("level completed", true);
 
-		if (coll.tag == "Wall")
-		{
-		    Messenger.Broadcast<bool>("touching wall", true);
+			    colliderDisabled = true;
+			}
+
+			if (coll.tag == "Water" && !water.HasCollidedWithBody())
+			{
+				water.SetCollidedWithBody(true);
+			    Messenger.Broadcast<string, Collider2D>("has died", "Drowned", coll);
+			}
+
+			if (coll.tag == "Wall")
+			{
+			    Messenger.Broadcast<bool>("touching wall", true);
+			}
 		}
 	}
 
 	void OnTriggerStay2D(Collider2D coll)
 	{
-		if (coll.tag == "Wall")
+		if (!colliderDisabled)
 		{
-		    Messenger.Broadcast<bool>("touching wall", true);
+			if (coll.tag == "Wall")
+			{
+			    Messenger.Broadcast<bool>("touching wall", true);
+			}
 		}
 	}
 
 	void OnTriggerExit2D(Collider2D coll)
 	{
-		GetColliderComponents(coll);
-
-		if (coll.tag == "Enemy")
+		if (!colliderDisabled)
 		{
-			entity.alreadyCollided = true;
-		}
+			GetColliderComponents(coll);
 
-		if (coll.tag == "Water")
-		{
-			entity.alreadyCollided = true;
-		}
+			if (coll.tag == "Enemy")
+			{
+				creature.SetCollidedWithBody(false);
+			}
 
-		if (coll.tag == "Wall")
-		{
-		    Messenger.Broadcast<bool>("touching wall", false);
-		}
-	}
+			if (coll.tag == "Water")
+			{
+				water.SetCollidedWithBody(false);
+			}
 
-	void GetColliderComponents(Collider2D coll)
-	{
-		pickupEntity = coll.GetComponent<PickupEntity>() as PickupEntity;
-		// charEntity = coll.GetComponent<CharacterEntity>() as CharacterEntity;
-
-		if (coll.GetComponent<EntityBehaviour>())
-		{
-			entity = coll.GetComponent<EntityBehaviour>();
+			if (coll.tag == "Wall")
+			{
+			    Messenger.Broadcast<bool>("touching wall", false);
+			}
 		}
 	}
 }

@@ -3,7 +3,8 @@ using System.Collections;
 
 public class BaseBehaviour : MonoBehaviour {
 
-	protected const int TILESIZE = 16;
+	protected const int TILE_SIZE = 16;
+	protected const float ALIGN_ENTITY_TO = .124f;
 	protected const float HUD_FADE_IN_AFTER = .75f;
 	protected const float HUD_FADE_OUT_AFTER = .25f;
 }

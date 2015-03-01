@@ -3,7 +3,7 @@ using System.Collections;
 using DG.Tweening;
 
 
-public class MovingPlatform : EntityBehaviour
+public class MovingPlatform : CacheBehaviour
 {
 	public enum Direction { right, left, up, down };
 	public Direction direction;

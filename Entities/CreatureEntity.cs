@@ -6,10 +6,11 @@ using Matcha.Game.Tweens;
 [RequireComponent(typeof(BoxCollider2D))]
 
 
-public class CharacterEntity : EntityBehaviour
+public class CreatureEntity : EntityBehaviour
 {
 	public enum EntityType { none, player, enemy };
 	public EntityType entityType;
+
 	public int hp;
 	public int ac;
 	public int damage;
@@ -19,14 +20,11 @@ public class CharacterEntity : EntityBehaviour
 	{
 		base.CacheComponents();
 
-		if (entityType == EntityType.enemy)
-			AutoAlign();
+		if (entityType == EntityType.enemy) { AutoAlign(); }
 	}
 
 	public void ReactToCollision()
 	{
-		alreadyCollided = true;
-
 		switch (entityType)
 		{
 		case EntityType.none:
@@ -38,5 +36,25 @@ public class CharacterEntity : EntityBehaviour
 		case EntityType.enemy:
 			break;
 		}
+	}
+
+	public void SetCollidedWithBody(bool status)
+	{
+		hasCollidedWithBody = status;
+	}
+
+	public bool HasCollidedWithBody()
+	{
+		return hasCollidedWithBody;
+	}
+
+	public void SetCollidedWithWeapon(bool status)
+	{
+		hasCollidedWithWeapon = status;
+	}
+
+	public bool HasCollidedWithWeapon()
+	{
+		return hasCollidedWithWeapon;
 	}
 }

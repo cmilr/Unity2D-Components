@@ -4,10 +4,15 @@ using System.Collections;
 
 public class EntityBehaviour : CacheBehaviour {
 
-	public bool alreadyCollided = false;
-	private float alignTo = .124f;
+	protected bool hasCollidedWithBody = false;
+	protected bool hasCollidedWithWeapon = false;
 
-	public void SelfDestruct(int inSeconds)
+	void Start()
+	{
+		base.CacheComponents();
+	}
+
+	protected void SelfDestruct(int inSeconds)
 	{
 		Destroy(gameObject, inSeconds);
 	}
@@ -26,7 +31,7 @@ public class EntityBehaviour : CacheBehaviour {
 
 	protected void AutoAlign()
 	{
-		float targetY = (float)(Math.Round(transform.position.y) - alignTo);
+		float targetY = (float)(Math.Round(transform.position.y) - ALIGN_ENTITY_TO);
 		transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
 	}
 }
