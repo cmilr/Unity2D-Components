@@ -2,12 +2,18 @@
 using System.Collections;
 
 
-public class PlayerManager : BaseBehaviour
+public class PlayerManager : CacheBehaviour
 {
-	// private PlayerData pData;
+	// private PlayerData pd;
+
+	// player state
+	public bool FacingRight 		{ get; private set; }
+	public bool RidingFastPlatform 	{ get; private set; }                   
+	public bool TouchingWall 		{ get; private set; }
+	public bool Dead 				{ get; private set; }
 
 	void Start()
 	{
-		// pData = GameObject.Find("_PlayerData").GetComponent<PlayerData>();
+		// pd = GameObject.Find("_PlayerData").GetComponent<PlayerData>();
 	}
 }
