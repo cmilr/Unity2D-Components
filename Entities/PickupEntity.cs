@@ -20,7 +20,7 @@ public class PickupEntity : EntityBehaviour
 			AutoAlign();
 	}
 
-	public void React()
+	public void ReactToCollision()
 	{
 		alreadyCollided = true;
 

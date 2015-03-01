@@ -8,6 +8,7 @@ using Matcha.Lib;
 public class BodyCollider : CacheBehaviour
 {
 	private bool alreadyCollided;
+	private bool alive;
 	private PickupEntity pickupEntity;
 	private EntityBehaviour entityBehaviour;
 	// private CharacterEntity charEntity;
@@ -27,7 +28,7 @@ public class BodyCollider : CacheBehaviour
 		if (coll.tag == "Prize" && !alreadyCollided)
 		{
 			Messenger.Broadcast<int>("prize collected", pickupEntity.worth);
-			pickupEntity.React();
+			pickupEntity.ReactToCollision();
 		}
 
 		if (coll.tag == "Enemy" && !alreadyCollided)
@@ -48,8 +49,8 @@ public class BodyCollider : CacheBehaviour
 		if (coll.tag == "LevelUp")
 		{
 			Messenger.Broadcast<int>("prize collected", pickupEntity.worth);
-			pickupEntity.React();
-			
+			pickupEntity.ReactToCollision();
+
 		    Messenger.Broadcast<bool>("level completed", true);
 		}
 	}

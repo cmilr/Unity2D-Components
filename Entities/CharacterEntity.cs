@@ -23,7 +23,7 @@ public class CharacterEntity : EntityBehaviour
 			AutoAlign();
 	}
 
-	public void React()
+	public void ReactToCollision()
 	{
 		alreadyCollided = true;
 

@@ -4,16 +4,16 @@ using System.Collections;
 
 // PERSISTENT SINGLETON
 // ~~~~~~~~~~~~~~~~~~~~
-public class PlayerSingleton : BaseBehaviour
+public class PlayerDataSingleton : BaseBehaviour
 {
-	private static PlayerSingleton _instance;
-	public static PlayerSingleton instance
+	private static PlayerDataSingleton _instance;
+	public static PlayerDataSingleton instance
 	{
 		get
 		{
 			if (_instance == null)
 			{
-				_instance = GameObject.FindObjectOfType<PlayerSingleton>();
+				_instance = GameObject.FindObjectOfType<PlayerDataSingleton>();
 
 				// tell unity not to destroy this object when loading a new scene.
 				DontDestroyOnLoad(_instance.gameObject);

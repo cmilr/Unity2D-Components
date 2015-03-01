@@ -10,13 +10,13 @@ using System.Runtime.Serialization.Formatters.Binary;
 public class GameData : MonoBehaviour {
 
 	// game stats
-	public float DifficultyMultiplier { get; set; }
+	public float DifficultyMultiplier 	{ get; set; }
 
 	// player stats
-	public int CurrentScore 		{ get; set; }
-	public int LastSavedScore 		{ get; set; }
-	public int Lives 				{ get; set; }
-	public int CurrentLevel 		{ get; set; }
+	public int CurrentScore 			{ get; set; }
+	public int LastSavedScore 			{ get; set; }
+	public int Lives 					{ get; set; }
+	public int CurrentLevel 			{ get; set; }
 
 	void Awake()
 	{
