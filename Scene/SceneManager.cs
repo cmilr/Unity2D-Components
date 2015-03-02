@@ -6,7 +6,7 @@ using Matcha.Game.Tweens;
 
 public class SceneManager : CacheBehaviour {
 
-	// private SceneData data;
+	// private SceneData sData;
 	private float timeToFade = 2f;
 	private float fadeInAfter = 0f;
 	private float fadeOutAfter = 2f;
@@ -14,7 +14,7 @@ public class SceneManager : CacheBehaviour {
 
 	void Start() 
 	{
-		// data = GameObject.Find("_SceneData").GetComponent<SceneData>();
+		// sData = GameObject.Find("_SceneData").GetComponent<SceneData>();
 		spriteRenderer.DOKill();
 		
 		MTween.FadeInSprite(spriteRenderer, fadeInAfter, timeToFade);
