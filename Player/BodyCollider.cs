@@ -9,14 +9,12 @@ public class BodyCollider : CacheBehaviour
 {
 	private PlayerState state;
 	private bool colliderDisabled;
-	
 
 	void Start()
 	{
-		state = transform.parent.GetComponent<PlayerState>();
-
 		MLib2D.IgnoreLayerCollisionWith(gameObject, "One-Way Platform", true);
 		MLib2D.IgnoreLayerCollisionWith(gameObject, "Platform", true);
+		state = transform.parent.GetComponent<PlayerState>();
 	}
 
 	void OnTriggerEnter2D(Collider2D coll)
@@ -44,6 +42,18 @@ public class BodyCollider : CacheBehaviour
 				case "Wall":
 					OnWallCollisionEnter(coll);
 					break;
+
+				case "SAVE":
+					_PlayerData.data.Save();
+					break;
+
+				case "LOAD":
+				{
+					_PlayerData.data.Load();
+					Debug.Log("HP = " + _PlayerData.data.HP);
+				}
+					break;
+
 			}
 		}
 	}

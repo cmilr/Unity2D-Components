@@ -10,13 +10,11 @@ public class WeaponCollider : CacheBehaviour
 	private PlayerState state;
 	private bool colliderDisabled;
 	
-
 	void Start()
 	{
-		state = transform.parent.GetComponent<PlayerState>();
-
 		MLib2D.IgnoreLayerCollisionWith(gameObject, "One-Way Platform", true);
 		MLib2D.IgnoreLayerCollisionWith(gameObject, "Platform", true);
+		state = transform.parent.GetComponent<PlayerState>();
 	}
 
 	void OnTriggerEnter2D(Collider2D coll)
@@ -74,9 +72,9 @@ public class WeaponCollider : CacheBehaviour
 
 		if (!entity.AlreadyCollidedWithWeapon() && !state.Dead)
 		{
-			entity.SetCollidedWithWeapon(true);
-			Messenger.Broadcast<int>("prize collected", entity.Worth());
-			entity.ReactToCollision();
+			// entity.SetCollidedWithWeapon(true);
+			// Messenger.Broadcast<int>("prize collected", entity.Worth());
+			// entity.ReactToCollision();
 		}
 	}
 
@@ -88,12 +86,12 @@ public class WeaponCollider : CacheBehaviour
 
 		if (!entity.AlreadyCollidedWithWeapon() && !state.Dead)
 		{
-			entity.SetCollidedWithWeapon(true);
-			Messenger.Broadcast<int>("prize collected", entity.Worth());
-			entity.ReactToCollision();
-		    Messenger.Broadcast<bool>("level completed", true);
+			// entity.SetCollidedWithWeapon(true);
+			// Messenger.Broadcast<int>("prize collected", entity.Worth());
+			// entity.ReactToCollision();
+		 //    Messenger.Broadcast<bool>("level completed", true);
 
-		    colliderDisabled = true;
+		 //    colliderDisabled = true;
 		}
 	}
 
@@ -105,8 +103,9 @@ public class WeaponCollider : CacheBehaviour
 
 		if (!entity.AlreadyCollidedWithWeapon() && !state.Dead)
 		{
-			entity.SetCollidedWithWeapon(true);
-		    Messenger.Broadcast<string, Collider2D>("has died", "StruckDown", coll);
+			// entity.SetCollidedWithWeapon(true);
+		 //    Messenger.Broadcast<string, Collider2D>("has died", "StruckDown", coll);
+			Debug.Log("Weapon collision with >> " + coll);
 		}
 	}
 
@@ -114,42 +113,6 @@ public class WeaponCollider : CacheBehaviour
 	{
 		CreatureEntity entity = GetCreatureEntity(coll);
 		entity.SetCollidedWithWeapon(false);
-	}
-
-
-	// water collider handlers
-	private void OnWaterCollisionEnter(Collider2D coll)
-	{
-		WaterEntity entity = GetWaterEntity(coll);
-
-		if (!entity.AlreadyCollidedWithWeapon())
-		{
-			entity.SetCollidedWithWeapon(true);
-		    Messenger.Broadcast<string, Collider2D>("has died", "Drowned", coll);
-		}
-	}
-
-	private void OnWaterCollisionExit(Collider2D coll)
-	{
-		WaterEntity entity = GetWaterEntity(coll);
-		entity.SetCollidedWithWeapon(false);
-	}
-
-
-	// wall collision handlers
-	private void OnWallCollisionEnter(Collider2D coll)
-	{
-		Messenger.Broadcast<bool>("touching wall", true);
-	}
-
-	private void OnWallCollisionStay(Collider2D coll)
-	{
-		Messenger.Broadcast<bool>("touching wall", true);
-	}
-
-	private void OnWallCollisionExit(Collider2D coll)
-	{
-		Messenger.Broadcast<bool>("touching wall", false);
 	}
 
 
@@ -162,10 +125,5 @@ public class WeaponCollider : CacheBehaviour
 	private CreatureEntity GetCreatureEntity(Collider2D coll)
 	{
 		return coll.GetComponent<CreatureEntity>() as CreatureEntity;
-	}
-
-	private WaterEntity GetWaterEntity(Collider2D coll)
-	{
-		return coll.GetComponent<WaterEntity>() as WaterEntity;
 	}
 }

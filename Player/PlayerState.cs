@@ -17,21 +17,21 @@ public class PlayerState : BaseBehaviour {
 
 	void Start()
 	{
-		InvokeRepeating("CheckIfAboveGround", 0f, 0.2F);
+		InvokeRepeating("CheckIfAboveGround", 0f, 0.3F);
 	}
 
 	void OnEnable()
 	{
 		Messenger.AddListener<int>("set groundline", OnSetGroundline);
-		Messenger.AddListener<bool>( "touching wall", OnTouchingWall);
-		Messenger.AddListener<bool>( "riding fast platform", OnRidingFastPlatform);
+		Messenger.AddListener<bool>("touching wall", OnTouchingWall);
+		Messenger.AddListener<bool>("riding fast platform", OnRidingFastPlatform);
 	}
 
 	void OnDestroy()
 	{
 		Messenger.RemoveListener<int>("set groundline", OnSetGroundline);
-		Messenger.RemoveListener<bool>( "touching wall", OnTouchingWall);		
-		Messenger.RemoveListener<bool>( "riding fast platform", OnRidingFastPlatform);
+		Messenger.RemoveListener<bool>("touching wall", OnTouchingWall);		
+		Messenger.RemoveListener<bool>("riding fast platform", OnRidingFastPlatform);
 	}
 
 	void OnTouchingWall(bool status)

@@ -20,7 +20,6 @@ public class PlayerMovement : CacheBehaviour
 	private float previousY;                            // previous update's y position, for speed comparisons
 	private float speedCheck = .08f;                    // compare against to see if we need to throttle rising speed
 	private float h;                                    // input horizontal axis
-	private bool facingRight;
 	private bool moveRight;
 	private bool moveLeft;
 	private bool jump;
@@ -139,7 +138,8 @@ public class PlayerMovement : CacheBehaviour
 
 	void ApplyGravity()
 	{
-		velocity.y += gravity * Time.deltaTime;
+		if (!moveLeft && !moveRight)
+			velocity.y += gravity * Time.deltaTime;
 	}
 
 	void ClampYMovement()
