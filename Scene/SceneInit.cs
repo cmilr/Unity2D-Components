@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SceneInit : MonoBehaviour {
+public class SceneInit : BaseBehaviour {
 
 	// Use this for initialization
 	void Start () {

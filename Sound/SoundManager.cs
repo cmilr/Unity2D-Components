@@ -8,11 +8,6 @@ public class SoundManager : CacheBehaviour
 {
 	public AudioClip collectPrize;
 
-	void Start()
-	{
-		base.CacheComponents();
-	}
-
 	// EVENT LISTENERS
 	void OnEnable()
 	{

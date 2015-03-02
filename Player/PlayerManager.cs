@@ -4,14 +4,14 @@ using System.Collections;
 
 public class PlayerManager : CacheBehaviour
 {
-	private PlayerData data;
+	private PlayerData pData;
 	private PlayerState state;
 
 	void Start()
 	{
-		base.CacheComponents();
+		
 		state = GetComponent<PlayerState>();
-		data = GameObject.Find("_PlayerData").GetComponent<PlayerData>();
+		pData = GameObject.Find("_PlayerData").GetComponent<PlayerData>();
 	}
 
 	void OnHasDied(string methodOfDeath, Collider2D coll)

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerInit : MonoBehaviour {
+public class PlayerInit : BaseBehaviour {
 
 	// Use this for initialization
 	void Start () {

@@ -7,67 +7,43 @@ using Matcha.Lib;
 
 public class BodyCollider : CacheBehaviour
 {
-	private PickupEntity pickup;
-	private CreatureEntity creature;
-	private WaterEntity water;
 	private PlayerState state;
 	private bool colliderDisabled;
 	
 
 	void Start()
 	{
-		base.CacheComponents();
 		state = transform.parent.GetComponent<PlayerState>();
 
 		MLib2D.IgnoreLayerCollisionWith(gameObject, "One-Way Platform", true);
 		MLib2D.IgnoreLayerCollisionWith(gameObject, "Platform", true);
 	}
 
-	void GetColliderComponents(Collider2D coll)
-	{
-		pickup = coll.GetComponent<PickupEntity>() as PickupEntity;
-		creature = coll.GetComponent<CreatureEntity>() as CreatureEntity;
-		water = coll.GetComponent<WaterEntity>() as WaterEntity;
-	}
-
 	void OnTriggerEnter2D(Collider2D coll)
 	{
 		if (!colliderDisabled)
 		{
-			GetColliderComponents(coll);
-
-			if (coll.tag == "Prize" && !pickup.HasCollidedWithBody() && !state.Dead)
+			switch (coll.tag)
 			{
-				pickup.SetCollidedWithBody(true);
-				Messenger.Broadcast<int>("prize collected", pickup.Worth());
-				pickup.ReactToCollision();
-			}
+				case "Prize":
+					OnPrizeCollisionEnter(coll);
+					break;
 
-			if (coll.tag == "Enemy" && !creature.HasCollidedWithBody() && !state.Dead)
-			{
-				creature.SetCollidedWithBody(true);
-			    Messenger.Broadcast<string, Collider2D>("has died", "StruckDown", coll);
-			}
+				case "Enemy":
+					OnEnemyCollisionEnter(coll);
+					break;
 
-			if (coll.tag == "LevelUp" && !pickup.HasCollidedWithBody() && !state.Dead)
-			{
-				pickup.SetCollidedWithBody(true);
-				Messenger.Broadcast<int>("prize collected", pickup.Worth());
-				pickup.ReactToCollision();
-			    Messenger.Broadcast<bool>("level completed", true);
+				case "LevelUp":
+					OnLevelUpCollisionEnter(coll);
+					break;
 
-			    colliderDisabled = true;
-			}
+				case "Water":
+					OnWaterCollisionEnter(coll);
+					break;
 
-			if (coll.tag == "Water" && !water.HasCollidedWithBody())
-			{
-				water.SetCollidedWithBody(true);
-			    Messenger.Broadcast<string, Collider2D>("has died", "Drowned", coll);
-			}
-
-			if (coll.tag == "Wall")
-			{
-			    Messenger.Broadcast<bool>("touching wall", true);
+				case "Wall":
+					OnWallCollisionEnter(coll);
+					break;
 			}
 		}
 	}
@@ -76,9 +52,11 @@ public class BodyCollider : CacheBehaviour
 	{
 		if (!colliderDisabled)
 		{
-			if (coll.tag == "Wall")
+			switch (coll.tag)
 			{
-			    Messenger.Broadcast<bool>("touching wall", true);
+				case "Wall":
+					OnWallCollisionStay(coll);
+					break;
 			}
 		}
 	}
@@ -87,22 +65,123 @@ public class BodyCollider : CacheBehaviour
 	{
 		if (!colliderDisabled)
 		{
-			GetColliderComponents(coll);
-
-			if (coll.tag == "Enemy")
+			switch (coll.tag)
 			{
-				creature.SetCollidedWithBody(false);
-			}
+				case "Enemy":
+					OnEnemyCollisionExit(coll);
+					break;
 
-			if (coll.tag == "Water")
-			{
-				water.SetCollidedWithBody(false);
-			}
+				case "Water":
+					OnWaterCollisionExit(coll);
+					break;
 
-			if (coll.tag == "Wall")
-			{
-			    Messenger.Broadcast<bool>("touching wall", false);
+				case "Wall":
+					OnWallCollisionExit(coll);
+					break;
 			}
 		}
+	}
+
+
+	// prize collision handlers
+	private void OnPrizeCollisionEnter(Collider2D coll)
+	{
+		PickupEntity entity = GetPickupEntity(coll);
+
+		if (!entity.AlreadyCollidedWithBody() && !state.Dead)
+		{
+			entity.SetCollidedWithBody(true);
+			Messenger.Broadcast<int>("prize collected", entity.Worth());
+			entity.ReactToCollision();
+		}
+	}
+
+
+	// level-up collision handlers
+	private void OnLevelUpCollisionEnter(Collider2D coll)
+	{
+		PickupEntity entity = GetPickupEntity(coll);
+
+		if (!entity.AlreadyCollidedWithBody() && !state.Dead)
+		{
+			entity.SetCollidedWithBody(true);
+			Messenger.Broadcast<int>("prize collected", entity.Worth());
+			entity.ReactToCollision();
+		    Messenger.Broadcast<bool>("level completed", true);
+
+		    colliderDisabled = true;
+		}
+	}
+
+
+	// enemy collision handlers
+	private void OnEnemyCollisionEnter(Collider2D coll)
+	{
+		CreatureEntity entity = GetCreatureEntity(coll);
+
+		if (!entity.AlreadyCollidedWithBody() && !state.Dead)
+		{
+			entity.SetCollidedWithBody(true);
+		    Messenger.Broadcast<string, Collider2D>("has died", "StruckDown", coll);
+		}
+	}
+
+	private void OnEnemyCollisionExit(Collider2D coll)
+	{
+		CreatureEntity entity = GetCreatureEntity(coll);
+		entity.SetCollidedWithBody(false);
+	}
+
+
+	// water collider handlers
+	private void OnWaterCollisionEnter(Collider2D coll)
+	{
+		WaterEntity entity = GetWaterEntity(coll);
+
+		if (!entity.AlreadyCollidedWithBody())
+		{
+			entity.SetCollidedWithBody(true);
+		    Messenger.Broadcast<string, Collider2D>("has died", "Drowned", coll);
+		}
+	}
+
+	private void OnWaterCollisionExit(Collider2D coll)
+	{
+		WaterEntity entity = GetWaterEntity(coll);
+		entity.SetCollidedWithBody(false);
+	}
+
+
+	// wall collision handlers
+	private void OnWallCollisionEnter(Collider2D coll)
+	{
+		Messenger.Broadcast<bool>("touching wall", true);
+	}
+
+	private void OnWallCollisionStay(Collider2D coll)
+	{
+		Messenger.Broadcast<bool>("touching wall", true);
+	}
+
+	private void OnWallCollisionExit(Collider2D coll)
+	{
+		Messenger.Broadcast<bool>("touching wall", false);
+	}
+
+
+	// get collider components
+	private PickupEntity GetPickupEntity(Collider2D coll)
+	{
+		return coll.GetComponent<PickupEntity>() as PickupEntity;
+	}
+
+	private CreatureEntity GetCreatureEntity(Collider2D coll)
+	{
+		return coll.GetComponent<CreatureEntity>() as CreatureEntity;
+	}
+
+	private WaterEntity GetWaterEntity(Collider2D coll)
+	{
+		return coll.GetComponent<WaterEntity>() as WaterEntity;
 	}
 }

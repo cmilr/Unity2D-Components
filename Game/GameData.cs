@@ -7,7 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 [RequireComponent(typeof(GameDataSingleton))]
 
 
-public class GameData : MonoBehaviour {
+public class GameData : BaseBehaviour {
 
 	// game stats
 	public float DifficultyMultiplier 	{ get; set; }

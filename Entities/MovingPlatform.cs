@@ -17,7 +17,6 @@ public class MovingPlatform : CacheBehaviour
 
 	void Start()
 	{
-		base.CacheComponents();
 		gameObject.tag = "MovingPlatform";
 		CheckPlatformSpeed();
 		transform.DOKill();

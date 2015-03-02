@@ -14,7 +14,6 @@ public class SceneManager : CacheBehaviour {
 
 	void Start() 
 	{
-		base.CacheComponents();
 		// data = GameObject.Find("_SceneData").GetComponent<SceneData>();
 		spriteRenderer.DOKill();
 		

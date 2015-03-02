@@ -2,12 +2,13 @@
 using System.Collections;
 using Matcha.Game.Tweens;
 
-public class SunlightManager : MonoBehaviour {
+public class SunlightManager : CacheBehaviour {
 
 	private float aboveGround = .71f;
 	private float belowGround = .45f;
 
-	void Start () {
+	void Start () 
+	{
 		light.intensity = aboveGround;
 	}
 	

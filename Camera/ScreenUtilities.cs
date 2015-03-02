@@ -13,7 +13,6 @@ public class ScreenUtilities : CacheBehaviour
 
 	void Start()
 	{
-		base.CacheComponents();
 		trackedObject = objectToTrack.transform;
 
 		vertExtent = Camera.main.camera.orthographicSize;

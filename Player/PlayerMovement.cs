@@ -34,7 +34,6 @@ public class PlayerMovement : CacheBehaviour
 
 	void Start()
 	{
-		base.CacheComponents();
 		state = GetComponent<PlayerState>();
 		controller = GetComponent<CharacterController2D>();
 		playerControls = ReInput.players.GetPlayer(0);

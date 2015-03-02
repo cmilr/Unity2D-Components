@@ -10,7 +10,6 @@ public class WaterTween : CacheBehaviour
 
     void Start()
     {
-        base.CacheComponents();
         transform.DOKill();
 
         DOTween.Sequence().SetLoops(-1, LoopType.Restart)

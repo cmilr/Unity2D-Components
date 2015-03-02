@@ -13,7 +13,6 @@ public class PickupEntity : EntityBehaviour
 
 	void Start()
 	{
-		base.CacheComponents();
 		glow = gameObject.GetComponent<Light>() as Light;
 
 		if (entityType == EntityType.prize) { AutoAlign(); }
@@ -23,42 +22,22 @@ public class PickupEntity : EntityBehaviour
 	{
 		switch (entityType)
 		{
-		case EntityType.none:
-			break;
+			case EntityType.none:
+				break;
 
-		case EntityType.prize:
-			MTween.PickupPrize(gameObject);
-			MTween.ExtinguishLight(glow, 0, .1f);
-			break;
+			case EntityType.prize:
+				MTween.PickupPrize(gameObject);
+				MTween.ExtinguishLight(glow, 0, .1f);
+				break;
 
-		case EntityType.weapon:
-			MTween.PickupWeapon(gameObject);
-			break;
+			case EntityType.weapon:
+				MTween.PickupWeapon(gameObject);
+				break;
 		}
 	}
 
 	public int Worth()
 	{
 		return worth;
-	}
-
-	public void SetCollidedWithBody(bool status)
-	{
-		hasCollidedWithBody = status;
-	}
-
-	public bool HasCollidedWithBody()
-	{
-		return hasCollidedWithBody;
-	}
-
-	public void SetCollidedWithWeapon(bool status)
-	{
-		hasCollidedWithWeapon = status;
-	}
-
-	public bool HasCollidedWithWeapon()
-	{
-		return hasCollidedWithWeapon;
 	}
 }

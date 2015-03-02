@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class BaseBehaviour : MonoBehaviour {
 
 	protected const int TILE_SIZE = 16;

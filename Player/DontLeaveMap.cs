@@ -25,8 +25,6 @@ public class DontLeaveMap : CacheBehaviour
 
 	void Start()
 	{
-		base.CacheComponents();
-
 		tileSystem = tileMap.GetComponent<TileSystem>();
 
 		Vector3 tileSystemSize = new Vector3(
