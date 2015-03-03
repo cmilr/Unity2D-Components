@@ -3,8 +3,10 @@ using System.Collections;
 
 public class PlayerInit : BaseBehaviour {
 
+	private _PlayerData player;
+
 	void Start () 
 	{
-		_PlayerData.data.HP = 50;
+		player = GameObject.Find("_PlayerData").GetComponent<_PlayerData>();
 	}
 }

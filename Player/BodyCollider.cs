@@ -7,6 +7,7 @@ using Matcha.Lib;
 
 public class BodyCollider : CacheBehaviour
 {
+	private _PlayerData player;
 	private PlayerState state;
 	private bool colliderDisabled;
 
@@ -14,6 +15,7 @@ public class BodyCollider : CacheBehaviour
 	{
 		MLib2D.IgnoreLayerCollisionWith(gameObject, "One-Way Platform", true);
 		MLib2D.IgnoreLayerCollisionWith(gameObject, "Platform", true);
+		player = GameObject.Find("_PlayerData").GetComponent<_PlayerData>();
 		state = transform.parent.GetComponent<PlayerState>();
 	}
 
@@ -44,13 +46,13 @@ public class BodyCollider : CacheBehaviour
 					break;
 
 				case "SAVE":
-					_PlayerData.data.Save();
+					player.data.Save();
 					break;
 
 				case "LOAD":
 				{
-					_PlayerData.data.Load();
-					Debug.Log("HP = " + _PlayerData.data.HP);
+					player.data.Load();
+					Debug.Log("HP = " + player.data.HP);
 				}
 					break;
 
@@ -132,7 +134,12 @@ public class BodyCollider : CacheBehaviour
 		if (!entity.AlreadyCollidedWithBody() && !state.Dead)
 		{
 			entity.SetCollidedWithBody(true);
-		    Messenger.Broadcast<string, Collider2D>("has died", "StruckDown", coll);
+
+			// include state.Dead argument, because if player is already dead when colliding with this entity, there 
+			// are some actions we don't want to take, such as reducing lives by 1, or restarting level a second time
+		    Messenger.Broadcast<string, bool, Collider2D>("player dead", "StruckDown", state.Dead, coll);
+
+		    state.Dead = true;
 		}
 	}
 
@@ -151,7 +158,12 @@ public class BodyCollider : CacheBehaviour
 		if (!entity.AlreadyCollidedWithBody())
 		{
 			entity.SetCollidedWithBody(true);
-		    Messenger.Broadcast<string, Collider2D>("has died", "Drowned", coll);
+			
+			// include state.Dead argument, because if player is already dead when colliding with this entity, there 
+			// are some actions we don't want to take, such as reducing lives by 1, or restarting level a second time
+		    Messenger.Broadcast<string, bool, Collider2D>("player dead", "Drowned", state.Dead, coll);
+
+			state.Dead = true;
 		}
 	}
 

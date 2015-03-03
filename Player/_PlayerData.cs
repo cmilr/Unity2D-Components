@@ -4,9 +4,12 @@ using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
-public class _PlayerData : MonoBehaviour {
 
-	public static _PlayerData data;
+// this is a pseudo-singleton — it enforces a single instance, but doesn't expose
+// a static variable, so you can't access it without a GetComponent() call
+public class _PlayerData : BaseBehaviour {
+
+	public _PlayerData data;
 
 	public int HP 		{ get; set; }
 	public int AC 		{ get; set; }
@@ -14,7 +17,7 @@ public class _PlayerData : MonoBehaviour {
 
 	void Awake()
 	{
-		MakeSingleton();
+		MakePseudoSingleton();
 	}
 
 	public void Save()
@@ -46,7 +49,7 @@ public class _PlayerData : MonoBehaviour {
 		}
 	}
 
-	void MakeSingleton()
+	void MakePseudoSingleton()
 	{
 		if (data == null)
 		{

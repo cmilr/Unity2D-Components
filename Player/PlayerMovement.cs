@@ -162,18 +162,20 @@ public class PlayerMovement : CacheBehaviour
 		previousY = transform.position.y;
 	}
 
-	void OnDisableMovement(bool status)
+	void OnPlayerDead(string methodOfDeath, bool alreadyDead, Collider2D coll)
 	{
-		this.enabled = false;
+		// pass control of movement to DeathHandler
+		if (!alreadyDead)
+			this.enabled = false;
 	}
 
 	void OnEnable()
 	{
-		Messenger.AddListener<bool>( "disable movement", OnDisableMovement);
+		Messenger.AddListener<string, bool, Collider2D>( "player dead", OnPlayerDead);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<bool>( "disable movement", OnDisableMovement);	
+		Messenger.RemoveListener<string, bool, Collider2D>( "player dead", OnPlayerDead);
 	}
 }

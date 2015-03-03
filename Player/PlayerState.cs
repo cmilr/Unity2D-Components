@@ -13,23 +13,19 @@ public class PlayerState : BaseBehaviour {
 	public bool LevelCompleted 		{ get; set; }
 	public bool AboveGround 		{ get; set; }
 
-	private int groundline;
-
-	void Start()
+	public float GetY()
 	{
-		InvokeRepeating("CheckIfAboveGround", 0f, 0.3F);
+		return transform.position.y;
 	}
 
 	void OnEnable()
 	{
-		Messenger.AddListener<int>("set groundline", OnSetGroundline);
 		Messenger.AddListener<bool>("touching wall", OnTouchingWall);
 		Messenger.AddListener<bool>("riding fast platform", OnRidingFastPlatform);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<int>("set groundline", OnSetGroundline);
 		Messenger.RemoveListener<bool>("touching wall", OnTouchingWall);		
 		Messenger.RemoveListener<bool>("riding fast platform", OnRidingFastPlatform);
 	}
@@ -42,24 +38,5 @@ public class PlayerState : BaseBehaviour {
 	void OnRidingFastPlatform(bool status)
 	{
 		RidingFastPlatform = status;
-	}
-
-	void OnSetGroundline(int ground)
-	{
-		groundline = ground;
-	}
-
-	void CheckIfAboveGround()
-	{
-		if (transform.position.y > groundline)
-		{
-			Messenger.Broadcast<bool>("player above ground", true);
-			AboveGround = true;
-		}
-		else 
-		{
-			Messenger.Broadcast<bool>("player above ground", false);
-			AboveGround = false;
-		}
 	}
 }
