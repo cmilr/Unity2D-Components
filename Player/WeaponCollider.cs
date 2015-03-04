@@ -15,6 +15,7 @@ public class WeaponCollider : CacheBehaviour
 		MLib2D.IgnoreLayerCollisionWith(gameObject, "One-Way Platform", true);
 		MLib2D.IgnoreLayerCollisionWith(gameObject, "Platform", true);
 		state = transform.parent.GetComponent<PlayerState>();
+		colliderDisabled = false;
 	}
 
 	void OnTriggerEnter2D(Collider2D coll)

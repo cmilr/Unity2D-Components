@@ -8,8 +8,8 @@ public class SunlightManager : CacheBehaviour {
 	private GameObject player;
 	private PlayerState playerState;
 	private float groundLine;				// coordinates on TileMap where above ground and below ground meet
-	private float aboveGround = .71f;		// light intensity when player is above ground
-	private float belowGround = .45f;		// light intensity when player is below ground
+	private float aboveGround = 1.45f;		// light intensity when player is above ground
+	private float belowGround = .9f;		// light intensity when player is below ground
 
 	void Start () 
 	{
