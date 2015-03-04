@@ -18,8 +18,6 @@ public class SceneManager : CacheBehaviour {
 		spriteRenderer.DOKill();
 		
 		MTween.FadeInSprite(spriteRenderer, fadeInAfter, timeToFade);
-
-		Messenger.Broadcast<int>("set groundline", -50);
 	}
 
 	void OnLoadLevel(int newLevel)

@@ -50,10 +50,7 @@ public class BodyCollider : CacheBehaviour
 					break;
 
 				case "LOAD":
-				{
 					player.data.Load();
-					Debug.Log("HP = " + player.data.HP);
-				}
 					break;
 
 			}

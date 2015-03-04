@@ -13,17 +13,17 @@ public class EntityBehaviour : CacheBehaviour {
 		Destroy(gameObject, inSeconds);
 	}
 
-	protected void OnBecameInvisible()
-	{
-		if(rigidbody2D)
-			rigidbody2D.Sleep();
-	}
+	// protected void OnBecameInvisible()
+	// {
+	// 	if(rigidbody2D)
+	// 		rigidbody2D.Sleep();
+	// }
 
-	protected void OnBecameVisible()
-	{
-		if(rigidbody2D)
-			rigidbody2D.WakeUp();
-	}
+	// protected void OnBecameVisible()
+	// {
+	// 	if(rigidbody2D)
+	// 		rigidbody2D.WakeUp();
+	// }
 
 	protected void AutoAlign()
 	{

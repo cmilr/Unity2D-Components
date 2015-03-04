@@ -2,13 +2,14 @@
 using System.Collections;
 using Matcha.Game.Tweens;
 
+
 public class SunlightManager : CacheBehaviour {
 
 	private GameObject player;
 	private PlayerState playerState;
-	private int groundline;
-	private float aboveGround = .71f;
-	private float belowGround = .45f;
+	private float groundLine;				// coordinates on TileMap where above ground and below ground meet
+	private float aboveGround = .71f;		// light intensity when player is above ground
+	private float belowGround = .45f;		// light intensity when player is below ground
 
 	void Start () 
 	{
@@ -22,38 +23,36 @@ public class SunlightManager : CacheBehaviour {
 
 	void CheckIfAboveGround()
 	{
-		if (playerState.GetY() > groundline)
+		float targetIntensity;
+		float fadeAfter = 0f;
+		float timeToFade = 1f;
+
+		if (playerState.GetY() > groundLine)
 		{
+			targetIntensity = aboveGround;
 			Messenger.Broadcast<bool>("player above ground", true);
 		}
 		else 
 		{
+			targetIntensity = belowGround;
 			Messenger.Broadcast<bool>("player above ground", false);
 		}
+
+		MTween.FadeIntensity(light, targetIntensity, fadeAfter, timeToFade);
 	}
 	
+	void OnSetGroundLine(float coordinates)
+	{
+		groundLine = coordinates;
+	}
 
 	void OnEnable()
 	{
-		Messenger.AddListener<int>("set groundline", OnSetGroundline);
+		Messenger.AddListener<float>("set groundLine", OnSetGroundLine);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<int>("set groundline", OnSetGroundline);
-	}
-
-	void OnSetGroundline(int coordinates)
-	{
-		groundline = coordinates;
-	}
-
-	void OnPlayerAboveGround(bool status)
-	{
-		float targetIntensity = status ? aboveGround : belowGround;
-		float fadeAfter = 0f;
-		float timeToFade = 1f;
-
-		MTween.FadeIntensity(light, targetIntensity, fadeAfter, timeToFade);
+		Messenger.RemoveListener<float>("set groundLine", OnSetGroundLine);
 	}
 }

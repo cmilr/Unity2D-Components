@@ -22,12 +22,14 @@ public class PlayerState : BaseBehaviour {
 	{
 		Messenger.AddListener<bool>("touching wall", OnTouchingWall);
 		Messenger.AddListener<bool>("riding fast platform", OnRidingFastPlatform);
+		Messenger.AddListener<bool>("player above ground", OnPlayerAboveGround);
 	}
 
 	void OnDestroy()
 	{
 		Messenger.RemoveListener<bool>("touching wall", OnTouchingWall);		
 		Messenger.RemoveListener<bool>("riding fast platform", OnRidingFastPlatform);
+		Messenger.RemoveListener<bool>("player above ground", OnPlayerAboveGround);
 	}
 
 	void OnTouchingWall(bool status)
@@ -38,5 +40,10 @@ public class PlayerState : BaseBehaviour {
 	void OnRidingFastPlatform(bool status)
 	{
 		RidingFastPlatform = status;
+	}
+
+	void OnPlayerAboveGround(bool status)
+	{
+		AboveGround = status;
 	}
 }
