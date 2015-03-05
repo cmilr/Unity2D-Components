@@ -15,7 +15,7 @@ public class ScreenUtilities : CacheBehaviour
 	{
 		trackedObject = objectToTrack.transform;
 
-		vertExtent = Camera.main.camera.orthographicSize;
+		vertExtent = Camera.main.GetComponent<Camera>().orthographicSize;
 		horizExtent = vertExtent * Screen.width / Screen.height;
 
 		currentScreenWidth = Screen.width;
@@ -28,7 +28,7 @@ public class ScreenUtilities : CacheBehaviour
 	{
     	if (Screen.width != currentScreenWidth || Screen.height != currentScreenHeight)
     	{
-	        vertExtent = Camera.main.camera.orthographicSize;
+	        vertExtent = Camera.main.GetComponent<Camera>().orthographicSize;
 			horizExtent = vertExtent * Screen.width / Screen.height;
 
 	        Messenger.Broadcast<float, float>("screen size changed", vertExtent, horizExtent);
