@@ -87,7 +87,9 @@ public class PlayerMovement : CacheBehaviour
 			normalizedHorizontalSpeed = -1;
 
 			if (transform.localScale.x > 0f)
+			{
 				transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+			}
 
 			if (controller.isGrounded)
 				animator.Play(Animator.StringToHash("Run"));
