@@ -7,6 +7,6 @@ public class TileMapManager : BaseBehaviour {
 
 	void Start () 
 	{
-		Messenger.Broadcast<float>("set groundLine", groundLine);
+		Messenger.Broadcast<float>("set ground line", groundLine);
 	}
 }
