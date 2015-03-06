@@ -55,7 +55,6 @@ public class PlayerMovement : CacheBehaviour
 	void LateUpdate()
 	{
 		// keep movement in LateUpdate() to prevent falling through edge colliders
-		gravity = -35f;
 
 		velocity = controller.velocity;
 
@@ -140,8 +139,7 @@ public class PlayerMovement : CacheBehaviour
 
 	void ApplyGravity()
 	{
-		if (!moveLeft && !moveRight)
-			velocity.y += gravity * Time.deltaTime;
+		velocity.y += gravity * Time.deltaTime;
 	}
 
 	void ClampYMovement()

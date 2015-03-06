@@ -106,7 +106,6 @@ public class WeaponCollider : CacheBehaviour
 		{
 			// entity.SetCollidedWithWeapon(true);
 		 //    Messenger.Broadcast<string, Collider2D>("has died", "StruckDown", coll);
-			Debug.Log("Weapon collision with >> " + coll);
 		}
 	}
 
