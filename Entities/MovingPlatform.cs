@@ -89,7 +89,7 @@ public class MovingPlatform : CacheBehaviour
 	{
 		if (direction == Direction.up || direction == Direction.down)
 		{
-			if (distance > 4 && distance / time > 8)
+			if (distance > 4 && distance / time > 5)
 				fastPlatform = true;
 		}
 	}
