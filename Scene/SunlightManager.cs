@@ -17,7 +17,7 @@ public class SunlightManager : CacheBehaviour {
 	private float aboveGround = 1.44f;				// light intensity when player is above ground
 	private float playerBelowGround = 1.17f;		// light intensity when player is below ground
 	private float creatureBelowGround = 1.17f;		// light intensity when player is below ground
-	private float pickupBelowGround = .75f;			// light intensity when player is below ground
+	private float pickupBelowGround = 1.1f;			// light intensity when player is below ground
 	private float tileBelowGround = .64f;			// light intensity when player is below ground
 	private float planeAboveBelowGround = .13f;		// light intensity when player is below ground
 
