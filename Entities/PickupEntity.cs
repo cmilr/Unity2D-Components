@@ -4,11 +4,10 @@ using System.Collections;
 using Matcha.Game.Tweens;
 
 
-public class PickupEntity : EntityBehaviour
+public class PickupEntity : Entity
 {
 	public enum EntityType { none, prize, weapon };
 	public EntityType entityType;
-	public int worth;
 	public Light glow;
 
 	void Start()
@@ -18,7 +17,7 @@ public class PickupEntity : EntityBehaviour
 		if (entityType == EntityType.prize) { AutoAlign(); }
 	}
 
-	public void ReactToCollision()
+	public override void ReactToCollision()
 	{
 		switch (entityType)
 		{
@@ -34,10 +33,5 @@ public class PickupEntity : EntityBehaviour
 				MTween.PickupWeapon(gameObject);
 				break;
 		}
-	}
-
-	public int Worth()
-	{
-		return worth;
 	}
 }

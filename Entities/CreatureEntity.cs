@@ -5,21 +5,20 @@ using System.Collections;
 [RequireComponent(typeof(BoxCollider2D))]
 
 
-public class CreatureEntity : EntityBehaviour
+public class CreatureEntity : Entity
 {
 	public enum EntityType { none, player, enemy };
 	public EntityType entityType;
 	public int hp;
 	public int ac;
 	public int damage;
-	public int worth;
 
 	void Start()
 	{
 		if (entityType == EntityType.enemy) { AutoAlign(); }
 	}
 
-	public void ReactToCollision()
+	public override void ReactToCollision()
 	{
 		switch (entityType)
 		{

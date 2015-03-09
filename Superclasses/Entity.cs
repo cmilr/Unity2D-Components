@@ -3,27 +3,23 @@ using System;
 using System.Collections;
 
 
-public class EntityBehaviour : CacheBehaviour {
+public abstract class Entity : CacheBehaviour {
 
 	protected bool collidedWithBody = false;
 	protected bool collidedWithWeapon = false;
+	public int worth;
+
+	public abstract void ReactToCollision();
+	
+	public int Worth()
+	{
+		return worth;
+	}
 
 	protected void SelfDestruct(int inSeconds)
 	{
 		Destroy(gameObject, inSeconds);
 	}
-
-	// protected void OnBecameInvisible()
-	// {
-	// 	if(rigidbody2D)
-	// 		rigidbody2D.Sleep();
-	// }
-
-	// protected void OnBecameVisible()
-	// {
-	// 	if(rigidbody2D)
-	// 		rigidbody2D.WakeUp();
-	// }
 
 	protected void AutoAlign()
 	{
@@ -50,4 +46,16 @@ public class EntityBehaviour : CacheBehaviour {
 	{
 		return collidedWithWeapon;
 	}
+
+	// protected void OnBecameInvisible()
+	// {
+	// 	if(rigidbody2D)
+	// 		rigidbody2D.Sleep();
+	// }
+
+	// protected void OnBecameVisible()
+	// {
+	// 	if(rigidbody2D)
+	// 		rigidbody2D.WakeUp();
+	// }
 }

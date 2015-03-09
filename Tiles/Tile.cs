@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 
-public class TileEntity : BaseBehaviour
+public class Tile : BaseBehaviour
 {	
 	void Start()
 	{
