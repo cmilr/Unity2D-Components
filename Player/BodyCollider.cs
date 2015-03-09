@@ -171,6 +171,7 @@ public class BodyCollider : CacheBehaviour
 	// wall collision handlers
 	private void OnWallCollisionEnter(Collider2D coll)
 	{
+		Debug.Log("Touching Wall!");
 		Messenger.Broadcast<bool>("touching wall", true);
 	}
 
@@ -182,22 +183,5 @@ public class BodyCollider : CacheBehaviour
 	private void OnWallCollisionExit(Collider2D coll)
 	{
 		Messenger.Broadcast<bool>("touching wall", false);
-	}
-
-
-	// get collider components
-	private PickupEntity GetPickupEntity(Collider2D coll)
-	{
-		return coll.GetComponent<PickupEntity>() as PickupEntity;
-	}
-
-	private CreatureEntity GetCreatureEntity(Collider2D coll)
-	{
-		return coll.GetComponent<CreatureEntity>() as CreatureEntity;
-	}
-
-	private WaterEntity GetWaterEntity(Collider2D coll)
-	{
-		return coll.GetComponent<WaterEntity>() as WaterEntity;
 	}
 }
