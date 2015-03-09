@@ -14,5 +14,7 @@ public class GameInit : BaseBehaviour
 		// initialize DOTween before first use.
 		DOTween.Init(true, true, LogBehaviour.Verbose).SetCapacity(200, 10);
 		DOTween.SetTweensCapacity(2000, 100);
+
+		Cursor.visible = false;
 	}
 }

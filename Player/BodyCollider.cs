@@ -9,6 +9,7 @@ public class BodyCollider : CacheBehaviour
 {
 	private _PlayerData player;
 	private PlayerState state;
+	private Entity entity;
 	private bool colliderDisabled;
 
 	void Start()
@@ -23,6 +24,8 @@ public class BodyCollider : CacheBehaviour
 	{
 		if (!colliderDisabled)
 		{
+			entity = (Entity)coll.GetComponent(typeof(Entity));
+
 			switch (coll.tag)
 			{
 				case "Prize":
@@ -59,6 +62,8 @@ public class BodyCollider : CacheBehaviour
 
 	void OnTriggerStay2D(Collider2D coll)
 	{
+		entity = (Entity)coll.GetComponent(typeof(Entity));
+
 		if (!colliderDisabled)
 		{
 			switch (coll.tag)
@@ -72,6 +77,8 @@ public class BodyCollider : CacheBehaviour
 
 	void OnTriggerExit2D(Collider2D coll)
 	{
+		entity = (Entity)coll.GetComponent(typeof(Entity));
+
 		if (!colliderDisabled)
 		{
 			switch (coll.tag)
@@ -95,8 +102,6 @@ public class BodyCollider : CacheBehaviour
 	// prize collision handlers
 	private void OnPrizeCollisionEnter(Collider2D coll)
 	{
-		PickupEntity entity = GetPickupEntity(coll);
-
 		if (!entity.AlreadyCollidedWithBody() && !state.Dead)
 		{
 			entity.SetCollidedWithBody(true);
@@ -109,8 +114,6 @@ public class BodyCollider : CacheBehaviour
 	// level-up collision handlers
 	private void OnLevelUpCollisionEnter(Collider2D coll)
 	{
-		PickupEntity entity = GetPickupEntity(coll);
-
 		if (!entity.AlreadyCollidedWithBody() && !state.Dead)
 		{
 			entity.SetCollidedWithBody(true);
@@ -126,8 +129,6 @@ public class BodyCollider : CacheBehaviour
 	// enemy collision handlers
 	private void OnEnemyCollisionEnter(Collider2D coll)
 	{
-		CreatureEntity entity = GetCreatureEntity(coll);
-
 		if (!entity.AlreadyCollidedWithBody() && !state.Dead)
 		{
 			entity.SetCollidedWithBody(true);
@@ -142,7 +143,6 @@ public class BodyCollider : CacheBehaviour
 
 	private void OnEnemyCollisionExit(Collider2D coll)
 	{
-		CreatureEntity entity = GetCreatureEntity(coll);
 		entity.SetCollidedWithBody(false);
 	}
 
@@ -150,8 +150,6 @@ public class BodyCollider : CacheBehaviour
 	// water collider handlers
 	private void OnWaterCollisionEnter(Collider2D coll)
 	{
-		WaterEntity entity = GetWaterEntity(coll);
-
 		if (!entity.AlreadyCollidedWithBody())
 		{
 			entity.SetCollidedWithBody(true);
@@ -166,7 +164,6 @@ public class BodyCollider : CacheBehaviour
 
 	private void OnWaterCollisionExit(Collider2D coll)
 	{
-		WaterEntity entity = GetWaterEntity(coll);
 		entity.SetCollidedWithBody(false);
 	}
 
