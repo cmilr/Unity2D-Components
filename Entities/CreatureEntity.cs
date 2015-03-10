@@ -7,7 +7,7 @@ using System.Collections;
 
 public class CreatureEntity : Entity
 {
-	public enum EntityType { none, player, enemy };
+	public enum EntityType { player, enemy };
 	public EntityType entityType;
 	public int hp;
 	public int ac;
@@ -18,18 +18,23 @@ public class CreatureEntity : Entity
 		if (entityType == EntityType.enemy) { AutoAlign(); }
 	}
 
-	public override void ReactToCollision()
+	override public void OnBodyCollisionEnter()
 	{
-		switch (entityType)
+		if (!sceneLoading && !playerDead)
 		{
-			case EntityType.none:
-				break;
+			switch (entityType)
+			{
+				case EntityType.player:
+					break;
 
-			case EntityType.player:
+				case EntityType.enemy:
+					Messenger.Broadcast<string, Collider2D>("player dead", "struckdown", GetComponent<BoxCollider2D>());
 				break;
-
-			case EntityType.enemy:
-				break;
+			}
 		}
 	}
+
+	override public void OnBodyCollisionStay() {}
+
+	override public void OnBodyCollisionExit() {}
 }

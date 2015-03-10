@@ -19,15 +19,12 @@ public class GameManager : BaseBehaviour
 		Messenger.Broadcast<int>("change score", gData.CurrentScore);
 	}
 
-	void OnPlayerDead(string methodOfDeath, bool alreadyDead, Collider2D coll)
+	void OnPlayerDead(string methodOfDeath, Collider2D coll)
 	{
-		if (!alreadyDead)
-		{
-			gData.CurrentScore = gData.LastSavedScore;
-			gData.Lives -= 1;
-			Messenger.Broadcast<bool>("fade hud", true);
-			Messenger.Broadcast<int>("load level", gData.CurrentLevel);
-		}
+		gData.CurrentScore = gData.LastSavedScore;
+		gData.Lives -= 1;
+		Messenger.Broadcast<bool>("fade hud", true);
+		Messenger.Broadcast<int>("load level", gData.CurrentLevel);
 	}
 
 	void OnLevelCompleted(bool status)
@@ -41,14 +38,14 @@ public class GameManager : BaseBehaviour
 	void OnEnable()
 	{
 		Messenger.AddListener<int>( "prize collected", OnPrizeCollected);
-		Messenger.AddListener<string, bool, Collider2D>( "player dead", OnPlayerDead);
+		Messenger.AddListener<string, Collider2D>( "player dead", OnPlayerDead);
 		Messenger.AddListener<bool>( "level completed", OnLevelCompleted);
 	}
 
 	void OnDestroy()
 	{
 		Messenger.RemoveListener<int>( "prize collected", OnPrizeCollected );
-		Messenger.RemoveListener<string, bool, Collider2D>( "player dead", OnPlayerDead);
+		Messenger.RemoveListener<string, Collider2D>( "player dead", OnPlayerDead);
 		Messenger.RemoveListener<bool>( "level completed", OnLevelCompleted);
 	}
 }

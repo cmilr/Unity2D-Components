@@ -3,9 +3,16 @@ using System.Collections;
 
 public class WaterEntity : Entity 
 {
-	public override void ReactToCollision()
+	override public void OnBodyCollisionEnter()
 	{
-		Debug.Log("WaterEntity does not currently have a reaction.");
+		if (!playerDead)
+			Messenger.Broadcast<string, Collider2D>("player dead", "drowned", GetComponent<BoxCollider2D>());
+		else
+			Messenger.Broadcast<string, Collider2D>("player drowned", "drowned", GetComponent<BoxCollider2D>());
+
 	}
 
+	override public void OnBodyCollisionStay() {}
+
+	override public void OnBodyCollisionExit() {}
 }

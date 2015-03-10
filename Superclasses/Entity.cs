@@ -5,16 +5,17 @@ using System.Collections;
 
 public abstract class Entity : CacheBehaviour {
 
-	protected bool collidedWithBody = false;
-	protected bool collidedWithWeapon = false;
+	protected bool alreadyCollidedWithBody;
+	protected bool alreadyCollidedWithWeapon;
+	protected bool sceneLoading;
+	protected bool playerDead;
 	public int worth;
 
-	public abstract void ReactToCollision();
-	
-	public int Worth()
-	{
-		return worth;
-	}
+	public abstract void OnBodyCollisionEnter();
+
+	public abstract void OnBodyCollisionStay();
+
+	public abstract void OnBodyCollisionExit();
 
 	protected void SelfDestruct(int inSeconds)
 	{
@@ -27,24 +28,50 @@ public abstract class Entity : CacheBehaviour {
 		transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
 	}
 
-	public void SetCollidedWithBody(bool status)
+	void OnTriggerEnter2D(Collider2D coll)
 	{
-		collidedWithBody = status;
+		if (coll.name == "BodyCollider" && !alreadyCollidedWithBody)
+		{
+			alreadyCollidedWithBody = true;
+			OnBodyCollisionEnter();
+		}
 	}
 
-	public bool AlreadyCollidedWithBody()
+	void OnTriggerStay2D(Collider2D coll)
 	{
-		return collidedWithBody;
+		if (coll.name == "BodyCollider")
+			OnBodyCollisionStay();
 	}
 
-	public void SetCollidedWithWeapon(bool status)
+	void OnTriggerExit2D(Collider2D coll)
 	{
-		collidedWithWeapon = status;
+		if (coll.name == "BodyCollider")
+		{
+			alreadyCollidedWithBody = false;
+			OnBodyCollisionExit();
+		}
 	}
 
-	public bool AlreadyCollidedWithWeapon()
+	void OnLoadLevel(int unused)
 	{
-		return collidedWithWeapon;
+		sceneLoading = true;
+	}
+
+	void OnPlayerDead(string unused, Collider2D alsoUnused)
+	{
+		playerDead = true;
+	}
+
+	void OnEnable()
+	{
+		Messenger.AddListener<int>( "load level", OnLoadLevel);	
+		Messenger.AddListener<string, Collider2D>( "player dead", OnPlayerDead);
+	}
+
+	void OnDestroy()
+	{
+		Messenger.RemoveListener<int>( "load level", OnLoadLevel);	
+		Messenger.RemoveListener<string, Collider2D>( "player dead", OnPlayerDead);
 	}
 
 	// protected void OnBecameInvisible()

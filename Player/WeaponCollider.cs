@@ -18,112 +18,112 @@ public class WeaponCollider : CacheBehaviour
 		colliderDisabled = false;
 	}
 
-	void OnTriggerEnter2D(Collider2D coll)
-	{
-		if (!colliderDisabled)
-		{
-			switch (coll.tag)
-			{
-				case "Prize":
-					OnPrizeCollisionEnter(coll);
-					break;
+	// void OnTriggerEnter2D(Collider2D coll)
+	// {
+	// 	if (!colliderDisabled)
+	// 	{
+	// 		switch (coll.tag)
+	// 		{
+	// 			case "Prize":
+	// 				OnPrizeCollisionEnter(coll);
+	// 				break;
 
-				case "Enemy":
-					OnEnemyCollisionEnter(coll);
-					break;
+	// 			case "Enemy":
+	// 				OnEnemyCollisionEnter(coll);
+	// 				break;
 
-				case "LevelUp":
-					OnLevelUpCollisionEnter(coll);
-					break;
-			}
-		}
-	}
+	// 			case "LevelUp":
+	// 				OnLevelUpCollisionEnter(coll);
+	// 				break;
+	// 		}
+	// 	}
+	// }
 
-	void OnTriggerStay2D(Collider2D coll)
-	{
-		// if (!colliderDisabled)
-		// {
-		// 	switch (coll.tag)
-		// 	{
-		// 		case "Wall":
-		// 			OnWallCollisionStay(coll);
-		// 			break;
-		// 	}
-		// }
-	}
+	// void OnTriggerStay2D(Collider2D coll)
+	// {
+	// 	// if (!colliderDisabled)
+	// 	// {
+	// 	// 	switch (coll.tag)
+	// 	// 	{
+	// 	// 		case "Wall":
+	// 	// 			OnWallCollisionStay(coll);
+	// 	// 			break;
+	// 	// 	}
+	// 	// }
+	// }
 
-	void OnTriggerExit2D(Collider2D coll)
-	{
-		if (!colliderDisabled)
-		{
-			switch (coll.tag)
-			{
-				case "Enemy":
-					OnEnemyCollisionExit(coll);
-					break;
-			}
-		}
-	}
-
-
-	// prize collision handlers
-	private void OnPrizeCollisionEnter(Collider2D coll)
-	{
-		PickupEntity entity = GetPickupEntity(coll);
-
-		if (!entity.AlreadyCollidedWithWeapon() && !state.Dead)
-		{
-			// entity.SetCollidedWithWeapon(true);
-			// Messenger.Broadcast<int>("prize collected", entity.Worth());
-			// entity.ReactToCollision();
-		}
-	}
+	// void OnTriggerExit2D(Collider2D coll)
+	// {
+	// 	if (!colliderDisabled)
+	// 	{
+	// 		switch (coll.tag)
+	// 		{
+	// 			case "Enemy":
+	// 				OnEnemyCollisionExit(coll);
+	// 				break;
+	// 		}
+	// 	}
+	// }
 
 
-	// level-up collision handlers
-	private void OnLevelUpCollisionEnter(Collider2D coll)
-	{
-		PickupEntity entity = GetPickupEntity(coll);
+	// // prize collision handlers
+	// private void OnPrizeCollisionEnter(Collider2D coll)
+	// {
+	// 	PickupEntity entity = GetPickupEntity(coll);
 
-		if (!entity.AlreadyCollidedWithWeapon() && !state.Dead)
-		{
-			// entity.SetCollidedWithWeapon(true);
-			// Messenger.Broadcast<int>("prize collected", entity.Worth());
-			// entity.ReactToCollision();
-		 //    Messenger.Broadcast<bool>("level completed", true);
-
-		 //    colliderDisabled = true;
-		}
-	}
+	// 	if (!entity.AlreadyCollidedWithWeapon() && !state.Dead)
+	// 	{
+	// 		// entity.SetCollidedWithWeapon(true);
+	// 		// Messenger.Broadcast<int>("prize collected", entity.Worth());
+	// 		// entity.ReactToCollision();
+	// 	}
+	// }
 
 
-	// enemy collision handlers
-	private void OnEnemyCollisionEnter(Collider2D coll)
-	{
-		CreatureEntity entity = GetCreatureEntity(coll);
+	// // level-up collision handlers
+	// private void OnLevelUpCollisionEnter(Collider2D coll)
+	// {
+	// 	PickupEntity entity = GetPickupEntity(coll);
 
-		if (!entity.AlreadyCollidedWithWeapon() && !state.Dead)
-		{
-			// entity.SetCollidedWithWeapon(true);
-		 //    Messenger.Broadcast<string, Collider2D>("has died", "StruckDown", coll);
-		}
-	}
+	// 	if (!entity.AlreadyCollidedWithWeapon() && !state.Dead)
+	// 	{
+	// 		// entity.SetCollidedWithWeapon(true);
+	// 		// Messenger.Broadcast<int>("prize collected", entity.Worth());
+	// 		// entity.ReactToCollision();
+	// 	 //    Messenger.Broadcast<bool>("level completed", true);
 
-	private void OnEnemyCollisionExit(Collider2D coll)
-	{
-		CreatureEntity entity = GetCreatureEntity(coll);
-		entity.SetCollidedWithWeapon(false);
-	}
+	// 	 //    colliderDisabled = true;
+	// 	}
+	// }
 
 
-	// get collider components
-	private PickupEntity GetPickupEntity(Collider2D coll)
-	{
-		return coll.GetComponent<PickupEntity>() as PickupEntity;
-	}
+	// // enemy collision handlers
+	// private void OnEnemyCollisionEnter(Collider2D coll)
+	// {
+	// 	CreatureEntity entity = GetCreatureEntity(coll);
 
-	private CreatureEntity GetCreatureEntity(Collider2D coll)
-	{
-		return coll.GetComponent<CreatureEntity>() as CreatureEntity;
-	}
+	// 	if (!entity.AlreadyCollidedWithWeapon() && !state.Dead)
+	// 	{
+	// 		// entity.SetCollidedWithWeapon(true);
+	// 	 //    Messenger.Broadcast<string, Collider2D>("has died", "struckdown", coll);
+	// 	}
+	// }
+
+	// private void OnEnemyCollisionExit(Collider2D coll)
+	// {
+	// 	CreatureEntity entity = GetCreatureEntity(coll);
+	// 	entity.SetCollidedWithWeapon(false);
+	// }
+
+
+	// // get collider components
+	// private PickupEntity GetPickupEntity(Collider2D coll)
+	// {
+	// 	return coll.GetComponent<PickupEntity>() as PickupEntity;
+	// }
+
+	// private CreatureEntity GetCreatureEntity(Collider2D coll)
+	// {
+	// 	return coll.GetComponent<CreatureEntity>() as CreatureEntity;
+	// }
 }

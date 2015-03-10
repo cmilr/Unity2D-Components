@@ -61,6 +61,28 @@ public class _PlayerData : BaseBehaviour {
 			Destroy(gameObject);
 		}
 	}
+
+	void OnSavePlayerData(bool status)
+	{
+		Save();
+	}
+
+	void OnLoadPlayerData(bool status)
+	{
+		Load();
+	}
+
+	void OnEnable()
+	{
+		Messenger.AddListener<bool>("save player data", OnSavePlayerData);
+		Messenger.AddListener<bool>("load player data", OnLoadPlayerData);
+	}
+
+	void OnDestroy()
+	{
+		Messenger.RemoveListener<bool>("save player data", OnSavePlayerData);
+		Messenger.RemoveListener<bool>("load player data", OnLoadPlayerData);
+	}
 } 
 
 [Serializable]
