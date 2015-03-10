@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WallEntity : Entity 
+public class WallEntity : Entity
 {
 	override public void OnBodyCollisionEnter()
 	{
@@ -14,7 +14,13 @@ public class WallEntity : Entity
 	}
 
 	override public void OnBodyCollisionExit()
-	{	
+	{
 		Messenger.Broadcast<bool>("touching wall", false);
 	}
+
+	override public void OnWeaponCollisionEnter() {}
+
+	override public void OnWeaponCollisionStay() {}
+
+	override public void OnWeaponCollisionExit() {}
 }

@@ -12,17 +12,17 @@ public class SceneManager : CacheBehaviour {
 	private float fadeOutAfter = 2f;
 	private float timeBeforeLevelReload = 3f;
 
-	void Start() 
+	void Start()
 	{
 		// sData = GameObject.Find("_SceneData").GetComponent<SceneData>();
 		spriteRenderer.DOKill();
-		
-		MTween.FadeInSprite(spriteRenderer, fadeInAfter, timeToFade);
+
+		MTween.FadeIn(spriteRenderer, fadeInAfter, timeToFade);
 	}
 
 	void OnLoadLevel(int newLevel)
 	{
-		MTween.FadeOutSprite(spriteRenderer, fadeOutAfter, timeToFade);
+		MTween.FadeOut(spriteRenderer, fadeOutAfter, timeToFade);
 
 		StartCoroutine(Timer.Start(timeBeforeLevelReload, true, () =>
 		{
@@ -33,11 +33,11 @@ public class SceneManager : CacheBehaviour {
 
 	void OnEnable()
 	{
-		Messenger.AddListener<int>( "load level", OnLoadLevel);	
+		Messenger.AddListener<int>( "load level", OnLoadLevel);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<int>( "load level", OnLoadLevel);	
+		Messenger.RemoveListener<int>( "load level", OnLoadLevel);
 	}
 }

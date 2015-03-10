@@ -13,18 +13,9 @@ public class BodyCollider : CacheBehaviour
 		MLib2D.IgnoreLayerCollisionWith(gameObject, "Platform", true);
 	}
 
-	void OnTriggerEnter2D(Collider2D coll)
-	{
+	void OnTriggerEnter2D(Collider2D coll) {}
 
-	}
+	void OnTriggerStay2D(Collider2D coll) {}
 
-	void OnTriggerStay2D(Collider2D coll)
-	{
-
-	}
-
-	void OnTriggerExit2D(Collider2D coll)
-	{
-
-	}
+	void OnTriggerExit2D(Collider2D coll) {}
 }

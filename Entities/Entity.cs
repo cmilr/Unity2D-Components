@@ -5,17 +5,58 @@ using System.Collections;
 
 public abstract class Entity : CacheBehaviour {
 
+	public int worth;
+
 	protected bool alreadyCollidedWithBody;
 	protected bool alreadyCollidedWithWeapon;
 	protected bool sceneLoading;
 	protected bool playerDead;
-	public int worth;
 
 	public abstract void OnBodyCollisionEnter();
-
 	public abstract void OnBodyCollisionStay();
-
 	public abstract void OnBodyCollisionExit();
+	public abstract void OnWeaponCollisionEnter();
+	public abstract void OnWeaponCollisionStay();
+	public abstract void OnWeaponCollisionExit();
+
+	void OnTriggerEnter2D(Collider2D coll)
+	{
+		if (coll.name == "BodyCollider" && !alreadyCollidedWithBody)
+		{
+			alreadyCollidedWithBody = true;
+			OnBodyCollisionEnter();
+		}
+
+		if (coll.name == "WeaponCollider" && !alreadyCollidedWithBody)
+		{
+			alreadyCollidedWithWeapon = true;
+			OnWeaponCollisionEnter();
+		}
+	}
+
+	void OnTriggerStay2D(Collider2D coll)
+	{
+		if (coll.name == "BodyCollider")
+			OnBodyCollisionStay();
+
+		if (coll.name == "WeaponCollider")
+			OnWeaponCollisionStay();
+	}
+
+	void OnTriggerExit2D(Collider2D coll)
+	{
+		if (coll.name == "BodyCollider")
+		{
+			alreadyCollidedWithBody = false;
+			OnBodyCollisionExit();
+		}
+
+		if (coll.name == "WeaponCollider")
+		{
+			alreadyCollidedWithWeapon = false;
+			OnWeaponCollisionExit();
+		}
+	}
 
 	protected void SelfDestruct(int inSeconds)
 	{
@@ -26,30 +67,6 @@ public abstract class Entity : CacheBehaviour {
 	{
 		float targetY = (float)(Math.Round(transform.position.y) - ALIGN_ENTITY_TO);
 		transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
-	}
-
-	void OnTriggerEnter2D(Collider2D coll)
-	{
-		if (coll.name == "BodyCollider" && !alreadyCollidedWithBody)
-		{
-			alreadyCollidedWithBody = true;
-			OnBodyCollisionEnter();
-		}
-	}
-
-	void OnTriggerStay2D(Collider2D coll)
-	{
-		if (coll.name == "BodyCollider")
-			OnBodyCollisionStay();
-	}
-
-	void OnTriggerExit2D(Collider2D coll)
-	{
-		if (coll.name == "BodyCollider")
-		{
-			alreadyCollidedWithBody = false;
-			OnBodyCollisionExit();
-		}
 	}
 
 	void OnLoadLevel(int unused)
@@ -64,13 +81,13 @@ public abstract class Entity : CacheBehaviour {
 
 	void OnEnable()
 	{
-		Messenger.AddListener<int>( "load level", OnLoadLevel);	
+		Messenger.AddListener<int>( "load level", OnLoadLevel);
 		Messenger.AddListener<string, Collider2D>( "player dead", OnPlayerDead);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<int>( "load level", OnLoadLevel);	
+		Messenger.RemoveListener<int>( "load level", OnLoadLevel);
 		Messenger.RemoveListener<string, Collider2D>( "player dead", OnPlayerDead);
 	}
 

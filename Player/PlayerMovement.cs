@@ -43,13 +43,13 @@ public class PlayerMovement : CacheBehaviour
 		h = playerControls.GetAxisRaw("Move Horizontal");
 
 		if (h > 0)
-			moveRight = true; 
+			moveRight = true;
 
 		if (h < 0)
-			moveLeft = true; 
+			moveLeft = true;
 
 		if (playerControls.GetButtonDown("Jump") && controller.isGrounded)
-			jump = true; 			
+			jump = true;
 	}
 
 	void LateUpdate()
@@ -70,7 +70,7 @@ public class PlayerMovement : CacheBehaviour
 		if (moveRight)
 		{
 			normalizedHorizontalSpeed = 1;
-			
+
 			if (transform.localScale.x < 0f)
 				transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
 
@@ -104,12 +104,15 @@ public class PlayerMovement : CacheBehaviour
 			if (controller.isGrounded)
 				animator.Play(Animator.StringToHash("Idle"));
 		}
-		
-		if (MLib2D.Equals(transform.position.x, previousX) && state.TouchingWall)
+
+		if (state.TouchingWall
+			&& MLib2D.Equals(transform.position.x, previousX)
+			&& (transform.position.y < previousY))
 		{
-			// flush horizontal axis if player is falling or jumping while pressed against a wall
+			// flush horizontal axis if player is falling while pressed against a wall
 			normalizedHorizontalSpeed = 0;
 			velocity.x = 0f;
+			Dbug();
 		}
 
 		if (jump)
@@ -118,7 +121,7 @@ public class PlayerMovement : CacheBehaviour
 			animator.Play(Animator.StringToHash("Jump"));
 			jump = false;
 		}
-		
+
 		// compute x and y movements
 		var smoothedMovementFactor = controller.isGrounded ? groundDamping : inAirDamping;
 		velocity.x = Mathf.Lerp(velocity.x, normalizedHorizontalSpeed * runSpeed, Time.deltaTime * smoothedMovementFactor);
@@ -146,11 +149,11 @@ public class PlayerMovement : CacheBehaviour
 	{
 		// clamp to maxRisingSpeed to eliminate jitteriness when rising too fast,
 		// otherwise, clamp to maxFallingSpeed to prevent player leaving screen
-		if (MovingTooFast() && state.RidingFastPlatform) 
+		if (MovingTooFast() && state.RidingFastPlatform)
 		{
 			velocity.y = Mathf.Clamp(velocity.y, -maxFallingSpeed, maxRisingSpeed);
-		} 
-		else 
+		}
+		else
 		{
 			velocity.y = Mathf.Clamp(velocity.y, -maxFallingSpeed, maxFallingSpeed);
 		}

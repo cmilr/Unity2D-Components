@@ -18,9 +18,9 @@ public class DisplayLives : BaseBehaviour
 		lives = gameObject.GetComponent<Image>();
 		lives.sprite = threeLives;
 		lives.DOKill();
-		
-		MTween.FadeOutImage(lives, 0, 0);
-		MTween.FadeInImage(lives, HUD_FADE_IN_AFTER, timeToFade);
+
+		MTween.FadeOut(lives, 0, 0);
+		MTween.FadeIn(lives, HUD_FADE_IN_AFTER, timeToFade);
 	}
 
 	// EVENT LISTENERS
@@ -36,6 +36,6 @@ public class DisplayLives : BaseBehaviour
 
 	void OnFadeHud(bool status)
 	{
-		MTween.FadeOutImage(lives, HUD_FADE_OUT_AFTER, timeToFade);
+		MTween.FadeOut(lives, HUD_FADE_OUT_AFTER, timeToFade);
 	}
 }

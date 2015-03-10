@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WaterEntity : Entity 
+public class WaterEntity : Entity
 {
 	override public void OnBodyCollisionEnter()
 	{
@@ -15,4 +15,10 @@ public class WaterEntity : Entity
 	override public void OnBodyCollisionStay() {}
 
 	override public void OnBodyCollisionExit() {}
+
+    override public void OnWeaponCollisionEnter() {}
+
+    override public void OnWeaponCollisionStay() {}
+
+    override public void OnWeaponCollisionExit() {}
 }

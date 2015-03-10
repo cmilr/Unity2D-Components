@@ -7,7 +7,7 @@ using System.Collections;
 
 public class CreatureEntity : Entity
 {
-	public enum EntityType { player, enemy };
+	public enum EntityType { enemy };
 	public EntityType entityType;
 	public int hp;
 	public int ac;
@@ -24,9 +24,6 @@ public class CreatureEntity : Entity
 		{
 			switch (entityType)
 			{
-				case EntityType.player:
-					break;
-
 				case EntityType.enemy:
 					Messenger.Broadcast<string, Collider2D>("player dead", "struckdown", GetComponent<BoxCollider2D>());
 				break;
@@ -37,4 +34,21 @@ public class CreatureEntity : Entity
 	override public void OnBodyCollisionStay() {}
 
 	override public void OnBodyCollisionExit() {}
+
+	override public void OnWeaponCollisionEnter()
+	{
+		if (!sceneLoading && !playerDead)
+		{
+			switch (entityType)
+			{
+				case EntityType.enemy:
+					Debug.Log("Weapon collides with " + gameObject);
+				break;
+			}
+		}
+	}
+
+	override public void OnWeaponCollisionStay() {}
+
+	override public void OnWeaponCollisionExit() {}
 }

@@ -21,8 +21,8 @@ public class DisplayScore : BaseBehaviour
 		HUDScore.text = initScore.ToString();
 
 		// fade score to zero instantly upon start-up, then fade up slowly
-		MTween.FadeOutText(HUDScore, 0, 0);
-		MTween.FadeInText(HUDScore, HUD_FADE_IN_AFTER, timeToFade);
+		MTween.FadeOut(HUDScore, 0, 0);
+		MTween.FadeIn(HUDScore, HUD_FADE_IN_AFTER, timeToFade);
 	}
 
 	void OnChangeScore(int newScore)
@@ -33,15 +33,15 @@ public class DisplayScore : BaseBehaviour
 		{
 			MTween.DisplayScore(gameObject, HUDScore);
 		}
-		else 
+		else
 		{
-			MTween.DisplayScoreFX(gameObject, HUDScore);			
+			MTween.DisplayScoreFX(gameObject, HUDScore);
 		}
 	}
 
 	void OnFadeHud(bool status)
 	{
-		MTween.FadeOutText(HUDScore, HUD_FADE_OUT_AFTER, timeToFade);
+		MTween.FadeOut(HUDScore, HUD_FADE_OUT_AFTER, timeToFade);
 	}
 
 	void OnEnable()
@@ -50,7 +50,7 @@ public class DisplayScore : BaseBehaviour
 		Messenger.AddListener<int>("change score", OnChangeScore);
 		Messenger.AddListener<bool>("fade hud", OnFadeHud);
 	}
-	
+
 	void OnDestroy()
 	{
 		Messenger.RemoveListener<int>("init score", OnInitScore);
