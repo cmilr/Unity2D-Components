@@ -3,13 +3,21 @@ using System.Collections;
 
 public class WaterEntity : Entity
 {
+    private BoxCollider2D thisCollider;
+
+    void Start()
+    {
+        thisCollider = GetComponent<BoxCollider2D>();
+    }
+
 	override public void OnBodyCollisionEnter()
 	{
-		if (!playerDead)
-			Messenger.Broadcast<string, Collider2D>("player dead", "drowned", GetComponent<BoxCollider2D>());
-		else
-			Messenger.Broadcast<string, Collider2D>("player drowned", "drowned", GetComponent<BoxCollider2D>());
+        collidedWithBody = true;
 
+		if (!playerDead)
+			Messenger.Broadcast<string, Collider2D>("player dead", "drowned", thisCollider);
+		else
+			Messenger.Broadcast<string, Collider2D>("player drowned", "drowned", thisCollider);
 	}
 
 	override public void OnBodyCollisionStay() {}

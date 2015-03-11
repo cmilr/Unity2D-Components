@@ -7,8 +7,8 @@ public abstract class Entity : CacheBehaviour {
 
 	public int worth;
 
-	protected bool alreadyCollidedWithBody;
-	protected bool alreadyCollidedWithWeapon;
+	protected bool collidedWithBody;
+	protected bool collidedWithWeapon;
 	protected bool sceneLoading;
 	protected bool playerDead;
 
@@ -21,17 +21,11 @@ public abstract class Entity : CacheBehaviour {
 
 	void OnTriggerEnter2D(Collider2D coll)
 	{
-		if (coll.name == "BodyCollider" && !alreadyCollidedWithBody)
-		{
-			alreadyCollidedWithBody = true;
+		if (coll.name == "BodyCollider" && !collidedWithBody)
 			OnBodyCollisionEnter();
-		}
 
-		if (coll.name == "WeaponCollider" && !alreadyCollidedWithBody)
-		{
-			alreadyCollidedWithWeapon = true;
+		if (coll.name == "WeaponCollider" && !collidedWithWeapon)
 			OnWeaponCollisionEnter();
-		}
 	}
 
 	void OnTriggerStay2D(Collider2D coll)
@@ -46,16 +40,10 @@ public abstract class Entity : CacheBehaviour {
 	void OnTriggerExit2D(Collider2D coll)
 	{
 		if (coll.name == "BodyCollider")
-		{
-			alreadyCollidedWithBody = false;
 			OnBodyCollisionExit();
-		}
 
 		if (coll.name == "WeaponCollider")
-		{
-			alreadyCollidedWithWeapon = false;
 			OnWeaponCollisionExit();
-		}
 	}
 
 	protected void SelfDestruct(int inSeconds)

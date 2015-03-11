@@ -20,6 +20,8 @@ public class PickupEntity : Entity
 
 	override public void OnBodyCollisionEnter()
 	{
+		collidedWithBody = true;
+
 		if (!sceneLoading && !playerDead)
 		{
 			switch (entityType)

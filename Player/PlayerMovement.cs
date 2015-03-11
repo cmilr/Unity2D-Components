@@ -112,7 +112,6 @@ public class PlayerMovement : CacheBehaviour
 			// flush horizontal axis if player is falling while pressed against a wall
 			normalizedHorizontalSpeed = 0;
 			velocity.x = 0f;
-			Dbug();
 		}
 
 		if (jump)

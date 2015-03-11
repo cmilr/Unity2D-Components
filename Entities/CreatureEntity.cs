@@ -13,19 +13,25 @@ public class CreatureEntity : Entity
 	public int ac;
 	public int damage;
 
+	private BoxCollider2D thisCollider;
+
 	void Start()
 	{
+		thisCollider = GetComponent<BoxCollider2D>();
+
 		if (entityType == EntityType.enemy) { AutoAlign(); }
 	}
 
 	override public void OnBodyCollisionEnter()
 	{
+		collidedWithBody = true;
+
 		if (!sceneLoading && !playerDead)
 		{
 			switch (entityType)
 			{
 				case EntityType.enemy:
-					Messenger.Broadcast<string, Collider2D>("player dead", "struckdown", GetComponent<BoxCollider2D>());
+					Messenger.Broadcast<string, Collider2D>("player dead", "struckdown", thisCollider);
 				break;
 			}
 		}
@@ -37,12 +43,13 @@ public class CreatureEntity : Entity
 
 	override public void OnWeaponCollisionEnter()
 	{
+		collidedWithWeapon = true;
+
 		if (!sceneLoading && !playerDead)
 		{
 			switch (entityType)
 			{
 				case EntityType.enemy:
-					Debug.Log("Weapon collides with " + gameObject);
 				break;
 			}
 		}
