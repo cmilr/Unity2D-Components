@@ -7,7 +7,7 @@ public class PlayerState : BaseBehaviour {
 
 	// player state
 	public bool FacingRight 		{ get; set; }
-	public bool RidingFastPlatform 	{ get; set; }                   
+	public bool RidingFastPlatform 	{ get; set; }
 	public bool TouchingWall 		{ get; set; }
 	public bool Dead 				{ get; set; }
 	public bool LevelCompleted 		{ get; set; }
@@ -28,7 +28,7 @@ public class PlayerState : BaseBehaviour {
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<bool>("touching wall", OnTouchingWall);		
+		Messenger.RemoveListener<bool>("touching wall", OnTouchingWall);
 		Messenger.RemoveListener<bool>("riding fast platform", OnRidingFastPlatform);
 		Messenger.RemoveListener<bool>("player above ground", OnPlayerAboveGround);
 		Messenger.RemoveListener<string, Collider2D>("player dead", OnPlayerDead);
