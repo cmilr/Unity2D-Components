@@ -14,7 +14,7 @@ public class WaterEntity : Entity
 	{
         collidedWithBody = true;
 
-		if (!playerDead)
+		if (!player.Dead)
 			Messenger.Broadcast<string, Collider2D>("player dead", "drowned", thisCollider);
 		else
 			Messenger.Broadcast<string, Collider2D>("player drowned", "drowned", thisCollider);

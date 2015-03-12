@@ -4,7 +4,7 @@ using DG.Tweening;
 using Matcha.Game.Tweens;
 
 
-public class SceneManager : CacheBehaviour {
+public class LevelManager : CacheBehaviour {
 
 	// private SceneData sData;
 	private float timeToFade = 2f;
@@ -26,7 +26,7 @@ public class SceneManager : CacheBehaviour {
 
 		StartCoroutine(Timer.Start(timeBeforeLevelReload, true, () =>
 		{
-			Application.LoadLevel("Scene" + newLevel);
+			Application.LoadLevel("Level" + newLevel);
 			System.GC.Collect();
 		}));
 	}

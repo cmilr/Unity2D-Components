@@ -26,7 +26,7 @@ public class CreatureEntity : Entity
 	{
 		collidedWithBody = true;
 
-		if (!sceneLoading && !playerDead)
+		if (!game.LevelLoading && !player.Dead)
 		{
 			switch (entityType)
 			{
@@ -45,7 +45,7 @@ public class CreatureEntity : Entity
 	{
 		collidedWithWeapon = true;
 
-		if (!sceneLoading && !playerDead)
+		if (!game.LevelLoading && !player.Dead)
 		{
 			switch (entityType)
 			{

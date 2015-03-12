@@ -7,9 +7,9 @@ using System.IO;
 
 // this is a pseudo-singleton — it enforces a single instance, but doesn't expose
 // a static variable, so you can't access it without a GetComponent() call
-public class _PlayerData : BaseBehaviour {
+public class _LevelData : BaseBehaviour {
 
-	public _PlayerData data;
+	public _LevelData data;
 
 	public int HP 		{ get; set; }
 	public int AC 		{ get; set; }
@@ -23,9 +23,9 @@ public class _PlayerData : BaseBehaviour {
 	public void Save()
 	{
 		BinaryFormatter bf = new BinaryFormatter();
-		FileStream file = File.Create(Application.persistentDataPath + "/PlayerData.dat");
+		FileStream file = File.Create(Application.persistentDataPath + "/LevelData.dat");
 
-		PlayerDataContainer container = new PlayerDataContainer();
+		LevelDataContainer container = new LevelDataContainer();
 		container.hp = HP;
 		container.ac = AC;
 		container.damage = Damage;
@@ -36,11 +36,11 @@ public class _PlayerData : BaseBehaviour {
 
 	public void Load()
 	{
-		if(File.Exists(Application.persistentDataPath + "/PlayerData.dat"))
+		if(File.Exists(Application.persistentDataPath + "/LevelData.dat"))
 		{
 			BinaryFormatter bf = new BinaryFormatter();
-			FileStream file = File.Open(Application.persistentDataPath + "/PlayerData.dat",FileMode.Open);
-			PlayerDataContainer container = (PlayerDataContainer)bf.Deserialize(file);
+			FileStream file = File.Open(Application.persistentDataPath + "/LevelData.dat",FileMode.Open);
+			LevelDataContainer container = (LevelDataContainer)bf.Deserialize(file);
 			file.Close();
 
 			HP = container.hp;
@@ -62,31 +62,31 @@ public class _PlayerData : BaseBehaviour {
 		}
 	}
 
-	void OnSavePlayerData(bool status)
+	void OnSaveLevelData(bool status)
 	{
 		Save();
 	}
 
-	void OnLoadPlayerData(bool status)
+	void OnLoadLevelData(bool status)
 	{
 		Load();
 	}
 
 	void OnEnable()
 	{
-		Messenger.AddListener<bool>("save player data", OnSavePlayerData);
-		Messenger.AddListener<bool>("load player data", OnLoadPlayerData);
+		Messenger.AddListener<bool>("save level data", OnSaveLevelData);
+		Messenger.AddListener<bool>("load level data", OnLoadLevelData);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<bool>("save player data", OnSavePlayerData);
-		Messenger.RemoveListener<bool>("load player data", OnLoadPlayerData);
+		Messenger.RemoveListener<bool>("save level data", OnSaveLevelData);
+		Messenger.RemoveListener<bool>("load level data", OnLoadLevelData);
 	}
 }
 
 [Serializable]
-class PlayerDataContainer
+class LevelDataContainer
 {
 	public int hp;
 	public int ac;

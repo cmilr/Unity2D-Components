@@ -4,35 +4,35 @@ using System.Collections;
 
 public class GameManager : BaseBehaviour
 {
-	private GameData gData;
+	private _GameData gameData;
 
 	void Start()
 	{
-		gData = GameObject.Find("_GameData").GetComponent<GameData>();
+		gameData = GameObject.Find("_GameData").GetComponent<_GameData>();
 
-		Messenger.Broadcast<int>("init score", gData.CurrentScore);
+		Messenger.Broadcast<int>("init score", gameData.CurrentScore);
 	}
 
 	void OnPrizeCollected(int worth)
 	{
-		gData.CurrentScore += worth;
-		Messenger.Broadcast<int>("change score", gData.CurrentScore);
+		gameData.CurrentScore += worth;
+		Messenger.Broadcast<int>("change score", gameData.CurrentScore);
 	}
 
 	void OnPlayerDead(string methodOfDeath, Collider2D coll)
 	{
-		gData.CurrentScore = gData.LastSavedScore;
-		gData.Lives -= 1;
+		gameData.CurrentScore = gameData.LastSavedScore;
+		gameData.Lives -= 1;
 		Messenger.Broadcast<bool>("fade hud", true);
-		Messenger.Broadcast<int>("load level", gData.CurrentLevel);
+		Messenger.Broadcast<int>("load level", gameData.CurrentLevel);
 	}
 
 	void OnLevelCompleted(bool status)
 	{
-		gData.LastSavedScore = gData.CurrentScore;
-		gData.CurrentLevel = gData.CurrentLevel;
+		gameData.LastSavedScore = gameData.CurrentScore;
+		gameData.CurrentLevel = gameData.CurrentLevel;
 		Messenger.Broadcast<bool>("fade hud", true);
-		Messenger.Broadcast<int>("load level", gData.CurrentLevel);
+		Messenger.Broadcast<int>("load level", gameData.CurrentLevel);
 	}
 
 	void OnEnable()
@@ -62,10 +62,10 @@ public class GameManager : BaseBehaviour
 
 
 
-	// public int gData.CurrentScore
+	// public int gameData.CurrentScore
 	// {
 	// 	get
 	// 	{
-	// 		return gData.CurrentScore;
+	// 		return gameData.CurrentScore;
 	// 	}
 	// }

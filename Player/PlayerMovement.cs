@@ -105,9 +105,7 @@ public class PlayerMovement : CacheBehaviour
 				animator.Play(Animator.StringToHash("Idle"));
 		}
 
-		if (state.TouchingWall
-			&& MLib2D.Equals(transform.position.x, previousX)
-			&& (transform.position.y < previousY))
+		if (state.TouchingWall && !controller.isGrounded)
 		{
 			// flush horizontal axis if player is falling while pressed against a wall
 			normalizedHorizontalSpeed = 0;

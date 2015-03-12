@@ -3,9 +3,8 @@ using System.Collections;
 
 
 // a clearinghouse for temporary player state
-public class PlayerState : BaseBehaviour, IPlayerStateReadOnly
+public class PlayerState : BaseBehaviour, IPlayerStateReadOnly, IPlayerStateFullAccess
 {
-
 	// player state
 	public bool FacingRight 		{ get; set; }
 	public bool RidingFastPlatform 	{ get; set; }
@@ -13,6 +12,11 @@ public class PlayerState : BaseBehaviour, IPlayerStateReadOnly
 	public bool Dead 				{ get; set; }
 	public bool LevelCompleted 		{ get; set; }
 	public bool AboveGround 		{ get; set; }
+
+	public float GetX()
+	{
+		return transform.position.x;
+	}
 
 	public float GetY()
 	{
@@ -24,6 +28,7 @@ public class PlayerState : BaseBehaviour, IPlayerStateReadOnly
 		Messenger.AddListener<bool>("touching wall", OnTouchingWall);
 		Messenger.AddListener<bool>("riding fast platform", OnRidingFastPlatform);
 		Messenger.AddListener<bool>("player above ground", OnPlayerAboveGround);
+		Messenger.AddListener<bool>( "level completed", OnLevelCompleted);
 		Messenger.AddListener<string, Collider2D>("player dead", OnPlayerDead);
 	}
 
@@ -32,6 +37,7 @@ public class PlayerState : BaseBehaviour, IPlayerStateReadOnly
 		Messenger.RemoveListener<bool>("touching wall", OnTouchingWall);
 		Messenger.RemoveListener<bool>("riding fast platform", OnRidingFastPlatform);
 		Messenger.RemoveListener<bool>("player above ground", OnPlayerAboveGround);
+		Messenger.RemoveListener<bool>( "level completed", OnLevelCompleted);
 		Messenger.RemoveListener<string, Collider2D>("player dead", OnPlayerDead);
 	}
 
@@ -48,6 +54,11 @@ public class PlayerState : BaseBehaviour, IPlayerStateReadOnly
 	void OnPlayerAboveGround(bool status)
 	{
 		AboveGround = status;
+	}
+
+	void OnLevelCompleted(bool status)
+	{
+		LevelCompleted = status;
 	}
 
 	void OnPlayerDead (string methodOfDeath, Collider2D coll)

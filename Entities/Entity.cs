@@ -9,8 +9,7 @@ public abstract class Entity : CacheBehaviour {
 
 	protected bool collidedWithBody;
 	protected bool collidedWithWeapon;
-	protected bool sceneLoading;
-	protected bool playerDead;
+	protected IGameStateReadOnly game;
 	protected IPlayerStateReadOnly player;
 
 	public abstract void OnBodyCollisionEnter();
@@ -20,10 +19,6 @@ public abstract class Entity : CacheBehaviour {
 	public abstract void OnWeaponCollisionStay();
 	public abstract void OnWeaponCollisionExit();
 
-	public void Start()
-	{
-		player = GameObject.Find("Player").GetComponent<IPlayerStateReadOnly>();
-	}
 
 	void OnTriggerEnter2D(Collider2D coll)
 	{
@@ -63,26 +58,10 @@ public abstract class Entity : CacheBehaviour {
 		transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
 	}
 
-	void OnLoadLevel(int unused)
-	{
-		sceneLoading = true;
-	}
-
-	void OnPlayerDead(string unused, Collider2D alsoUnused)
-	{
-		playerDead = true;
-	}
-
 	void OnEnable()
 	{
-		Messenger.AddListener<int>( "load level", OnLoadLevel);
-		Messenger.AddListener<string, Collider2D>( "player dead", OnPlayerDead);
-	}
-
-	void OnDestroy()
-	{
-		Messenger.RemoveListener<int>( "load level", OnLoadLevel);
-		Messenger.RemoveListener<string, Collider2D>( "player dead", OnPlayerDead);
+		game = GameObject.Find("GameState").GetComponent<IGameStateReadOnly>();
+		player = GameObject.Find("Player").GetComponent<IPlayerStateReadOnly>();
 	}
 
 	// protected void OnBecameInvisible()

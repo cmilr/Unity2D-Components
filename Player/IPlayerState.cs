@@ -9,6 +9,8 @@ public interface IPlayerStateReadOnly
     bool Dead                { get; }
     bool LevelCompleted      { get; }
     bool AboveGround         { get; }
+    float GetX();
+    float GetY();
 }
 
 public interface IPlayerStateFullAccess
@@ -19,4 +21,6 @@ public interface IPlayerStateFullAccess
     bool Dead                { get; set; }
     bool LevelCompleted      { get; set; }
     bool AboveGround         { get; set; }
+    float GetX();
+    float GetY();
 }
