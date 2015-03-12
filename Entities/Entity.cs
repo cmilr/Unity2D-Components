@@ -11,6 +11,7 @@ public abstract class Entity : CacheBehaviour {
 	protected bool collidedWithWeapon;
 	protected bool sceneLoading;
 	protected bool playerDead;
+	protected IPlayerStateReadOnly player;
 
 	public abstract void OnBodyCollisionEnter();
 	public abstract void OnBodyCollisionStay();
@@ -18,6 +19,11 @@ public abstract class Entity : CacheBehaviour {
 	public abstract void OnWeaponCollisionEnter();
 	public abstract void OnWeaponCollisionStay();
 	public abstract void OnWeaponCollisionExit();
+
+	public void Start()
+	{
+		player = GameObject.Find("Player").GetComponent<IPlayerStateReadOnly>();
+	}
 
 	void OnTriggerEnter2D(Collider2D coll)
 	{

@@ -16,13 +16,15 @@ public class PickupEntity : Entity
 
 		if (entityType == EntityType.prize) { AutoAlign(); }
 		if (entityType == EntityType.levelUp) { AutoAlign(); }
+
+		base.Start();
 	}
 
 	override public void OnBodyCollisionEnter()
 	{
 		collidedWithBody = true;
 
-		if (!sceneLoading && !playerDead)
+		if (!sceneLoading && !player.Dead)
 		{
 			switch (entityType)
 			{

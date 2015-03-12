@@ -3,7 +3,8 @@ using System.Collections;
 
 
 // a clearinghouse for temporary player state
-public class PlayerState : BaseBehaviour {
+public class PlayerState : BaseBehaviour, IPlayerStateReadOnly
+{
 
 	// player state
 	public bool FacingRight 		{ get; set; }
