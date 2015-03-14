@@ -19,6 +19,7 @@ public class GameInit : BaseBehaviour
         MLib2D.IgnoreLayerCollision("BodyCollider", "One-Way Platform", true);
         MLib2D.IgnoreLayerCollision("WeaponCollider", "Platform", true);
         MLib2D.IgnoreLayerCollision("WeaponCollider", "One-Way Platform", true);
+        MLib2D.IgnoreLayerCollision("WeaponCollider", "Wall", true);
 
 		Cursor.visible = false;
 

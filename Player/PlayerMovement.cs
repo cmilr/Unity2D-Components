@@ -105,12 +105,7 @@ public class PlayerMovement : CacheBehaviour
 				animator.Play(Animator.StringToHash("Idle"));
 		}
 
-		if (state.TouchingWall && !controller.isGrounded)
-		{
-			// flush horizontal axis if player is falling while pressed against a wall
-			normalizedHorizontalSpeed = 0;
-			velocity.x = 0f;
-		}
+		IfFreeFallAgainstWall();
 
 		if (jump)
 		{
@@ -130,6 +125,16 @@ public class PlayerMovement : CacheBehaviour
 		controller.move(velocity * Time.deltaTime);
 
 		SaveCurrentPosition();
+	}
+
+	void IfFreeFallAgainstWall()
+	{
+		// flush horizontal axis if player is falling while pressed against a wall
+		if (state.TouchingWall && !controller.isGrounded)
+		{
+			normalizedHorizontalSpeed = 0;
+			velocity.x = 0f;
+		}
 	}
 
 	bool MovingTooFast()
