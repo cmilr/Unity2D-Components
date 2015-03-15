@@ -8,14 +8,15 @@ using Matcha.Lib;
 
 public class PlayerMovement : CacheBehaviour
 {
-	public float gravity = -35f;                        // set gravity for player
-	public float runSpeed = 8f;                         // set player's run speed
-	public float groundDamping = 20f;                   // how fast do we change direction? higher means faster
-	public float inAirDamping = 5f;                     // how fast do we change direction mid-air?
-	public float jumpHeight = 2.6f;                     // player's jump height
+	public float gravity         = -35f;                // set gravity for player
+	public float runSpeed        = 8f;                  // set player's run speed
+	public float groundDamping   = 20f;                 // how fast do we change direction? higher means faster
+	public float inAirDamping    = 5f;                  // how fast do we change direction mid-air?
+	public float jumpHeight      = 2.6f;                // player's jump height
 	public float maxFallingSpeed = 100f;                // max falling speed, for throttling falls, etc
-	public float maxRisingSpeed = 2f;                   // max rising speed, for throttling player on moving platforms, etc
+	public float maxRisingSpeed  = 2f;                  // max rising speed, for throttling player on moving platforms, etc
 
+	private float normalizedHorizontalSpeed;
 	private float previousX;							// previous update's x position, for horizontal movement comparisons
 	private float previousY;                            // previous update's y position, for speed comparisons
 	private float speedCheck = .08f;                    // compare against to see if we need to throttle rising speed
@@ -27,13 +28,12 @@ public class PlayerMovement : CacheBehaviour
 	private Vector3 velocity;
 	private Player playerControls;
 	private CharacterController2D controller;
-	private PlayerState state;
-	private float normalizedHorizontalSpeed;
+	private IPlayerStateFullAccess state;
 
 
 	void Start()
 	{
-		state = GetComponent<PlayerState>();
+		state = GetComponent<IPlayerStateFullAccess>();
 		controller = GetComponent<CharacterController2D>();
 		playerControls = ReInput.players.GetPlayer(0);
 	}
@@ -61,6 +61,7 @@ public class PlayerMovement : CacheBehaviour
 		if (controller.isGrounded)
 		{
 			velocity.y = 0;
+			state.Grounded = true;
 		}
 		else
 		{
@@ -105,14 +106,14 @@ public class PlayerMovement : CacheBehaviour
 				animator.Play(Animator.StringToHash("Idle"));
 		}
 
-		IfFreeFallAgainstWall();
-
 		if (jump)
 		{
 			velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
 			animator.Play(Animator.StringToHash("Jump"));
 			jump = false;
 		}
+
+		IfFreeFallAgainstWall();
 
 		// compute x and y movements
 		var smoothedMovementFactor = controller.isGrounded ? groundDamping : inAirDamping;
@@ -165,6 +166,8 @@ public class PlayerMovement : CacheBehaviour
 	{
 		previousX = transform.position.x;
 		previousY = transform.position.y;
+		state.PreviousX = previousX;
+		state.PreviousY = previousY;
 	}
 
 	void OnPlayerDead(string methodOfDeath, Collider2D coll)

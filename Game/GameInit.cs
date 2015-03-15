@@ -15,14 +15,11 @@ public class GameInit : BaseBehaviour
 		DOTween.Init(true, true, LogBehaviour.Verbose).SetCapacity(200, 10);
 		DOTween.SetTweensCapacity(2000, 100);
 
-        MLib2D.IgnoreLayerCollision("BodyCollider", "Platform", true);
-        MLib2D.IgnoreLayerCollision("BodyCollider", "One-Way Platform", true);
-        MLib2D.IgnoreLayerCollision("WeaponCollider", "Platform", true);
-        MLib2D.IgnoreLayerCollision("WeaponCollider", "One-Way Platform", true);
-        MLib2D.IgnoreLayerCollision("WeaponCollider", "Wall", true);
+        MLib.IgnoreLayerCollision2D("BodyCollider", "Platform", true);
+        MLib.IgnoreLayerCollision2D("BodyCollider", "One-Way Platform", true);
+        MLib.IgnoreLayerCollision2D("WeaponCollider", "Platform", true);
+        MLib.IgnoreLayerCollision2D("WeaponCollider", "One-Way Platform", true);
 
 		Cursor.visible = false;
-
-
 	}
 }

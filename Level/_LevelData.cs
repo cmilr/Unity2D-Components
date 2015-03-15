@@ -26,9 +26,8 @@ public class _LevelData : BaseBehaviour {
 		FileStream file = File.Create(Application.persistentDataPath + "/LevelData.dat");
 
 		LevelDataContainer container = new LevelDataContainer();
-
-		container.hp     = HP;
-		container.ac     = AC;
+		container.hp = HP;
+		container.ac = AC;
 		container.damage = Damage;
 
 		bf.Serialize(file, container);
@@ -44,8 +43,8 @@ public class _LevelData : BaseBehaviour {
 			LevelDataContainer container = (LevelDataContainer)bf.Deserialize(file);
 			file.Close();
 
-			HP     = container.hp;
-			AC     = container.ac;
+			HP = container.hp;
+			AC = container.ac;
 			Damage = container.damage;
 		}
 	}

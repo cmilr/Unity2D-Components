@@ -16,17 +16,17 @@ public class LightManager : CacheBehaviour {
 	// coordinates on TileMap where ground begins
 	private float groundLine;
 	// above ground light intensity
-	private float playerAboveGround = 1.95f;
+	private float playerAboveGround   = 1.95f;
 	private float creatureAboveGround = 1.95f;
-	private float pickupAboveGround = 1.95f;
-	private float tileAboveGround = 1.44f;
-	private float planeAboveGround = .13f;
+	private float pickupAboveGround   = 1.95f;
+	private float tileAboveGround     = 1.44f;
+	private float planeAboveGround    = .13f;
 	// below ground light intensity
-	private float playerBelowGround = 1.17f;
+	private float playerBelowGround   = 1.17f;
 	private float creatureBelowGround = 1.17f;
-	private float pickupBelowGround = 1.1f;
-	private float tileBelowGround = .64f;
-	private float planeBelowGround = .13f;
+	private float pickupBelowGround   = 1.1f;
+	private float tileBelowGround     = .64f;
+	private float planeBelowGround    = .13f;
 
 	void Start ()
 	{
@@ -44,7 +44,7 @@ public class LightManager : CacheBehaviour {
 
 	void CheckIfAboveGround()
 	{
-		if (player.GetY() > groundLine)
+		if (player.Y() > groundLine)
 		{
 			OnAboveGround();
 			Messenger.Broadcast<bool>("player above ground", true);
