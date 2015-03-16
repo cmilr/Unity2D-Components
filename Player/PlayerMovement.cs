@@ -106,11 +106,6 @@ public class PlayerMovement : CacheBehaviour
 				animator.Play(Animator.StringToHash("Idle"));
 		}
 
-<<<<<<< HEAD
-		IfFreeFallAgainstWall();
-
-=======
->>>>>>> a7f84456c956f1be0a4b19b39066f2aa72d1e2a6
 		if (jump)
 		{
 			velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
@@ -133,11 +128,7 @@ public class PlayerMovement : CacheBehaviour
 		SaveCurrentPosition();
 	}
 
-<<<<<<< HEAD
-	void IfFreeFallAgainstWall()
-=======
 	void CheckForFreeFall()
->>>>>>> a7f84456c956f1be0a4b19b39066f2aa72d1e2a6
 	{
 		// flush horizontal axis if player is falling while pressed against a wall
 		if (state.TouchingWall && !controller.isGrounded)
