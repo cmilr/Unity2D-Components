@@ -5,9 +5,8 @@ using Matcha.Game.Tweens;
 
 public class LightManager : CacheBehaviour {
 
-	private float fadeAfter = 0f;
+	private float fadeAfter  = 0f;
 	private float timeToFade = 1f;
-	private IPlayerStateReadOnly player;
 	private Light playerLight;
 	private Light creatureLight;
 	private Light pickupLight;
@@ -27,6 +26,8 @@ public class LightManager : CacheBehaviour {
 	private float pickupBelowGround   = 1.1f;
 	private float tileBelowGround     = .64f;
 	private float planeBelowGround    = .13f;
+
+	private IPlayerStateReadOnly player;
 
 	void Start ()
 	{

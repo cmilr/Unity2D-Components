@@ -113,7 +113,7 @@ public class PlayerMovement : CacheBehaviour
 			jump = false;
 		}
 
-		IfFreeFallAgainstWall();
+		CheckForFreeFall();
 
 		// compute x and y movements
 		var smoothedMovementFactor = controller.isGrounded ? groundDamping : inAirDamping;
@@ -128,7 +128,7 @@ public class PlayerMovement : CacheBehaviour
 		SaveCurrentPosition();
 	}
 
-	void IfFreeFallAgainstWall()
+	void CheckForFreeFall()
 	{
 		// flush horizontal axis if player is falling while pressed against a wall
 		if (state.TouchingWall && !controller.isGrounded)
