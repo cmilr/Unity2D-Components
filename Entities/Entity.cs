@@ -47,11 +47,6 @@ public abstract class Entity : CacheBehaviour {
 			OnWeaponCollisionExit();
 	}
 
-	protected void SelfDestruct(int inSeconds)
-	{
-		Destroy(gameObject, inSeconds);
-	}
-
 	protected void AutoAlign()
 	{
 		float targetY = (float)(Math.Round(transform.position.y) - ALIGN_ENTITY_TO);
@@ -62,6 +57,16 @@ public abstract class Entity : CacheBehaviour {
 	{
 		game = GameObject.Find("GameState").GetComponent<IGameStateReadOnly>();
 		player = GameObject.Find("Player").GetComponent<IPlayerStateReadOnly>();
+	}
+
+	protected void LifecycleOver()
+	{
+		gameObject.SetActive(false);
+	}
+
+	public void OnTweenCompleted()
+	{
+		LifecycleOver();
 	}
 
 	// protected void OnBecameInvisible()

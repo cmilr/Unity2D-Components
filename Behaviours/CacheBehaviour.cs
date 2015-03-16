@@ -1,7 +1,7 @@
-﻿/* 
- * This version of CacheBehaviour was extended/modified by C.Miller.
- * See below for original Copyright and Disclaimer info.                                  
- */ 
+﻿//--------------------------------------------------------------------------//
+//--  This version of CacheBehaviour was extended/modified by Cary Miller --//
+//--  See below for original Copyright and Disclaimer info.               --//
+//--------------------------------------------------------------------------//
 
 /*
  * Copyright (c) 2014, Nick Gravelyn.

@@ -6,24 +6,28 @@ using Matcha.Game.Tweens;
 
 public class LevelManager : CacheBehaviour {
 
-	// private SceneData sData;
-	private float timeToFade = 2f;
-	private float fadeInAfter = 0f;
-	private float fadeOutAfter = 2f;
+	// private LevelData level;
+	private float timeToFade            = 2f;
+	private float fadeInAfter           = 0f;
+	private float fadeOutAfter          = 2f;
 	private float timeBeforeLevelReload = 3f;
 
 	void Start()
 	{
-		// sData = GameObject.Find("_SceneData").GetComponent<SceneData>();
+		// level = GameObject.Find("_LevelData").GetComponent<LevelData>();
 		spriteRenderer.DOKill();
+		spriteRenderer.enabled = true;
 
+		// fade in new level
 		MTween.FadeIn(spriteRenderer, fadeInAfter, timeToFade);
 	}
 
 	void OnLoadLevel(int newLevel)
 	{
+		// fade out current level
 		MTween.FadeOut(spriteRenderer, fadeOutAfter, timeToFade);
 
+		// start next level and trigger garbage collection
 		StartCoroutine(Timer.Start(timeBeforeLevelReload, true, () =>
 		{
 			Application.LoadLevel("Level" + newLevel);

@@ -12,13 +12,18 @@ public class PlayerState : BaseBehaviour, IPlayerStateReadOnly, IPlayerStateFull
 	public bool Dead 				{ get; set; }
 	public bool AboveGround 		{ get; set; }
 	public bool Grounded 	 		{ get; set; }
+<<<<<<< HEAD
+=======
+	public float PreviousX			{ get; set; }
+	public float PreviousY			{ get; set; }
+>>>>>>> a7f84456c956f1be0a4b19b39066f2aa72d1e2a6
 
-	public float GetX()
+	public float X()
 	{
 		return transform.position.x;
 	}
 
-	public float GetY()
+	public float Y()
 	{
 		return transform.position.y;
 	}
