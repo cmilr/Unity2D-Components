@@ -4,6 +4,8 @@
 [Bb]uild/
 [Ii]OSBuild/
 
+Add-Ons/
+[Aa]dd-Ons/
 [Ee]xtensions/
 [Ll]ibraries/
 [Tt]weens/
@@ -12,6 +14,8 @@
 [Xx]_Archive/
 [Xx]_docs/
 
+Add-Ons.meta
+[Aa]dd-Ons.meta
 [Ee]xtensions.meta
 [Ll]ibraries.meta
 [Tt]weens.meta

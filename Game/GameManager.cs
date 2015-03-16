@@ -49,23 +49,3 @@ public class GameManager : BaseBehaviour
 		Messenger.RemoveListener<bool>( "level completed", OnLevelCompleted);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-	// public int gameData.CurrentScore
-	// {
-	// 	get
-	// 	{
-	// 		return gameData.CurrentScore;
-	// 	}
-	// }

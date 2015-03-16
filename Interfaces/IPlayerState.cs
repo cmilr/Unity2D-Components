@@ -7,8 +7,8 @@ public interface IPlayerStateReadOnly
     bool RidingFastPlatform  { get; }
     bool TouchingWall        { get; }
     bool Dead                { get; }
-    bool LevelCompleted      { get; }
     bool AboveGround         { get; }
+    bool Grounded            { get; }
     float GetX();
     float GetY();
 }
@@ -19,8 +19,8 @@ public interface IPlayerStateFullAccess
     bool RidingFastPlatform  { get; set; }
     bool TouchingWall        { get; set; }
     bool Dead                { get; set; }
-    bool LevelCompleted      { get; set; }
     bool AboveGround         { get; set; }
+    bool Grounded            { get; set; }
     float GetX();
     float GetY();
 }
