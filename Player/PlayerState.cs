@@ -14,16 +14,8 @@ public class PlayerState : BaseBehaviour, IPlayerStateReadOnly, IPlayerStateFull
 	public bool Grounded 	 		{ get; set; }
 	public float PreviousX			{ get; set; }
 	public float PreviousY			{ get; set; }
-
-	public float X()
-	{
-		return transform.position.x;
-	}
-
-	public float Y()
-	{
-		return transform.position.y;
-	}
+	public float X					{ get; set; }
+	public float Y					{ get; set; }
 
 	void OnEnable()
 	{

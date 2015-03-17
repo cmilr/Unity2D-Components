@@ -5,15 +5,14 @@ using Matcha.Game.Tweens;
 
 public class LightManager : CacheBehaviour {
 
-	private float fadeAfter  = 0f;
-	private float timeToFade = 1f;
 	private Light playerLight;
 	private Light creatureLight;
 	private Light pickupLight;
 	private Light tileLight;
 	private Light planeLight;
-	// coordinates on TileMap where ground begins
-	private float groundLine;
+	private float fadeAfter  = 0f;
+	private float timeToFade = 1f;
+
 	// above ground light intensity
 	private float playerAboveGround   = 1.95f;
 	private float creatureAboveGround = 1.95f;
@@ -27,66 +26,42 @@ public class LightManager : CacheBehaviour {
 	private float tileBelowGround     = .64f;
 	private float planeBelowGround    = .13f;
 
-	private IPlayerStateReadOnly player;
-
 	void Start ()
 	{
-		player = GameObject.Find("Player").GetComponent<IPlayerStateReadOnly>();
 		playerLight = GameObject.Find("PlayerLight").GetComponent<Light>();
 		creatureLight = GameObject.Find("CreatureLight").GetComponent<Light>();
 		pickupLight = GameObject.Find("PickupLight").GetComponent<Light>();
 		tileLight = GameObject.Find("TileLight").GetComponent<Light>();
 		planeLight = GameObject.Find("PlaneLight").GetComponent<Light>();
-
-		OnAboveGround();
-
-		InvokeRepeating("CheckIfAboveGround", 0f, 0.3F);
 	}
 
-	void CheckIfAboveGround()
+	void OnPlayerAboveGround(bool aboveGround)
 	{
-		if (player.Y() > groundLine)
+		if (aboveGround)
 		{
-			OnAboveGround();
-			Messenger.Broadcast<bool>("player above ground", true);
+			MTween.FadeIntensity(playerLight, playerAboveGround, fadeAfter, timeToFade);
+			MTween.FadeIntensity(creatureLight, creatureAboveGround, fadeAfter, timeToFade);
+			MTween.FadeIntensity(pickupLight, pickupAboveGround, fadeAfter, timeToFade);
+			MTween.FadeIntensity(tileLight, tileAboveGround, fadeAfter, timeToFade);
+			MTween.FadeIntensity(planeLight, planeAboveGround, fadeAfter, timeToFade);
 		}
 		else
 		{
-			OnBelowGround();
-			Messenger.Broadcast<bool>("player above ground", false);
+			MTween.FadeIntensity(playerLight, playerBelowGround, fadeAfter, timeToFade);
+			MTween.FadeIntensity(creatureLight, creatureBelowGround, fadeAfter, timeToFade);
+			MTween.FadeIntensity(pickupLight, pickupBelowGround, fadeAfter, timeToFade);
+			MTween.FadeIntensity(tileLight, tileBelowGround, fadeAfter, timeToFade);
+			MTween.FadeIntensity(planeLight, planeBelowGround, fadeAfter, timeToFade);
 		}
-	}
-
-	void OnAboveGround()
-	{
-		MTween.FadeIntensity(playerLight, playerAboveGround, fadeAfter, timeToFade);
-		MTween.FadeIntensity(creatureLight, creatureAboveGround, fadeAfter, timeToFade);
-		MTween.FadeIntensity(pickupLight, pickupAboveGround, fadeAfter, timeToFade);
-		MTween.FadeIntensity(tileLight, tileAboveGround, fadeAfter, timeToFade);
-		MTween.FadeIntensity(planeLight, planeAboveGround, fadeAfter, timeToFade);
-	}
-
-	void OnBelowGround()
-	{
-		MTween.FadeIntensity(playerLight, playerBelowGround, fadeAfter, timeToFade);
-		MTween.FadeIntensity(creatureLight, creatureBelowGround, fadeAfter, timeToFade);
-		MTween.FadeIntensity(pickupLight, pickupBelowGround, fadeAfter, timeToFade);
-		MTween.FadeIntensity(tileLight, tileBelowGround, fadeAfter, timeToFade);
-		MTween.FadeIntensity(planeLight, planeBelowGround, fadeAfter, timeToFade);
-	}
-
-	void OnSetGroundLine(float coordinates)
-	{
-		groundLine = coordinates;
 	}
 
 	void OnEnable()
 	{
-		Messenger.AddListener<float>("set ground line", OnSetGroundLine);
+		Messenger.AddListener<bool>("player above ground", OnPlayerAboveGround);
 	}
 
 	void OnDisable()
 	{
-		Messenger.RemoveListener<float>("set ground line", OnSetGroundLine);
+		Messenger.RemoveListener<bool>("player above ground", OnPlayerAboveGround);
 	}
 }

@@ -1,6 +1,6 @@
 ﻿//   _  _ ____ ___ ____ _  _ ____
-//   |\/| |--|  |  |___ |--| |--|   www.matcha.industries
-//   i  n  d  u  s  t  r  i  e  s   indie games
+//   |\/| |--|  |  |___ |--| |--|    www.matcha.industries
+//   i  n  d  u  s  t  r  i  e  s    jguarshark@gmail.com
 
 using UnityEngine;
 using System.Collections;

@@ -1,5 +1,5 @@
 ﻿//   _  _ ____ ___ ____ _  _ ____
-//   |\/| |--|  |  |___ |--| |--|   This version of CacheBehaviour was extended/modified by Cary Miller.
+//   |\/| |--|  |  |___ |--| |--|   This version of CacheBehaviour was modified by Cary Miller.
 //   i  n  d  u  s  t  r  i  e  s   See below for original Copyright and Disclaimer info.
 
 /*

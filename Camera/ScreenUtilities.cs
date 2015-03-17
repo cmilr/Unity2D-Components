@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using DG.Tweening;
+using UnityStandardAssets.ImageEffects;
 
 
 public class ScreenUtilities : CacheBehaviour
 {
-	public GameObject objectToTrack;            // object whose position we are tracking.
+	private GameObject objectToTrack;			// object whose position we are tracking.
 	private Transform trackedObject;            // reference to the tracked object's transform.
 	private float vertExtent;                   // half the height of the game screen.
 	private float horizExtent;                  // half the width of the game screen.
@@ -13,6 +15,7 @@ public class ScreenUtilities : CacheBehaviour
 
 	void Start()
 	{
+		objectToTrack = GameObject.Find("Player");
 		trackedObject = objectToTrack.transform;
 
 		vertExtent = Camera.main.GetComponent<Camera>().orthographicSize;

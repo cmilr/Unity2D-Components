@@ -11,8 +11,8 @@ public interface IPlayerStateReadOnly
     bool Grounded               { get; }
     float PreviousX             { get; }
     float PreviousY             { get; }
-    float X();
-    float Y();
+    float X                     { get; }
+    float Y                     { get; }
 }
 
 public interface IPlayerStateFullAccess
@@ -25,6 +25,6 @@ public interface IPlayerStateFullAccess
     bool Grounded               { get; set; }
     float PreviousX             { get; set; }
     float PreviousY             { get; set; }
-    float X();
-    float Y();
+    float X                     { get; set; }
+    float Y                     { get; set; }
 }

@@ -114,13 +114,13 @@ public class PlayerMovement : CacheBehaviour
 		}
 
 		CheckForFreeFall();
+		SavePreviousPosition();
 
 		// compute x and y movements
 		var smoothedMovementFactor = controller.isGrounded ? groundDamping : inAirDamping;
 		velocity.x = Mathf.Lerp(velocity.x, normalizedHorizontalSpeed * runSpeed, Time.deltaTime * smoothedMovementFactor);
 
 		ApplyGravity();
-
 		ClampYMovement();
 
 		controller.move(velocity * Time.deltaTime);
@@ -163,6 +163,12 @@ public class PlayerMovement : CacheBehaviour
 	}
 
 	void SaveCurrentPosition()
+	{
+		state.X = transform.position.x;
+		state.Y = transform.position.y;
+	}
+
+	void SavePreviousPosition()
 	{
 		previousX = transform.position.x;
 		previousY = transform.position.y;
