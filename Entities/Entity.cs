@@ -55,8 +55,8 @@ public abstract class Entity : CacheBehaviour {
 
 	void OnEnable()
 	{
-		game = GameObject.Find("GameState").GetComponent<IGameStateReadOnly>();
-		player = GameObject.Find("Player").GetComponent<IPlayerStateReadOnly>();
+		game = GameObject.Find(GAME_STATE).GetComponent<IGameStateReadOnly>();
+		player = GameObject.Find(PLAYER).GetComponent<IPlayerStateReadOnly>();
 	}
 
 	protected void LifecycleOver()

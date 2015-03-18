@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Rewired;
 using Matcha.Lib;
 
 [RequireComponent(typeof(CharacterController2D))]
 
 
-public class PlayerMovement : CacheBehaviour
+public class PlayerMovement : CacheBehaviour, ICreatureController
 {
 	public float gravity         = -35f;                // set gravity for player
 	public float runSpeed        = 8f;                  // set player's run speed
@@ -20,13 +19,11 @@ public class PlayerMovement : CacheBehaviour
 	private float previousX;							// previous update's x position, for horizontal movement comparisons
 	private float previousY;                            // previous update's y position, for speed comparisons
 	private float speedCheck = .08f;                    // compare against to see if we need to throttle rising speed
-	private float h;                                    // input horizontal axis
 	private bool moveRight;
 	private bool moveLeft;
 	private bool jump;
 	private RaycastHit2D lastControllerColliderHit;
 	private Vector3 velocity;
-	private Player playerControls;
 	private CharacterController2D controller;
 	private IPlayerStateFullAccess state;
 
@@ -35,22 +32,26 @@ public class PlayerMovement : CacheBehaviour
 	{
 		state = GetComponent<IPlayerStateFullAccess>();
 		controller = GetComponent<CharacterController2D>();
-		playerControls = ReInput.players.GetPlayer(0);
 	}
 
-	void Update()
+	public void MoveRight()
 	{
-		h = playerControls.GetAxisRaw("Move Horizontal");
-
-		if (h > 0)
-			moveRight = true;
-
-		if (h < 0)
-			moveLeft = true;
-
-		if (playerControls.GetButtonDown("Jump") && controller.isGrounded)
-			jump = true;
+		moveRight = true;
 	}
+
+    public void MoveLeft()
+    {
+		moveLeft = true;
+    }
+
+    public void Jump()
+    {
+		if (controller.isGrounded)
+			jump = true;
+    }
+
+    public void Attack(){}
+    public void Defend(){}
 
 	void LateUpdate()
 	{
@@ -114,7 +115,7 @@ public class PlayerMovement : CacheBehaviour
 		}
 
 		CheckForFreeFall();
-		SavePreviousPosition();
+		SaveCurrentPosition();
 
 		// compute x and y movements
 		var smoothedMovementFactor = controller.isGrounded ? groundDamping : inAirDamping;
@@ -125,7 +126,7 @@ public class PlayerMovement : CacheBehaviour
 
 		controller.move(velocity * Time.deltaTime);
 
-		SaveCurrentPosition();
+		SavePreviousPosition();
 	}
 
 	void CheckForFreeFall()

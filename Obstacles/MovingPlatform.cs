@@ -62,16 +62,16 @@ public class MovingPlatform : CacheBehaviour
 
 	void OnTriggerEnter2D (Collider2D coll)
 	{
-		if (coll.name == "Player" && coll.transform.position.y - .3f > gameObject.transform.position.y)
+		if (coll.name == PLAYER && coll.transform.position.y - .3f > gameObject.transform.position.y)
 		{
 			coll.transform.parent = gameObject.transform;
 		}
-		else if (coll.name != "Player")
+		else if (coll.name != PLAYER)
 		{
 			coll.transform.parent = gameObject.transform;
 		}
 
-		if (coll.name == "Player" && fastPlatform)
+		if (coll.name == PLAYER && fastPlatform)
 			Messenger.Broadcast<bool>("riding fast platform", true);
 	}
 
@@ -79,7 +79,7 @@ public class MovingPlatform : CacheBehaviour
 	{
 		coll.transform.parent = null;
 
-		if (coll.name == "Player" && fastPlatform)
+		if (coll.name == PLAYER && fastPlatform)
 			Messenger.Broadcast<bool>("riding fast platform", false);
 	}
 

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public interface IPlayerStateReadOnly
-{
+public interface IPlayerStateReadOnly {
+
     bool FacingRight            { get; }
     bool RidingFastPlatform     { get; }
     bool TouchingWall           { get; }
@@ -15,8 +15,8 @@ public interface IPlayerStateReadOnly
     float Y                     { get; }
 }
 
-public interface IPlayerStateFullAccess
-{
+public interface IPlayerStateFullAccess {
+
     bool FacingRight            { get; set; }
     bool RidingFastPlatform     { get; set; }
     bool TouchingWall           { get; set; }
