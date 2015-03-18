@@ -8,7 +8,12 @@ public class SoundManager : CacheBehaviour
 {
 	public AudioClip collectPrize;
 
-	// EVENT LISTENERS
+
+	void OnPrizeCollected(int worth)
+	{
+		audio.PlayOneShot(collectPrize, 0F);
+	}
+
 	void OnEnable()
 	{
 		Messenger.AddListener<int>( "prize collected", OnPrizeCollected );
@@ -17,12 +22,6 @@ public class SoundManager : CacheBehaviour
 	void OnDestroy()
 	{
 		Messenger.RemoveListener<int>( "prize collected", OnPrizeCollected );
-	}
-
-	// EVENT RESPONDERS
-	void OnPrizeCollected(int worth)
-	{
-		audio.PlayOneShot(collectPrize, 0F);
 	}
 
 }

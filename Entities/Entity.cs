@@ -20,6 +20,12 @@ public abstract class Entity : CacheBehaviour {
 	public abstract void OnWeaponCollisionExit();
 
 
+	void OnEnable()
+	{
+		game = GameObject.Find(GAME_STATE).GetComponent<IGameStateReadOnly>();
+		player = GameObject.Find(PLAYER).GetComponent<IPlayerStateReadOnly>();
+	}
+
 	void OnTriggerEnter2D(Collider2D coll)
 	{
 		if (coll.name == "BodyCollider" && !collidedWithBody)
@@ -51,12 +57,6 @@ public abstract class Entity : CacheBehaviour {
 	{
 		float targetY = (float)(Math.Round(transform.position.y) - ALIGN_ENTITY_TO);
 		transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
-	}
-
-	void OnEnable()
-	{
-		game = GameObject.Find(GAME_STATE).GetComponent<IGameStateReadOnly>();
-		player = GameObject.Find(PLAYER).GetComponent<IPlayerStateReadOnly>();
 	}
 
 	protected void LifecycleOver()

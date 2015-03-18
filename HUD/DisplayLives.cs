@@ -10,20 +10,29 @@ public class DisplayLives : BaseBehaviour
 	public Sprite threeLives;
 	public Sprite twoLives;
 	public Sprite oneLife;
-	private Image lives;
+	private Image HUDLives;
 	private float timeToFade = 2f;
 
 	void Start()
 	{
-		lives = gameObject.GetComponent<Image>();
-		lives.sprite = threeLives;
-		lives.DOKill();
-
-		MTween.FadeOut(lives, 0, 0);
-		MTween.FadeIn(lives, HUD_FADE_IN_AFTER, timeToFade);
+		HUDLives = gameObject.GetComponent<Image>();
+		HUDLives.sprite = threeLives;
+		HUDLives.DOKill();
+		FadeInLives();
 	}
 
-	// EVENT LISTENERS
+	void FadeInLives()
+	{
+		// fade lives to zero instantly, then fade up slowly
+		MTween.FadeOut(HUDLives, 0, 0);
+		MTween.FadeIn(HUDLives, HUD_FADE_IN_AFTER, timeToFade);
+	}
+
+	void OnFadeHud(bool status)
+	{
+		MTween.FadeOut(HUDLives, HUD_FADE_OUT_AFTER, timeToFade);
+	}
+
 	void OnEnable()
 	{
 		Messenger.AddListener<bool>("fade hud", OnFadeHud);
@@ -32,10 +41,5 @@ public class DisplayLives : BaseBehaviour
 	void OnDestroy()
 	{
 		Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
-	}
-
-	void OnFadeHud(bool status)
-	{
-		MTween.FadeOut(lives, HUD_FADE_OUT_AFTER, timeToFade);
 	}
 }

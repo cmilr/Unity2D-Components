@@ -7,12 +7,14 @@ public class MovingPlatform : CacheBehaviour
 {
 	public enum Direction { right, left, up, down };
 	public Direction direction;
+
 	[Tooltip("Distance for platform to move, measured in tiles.")]
-	public float distance = 1.0f;
+	public float distance  = 1.0f;
 	[Tooltip("How many seconds to travel the above distance?")]
-	public float time = 1.0f;
+	public float time      = 1.0f;
 	[Tooltip("How long should the platform pause at each end?")]
 	public float pauseTime = .1f;
+
 	private bool fastPlatform;
 
 	void Start()

@@ -31,6 +31,7 @@ public class CreatureEntity : Entity
 			switch (entityType)
 			{
 				case EntityType.enemy:
+					// ultimately, this event will be broadcast from the player
 					Messenger.Broadcast<string, Collider2D>("player dead", "struckdown", thisCollider);
 				break;
 			}

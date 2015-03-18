@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public interface IGameStateReadOnly
-{
+public interface IGameStateReadOnly {
+
     bool LevelLoading           { get; }
 }
 
-public interface IGameStateFullAccess
-{
+public interface IGameStateFullAccess {
+
     bool LevelLoading           { get; set; }
 }

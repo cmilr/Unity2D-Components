@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using DG.Tweening;
 using Matcha.Game.Tweens;
 
 
@@ -14,17 +15,21 @@ public class DisplayScore : BaseBehaviour
 	void Start ()
 	{
 		HUDScore = gameObject.GetComponent<Text>();
+		HUDScore.DOKill();
 	}
 
 	void OnInitScore(int initScore)
 	{
 		HUDScore.text = initScore.ToString();
+		FadeInScore();
+	}
 
-		// fade score to zero instantly upon start-up, then fade up slowly
+	void FadeInScore()
+	{
+		// fade score to zero instantly, then fade up slowly
 		MTween.FadeOut(HUDScore, 0, 0);
 		MTween.FadeIn(HUDScore, HUD_FADE_IN_AFTER, timeToFade);
 	}
-
 	void OnChangeScore(int newScore)
 	{
 		HUDScore.text = newScore.ToString();

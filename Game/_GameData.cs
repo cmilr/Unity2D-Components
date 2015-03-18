@@ -25,10 +25,10 @@ public class _GameData : BaseBehaviour {
 		MakePseudoSingleton();
 
 		DifficultyMultiplier = 1.0f;
-		CurrentScore = 0;
-		LastSavedScore = 0;
-		Lives = 3;
-		CurrentLevel = 1;
+		CurrentScore         = 0;
+		LastSavedScore       = 0;
+		Lives                = 3;
+		CurrentLevel         = 1;
 	}
 
 	public void Save()
@@ -39,10 +39,10 @@ public class _GameData : BaseBehaviour {
 		GameDataContainer container = new GameDataContainer();
 
 		container.difficultyMultiplier = DifficultyMultiplier;
-		container.currentScore = CurrentScore;
-		container.lastSavedScore = LastSavedScore;
-		container.lives = Lives;
-		container.currentLevel = CurrentLevel;
+		container.currentScore         = CurrentScore;
+		container.lastSavedScore       = LastSavedScore;
+		container.lives                = Lives;
+		container.currentLevel         = CurrentLevel;
 
 		bf.Serialize(file, container);
 		file.Close();
@@ -58,10 +58,10 @@ public class _GameData : BaseBehaviour {
 			file.Close();
 
 			DifficultyMultiplier = container.difficultyMultiplier;
-			CurrentScore = container.currentScore;
-			LastSavedScore = container.lastSavedScore;
-			Lives = container.lives;
-			CurrentLevel = container.currentLevel;
+			CurrentScore         = container.currentScore;
+			LastSavedScore       = container.lastSavedScore;
+			Lives                = container.lives;
+			CurrentLevel         = container.currentLevel;
 		}
 	}
 

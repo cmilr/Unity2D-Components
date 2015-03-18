@@ -18,7 +18,11 @@ public class PixelArtCamera : BaseBehaviour
         Camera.main.orthographicSize = s_baseOrthographicSize;
     }
 
-	// EVENT LISTENERS
+    void OnScreenSizeChanged(float vExtent, float hExtent)
+    {
+        SetOrthographicSize();
+    }
+
 	void OnEnable()
 	{
 		Messenger.AddListener<float, float>( "screen size changed", OnScreenSizeChanged);
@@ -26,12 +30,6 @@ public class PixelArtCamera : BaseBehaviour
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<float, float>( "screen size changed", OnScreenSizeChanged);	
-	}
-
-	// EVENT RESPONDERS
-	void OnScreenSizeChanged(float vExtent, float hExtent)
-	{
-		SetOrthographicSize();
+		Messenger.RemoveListener<float, float>( "screen size changed", OnScreenSizeChanged);
 	}
 }

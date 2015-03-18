@@ -3,7 +3,7 @@ using System.Collections;
 using Rewired;
 
 
-public class RewiredAdapter : BaseBehaviour {
+public class RewiredInputAdapter : BaseBehaviour {
 
     private Player playerControls;
     private ICreatureController creature;

@@ -8,7 +8,7 @@ public class GameManager : BaseBehaviour
 
 	void Start()
 	{
-		gameData = GameObject.Find("_GameData").GetComponent<_GameData>();
+		gameData = GameObject.Find(_GAME_DATA).GetComponent<_GameData>();
 
 		Messenger.Broadcast<int>("init score", gameData.CurrentScore);
 	}

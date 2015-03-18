@@ -1,6 +1,6 @@
-﻿//   _  _ ____ ___ ____ _  _ ____
-//   |\/| |--|  |  |___ |--| |--|   This version of CacheBehaviour was modified by Cary Miller.
-//   i  n  d  u  s  t  r  i  e  s   See below for original Copyright and Disclaimer info.
+﻿
+// This version of CacheBehaviour was modified by C.Miller.
+// See below for original Copyright and Disclaimer info.
 
 /*
  * Copyright (c) 2014, Nick Gravelyn.

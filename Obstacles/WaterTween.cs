@@ -6,7 +6,7 @@ using DG.Tweening;
 public class WaterTween : CacheBehaviour
 {
     private float distance = 2f;
-    private float time = 1.5f;
+    private float time     = 1.5f;
 
     void Start()
     {

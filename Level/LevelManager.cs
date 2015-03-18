@@ -14,7 +14,7 @@ public class LevelManager : CacheBehaviour {
 	private float timeBeforeLevelReload = 3f;
 
 	// tile map specs
-	public float groundLine             = -50.00f;
+	public float groundLine             = -50.00f;		// where above-ground ends and below-ground begins
 
 	void Start()
 	{

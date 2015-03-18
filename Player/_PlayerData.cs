@@ -26,8 +26,9 @@ public class _PlayerData : BaseBehaviour {
 		FileStream file = File.Create(Application.persistentDataPath + "/PlayerData.dat");
 
 		PlayerDataContainer container = new PlayerDataContainer();
-		container.hp = HP;
-		container.ac = AC;
+
+		container.hp     = HP;
+		container.ac     = AC;
 		container.damage = Damage;
 
 		bf.Serialize(file, container);
@@ -43,8 +44,8 @@ public class _PlayerData : BaseBehaviour {
 			PlayerDataContainer container = (PlayerDataContainer)bf.Deserialize(file);
 			file.Close();
 
-			HP = container.hp;
-			AC = container.ac;
+			HP     = container.hp;
+			AC     = container.ac;
 			Damage = container.damage;
 		}
 	}

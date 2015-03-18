@@ -14,11 +14,11 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	public float jumpHeight      = 2.6f;                // player's jump height
 	public float maxFallingSpeed = 100f;                // max falling speed, for throttling falls, etc
 	public float maxRisingSpeed  = 2f;                  // max rising speed, for throttling player on moving platforms, etc
+	private float speedCheck     = .08f;                // compare against to see if we need to throttle rising speed
 
 	private float normalizedHorizontalSpeed;
-	private float previousX;							// previous update's x position, for horizontal movement comparisons
-	private float previousY;                            // previous update's y position, for speed comparisons
-	private float speedCheck = .08f;                    // compare against to see if we need to throttle rising speed
+	private float previousX;
+	private float previousY;
 	private bool moveRight;
 	private bool moveLeft;
 	private bool jump;
@@ -114,7 +114,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			jump = false;
 		}
 
-		CheckForFreeFall();
+		CheckForFreefall();
 		SaveCurrentPosition();
 
 		// compute x and y movements
@@ -129,7 +129,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		SavePreviousPosition();
 	}
 
-	void CheckForFreeFall()
+	void CheckForFreefall()
 	{
 		// flush horizontal axis if player is falling while pressed against a wall
 		if (state.TouchingWall && !controller.isGrounded)
