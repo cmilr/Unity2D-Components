@@ -85,13 +85,13 @@ public class MovingPlatform : CacheBehaviour
 			Messenger.Broadcast<bool>("riding fast platform", false);
 	}
 
-	// if platform is particularly fast and long, send a message to PlayerManager so it can throttle
-	// y-speed to alleviate jitteriness. formula below was attained through experimentation.
+	// if platform is particularly fast and long, send a message to PlayerState, so PlayerMovement can
+	// throttle y-speed to alleviate jitteriness. formula below was attained through experimentation.
 	void CheckPlatformSpeed()
 	{
 		if (direction == Direction.up || direction == Direction.down)
 		{
-			if (distance > 4 && distance / time > 5)
+			if (distance > 4 && distance / time >= 5)
 				fastPlatform = true;
 		}
 	}
