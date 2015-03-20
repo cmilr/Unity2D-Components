@@ -16,6 +16,10 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	public float maxRisingSpeed  = 2f;                  // max rising speed, for throttling player on moving platforms, etc
 	private float speedCheck     = .08f;                // compare against to see if we need to throttle rising speed
 
+    private string character;
+    private string idleAnimation;
+    private string runAnimation;
+    private string jumpAnimation;
 	private float normalizedHorizontalSpeed;
 	private float previousX;
 	private float previousY;
@@ -32,6 +36,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		state = GetComponent<IPlayerStateFullAccess>();
 		controller = GetComponent<CharacterController2D>();
+		SetCharacterAnimations("LAURA");
 	}
 
 	public void MoveRight()
@@ -53,6 +58,13 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
     public void Attack(){}
     public void Defend(){}
 
+	void SetCharacterAnimations(string character)
+	{
+		idleAnimation = character + "_Idle";
+		runAnimation = character + "_Run";
+		jumpAnimation = character + "_Jump";
+	}
+
 	void LateUpdate()
 	{
 		// keep movement in LateUpdate() to prevent falling through edge colliders
@@ -66,7 +78,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		}
 		else
 		{
-			animator.Play(Animator.StringToHash("Jump"));
+			animator.Play(Animator.StringToHash(jumpAnimation));
 		}
 
 		if (moveRight)
@@ -77,7 +89,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 				transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
 
 			if (controller.isGrounded)
-				animator.Play(Animator.StringToHash("Run"));
+				animator.Play(Animator.StringToHash(runAnimation));
 
 			moveRight = false;
 
@@ -93,7 +105,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			}
 
 			if (controller.isGrounded)
-				animator.Play(Animator.StringToHash("Run"));
+				animator.Play(Animator.StringToHash(runAnimation));
 
 			moveLeft = false;
 
@@ -104,13 +116,13 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			normalizedHorizontalSpeed = 0;
 
 			if (controller.isGrounded)
-				animator.Play(Animator.StringToHash("Idle"));
+				animator.Play(Animator.StringToHash(idleAnimation));
 		}
 
 		if (jump)
 		{
 			velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
-			animator.Play(Animator.StringToHash("Jump"));
+			animator.Play(Animator.StringToHash(jumpAnimation));
 			jump = false;
 		}
 

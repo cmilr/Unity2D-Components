@@ -32,7 +32,7 @@ public class CreatureEntity : Entity
 			{
 				case EntityType.enemy:
 					// ultimately, this event will be broadcast from the player
-					Messenger.Broadcast<string, Collider2D>("player dead", "struckdown", thisCollider);
+					Messenger.Broadcast<string, Collider2D>("player dead", "StruckDown", thisCollider);
 				break;
 			}
 		}
