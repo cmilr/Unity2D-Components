@@ -30,12 +30,14 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	private Vector3 velocity;
 	private CharacterController2D controller;
 	private IPlayerStateFullAccess state;
+	private WeaponHandler weapon;
 
 
 	void Start()
 	{
 		state = GetComponent<IPlayerStateFullAccess>();
 		controller = GetComponent<CharacterController2D>();
+		weapon =GetComponentInChildren<WeaponHandler>();
 		SetCharacterAnimations("LAURA");
 	}
 
@@ -79,6 +81,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		else
 		{
 			animator.Play(Animator.StringToHash(jumpAnimation));
+			weapon.animator.Play(Animator.StringToHash(weapon.jumpAnimation));
 		}
 
 		if (moveRight)
@@ -89,7 +92,10 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 				transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
 
 			if (controller.isGrounded)
+			{
 				animator.Play(Animator.StringToHash(runAnimation));
+				weapon.animator.Play(Animator.StringToHash(weapon.runAnimation));
+			}
 
 			moveRight = false;
 
@@ -105,7 +111,10 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			}
 
 			if (controller.isGrounded)
+			{
 				animator.Play(Animator.StringToHash(runAnimation));
+				weapon.animator.Play(Animator.StringToHash(weapon.runAnimation));
+			}
 
 			moveLeft = false;
 
@@ -116,13 +125,17 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			normalizedHorizontalSpeed = 0;
 
 			if (controller.isGrounded)
+			{
 				animator.Play(Animator.StringToHash(idleAnimation));
+				weapon.animator.Play(Animator.StringToHash(weapon.idleAnimation));
+			}
 		}
 
 		if (jump)
 		{
 			velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
 			animator.Play(Animator.StringToHash(jumpAnimation));
+			weapon.animator.Play(Animator.StringToHash(weapon.jumpAnimation));
 			jump = false;
 		}
 
