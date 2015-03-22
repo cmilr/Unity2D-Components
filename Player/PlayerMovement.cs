@@ -30,14 +30,14 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	private Vector3 velocity;
 	private CharacterController2D controller;
 	private IPlayerStateFullAccess state;
-	private WeaponHandler weapon;
+	private IWeapon weapon;
 
 
 	void Start()
 	{
 		state = GetComponent<IPlayerStateFullAccess>();
 		controller = GetComponent<CharacterController2D>();
-		weapon =GetComponentInChildren<WeaponHandler>();
+		weapon = GetComponentInChildren<IWeapon>();
 		SetCharacterAnimations("LAURA");
 	}
 
@@ -81,7 +81,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		else
 		{
 			animator.Play(Animator.StringToHash(jumpAnimation));
-			weapon.animator.Play(Animator.StringToHash(weapon.jumpAnimation));
+			weapon.PlayJumpAnimation();
 		}
 
 		if (moveRight)
@@ -94,7 +94,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			if (controller.isGrounded)
 			{
 				animator.Play(Animator.StringToHash(runAnimation));
-				weapon.animator.Play(Animator.StringToHash(weapon.runAnimation));
+				weapon.PlayRunAnimation();
 			}
 
 			moveRight = false;
@@ -113,7 +113,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			if (controller.isGrounded)
 			{
 				animator.Play(Animator.StringToHash(runAnimation));
-				weapon.animator.Play(Animator.StringToHash(weapon.runAnimation));
+				weapon.PlayRunAnimation();
 			}
 
 			moveLeft = false;
@@ -127,7 +127,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			if (controller.isGrounded)
 			{
 				animator.Play(Animator.StringToHash(idleAnimation));
-				weapon.animator.Play(Animator.StringToHash(weapon.idleAnimation));
+				weapon.PlayIdleAnimation();
 			}
 		}
 
@@ -135,7 +135,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		{
 			velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
 			animator.Play(Animator.StringToHash(jumpAnimation));
-			weapon.animator.Play(Animator.StringToHash(weapon.jumpAnimation));
+			weapon.PlayJumpAnimation();
 			jump = false;
 		}
 
