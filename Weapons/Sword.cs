@@ -16,22 +16,22 @@ public class Sword : CacheBehaviour, IWeapon {
 
     public void PlayIdleAnimation()
     {
-        blade.IdleAnimation();
-        hilt.IdleAnimation();
-        handle.IdleAnimation();
+        blade.PlayIdleAnimation();
+        hilt.PlayIdleAnimation();
+        handle.PlayIdleAnimation();
     }
 
     public void PlayRunAnimation()
     {
-        blade.RunAnimation();
-        hilt.RunAnimation();
-        handle.RunAnimation();
+        blade.PlayRunAnimation();
+        hilt.PlayRunAnimation();
+        handle.PlayRunAnimation();
     }
 
     public void PlayJumpAnimation()
     {
-        blade.JumpAnimation();
-        hilt.JumpAnimation();
-        handle.JumpAnimation();
+        blade.PlayJumpAnimation();
+        hilt.PlayJumpAnimation();
+        handle.PlayJumpAnimation();
     }
 }

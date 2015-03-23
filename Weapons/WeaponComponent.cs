@@ -20,17 +20,17 @@ public class WeaponComponent : CacheBehaviour {
         jumpAnimation = name + "_Jump";
     }
 
-    public void IdleAnimation()
+    public void PlayIdleAnimation()
     {
         animator.Play(Animator.StringToHash(idleAnimation));
     }
 
-    public void RunAnimation()
+    public void PlayRunAnimation()
     {
         animator.Play(Animator.StringToHash(runAnimation));
     }
 
-    public void JumpAnimation()
+    public void PlayJumpAnimation()
     {
         animator.Play(Animator.StringToHash(jumpAnimation));
     }
