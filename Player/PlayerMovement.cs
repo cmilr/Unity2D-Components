@@ -80,8 +80,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		}
 		else
 		{
-			animator.Play(Animator.StringToHash(jumpAnimation));
-			weapon.PlayJumpAnimation();
+			PlayJumpAnimation();
 		}
 
 		if (moveRight)
@@ -93,8 +92,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 			if (controller.isGrounded)
 			{
-				animator.Play(Animator.StringToHash(runAnimation));
-				weapon.PlayRunAnimation();
+				PlayRunAnimation();
 			}
 
 			moveRight = false;
@@ -112,8 +110,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 			if (controller.isGrounded)
 			{
-				animator.Play(Animator.StringToHash(runAnimation));
-				weapon.PlayRunAnimation();
+				PlayRunAnimation();
 			}
 
 			moveLeft = false;
@@ -126,16 +123,16 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 			if (controller.isGrounded)
 			{
-				animator.Play(Animator.StringToHash(idleAnimation));
-				weapon.PlayIdleAnimation();
+				PlayIdleAnimation();
 			}
 		}
 
 		if (jump)
 		{
 			velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
-			animator.Play(Animator.StringToHash(jumpAnimation));
-			weapon.PlayJumpAnimation();
+
+			PlayJumpAnimation();
+
 			jump = false;
 		}
 
@@ -152,6 +149,27 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		controller.move(velocity * Time.deltaTime);
 
 		SavePreviousPosition();
+	}
+
+	void PlayIdleAnimation()
+	{
+		animator.speed = IDLE_SPEED;
+		animator.Play(Animator.StringToHash(idleAnimation));
+		weapon.PlayIdleAnimation();
+	}
+
+	void PlayRunAnimation()
+	{
+		animator.speed = RUN_SPEED;
+		animator.Play(Animator.StringToHash(runAnimation));
+		weapon.PlayRunAnimation();
+	}
+
+	void PlayJumpAnimation()
+	{
+		animator.speed = JUMP_SPEED;
+		animator.Play(Animator.StringToHash(jumpAnimation));
+		weapon.PlayJumpAnimation();
 	}
 
 	void CheckForFreefall()

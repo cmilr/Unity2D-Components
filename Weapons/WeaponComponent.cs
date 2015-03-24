@@ -22,16 +22,19 @@ public class WeaponComponent : CacheBehaviour {
 
     public void PlayIdleAnimation()
     {
+        animator.speed = IDLE_SPEED;
         animator.Play(Animator.StringToHash(idleAnimation));
     }
 
     public void PlayRunAnimation()
     {
+        animator.speed = RUN_SPEED;
         animator.Play(Animator.StringToHash(runAnimation));
     }
 
     public void PlayJumpAnimation()
     {
+        animator.speed = JUMP_SPEED;
         animator.Play(Animator.StringToHash(jumpAnimation));
     }
 }
