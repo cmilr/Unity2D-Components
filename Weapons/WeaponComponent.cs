@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Matcha.Game.Colors;
 
 public class WeaponComponent : CacheBehaviour {
 
