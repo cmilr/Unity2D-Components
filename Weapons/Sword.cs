@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Matcha.Game.Colors;
 
 public class Sword : CacheBehaviour, IWeapon {
 
@@ -12,6 +13,10 @@ public class Sword : CacheBehaviour, IWeapon {
         blade  = transform.FindChild("Blade").gameObject.GetComponent<WeaponComponent>();
         hilt   = transform.FindChild("Hilt").gameObject.GetComponent<WeaponComponent>();
         handle = transform.FindChild("Handle").gameObject.GetComponent<WeaponComponent>();
+
+        blade.spriteRenderer.material.SetColor("_Color", MColor.orange);
+        hilt.spriteRenderer.material.SetColor("_Color", MColor.deepBrightBlue);
+        handle.spriteRenderer.material.SetColor("_Color", MColor.black);
 	}
 
     public void PlayIdleAnimation()

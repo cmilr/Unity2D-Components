@@ -7,11 +7,13 @@ public class WeaponComponent : CacheBehaviour {
     public string idleAnimation;
     public string runAnimation;
     public string jumpAnimation;
+    private Material material;
 
     void Start ()
     {
-       // spriteRenderer.color = new Color(0f, 0f, 0f, 1f); // Set to opaque black
-       SetAnimations();
+        // spriteRenderer.color = MColor.orange; // Set to opaque black
+        // spriteRenderer.material.SetColor("_Color", MColor.orange);
+        SetAnimations();
     }
 
     void SetAnimations()
