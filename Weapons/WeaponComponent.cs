@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Matcha.Game.Colors;
 
 public class WeaponComponent : CacheBehaviour {
 
@@ -11,8 +10,6 @@ public class WeaponComponent : CacheBehaviour {
 
     void Start ()
     {
-        // spriteRenderer.color = MColor.orange; // Set to opaque black
-        // spriteRenderer.material.SetColor("_Color", MColor.orange);
         SetAnimations();
     }
 
