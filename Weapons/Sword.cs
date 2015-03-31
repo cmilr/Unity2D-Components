@@ -39,4 +39,11 @@ public class Sword : CacheBehaviour, IWeapon {
         hilt.PlayJumpAnimation();
         handle.PlayJumpAnimation();
     }
+
+    public void PlaySwingAnimation()
+    {
+        blade.PlaySwingAnimation();
+        hilt.PlaySwingAnimation();
+        handle.PlaySwingAnimation();
+    }
 }

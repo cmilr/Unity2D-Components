@@ -20,12 +20,15 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
     private string idleAnimation;
     private string runAnimation;
     private string jumpAnimation;
+    private string swingAnimation;
 	private float normalizedHorizontalSpeed;
 	private float previousX;
 	private float previousY;
 	private bool moveRight;
 	private bool moveLeft;
 	private bool jump;
+	private bool attack;
+	private bool defend;
 	private RaycastHit2D lastControllerColliderHit;
 	private Vector3 velocity;
 	private CharacterController2D controller;
@@ -57,14 +60,22 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			jump = true;
     }
 
-    public void Attack(){}
-    public void Defend(){}
+    public void Attack()
+    {
+    	attack = true;
+    }
+
+    public void Defend()
+    {
+    	defend = true;
+    }
 
 	void SetCharacterAnimations(string character)
 	{
 		idleAnimation = character + "_Idle";
 		runAnimation = character + "_Run";
 		jumpAnimation = character + "_Jump";
+		swingAnimation = character + "_Swing";
 	}
 
 	void LateUpdate()
@@ -111,6 +122,24 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			if (controller.isGrounded)
 			{
 				PlayRunAnimation();
+			}
+
+			moveLeft = false;
+
+			state.FacingRight = false;
+		}
+		else if (attack)
+		{
+			normalizedHorizontalSpeed = -1;
+
+			if (transform.localScale.x > 0f)
+			{
+				transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+			}
+
+			if (controller.isGrounded)
+			{
+				PlaySwingAnimation();
 			}
 
 			moveLeft = false;
@@ -170,6 +199,13 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		animator.speed = JUMP_SPEED;
 		animator.Play(Animator.StringToHash(jumpAnimation));
 		weapon.PlayJumpAnimation();
+	}
+
+	void PlaySwingAnimation()
+	{
+		animator.speed = SWING_SPEED;
+		animator.Play(Animator.StringToHash(swingAnimation));
+		weapon.PlaySwingAnimation();
 	}
 
 	void CheckForFreefall()
