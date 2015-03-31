@@ -130,21 +130,17 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		}
 		else if (attack)
 		{
-			normalizedHorizontalSpeed = -1;
+			// normalizedHorizontalSpeed = -1;
 
-			if (transform.localScale.x > 0f)
-			{
-				transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-			}
+			// if (transform.localScale.x > 0f)
+			// {
+			// 	transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+			// }
 
 			if (controller.isGrounded)
 			{
 				PlaySwingAnimation();
 			}
-
-			moveLeft = false;
-
-			state.FacingRight = false;
 		}
 		else if (controller.isGrounded)
 		{

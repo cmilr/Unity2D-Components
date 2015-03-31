@@ -19,6 +19,7 @@ public class WeaponComponent : CacheBehaviour {
         idleAnimation = name + "_Idle";
         runAnimation = name + "_Run";
         jumpAnimation = name + "_Jump";
+        swingAnimation = name + "_Swing";
     }
 
     public void PlayIdleAnimation()
