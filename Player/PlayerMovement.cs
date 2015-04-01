@@ -60,9 +60,9 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			jump = true;
     }
 
-    public void Attack()
+    public void Attack(bool status)
     {
-    	attack = true;
+    	attack = status;
     }
 
     public void Defend()

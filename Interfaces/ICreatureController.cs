@@ -6,6 +6,6 @@ public interface ICreatureController {
     void MoveRight();
     void MoveLeft();
     void Jump();
-    void Attack();
+    void Attack(bool status);
     void Defend();
 }

@@ -30,6 +30,10 @@ public class RewiredInputAdapter : BaseBehaviour {
             creature.Jump();
 
         if (playerControls.GetButtonDown("Attack"))
-            creature.Attack();
+            creature.Attack(true);
+        else if (playerControls.GetButtonUp("Attack"))
+        {
+            creature.Attack(false);
+        }
     }
 }
