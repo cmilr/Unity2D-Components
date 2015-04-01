@@ -44,14 +44,14 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		SetCharacterAnimations("LAURA");
 	}
 
-	public void MoveRight()
+	public void MoveRight(bool status)
 	{
-		moveRight = true;
+		moveRight = status;
 	}
 
-    public void MoveLeft()
+    public void MoveLeft(bool status)
     {
-		moveLeft = true;
+		moveLeft = status;
     }
 
     public void Jump()
@@ -130,16 +130,10 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		}
 		else if (attack)
 		{
-			// normalizedHorizontalSpeed = -1;
-
-			// if (transform.localScale.x > 0f)
-			// {
-			// 	transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-			// }
-
 			if (controller.isGrounded)
 			{
 				PlaySwingAnimation();
+				normalizedHorizontalSpeed = 0;
 			}
 		}
 		else if (controller.isGrounded)

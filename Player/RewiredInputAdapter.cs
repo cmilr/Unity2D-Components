@@ -21,19 +21,22 @@ public class RewiredInputAdapter : BaseBehaviour {
         h = playerControls.GetAxisRaw("Move Horizontal");
 
         if (h > 0)
-            creature.MoveRight();
+            creature.MoveRight(true);
+        else
+            creature.MoveRight(false);
 
         if (h < 0)
-            creature.MoveLeft();
+            creature.MoveLeft(true);
+        else
+            creature.MoveLeft(false);
 
         if (playerControls.GetButtonDown("Jump"))
             creature.Jump();
 
         if (playerControls.GetButtonDown("Attack"))
             creature.Attack(true);
-        else if (playerControls.GetButtonUp("Attack"))
-        {
+
+        if (playerControls.GetButtonUp("Attack"))
             creature.Attack(false);
-        }
     }
 }
