@@ -156,6 +156,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		}
 
 		CheckForFreefall();
+
 		SaveCurrentPosition();
 
 		// compute x and y movements
@@ -163,6 +164,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		velocity.x = Mathf.Lerp(velocity.x, normalizedHorizontalSpeed * runSpeed, Time.deltaTime * smoothedMovementFactor);
 
 		ApplyGravity();
+
 		ClampYMovement();
 
 		controller.move(velocity * Time.deltaTime);
