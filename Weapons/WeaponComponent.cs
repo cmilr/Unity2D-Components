@@ -6,6 +6,7 @@ public class WeaponComponent : CacheBehaviour {
     public string idleAnimation;
     public string runAnimation;
     public string jumpAnimation;
+    public string swingAnimation;
     private Material material;
 
     void Start ()
@@ -18,6 +19,7 @@ public class WeaponComponent : CacheBehaviour {
         idleAnimation = name + "_Idle";
         runAnimation = name + "_Run";
         jumpAnimation = name + "_Jump";
+        swingAnimation = name + "_Swing";
     }
 
     public void PlayIdleAnimation()
@@ -36,5 +38,11 @@ public class WeaponComponent : CacheBehaviour {
     {
         animator.speed = JUMP_SPEED;
         animator.Play(Animator.StringToHash(jumpAnimation));
+    }
+
+    public void PlaySwingAnimation()
+    {
+        animator.speed = SWING_SPEED;
+        animator.Play(Animator.StringToHash(swingAnimation));
     }
 }

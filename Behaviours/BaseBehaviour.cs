@@ -22,6 +22,7 @@ public class BaseBehaviour : MonoBehaviour {
     protected const float IDLE_SPEED         = 1f;
     protected const float RUN_SPEED          = .5f;
     protected const float JUMP_SPEED         = 5f;
+    protected const float SWING_SPEED       = 1f;
 
     // entity auto-alignment settings
     protected const float ALIGN_ENTITY_TO    = .124f;
