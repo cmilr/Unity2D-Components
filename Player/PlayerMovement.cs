@@ -44,14 +44,22 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		SetCharacterAnimations("LAURA");
 	}
 
-	public void MoveRight(bool status)
+	void SetCharacterAnimations(string character)
 	{
-		moveRight = status;
+		idleAnimation = character + "_Idle";
+		runAnimation = character + "_Run";
+		jumpAnimation = character + "_Jump";
+		swingAnimation = character + "_Swing";
 	}
 
-    public void MoveLeft(bool status)
+	public void MoveRight()
+	{
+		moveRight = true;
+	}
+
+    public void MoveLeft()
     {
-		moveLeft = status;
+		moveLeft = true;
     }
 
     public void Jump()
@@ -70,18 +78,9 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
     	defend = true;
     }
 
-	void SetCharacterAnimations(string character)
-	{
-		idleAnimation = character + "_Idle";
-		runAnimation = character + "_Run";
-		jumpAnimation = character + "_Jump";
-		swingAnimation = character + "_Swing";
-	}
-
 	void LateUpdate()
 	{
 		// keep movement in LateUpdate() to prevent falling through edge colliders
-
 		velocity = controller.velocity;
 
 		if (controller.isGrounded)
@@ -96,63 +95,24 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		if (moveRight)
 		{
-			normalizedHorizontalSpeed = 1;
-
-			if (transform.localScale.x < 0f)
-				transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-
-			if (controller.isGrounded)
-			{
-				PlayRunAnimation();
-			}
-
-			moveRight = false;
-
-			state.FacingRight = true;
+			MovePlayerRight();
 		}
 		else if (moveLeft)
 		{
-			normalizedHorizontalSpeed = -1;
-
-			if (transform.localScale.x > 0f)
-			{
-				transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-			}
-
-			if (controller.isGrounded)
-			{
-				PlayRunAnimation();
-			}
-
-			moveLeft = false;
-
-			state.FacingRight = false;
+			MovePlayerLeft();
 		}
 		else if (attack)
 		{
-			if (controller.isGrounded)
-			{
-				PlaySwingAnimation();
-				normalizedHorizontalSpeed = 0;
-			}
+			PlayerAttack();
 		}
 		else if (controller.isGrounded)
 		{
-			normalizedHorizontalSpeed = 0;
-
-			if (controller.isGrounded)
-			{
-				PlayIdleAnimation();
-			}
+			PlayerGrounded();
 		}
 
 		if (jump)
 		{
-			velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
-
-			PlayJumpAnimation();
-
-			jump = false;
+			PlayerJump();
 		}
 
 		CheckForFreefall();
@@ -170,6 +130,70 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		controller.move(velocity * Time.deltaTime);
 
 		SavePreviousPosition();
+	}
+
+	void MovePlayerRight()
+	{
+		normalizedHorizontalSpeed = 1;
+
+		if (transform.localScale.x < 0f)
+			transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+
+		if (controller.isGrounded)
+		{
+			PlayRunAnimation();
+		}
+
+		moveRight = false;
+
+		state.FacingRight = true;
+	}
+
+	void MovePlayerLeft()
+	{
+		normalizedHorizontalSpeed = -1;
+
+		if (transform.localScale.x > 0f)
+		{
+			transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+		}
+
+		if (controller.isGrounded)
+		{
+			PlayRunAnimation();
+		}
+
+		moveLeft = false;
+
+		state.FacingRight = false;
+	}
+
+	void PlayerAttack()
+	{
+		if (controller.isGrounded)
+		{
+			PlaySwingAnimation();
+			normalizedHorizontalSpeed = 0;
+		}
+	}
+
+	void PlayerGrounded()
+	{
+		normalizedHorizontalSpeed = 0;
+
+		if (controller.isGrounded)
+		{
+			PlayIdleAnimation();
+		}
+	}
+
+	void PlayerJump()
+	{
+		velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
+
+		PlayJumpAnimation();
+
+		jump = false;
 	}
 
 	void PlayIdleAnimation()
