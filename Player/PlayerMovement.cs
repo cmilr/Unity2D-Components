@@ -128,7 +128,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 			state.FacingRight = false;
 		}
-		else if ((attack) || (attack && moveLeft) || (attack && moveRight))
+		else if (attack)
 		{
 			if (controller.isGrounded)
 			{
