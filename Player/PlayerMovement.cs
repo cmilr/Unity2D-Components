@@ -44,6 +44,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		SetCharacterAnimations("LAURA");
 	}
 
+<<<<<<< HEAD
 	void SetCharacterAnimations(string character)
 	{
 		idleAnimation = character + "_Idle";
@@ -57,6 +58,13 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		moveRight = true;
 	}
 
+=======
+	public void MoveRight()
+	{
+		moveRight = true;
+	}
+
+>>>>>>> 4b0266c00c5d8b4824c4620f34eca2262d1ec433
     public void MoveLeft()
     {
 		moveLeft = true;
