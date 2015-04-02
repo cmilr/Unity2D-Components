@@ -44,7 +44,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		SetCharacterAnimations("LAURA");
 	}
 
-<<<<<<< HEAD
 	void SetCharacterAnimations(string character)
 	{
 		idleAnimation = character + "_Idle";
@@ -58,13 +57,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		moveRight = true;
 	}
 
-=======
-	public void MoveRight()
-	{
-		moveRight = true;
-	}
-
->>>>>>> 4b0266c00c5d8b4824c4620f34eca2262d1ec433
     public void MoveLeft()
     {
 		moveLeft = true;
@@ -91,15 +83,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		// keep movement in LateUpdate() to prevent falling through edge colliders
 		velocity = controller.velocity;
 
-		if (controller.isGrounded)
-		{
-			velocity.y = 0;
-			state.Grounded = true;
-		}
-		else
-		{
-			PlayJumpAnimation();
-		}
+		CheckIfStandingOrFalling();
 
 		if (moveRight)
 		{
@@ -138,6 +122,19 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		controller.move(velocity * Time.deltaTime);
 
 		SavePreviousPosition();
+	}
+
+	void CheckIfStandingOrFalling()
+	{
+		if (controller.isGrounded)
+		{
+			velocity.y = 0;
+			state.Grounded = true;
+		}
+		else
+		{
+			PlayJumpAnimation();
+		}
 	}
 
 	void MovePlayerRight()
