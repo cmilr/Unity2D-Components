@@ -21,14 +21,10 @@ public class RewiredInputAdapter : BaseBehaviour {
         h = playerControls.GetAxisRaw("Move Horizontal");
 
         if (h > 0)
-            creature.MoveRight(true);
-        else
-            creature.MoveRight(false);
+            creature.MoveRight();
 
         if (h < 0)
-            creature.MoveLeft(true);
-        else
-            creature.MoveLeft(false);
+            creature.MoveLeft();
 
         if (playerControls.GetButtonDown("Jump"))
             creature.Jump();

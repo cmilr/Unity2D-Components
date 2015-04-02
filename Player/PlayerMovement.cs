@@ -44,14 +44,14 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		SetCharacterAnimations("LAURA");
 	}
 
-	public void MoveRight(bool status)
+	public void MoveRight()
 	{
-		moveRight = status;
+		moveRight = true;
 	}
 
-    public void MoveLeft(bool status)
+    public void MoveLeft()
     {
-		moveLeft = status;
+		moveLeft = true;
     }
 
     public void Jump()
@@ -128,7 +128,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 			state.FacingRight = false;
 		}
-		else if (attack)
+		else if ((attack) || (attack && moveLeft) || (attack && moveRight))
 		{
 			if (controller.isGrounded)
 			{
