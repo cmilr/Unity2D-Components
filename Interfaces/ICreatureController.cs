@@ -3,8 +3,8 @@ using System.Collections;
 
 public interface ICreatureController {
 
-    void MoveRight();
-    void MoveLeft();
+    void MoveRight(bool status);
+    void MoveLeft(bool status);
     void Jump();
     void Attack(bool status);
     void Defend();
