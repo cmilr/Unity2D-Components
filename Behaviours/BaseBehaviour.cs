@@ -21,8 +21,8 @@ public class BaseBehaviour : MonoBehaviour {
     // player/weapon animation speeds
     protected const float IDLE_SPEED         = 1f;
     protected const float RUN_SPEED          = .5f;
-    protected const float JUMP_SPEED         = 5f;
-    protected const float SWING_SPEED        = .8f;
+    protected const float JUMP_SPEED         = 10f;
+    protected const float SWING_SPEED        = 1f;
 
     // entity auto-alignment settings
     protected const float ALIGN_ENTITY_TO    = .124f;

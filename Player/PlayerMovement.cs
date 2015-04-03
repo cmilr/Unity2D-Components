@@ -16,11 +16,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	public float maxRisingSpeed  = 2f;                  // max rising speed, for throttling player on moving platforms, etc
 	private float speedCheck     = .08f;                // compare against to see if we need to throttle rising speed
 
-    private string character;
-    private string idleAnimation;
-    private string runAnimation;
-    private string jumpAnimation;
-    private string swingAnimation;
 	private float normalizedHorizontalSpeed;
 	private float previousX;
 	private float previousY;
@@ -35,6 +30,14 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	private IPlayerStateFullAccess state;
 	private IWeapon weapon;
 
+    private string character;
+    private string idleAnimation;
+    private string runAnimation;
+    private string jumpAnimation;
+    private string swingAnimation;
+	private enum Action {Idle, Run, Jump, Fall, Attack, Defend};
+	private Action action;
+
 
 	void Start()
 	{
@@ -44,6 +47,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		SetCharacterAnimations("LAURA");
 	}
 
+	// set animations depending on which character is chosen
 	void SetCharacterAnimations(string character)
 	{
 		idleAnimation = character + "_Idle";
@@ -52,6 +56,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		swingAnimation = character + "_Swing";
 	}
 
+	// required methods for ICreatureController
 	public void MoveRight()
 	{
 		moveRight = true;
@@ -68,9 +73,9 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			jump = true;
     }
 
-    public void Attack(bool status)
+    public void Attack()
     {
-    	attack = status;
+    	attack = true;
     }
 
     public void Defend()
@@ -78,26 +83,33 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
     	defend = true;
     }
 
+    // main movement loop — keep in LateUpdate() to prevent player falling through edge colliders
 	void LateUpdate()
 	{
-		// keep movement in LateUpdate() to prevent falling through edge colliders
 		velocity = controller.velocity;
 
 		CheckIfStandingOrFalling();
 
+		// attack state
 		if (attack)
 		{
 			if (moveRight)
 			{
 				MovePlayerRight();
+				AttackWhileMoving();
 			}
 			else if (moveLeft)
 			{
 				MovePlayerLeft();
+				AttackWhileMoving();
 			}
-
-			PlayerAttack();
+			else
+			{
+				AttackWhileIdle();
+			}
 		}
+
+		// movement state
 		else if (moveRight)
 		{
 			MovePlayerRight();
@@ -106,17 +118,22 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		{
 			MovePlayerLeft();
 		}
+
+		// idle state
 		else if (controller.isGrounded)
 		{
 			PlayerGrounded();
 		}
 
+		// jump state
 		if (jump)
 		{
 			PlayerJump();
 		}
 
 		CheckForFreefall();
+
+		PlayAnimation();
 
 		SaveCurrentPosition();
 
@@ -142,7 +159,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		}
 		else
 		{
-			PlayJumpAnimation();
+			action = Action.Fall;
 		}
 	}
 
@@ -155,7 +172,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		if (controller.isGrounded)
 		{
-			PlayRunAnimation();
+			action = Action.Run;
 		}
 
 		moveRight = false;
@@ -174,7 +191,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		if (controller.isGrounded)
 		{
-			PlayRunAnimation();
+			action = Action.Run;
 		}
 
 		moveLeft = false;
@@ -182,12 +199,22 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		state.FacingRight = false;
 	}
 
-	void PlayerAttack()
+	void AttackWhileIdle()
 	{
 		if (controller.isGrounded)
 		{
-			PlaySwingAnimation();
+			action = Action.Attack;
 			normalizedHorizontalSpeed = 0;
+		}
+
+		attack = false;
+	}
+
+	void AttackWhileMoving()
+	{
+		if (controller.isGrounded)
+		{
+			action = Action.Attack;
 		}
 
 		attack = false;
@@ -199,7 +226,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		if (controller.isGrounded)
 		{
-			PlayIdleAnimation();
+			action = Action.Idle;
 		}
 	}
 
@@ -207,37 +234,61 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
 
-		PlayJumpAnimation();
+		action = Action.Jump;
 
 		jump = false;
 	}
 
-	void PlayIdleAnimation()
+	void PlayAnimation()
 	{
-		animator.speed = IDLE_SPEED;
-		animator.Play(Animator.StringToHash(idleAnimation));
-		weapon.PlayIdleAnimation();
-	}
+		switch (action)
+		{
+			case Action.Idle:
+			{
+				animator.speed = IDLE_SPEED;
+				animator.Play(Animator.StringToHash(idleAnimation));
+				weapon.PlayIdleAnimation();
+				break;
+			}
 
-	void PlayRunAnimation()
-	{
-		animator.speed = RUN_SPEED;
-		animator.Play(Animator.StringToHash(runAnimation));
-		weapon.PlayRunAnimation();
-	}
+			case Action.Run:
+			{
+				animator.speed = RUN_SPEED;
+				animator.Play(Animator.StringToHash(runAnimation));
+				weapon.PlayRunAnimation();
+				break;
+			}
 
-	void PlayJumpAnimation()
-	{
-		animator.speed = JUMP_SPEED;
-		animator.Play(Animator.StringToHash(jumpAnimation));
-		weapon.PlayJumpAnimation();
-	}
+			case Action.Jump:
+			{
+				animator.speed = JUMP_SPEED;
+				animator.Play(Animator.StringToHash(jumpAnimation));
+				weapon.PlayJumpAnimation();
+				break;
+			}
 
-	void PlaySwingAnimation()
-	{
-		animator.speed = SWING_SPEED;
-		animator.Play(Animator.StringToHash(swingAnimation));
-		weapon.PlaySwingAnimation();
+			case Action.Fall:
+			{
+				animator.speed = JUMP_SPEED;
+				animator.Play(Animator.StringToHash(jumpAnimation));
+				weapon.PlayJumpAnimation();
+				break;
+			}
+
+			case Action.Attack:
+			{
+				animator.speed = SWING_SPEED;
+				animator.Play(Animator.StringToHash(swingAnimation));
+				weapon.PlaySwingAnimation();
+				break;
+			}
+
+			default:
+			{
+				Debug.Log("ERROR: No action was set in PlayerMovement.cs >> PlayAnimation()");
+				break;
+			}
+		}
 	}
 
 	void CheckForFreefall()
