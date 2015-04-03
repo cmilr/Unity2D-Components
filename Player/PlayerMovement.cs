@@ -85,17 +85,26 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		CheckIfStandingOrFalling();
 
-		if (moveRight)
+		if (attack)
+		{
+			if (moveRight)
+			{
+				MovePlayerRight();
+			}
+			else if (moveLeft)
+			{
+				MovePlayerLeft();
+			}
+
+			PlayerAttack();
+		}
+		else if (moveRight)
 		{
 			MovePlayerRight();
 		}
 		else if (moveLeft)
 		{
 			MovePlayerLeft();
-		}
-		else if (attack)
-		{
-			PlayerAttack();
 		}
 		else if (controller.isGrounded)
 		{
@@ -180,6 +189,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			PlaySwingAnimation();
 			normalizedHorizontalSpeed = 0;
 		}
+
+		attack = false;
 	}
 
 	void PlayerGrounded()
