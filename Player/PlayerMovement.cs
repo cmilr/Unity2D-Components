@@ -56,7 +56,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		swingAnimation = character + "_Swing";
 	}
 
-	// required methods for ICreatureController
+	// input methods required by ICreatureController
 	public void MoveRight()
 	{
 		moveRight = true;
@@ -86,7 +86,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
     // main movement loop — keep in LateUpdate() to prevent player falling through edge colliders
 	void LateUpdate()
 	{
-		velocity = controller.velocity;
+		InitializeVelocity();
 
 		CheckIfStandingOrFalling();
 
@@ -137,15 +137,13 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		SaveCurrentPosition();
 
-		// compute x and y movements
-		var smoothedMovementFactor = controller.isGrounded ? groundDamping : inAirDamping;
-		velocity.x = Mathf.Lerp(velocity.x, normalizedHorizontalSpeed * runSpeed, Time.deltaTime * smoothedMovementFactor);
+		ComputeMovement();
 
 		ApplyGravity();
 
 		ClampYMovement();
 
-		controller.move(velocity * Time.deltaTime);
+		ApplyMovement();
 
 		SavePreviousPosition();
 	}
@@ -291,6 +289,11 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		}
 	}
 
+	void InitializeVelocity()
+	{
+		velocity = controller.velocity;
+	}
+
 	void CheckForFreefall()
 	{
 		// flush horizontal axis if player is falling while pressed against a wall
@@ -325,10 +328,22 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		}
 	}
 
+	void ApplyMovement()
+	{
+		controller.move(velocity * Time.deltaTime);
+	}
+
 	void SaveCurrentPosition()
 	{
 		state.X = transform.position.x;
 		state.Y = transform.position.y;
+	}
+
+	void ComputeMovement()
+	{
+		// compute x and y movements
+		var smoothedMovementFactor = controller.isGrounded ? groundDamping : inAirDamping;
+		velocity.x = Mathf.Lerp(velocity.x, normalizedHorizontalSpeed * runSpeed, Time.deltaTime * smoothedMovementFactor);
 	}
 
 	void SavePreviousPosition()
