@@ -35,8 +35,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
     private string runAnimation;
     private string jumpAnimation;
     private string swingAnimation;
-	private enum Action {Idle, Run, Jump, Fall, Attack, Defend};
-	private Action action;
+	private enum AnimationAction {Idle, Run, Jump, Fall, Attack, Defend};
+	private AnimationAction animationAction;
 
 
 	void Start()
@@ -157,7 +157,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		}
 		else
 		{
-			action = Action.Fall;
+			animationAction = AnimationAction.Fall;
 		}
 	}
 
@@ -170,7 +170,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		if (controller.isGrounded)
 		{
-			action = Action.Run;
+			animationAction = AnimationAction.Run;
 		}
 
 		moveRight = false;
@@ -189,7 +189,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		if (controller.isGrounded)
 		{
-			action = Action.Run;
+			animationAction = AnimationAction.Run;
 		}
 
 		moveLeft = false;
@@ -201,7 +201,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		if (controller.isGrounded)
 		{
-			action = Action.Attack;
+			animationAction = AnimationAction.Attack;
 			normalizedHorizontalSpeed = 0;
 		}
 
@@ -212,7 +212,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		if (controller.isGrounded)
 		{
-			action = Action.Attack;
+			animationAction = AnimationAction.Attack;
 		}
 
 		attack = false;
@@ -224,7 +224,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		if (controller.isGrounded)
 		{
-			action = Action.Idle;
+			animationAction = AnimationAction.Idle;
 		}
 	}
 
@@ -232,16 +232,16 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
 
-		action = Action.Jump;
+		animationAction = AnimationAction.Jump;
 
 		jump = false;
 	}
 
 	void PlayAnimation()
 	{
-		switch (action)
+		switch (animationAction)
 		{
-			case Action.Idle:
+			case AnimationAction.Idle:
 			{
 				animator.speed = IDLE_SPEED;
 				animator.Play(Animator.StringToHash(idleAnimation));
@@ -249,7 +249,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 				break;
 			}
 
-			case Action.Run:
+			case AnimationAction.Run:
 			{
 				animator.speed = RUN_SPEED;
 				animator.Play(Animator.StringToHash(runAnimation));
@@ -257,7 +257,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 				break;
 			}
 
-			case Action.Jump:
+			case AnimationAction.Jump:
 			{
 				animator.speed = JUMP_SPEED;
 				animator.Play(Animator.StringToHash(jumpAnimation));
@@ -265,7 +265,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 				break;
 			}
 
-			case Action.Fall:
+			case AnimationAction.Fall:
 			{
 				animator.speed = JUMP_SPEED;
 				animator.Play(Animator.StringToHash(jumpAnimation));
@@ -273,7 +273,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 				break;
 			}
 
-			case Action.Attack:
+			case AnimationAction.Attack:
 			{
 				animator.speed = SWING_SPEED;
 				animator.Play(Animator.StringToHash(swingAnimation));
@@ -283,7 +283,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 			default:
 			{
-				Debug.Log("ERROR: No action was set in PlayerMovement.cs >> PlayAnimation()");
+				Debug.Log("ERROR: No animationAction was set in PlayerMovement.cs >> PlayAnimation()");
 				break;
 			}
 		}
