@@ -29,13 +29,15 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	private CharacterController2D controller;
 	private IPlayerStateFullAccess state;
 	private IWeapon weapon;
+	private LegAnimations legs;
 
     private string character;
     private string idleAnimation;
     private string runAnimation;
     private string jumpAnimation;
     private string swingAnimation;
-	private enum AnimationAction {Idle, Run, Jump, Fall, Attack, Defend};
+    private string runSwingAnimation;
+	private enum AnimationAction { Idle, Run, Jump, Fall, Attack, Defend, RunSwing };
 	private AnimationAction animationAction;
 
 
@@ -44,6 +46,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		state = GetComponent<IPlayerStateFullAccess>();
 		controller = GetComponent<CharacterController2D>();
 		weapon = GetComponentInChildren<IWeapon>();
+		legs = GetComponentInChildren<LegAnimations>();
 		SetCharacterAnimations("LAURA");
 	}
 
@@ -54,6 +57,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		runAnimation = character + "_Run";
 		jumpAnimation = character + "_Jump";
 		swingAnimation = character + "_Swing";
+		runSwingAnimation = character + "_Run_Swing";
 	}
 
 	// input methods required by ICreatureController
@@ -212,7 +216,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		if (controller.isGrounded)
 		{
-			animationAction = AnimationAction.Attack;
+			animationAction = AnimationAction.RunSwing;
 		}
 
 		attack = false;
@@ -245,6 +249,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			{
 				animator.speed = IDLE_SPEED;
 				animator.Play(Animator.StringToHash(idleAnimation));
+				legs.PlayIdleAnimation();
 				weapon.PlayIdleAnimation();
 				break;
 			}
@@ -253,6 +258,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			{
 				animator.speed = RUN_SPEED;
 				animator.Play(Animator.StringToHash(runAnimation));
+				legs.PlayRunAnimation();
 				weapon.PlayRunAnimation();
 				break;
 			}
@@ -261,6 +267,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			{
 				animator.speed = JUMP_SPEED;
 				animator.Play(Animator.StringToHash(jumpAnimation));
+				legs.PlayJumpAnimation();
 				weapon.PlayJumpAnimation();
 				break;
 			}
@@ -269,6 +276,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			{
 				animator.speed = JUMP_SPEED;
 				animator.Play(Animator.StringToHash(jumpAnimation));
+				legs.PlayJumpAnimation();
 				weapon.PlayJumpAnimation();
 				break;
 			}
@@ -277,7 +285,18 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			{
 				animator.speed = SWING_SPEED;
 				animator.Play(Animator.StringToHash(swingAnimation));
+				legs.PlaySwingAnimation();
 				weapon.PlaySwingAnimation();
+				break;
+			}
+
+			case AnimationAction.RunSwing:
+			{
+				animator.speed = RUN_SPEED;
+				animator.Play(Animator.StringToHash(runSwingAnimation));
+				legs.PlayRunAnimation();
+				weapon.PlaySwingAnimation();
+				weapon.OffsetAnimationBy(ONE_PIXEL);
 				break;
 			}
 
