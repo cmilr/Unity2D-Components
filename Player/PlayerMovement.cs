@@ -35,7 +35,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
     private string runAnimation;
     private string jumpAnimation;
     private string swingAnimation;
-	private enum AnimationAction {Idle, Run, Jump, Fall, Attack, Defend};
+	private enum AnimationAction { Idle, Run, Jump, Fall, Attack, Defend, RunAttack };
 	private AnimationAction animationAction;
 
 
@@ -97,12 +97,12 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			if (moveRight)
 			{
 				MovePlayerRight();
-				AttackWhileMoving();
+				AttackWhileRunning();
 			}
 			else if (moveLeft)
 			{
 				MovePlayerLeft();
-				AttackWhileMoving();
+				AttackWhileRunning();
 			}
 			else
 			{
@@ -209,11 +209,11 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		attack = false;
 	}
 
-	void AttackWhileMoving()
+	void AttackWhileRunning()
 	{
 		if (controller.isGrounded)
 		{
-			animationAction = AnimationAction.Attack;
+			animationAction = AnimationAction.RunAttack;
 		}
 
 		attack = false;
@@ -284,6 +284,17 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 				animator.Play(Animator.StringToHash(swingAnimation));
 				arm.PlaySwingAnimation();
 				weapon.PlaySwingAnimation();
+				break;
+			}
+
+			case AnimationAction.RunAttack:
+			{
+				animator.speed = RUN_SPEED;
+				animator.Play(Animator.StringToHash(runAnimation));
+				arm.PlaySwingAnimation();
+				weapon.PlaySwingAnimation();
+				arm.OffsetY(ONE_PIXEL);
+				weapon.OffsetY(ONE_PIXEL);
 				break;
 			}
 

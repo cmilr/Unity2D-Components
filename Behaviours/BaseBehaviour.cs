@@ -11,8 +11,9 @@ using System.Collections;
 
 public class BaseBehaviour : MonoBehaviour {
 
-    // temp stuff
+    // global stuff
     protected string character = "LAURA";
+    protected const float ONE_PIXEL = .03125f;
 
     // gameObject names
     protected const string PLAYER            = "Player";

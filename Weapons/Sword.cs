@@ -47,8 +47,13 @@ public class Sword : CacheBehaviour, IWeapon {
         handle.PlaySwingAnimation();
     }
 
-    public void OffsetAnimationBy(float offset)
+    public void OffsetX(float offset)
     {
+        transform.localPosition = new Vector3(offset, 0, 0);
+    }
 
+    public void OffsetY(float offset)
+    {
+        transform.localPosition = new Vector3(0, offset, 0);
     }
 }

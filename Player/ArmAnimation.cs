@@ -45,8 +45,13 @@ public class ArmAnimation : CacheBehaviour, IPlayerAnimation {
         animator.Play(Animator.StringToHash(swingAnimation));
     }
 
-    public void OffsetAnimationBy(float offset)
+    public void OffsetX(float offset)
     {
+        transform.localPosition = new Vector3(offset, 0, 0);
+    }
 
+    public void OffsetY(float offset)
+    {
+        transform.localPosition = new Vector3(0, offset, 0);
     }
 }

@@ -7,5 +7,6 @@ public interface IPlayerAnimation {
     void PlayRunAnimation();
     void PlayJumpAnimation();
     void PlaySwingAnimation();
-    void OffsetAnimationBy(float offset);
+    void OffsetX(float offset);
+    void OffsetY(float offset);
 }
