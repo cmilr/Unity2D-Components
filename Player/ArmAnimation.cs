@@ -7,7 +7,6 @@ public class ArmAnimation : CacheBehaviour, IPlayerAnimation {
     private string runAnimation;
     private string jumpAnimation;
     private string swingAnimation;
-    private string playerName = "MAC";
 
     void Start ()
     {
@@ -16,10 +15,10 @@ public class ArmAnimation : CacheBehaviour, IPlayerAnimation {
 
     void SetAnimations()
     {
-        idleAnimation = playerName + "_ARM_Idle";
-        runAnimation = playerName + "_ARM_Run";
-        jumpAnimation = playerName + "_ARM_Jump";
-        swingAnimation = playerName + "_ARM_Swing";
+        idleAnimation = character + "_ARM_Idle";
+        runAnimation = character + "_ARM_Run";
+        jumpAnimation = character + "_ARM_Jump";
+        swingAnimation = character + "_ARM_Swing";
     }
 
     public void PlayIdleAnimation()

@@ -12,7 +12,7 @@ using System.Collections;
 public class BaseBehaviour : MonoBehaviour {
 
     // temp stuff
-    private string character = "LAURA";
+    protected string character = "LAURA";
 
     // gameObject names
     protected const string PLAYER            = "Player";

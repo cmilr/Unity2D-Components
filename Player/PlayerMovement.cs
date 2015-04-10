@@ -31,7 +31,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	private IWeapon weapon;
 	private ArmAnimation arm;
 
-    private string character;
     private string idleAnimation;
     private string runAnimation;
     private string jumpAnimation;
@@ -46,7 +45,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		controller = GetComponent<CharacterController2D>();
 		weapon = GetComponentInChildren<IWeapon>();
 		arm = GetComponentInChildren<ArmAnimation>();
-		SetCharacterAnimations("MAC");
+		SetCharacterAnimations(character);
 	}
 
 	// set animations depending on which character is chosen
