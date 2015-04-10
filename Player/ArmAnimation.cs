@@ -7,7 +7,7 @@ public class ArmAnimation : CacheBehaviour, IPlayerAnimation {
     private string runAnimation;
     private string jumpAnimation;
     private string swingAnimation;
-    private string playerName = "LAURA";
+    private string playerName = "MAC";
 
     void Start ()
     {

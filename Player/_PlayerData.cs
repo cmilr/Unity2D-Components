@@ -11,9 +11,10 @@ public class _PlayerData : BaseBehaviour {
 
 	public _PlayerData data;
 
-	public int HP 		{ get; set; }
-	public int AC 		{ get; set; }
-	public int Damage	{ get; set; }
+	public string Character 	{ get; set; }
+	public int HP 				{ get; set; }
+	public int AC 				{ get; set; }
+	public int Damage			{ get; set; }
 
 	void Awake()
 	{
@@ -27,9 +28,10 @@ public class _PlayerData : BaseBehaviour {
 
 		PlayerDataContainer container = new PlayerDataContainer();
 
-		container.hp     = HP;
-		container.ac     = AC;
-		container.damage = Damage;
+		container.character = Character;
+		container.hp        = HP;
+		container.ac        = AC;
+		container.damage    = Damage;
 
 		bf.Serialize(file, container);
 		file.Close();
@@ -44,9 +46,10 @@ public class _PlayerData : BaseBehaviour {
 			PlayerDataContainer container = (PlayerDataContainer)bf.Deserialize(file);
 			file.Close();
 
-			HP     = container.hp;
-			AC     = container.ac;
-			Damage = container.damage;
+			Character = container.character;
+			HP        = container.hp;
+			AC        = container.ac;
+			Damage    = container.damage;
 		}
 	}
 
@@ -89,6 +92,7 @@ public class _PlayerData : BaseBehaviour {
 [Serializable]
 class PlayerDataContainer
 {
+	public string character;
 	public int hp;
 	public int ac;
 	public int damage;

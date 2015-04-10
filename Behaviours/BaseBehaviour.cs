@@ -11,6 +11,9 @@ using System.Collections;
 
 public class BaseBehaviour : MonoBehaviour {
 
+    // temp stuff
+    private string character = "LAURA";
+
     // gameObject names
     protected const string PLAYER            = "Player";
     protected const string _GAME_DATA        = "_GameData";
