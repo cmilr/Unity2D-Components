@@ -7,7 +7,6 @@ public class Sword : CacheBehaviour, IWeapon {
     private WeaponComponent blade;
     private WeaponComponent hilt;
     private WeaponComponent handle;
-    private bool alreadyOffset;
 
 	void Start ()
     {
@@ -50,11 +49,6 @@ public class Sword : CacheBehaviour, IWeapon {
 
     public void OffsetAnimationBy(float offset)
     {
-        if (!alreadyOffset)
-        {
-            transform.position = new Vector3(transform.position.x, (transform.position.y + ONE_PIXEL), transform.position.z);
-        }
 
-        alreadyOffset = true;
     }
 }

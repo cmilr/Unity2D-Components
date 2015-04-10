@@ -11,9 +11,6 @@ using System.Collections;
 
 public class BaseBehaviour : MonoBehaviour {
 
-    // basic game measurements
-    protected const float ONE_PIXEL          = .0625f;
-
     // gameObject names
     protected const string PLAYER            = "Player";
     protected const string _GAME_DATA        = "_GameData";

@@ -1,27 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LegAnimations : CacheBehaviour, IPlayerAnimation {
+public class ArmAnimation : CacheBehaviour, IPlayerAnimation {
 
     private string idleAnimation;
     private string runAnimation;
     private string jumpAnimation;
     private string swingAnimation;
-    private string name;
-    private bool alreadyOffset;
+    private string playerName = "LAURA";
 
     void Start ()
     {
-        name = "LAURA";
         SetAnimations();
     }
 
     void SetAnimations()
     {
-        idleAnimation = name + "_Idle_Legs";
-        runAnimation = name + "_Run_Legs";
-        jumpAnimation = name + "_Jump_Legs";
-        swingAnimation = name + "_Swing_Legs";
+        idleAnimation = playerName + "_ARM_Idle";
+        runAnimation = playerName + "_ARM_Run";
+        jumpAnimation = playerName + "_ARM_Jump";
+        swingAnimation = playerName + "_ARM_Swing";
     }
 
     public void PlayIdleAnimation()
@@ -50,11 +48,6 @@ public class LegAnimations : CacheBehaviour, IPlayerAnimation {
 
     public void OffsetAnimationBy(float offset)
     {
-        if (!alreadyOffset)
-        {
-            transform.position = new Vector3(transform.position.x, (transform.position.y + offset), transform.position.z);
-        }
 
-        alreadyOffset = true;
     }
 }
