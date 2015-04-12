@@ -240,6 +240,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		jump = false;
 	}
 
+	// mix & match animations for various activity states
 	void PlayAnimation()
 	{
 		switch (animationAction)
