@@ -1,10 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public interface IWeapon {
+public interface IWeapon : IPlayerAnimation {
 
-    void PlayIdleAnimation();
-    void PlayRunAnimation();
-    void PlayJumpAnimation();
-    void PlaySwingAnimation();
 }

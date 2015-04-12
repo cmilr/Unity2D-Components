@@ -2,7 +2,7 @@
 using System.Collections;
 using Matcha.Game.Colors;
 
-public class Sword : CacheBehaviour, IWeapon {
+public class Sword : AnimationBehaviour, IWeapon {
 
     private WeaponComponent blade;
     private WeaponComponent hilt;
@@ -19,41 +19,35 @@ public class Sword : CacheBehaviour, IWeapon {
         handle.spriteRenderer.material.SetColor("_Color", MColor.black);
 	}
 
-    public void PlayIdleAnimation()
+    public void PlayIdleAnimation(float xOffset, float yOffset)
     {
         blade.PlayIdleAnimation();
         hilt.PlayIdleAnimation();
         handle.PlayIdleAnimation();
+        OffsetAnimation(xOffset, yOffset);
     }
 
-    public void PlayRunAnimation()
+    public void PlayRunAnimation(float xOffset, float yOffset)
     {
         blade.PlayRunAnimation();
         hilt.PlayRunAnimation();
         handle.PlayRunAnimation();
+        OffsetAnimation(xOffset, yOffset);
     }
 
-    public void PlayJumpAnimation()
+    public void PlayJumpAnimation(float xOffset, float yOffset)
     {
         blade.PlayJumpAnimation();
         hilt.PlayJumpAnimation();
         handle.PlayJumpAnimation();
+        OffsetAnimation(xOffset, yOffset);
     }
 
-    public void PlaySwingAnimation()
+    public void PlaySwingAnimation(float xOffset, float yOffset)
     {
         blade.PlaySwingAnimation();
         hilt.PlaySwingAnimation();
         handle.PlaySwingAnimation();
-    }
-
-    public void OffsetX(float offset)
-    {
-        transform.localPosition = new Vector3(offset, 0, 0);
-    }
-
-    public void OffsetY(float offset)
-    {
-        transform.localPosition = new Vector3(0, offset, 0);
+        OffsetAnimation(xOffset, yOffset);
     }
 }

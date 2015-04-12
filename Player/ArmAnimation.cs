@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ArmAnimation : CacheBehaviour, IPlayerAnimation {
+public class ArmAnimation : AnimationBehaviour, IPlayerAnimation {
 
     private string idleAnimation;
     private string runAnimation;
@@ -21,37 +21,31 @@ public class ArmAnimation : CacheBehaviour, IPlayerAnimation {
         swingAnimation = character + "_ARM_Swing";
     }
 
-    public void PlayIdleAnimation()
+    public void PlayIdleAnimation(float xOffset, float yOffset)
     {
         animator.speed = IDLE_SPEED;
         animator.Play(Animator.StringToHash(idleAnimation));
+        OffsetAnimation(xOffset, yOffset);
     }
 
-    public void PlayRunAnimation()
+    public void PlayRunAnimation(float xOffset, float yOffset)
     {
         animator.speed = RUN_SPEED;
         animator.Play(Animator.StringToHash(runAnimation));
+        OffsetAnimation(xOffset, yOffset);
     }
 
-    public void PlayJumpAnimation()
+    public void PlayJumpAnimation(float xOffset, float yOffset)
     {
         animator.speed = JUMP_SPEED;
         animator.Play(Animator.StringToHash(jumpAnimation));
+        OffsetAnimation(xOffset, yOffset);
     }
 
-    public void PlaySwingAnimation()
+    public void PlaySwingAnimation(float xOffset, float yOffset)
     {
         animator.speed = SWING_SPEED;
         animator.Play(Animator.StringToHash(swingAnimation));
-    }
-
-    public void OffsetX(float offset)
-    {
-        transform.localPosition = new Vector3(offset, 0, 0);
-    }
-
-    public void OffsetY(float offset)
-    {
-        transform.localPosition = new Vector3(0, offset, 0);
+        OffsetAnimation(xOffset, yOffset);
     }
 }

@@ -156,6 +156,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			velocity.y = 0;
 			state.Grounded = true;
 		}
+
+		// falling state
 		else
 		{
 			animationAction = AnimationAction.Fall;
@@ -246,8 +248,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			{
 				animator.speed = IDLE_SPEED;
 				animator.Play(Animator.StringToHash(idleAnimation));
-				arm.PlayIdleAnimation();
-				weapon.PlayIdleAnimation();
+				arm.PlayIdleAnimation(0, 0);
+				weapon.PlayIdleAnimation(0, 0);
 				break;
 			}
 
@@ -255,8 +257,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			{
 				animator.speed = RUN_SPEED;
 				animator.Play(Animator.StringToHash(runAnimation));
-				arm.PlayRunAnimation();
-				weapon.PlayRunAnimation();
+				arm.PlayRunAnimation(0, 0);
+				weapon.PlayRunAnimation(0, 0);
 				break;
 			}
 
@@ -264,8 +266,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			{
 				animator.speed = JUMP_SPEED;
 				animator.Play(Animator.StringToHash(jumpAnimation));
-				arm.PlayJumpAnimation();
-				weapon.PlayJumpAnimation();
+				arm.PlayJumpAnimation(0, 0);
+				weapon.PlayJumpAnimation(0, 0);
 				break;
 			}
 
@@ -273,8 +275,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			{
 				animator.speed = JUMP_SPEED;
 				animator.Play(Animator.StringToHash(jumpAnimation));
-				arm.PlayJumpAnimation();
-				weapon.PlayJumpAnimation();
+				arm.PlayJumpAnimation(0, 0);
+				weapon.PlayJumpAnimation(0, 0);
 				break;
 			}
 
@@ -282,8 +284,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			{
 				animator.speed = SWING_SPEED;
 				animator.Play(Animator.StringToHash(swingAnimation));
-				arm.PlaySwingAnimation();
-				weapon.PlaySwingAnimation();
+				arm.PlaySwingAnimation(0, 0);
+				weapon.PlaySwingAnimation(0, 0);
 				break;
 			}
 
@@ -291,10 +293,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			{
 				animator.speed = RUN_SPEED;
 				animator.Play(Animator.StringToHash(runAnimation));
-				arm.PlaySwingAnimation();
-				weapon.PlaySwingAnimation();
-				arm.OffsetY(ONE_PIXEL);
-				weapon.OffsetY(ONE_PIXEL);
+				arm.PlaySwingAnimation(0, ONE_PIXEL);
+				weapon.PlaySwingAnimation(0, ONE_PIXEL);
 				break;
 			}
 
