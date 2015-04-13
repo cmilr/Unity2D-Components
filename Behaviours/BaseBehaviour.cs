@@ -14,6 +14,7 @@ public class BaseBehaviour : MonoBehaviour {
     // global stuff
     protected string character                  = "LAURA";
     protected const float ONE_PIXEL             = .03125f;
+    protected const float ONE_HUD_PIXEL         = 5f;
 
     // gameObject names
     protected const string PLAYER               = "Player";
@@ -32,7 +33,7 @@ public class BaseBehaviour : MonoBehaviour {
     protected const float ALIGN_ENTITY_TO       = .124f;
 
     // hud specs
-    protected const float HUD_TOP_MARGIN        = 40f;
+    protected const float HUD_TOP_MARGIN        = 100f;
     protected const float HUD_HEARTS_TOP_MARGIN = 17f;
     protected const float HUD_Z                 = 10f;
     protected const float HUD_FADE_IN_AFTER     = .75f;

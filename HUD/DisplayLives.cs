@@ -5,49 +5,41 @@ using DG.Tweening;
 using Matcha.Game.Tweens;
 
 
-public class DisplayLives : CacheBehaviour
+public class DisplayLives : BaseBehaviour
 {
-
 	public Sprite threeLives;
 	public Sprite twoLives;
 	public Sprite oneLife;
-    private Camera mainCamera;
-    private SpriteRenderer HUDHearts;
-    private float timeToFade = 2f;
+	private Image HUDLives;
+	private float timeToFade = 2f;
 
-    void Awake ()
-    {
-        mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-        transform.position = mainCamera.ScreenToWorldPoint(new Vector3 (Screen.width / 2, Screen.height - HUD_TOP_MARGIN, HUD_Z));
-    }
+	void Start()
+	{
+		HUDLives = gameObject.GetComponent<Image>();
+		HUDLives.sprite = threeLives;
+		HUDLives.DOKill();
+		FadeInLives();
+	}
 
-    void Start()
-    {
-        HUDHearts = spriteRenderer;
-        HUDHearts.sprite = threeLives;
-        HUDHearts.DOKill();
-        FadeInHearts();
-    }
+	void FadeInLives()
+	{
+		// fade lives to zero instantly, then fade up slowly
+		MTween.FadeOut(HUDLives, 0, 0);
+		MTween.FadeIn(HUDLives, HUD_FADE_IN_AFTER, timeToFade);
+	}
 
-    void FadeInHearts()
-    {
-        // fade weapon to zero instantly, then fade up slowly
-        MTween.FadeOut(HUDHearts, 0, 0);
-        MTween.FadeIn(HUDHearts, HUD_FADE_IN_AFTER, timeToFade);
-    }
+	void OnFadeHud(bool status)
+	{
+		MTween.FadeOut(HUDLives, HUD_FADE_OUT_AFTER, timeToFade);
+	}
 
-    void OnFadeHud(bool status)
-    {
-        MTween.FadeOut(HUDHearts, HUD_FADE_OUT_AFTER, timeToFade);
-    }
+	void OnEnable()
+	{
+		Messenger.AddListener<bool>("fade hud", OnFadeHud);
+	}
 
-    void OnEnable()
-    {
-        Messenger.AddListener<bool>("fade hud", OnFadeHud);
-    }
-
-    void OnDestroy()
-    {
-        Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
-    }
+	void OnDestroy()
+	{
+		Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
+	}
 }

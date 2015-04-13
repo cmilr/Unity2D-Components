@@ -14,11 +14,18 @@ public class DisplayShield : CacheBehaviour
 
     void Start()
     {
+        mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         PositionHUDElements();
+
         HUDShield = spriteRenderer;
         HUDShield.sprite = equippedShield;
         HUDShield.DOKill();
         FadeInShield();
+    }
+
+    void PositionHUDElements()
+    {
+        transform.position = mainCamera.ScreenToWorldPoint(new Vector3 (Screen.width / 2, Screen.height - HUD_TOP_MARGIN, HUD_Z));
     }
 
     void FadeInShield()
@@ -31,12 +38,6 @@ public class DisplayShield : CacheBehaviour
     void OnFadeHud(bool status)
     {
         MTween.FadeOut(HUDShield, HUD_FADE_OUT_AFTER, timeToFade);
-    }
-
-    void PositionHUDElements()
-    {
-        mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-        transform.position = mainCamera.ScreenToWorldPoint(new Vector3 (Screen.width / 2, Screen.height - HUD_TOP_MARGIN, HUD_Z));
     }
 
     void OnScreenSizeChanged(float vExtent, float hExtent)

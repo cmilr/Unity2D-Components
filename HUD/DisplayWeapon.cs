@@ -14,11 +14,18 @@ public class DisplayWeapon : CacheBehaviour
 
     void Start()
     {
+        mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         PositionHUDElements();
+
         HUDWeapon = spriteRenderer;
         HUDWeapon.sprite = equippedWeapon;
         HUDWeapon.DOKill();
         FadeInWeapon();
+    }
+
+    void PositionHUDElements()
+    {
+        transform.position = mainCamera.ScreenToWorldPoint(new Vector3 (Screen.width / 2, Screen.height - HUD_TOP_MARGIN, HUD_Z));
     }
 
     void FadeInWeapon()
@@ -31,12 +38,6 @@ public class DisplayWeapon : CacheBehaviour
     void OnFadeHud(bool status)
     {
         MTween.FadeOut(HUDWeapon, HUD_FADE_OUT_AFTER, timeToFade);
-    }
-
-    void PositionHUDElements()
-    {
-        mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-        transform.position = mainCamera.ScreenToWorldPoint(new Vector3 (((Screen.width / 2) - 5), ((Screen.height - HUD_TOP_MARGIN) + 5), HUD_Z));
     }
 
     void OnScreenSizeChanged(float vExtent, float hExtent)
