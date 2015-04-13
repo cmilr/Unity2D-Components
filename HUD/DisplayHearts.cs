@@ -5,7 +5,7 @@ using DG.Tweening;
 using Matcha.Game.Tweens;
 
 
-public class DisplayLives : CacheBehaviour
+public class DisplayHearts : CacheBehaviour
 {
 
 	public Sprite threeLives;
@@ -18,7 +18,7 @@ public class DisplayLives : CacheBehaviour
     void Awake ()
     {
         mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-        transform.position = mainCamera.ScreenToWorldPoint(new Vector3 (Screen.width / 2, Screen.height - HUD_TOP_MARGIN, HUD_Z));
+        transform.position = mainCamera.ScreenToWorldPoint(new Vector3 (Screen.width - 20, Screen.height - HUD_HEARTS_TOP_MARGIN, HUD_Z));
     }
 
     void Start()

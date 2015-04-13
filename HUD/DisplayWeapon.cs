@@ -12,14 +12,9 @@ public class DisplayWeapon : CacheBehaviour
     private SpriteRenderer HUDWeapon;
     private float timeToFade = 2f;
 
-    void Awake ()
-    {
-        mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-        transform.position = mainCamera.ScreenToWorldPoint(new Vector3 (Screen.width / 2, Screen.height - HUD_TOP_MARGIN, HUD_Z));
-    }
-
     void Start()
     {
+        PositionHUDElements();
         HUDWeapon = spriteRenderer;
         HUDWeapon.sprite = equippedWeapon;
         HUDWeapon.DOKill();
@@ -38,13 +33,26 @@ public class DisplayWeapon : CacheBehaviour
         MTween.FadeOut(HUDWeapon, HUD_FADE_OUT_AFTER, timeToFade);
     }
 
+    void PositionHUDElements()
+    {
+        mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+        transform.position = mainCamera.ScreenToWorldPoint(new Vector3 (((Screen.width / 2) - 5), ((Screen.height - HUD_TOP_MARGIN) + 5), HUD_Z));
+    }
+
+    void OnScreenSizeChanged(float vExtent, float hExtent)
+    {
+        PositionHUDElements();
+    }
+
     void OnEnable()
     {
         Messenger.AddListener<bool>("fade hud", OnFadeHud);
+        Messenger.AddListener<float, float>( "screen size changed", OnScreenSizeChanged);
     }
 
     void OnDestroy()
     {
         Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
+        Messenger.RemoveListener<float, float>( "screen size changed", OnScreenSizeChanged);
     }
 }

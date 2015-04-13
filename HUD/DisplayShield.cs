@@ -12,14 +12,9 @@ public class DisplayShield : CacheBehaviour
     private SpriteRenderer HUDShield;
     private float timeToFade = 2f;
 
-    void Awake ()
-    {
-        mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-        transform.position = mainCamera.ScreenToWorldPoint(new Vector3 (Screen.width / 2, Screen.height - HUD_TOP_MARGIN, HUD_Z));
-    }
-
     void Start()
     {
+        PositionHUDElements();
         HUDShield = spriteRenderer;
         HUDShield.sprite = equippedShield;
         HUDShield.DOKill();
@@ -38,13 +33,26 @@ public class DisplayShield : CacheBehaviour
         MTween.FadeOut(HUDShield, HUD_FADE_OUT_AFTER, timeToFade);
     }
 
+    void PositionHUDElements()
+    {
+        mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+        transform.position = mainCamera.ScreenToWorldPoint(new Vector3 (Screen.width / 2, Screen.height - HUD_TOP_MARGIN, HUD_Z));
+    }
+
+    void OnScreenSizeChanged(float vExtent, float hExtent)
+    {
+        PositionHUDElements();
+    }
+
     void OnEnable()
     {
         Messenger.AddListener<bool>("fade hud", OnFadeHud);
+        Messenger.AddListener<float, float>( "screen size changed", OnScreenSizeChanged);
     }
 
     void OnDestroy()
     {
         Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
+        Messenger.RemoveListener<float, float>( "screen size changed", OnScreenSizeChanged);
     }
 }
