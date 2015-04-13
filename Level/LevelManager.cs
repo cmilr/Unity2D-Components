@@ -9,8 +9,8 @@ public class LevelManager : CacheBehaviour {
 
 	// screen-fader settings
 	private float timeToFade            = 2f;
-	private float fadeInAfter           = 0f;
-	private float fadeOutAfter          = 2f;
+	private float fadeInAfter           = 2f;
+	private float fadeOutAfter          = 0f;
 	private float timeBeforeLevelReload = 3f;
 
 	// tile map specs
@@ -27,12 +27,12 @@ public class LevelManager : CacheBehaviour {
 
 	void FadeInNewLevel()
 	{
-		MTween.FadeIn(spriteRenderer, fadeInAfter, timeToFade);
+		MTween.FadeOut(spriteRenderer, fadeOutAfter, timeToFade);
 	}
 
 	void FadeOutCurrentLevel()
 	{
-		MTween.FadeOut(spriteRenderer, fadeOutAfter, timeToFade);
+		MTween.FadeIn(spriteRenderer, fadeInAfter, timeToFade);
 	}
 
 	void OnLoadLevel(int newLevel)

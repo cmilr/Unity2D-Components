@@ -5,15 +5,22 @@ using DG.Tweening;
 using Matcha.Game.Tweens;
 
 
-public class DisplayWeapon : BaseBehaviour
+public class DisplayWeapon : CacheBehaviour
 {
     public Sprite equippedWeapon;
-    private Image HUDWeapon;
+    private Camera mainCamera;
+    private SpriteRenderer HUDWeapon;
     private float timeToFade = 2f;
+
+    void Awake ()
+    {
+        mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+        transform.position = mainCamera.ScreenToWorldPoint(new Vector3 (Screen.width / 2, Screen.height - HUD_TOP_MARGIN, HUD_Z));
+    }
 
     void Start()
     {
-        HUDWeapon = gameObject.GetComponent<Image>();
+        HUDWeapon = spriteRenderer;
         HUDWeapon.sprite = equippedWeapon;
         HUDWeapon.DOKill();
         FadeInWeapon();

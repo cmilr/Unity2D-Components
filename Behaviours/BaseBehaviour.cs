@@ -31,7 +31,9 @@ public class BaseBehaviour : MonoBehaviour {
     // entity auto-alignment settings
     protected const float ALIGN_ENTITY_TO    = .124f;
 
-    // hud fading speeds on level loading
+    // hud specs
+    protected const float HUD_TOP_MARGIN     = 40f;
+    protected const float HUD_Z              = 10f;
     protected const float HUD_FADE_IN_AFTER  = .75f;
     protected const float HUD_FADE_OUT_AFTER = .25f;
 
