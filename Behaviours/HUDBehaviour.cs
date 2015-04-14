@@ -5,11 +5,11 @@ using DG.Tweening;
 using Matcha.Game.Tweens;
 
 
-public class DisplayShield : CacheBehaviour
+public class HUDBehaviour : CacheBehaviour
 {
-    public Sprite equippedShield;
+    public Sprite spriteElement;
     private Camera mainCamera;
-    private SpriteRenderer HUDShield;
+    private SpriteRenderer HUDElement;
     private float timeToFade = 2f;
 
     void Start()
@@ -17,27 +17,22 @@ public class DisplayShield : CacheBehaviour
         mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         PositionHUDElement();
 
-        HUDShield = spriteRenderer;
-        HUDShield.sprite = equippedShield;
-        HUDShield.DOKill();
-        FadeInShield();
+        HUDElement = spriteRenderer;
+        HUDElement.sprite = spriteElement;
+        HUDElement.DOKill();
+        FadeInElement();
     }
 
-    void PositionHUDElement()
-    {
-        transform.position = mainCamera.ScreenToWorldPoint(new Vector3 (Screen.width / 2, Screen.height - HUD_TOP_MARGIN, HUD_Z));
-    }
-
-    void FadeInShield()
+    void FadeInElement()
     {
         // fade weapon to zero instantly, then fade up slowly
-        MTween.FadeOut(HUDShield, 0, 0);
-        MTween.FadeIn(HUDShield, HUD_FADE_IN_AFTER, timeToFade);
+        MTween.FadeOut(HUDElement, 0, 0);
+        MTween.FadeIn(HUDElement, HUD_FADE_IN_AFTER, timeToFade);
     }
 
     void OnFadeHud(bool status)
     {
-        MTween.FadeOut(HUDShield, HUD_FADE_OUT_AFTER, timeToFade);
+        MTween.FadeOut(HUDElement, HUD_FADE_OUT_AFTER, timeToFade);
     }
 
     void OnScreenSizeChanged(float vExtent, float hExtent)
