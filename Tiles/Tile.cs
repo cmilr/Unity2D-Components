@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 
-public class Tile : BaseBehaviour
+public class Tile : CacheBehaviour
 {
 	void Start()
 	{
@@ -12,4 +12,16 @@ public class Tile : BaseBehaviour
 		if (gameObject.name != DEFAULT_TILE)
 			transform.parent.GetComponent<MeshRenderer>().enabled = false;
 	}
+
+    void OnBecameInvisible()
+    {
+        if(rigidbody2D)
+            rigidbody2D.Sleep();
+    }
+
+    void OnBecameVisible()
+    {
+        if(rigidbody2D)
+            rigidbody2D.WakeUp();
+    }
 }

@@ -15,7 +15,7 @@ public class DisplayShield : CacheBehaviour
     void Start()
     {
         mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-        PositionHUDElement();
+        PositionHUDElements();
 
         HUDShield = spriteRenderer;
         HUDShield.sprite = equippedShield;
@@ -23,7 +23,7 @@ public class DisplayShield : CacheBehaviour
         FadeInShield();
     }
 
-    void PositionHUDElement()
+    void PositionHUDElements()
     {
         transform.position = mainCamera.ScreenToWorldPoint(new Vector3 (Screen.width / 2, Screen.height - HUD_TOP_MARGIN, HUD_Z));
     }
@@ -42,7 +42,7 @@ public class DisplayShield : CacheBehaviour
 
     void OnScreenSizeChanged(float vExtent, float hExtent)
     {
-        PositionHUDElement();
+        PositionHUDElements();
     }
 
     void OnEnable()
