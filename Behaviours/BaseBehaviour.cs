@@ -15,6 +15,10 @@ public class BaseBehaviour : MonoBehaviour {
     protected string character                  = "LAURA";
     protected const float ONE_PIXEL             = .03125f;
     protected const float ONE_HUD_PIXEL         = 5f;
+    protected const int TOP                     = 0;
+    protected const int BOTTOM                  = 1;
+    protected const int LEFT                    = 2;
+    protected const int RIGHT                   = 3;
 
     // gameObject names
     protected const string PLAYER               = "Player";
@@ -26,6 +30,9 @@ public class BaseBehaviour : MonoBehaviour {
     // layer names
     protected const int WEAPON_COLLIDER         = 9;
     protected const int BODY_COLLIDER           = 10;
+
+    // player offsets
+    protected const float ABOUTFACE_OFFSET      = .2f;
 
     // player/weapon animation speeds
     protected const float IDLE_SPEED            = 1f;

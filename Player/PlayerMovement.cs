@@ -169,7 +169,13 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		normalizedHorizontalSpeed = 1;
 
 		if (transform.localScale.x < 0f)
+		{
+			// reverse sprite direction
 			transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+
+			// offset so player isn't pushed too far forward when sprite flips
+			transform.position = new Vector3(transform.position.x - ABOUTFACE_OFFSET, transform.position.y, transform.position.z);
+		}
 
 		if (controller.isGrounded)
 		{
@@ -187,7 +193,11 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		if (transform.localScale.x > 0f)
 		{
+			// reverse sprite direction
 			transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+
+			// offset so player isn't pushed too far forward when sprite flips
+			transform.position = new Vector3(transform.position.x + ABOUTFACE_OFFSET, transform.position.y, transform.position.z);
 		}
 
 		if (controller.isGrounded)

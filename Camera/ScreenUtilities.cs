@@ -39,20 +39,20 @@ public class ScreenUtilities : CacheBehaviour
 	}
 
 	// returns the distance from a gameObject to the edge of the screen on 2D orthographic cameras.
-	public float DistanceFromEdge(string screenEdge)
+	public float DistanceFromEdge(int screenEdge)
 	{
-		switch (screenEdge.ToLower())
+		switch (screenEdge)
 		{
-		case "top":
+		case TOP:
 			return Mathf.Abs(transform.position.y + vertExtent - trackedObject.position.y);
 
-		case "bottom":
+		case BOTTOM:
 			return Mathf.Abs(transform.position.y - vertExtent - trackedObject.position.y);
 
-		case "left":
+		case LEFT:
 			return Mathf.Abs(transform.position.x - horizExtent - trackedObject.position.x);
 
-		case "right":
+		case RIGHT:
 			return Mathf.Abs(transform.position.x + horizExtent - trackedObject.position.x);
 
 		default:
