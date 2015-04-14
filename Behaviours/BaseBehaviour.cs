@@ -23,6 +23,10 @@ public class BaseBehaviour : MonoBehaviour {
     protected const string TILE_MAP             = "TileMap";
     protected const string DEFAULT_TILE         = "DefaultTile";
 
+    // layer names
+    protected const int WEAPON_COLLIDER         = 9;
+    protected const int BODY_COLLIDER           = 10;
+
     // player/weapon animation speeds
     protected const float IDLE_SPEED            = 1f;
     protected const float RUN_SPEED             = .5f;

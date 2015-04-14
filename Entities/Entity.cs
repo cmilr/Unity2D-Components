@@ -7,6 +7,7 @@ public abstract class Entity : CacheBehaviour {
 
 	public int worth;
 
+	protected int layer;
 	protected bool collidedWithBody;
 	protected bool collidedWithWeapon;
 	protected IGameStateReadOnly game;
@@ -28,28 +29,34 @@ public abstract class Entity : CacheBehaviour {
 
 	void OnTriggerEnter2D(Collider2D coll)
 	{
-		if (coll.name == "BodyCollider" && !collidedWithBody)
+		layer = coll.gameObject.layer;
+
+		if (layer == BODY_COLLIDER && !collidedWithBody)
 			OnBodyCollisionEnter();
 
-		if (coll.name == "WeaponCollider" && !collidedWithWeapon)
+		if (layer == WEAPON_COLLIDER && !collidedWithWeapon)
 			OnWeaponCollisionEnter();
 	}
 
 	void OnTriggerStay2D(Collider2D coll)
 	{
-		if (coll.name == "BodyCollider")
+		layer = coll.gameObject.layer;
+
+		if (layer == BODY_COLLIDER)
 			OnBodyCollisionStay();
 
-		if (coll.name == "WeaponCollider")
+		if (layer == WEAPON_COLLIDER)
 			OnWeaponCollisionStay();
 	}
 
 	void OnTriggerExit2D(Collider2D coll)
 	{
-		if (coll.name == "BodyCollider")
+		layer = coll.gameObject.layer;
+
+		if (layer == BODY_COLLIDER)
 			OnBodyCollisionExit();
 
-		if (coll.name == "WeaponCollider")
+		if (layer == WEAPON_COLLIDER)
 			OnWeaponCollisionExit();
 	}
 
@@ -69,15 +76,15 @@ public abstract class Entity : CacheBehaviour {
 		LifecycleOver();
 	}
 
-	protected void OnBecameInvisible()
-	{
-		if(rigidbody2D)
-			rigidbody2D.Sleep();
-	}
+	// protected void OnBecameInvisible()
+	// {
+	// 	if(rigidbody2D)
+	// 		rigidbody2D.Sleep();
+	// }
 
-	protected void OnBecameVisible()
-	{
-		if(rigidbody2D)
-			rigidbody2D.WakeUp();
-	}
+	// protected void OnBecameVisible()
+	// {
+	// 	if(rigidbody2D)
+	// 		rigidbody2D.WakeUp();
+	// }
 }
