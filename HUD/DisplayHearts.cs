@@ -27,7 +27,7 @@ public class DisplayHearts : CacheBehaviour
 
     void PositionHUDElements()
     {
-        transform.position = mainCamera.ScreenToWorldPoint(new Vector3 (Screen.width - 200, Screen.height - HUD_TOP_MARGIN - 20, HUD_Z));
+        transform.position = mainCamera.ScreenToWorldPoint(new Vector3 (Screen.width - renderer.bounds.size.x, Screen.height - HUD_TOP_MARGIN - 20, HUD_Z));
     }
 
     void FadeInShield()
