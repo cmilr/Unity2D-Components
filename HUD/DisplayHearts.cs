@@ -17,17 +17,17 @@ public class DisplayHearts : CacheBehaviour
     void Start()
     {
         mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-        PositionHUDElements();
 
         HUDHearts = spriteRenderer;
         HUDHearts.sprite = threeHearts;
         HUDHearts.DOKill();
         FadeInShield();
+        Invoke("PositionHUDElements", .5f);
     }
 
     void PositionHUDElements()
     {
-        transform.position = mainCamera.ScreenToWorldPoint(new Vector3 (Screen.width - renderer.bounds.size.x, Screen.height - HUD_TOP_MARGIN - 20, HUD_Z));
+        transform.position = mainCamera.ScreenToWorldPoint(new Vector3 (Screen.width - 100, Screen.height - 70, HUD_Z));
     }
 
     void FadeInShield()
