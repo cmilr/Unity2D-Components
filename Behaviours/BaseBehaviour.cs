@@ -28,6 +28,7 @@ public class BaseBehaviour : MonoBehaviour {
     protected const string DEFAULT_TILE         = "DefaultTile";
 
     // layer names
+    protected const int PLAYER_COLLIDER         = 12;
     protected const int WEAPON_COLLIDER         = 9;
     protected const int BODY_COLLIDER           = 10;
 

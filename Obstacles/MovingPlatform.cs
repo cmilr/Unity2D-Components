@@ -15,6 +15,8 @@ public class MovingPlatform : CacheBehaviour
 	[Tooltip("How long should the platform pause at each end?")]
 	public float pauseTime = .1f;
 
+	private int layer;
+	private Collider2D collided;
 	private bool fastPlatform;
 
 	void Start()
@@ -64,25 +66,50 @@ public class MovingPlatform : CacheBehaviour
 
 	void OnTriggerEnter2D (Collider2D coll)
 	{
-		if (coll.name == PLAYER && coll.transform.position.y - .3f > gameObject.transform.position.y)
+		layer = coll.gameObject.layer;
+		collided = coll;
+
+		if (layer == PLAYER_COLLIDER && coll.transform.position.y - .3f > gameObject.transform.position.y)
 		{
 			coll.transform.parent = gameObject.transform;
+
+			Invoke("AttachToPlatform", .005f);
 		}
-		else if (coll.name != PLAYER)
+		else if (layer != PLAYER_COLLIDER)
 		{
 			coll.transform.parent = gameObject.transform;
 		}
 
-		if (coll.name == PLAYER && fastPlatform)
+		if (layer == PLAYER_COLLIDER && fastPlatform)
 			Messenger.Broadcast<bool>("riding fast platform", true);
+	}
+
+	void OnTriggerStay2D (Collider2D coll)
+	{
+		layer = coll.gameObject.layer;
+		collided = coll;
+
+		if (layer == PLAYER_COLLIDER)
+		{
+			coll.transform.parent = gameObject.transform;
+
+			Invoke("AttachToPlatform", .005f);
+		}
 	}
 
 	void OnTriggerExit2D (Collider2D coll)
 	{
+		layer = coll.gameObject.layer;
+
 		coll.transform.parent = null;
 
-		if (coll.name == PLAYER && fastPlatform)
+		if (layer == PLAYER_COLLIDER && fastPlatform)
 			Messenger.Broadcast<bool>("riding fast platform", false);
+	}
+
+	void AttachToPlatform()
+	{
+		collided.transform.parent = gameObject.transform;
 	}
 
 	// if platform is particularly fast and long, send a message to PlayerState, so PlayerMovement can

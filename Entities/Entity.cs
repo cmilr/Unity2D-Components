@@ -24,7 +24,7 @@ public abstract class Entity : CacheBehaviour {
 	void OnEnable()
 	{
 		game = GameObject.Find(GAME_STATE).GetComponent<IGameStateReadOnly>();
-		player = GameObject.Find(PLAYER).GetComponent<IPlayerStateReadOnly>();
+		player = GameObject.Find("Player").GetComponent<IPlayerStateReadOnly>();
 	}
 
 	void OnTriggerEnter2D(Collider2D coll)

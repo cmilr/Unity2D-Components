@@ -18,7 +18,7 @@ public class LevelManager : CacheBehaviour {
 
 	void Start()
 	{
-		player = GameObject.Find(PLAYER).GetComponent<IPlayerStateReadOnly>();
+		player = GameObject.Find("Player").GetComponent<IPlayerStateReadOnly>();
 		spriteRenderer.enabled = true;
 
 		FadeInNewLevel();
