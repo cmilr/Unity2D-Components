@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/jguarshark/unity2d-components.png?label=ready&title=Ready)](https://waffle.io/jguarshark/unity2d-components)
 # Unity2D Components
 **Disclaimer:** I'm a complete noob, and you should use this codebase at your own risk.
 
