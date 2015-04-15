@@ -32,7 +32,7 @@ public class BaseBehaviour : MonoBehaviour {
     protected const int BODY_COLLIDER           = 10;
 
     // player offsets
-    protected const float ABOUTFACE_OFFSET      = .2f;
+    protected const float ABOUTFACE_OFFSET      = .25f;
 
     // player/weapon animation speeds
     protected const float IDLE_SPEED            = 1f;
