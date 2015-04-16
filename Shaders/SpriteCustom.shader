@@ -5,8 +5,8 @@
 //        \/_/  \/_/   \/_/\/_/     \/_/   \/_____/   \/_/\/_/   \/_/\/_/
 //         I  N  D  U  S  T  R  I  E  S             www.matcha.industries
 
-Shader "SpriteCustom"  	// A modified version of the Unity 5 Standard Shader,
-{						// with support for two-sided sprites.
+Shader "Sprites/Custom"  	// A modified version of the Unity 5 Standard Shader,
+{							// with support for two-sided sprites.
 	Properties
 	{
 		_Color("Color", Color) = (1,1,1,1)
