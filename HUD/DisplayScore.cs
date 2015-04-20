@@ -9,10 +9,8 @@ public class DisplayScore : BaseBehaviour
 {
 	public bool topLayer;
 	private Text HUDScore;
-	private int currentScore;
-	private float timeToFade = 2f;
 
-	void Start ()
+	void Awake()
 	{
 		HUDScore = gameObject.GetComponent<Text>();
 		HUDScore.DOKill();
@@ -26,9 +24,9 @@ public class DisplayScore : BaseBehaviour
 
 	void FadeInScore()
 	{
-		// fade score to zero instantly, then fade up slowly
+		// fade to zero instantly, then fade up slowly
 		MTween.FadeOut(HUDScore, 0, 0);
-		MTween.FadeIn(HUDScore, HUD_FADE_IN_AFTER, timeToFade);
+		MTween.FadeIn(HUDScore, HUD_FADE_IN_AFTER, HUD_TIME_TO_FADE);
 	}
 	void OnChangeScore(int newScore)
 	{
@@ -46,7 +44,7 @@ public class DisplayScore : BaseBehaviour
 
 	void OnFadeHud(bool status)
 	{
-		MTween.FadeOut(HUDScore, HUD_FADE_OUT_AFTER, timeToFade);
+		MTween.FadeOut(HUDScore, HUD_FADE_OUT_AFTER, HUD_TIME_TO_FADE);
 	}
 
 	void OnEnable()

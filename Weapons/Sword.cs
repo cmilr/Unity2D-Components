@@ -14,9 +14,10 @@ public class Sword : AnimationBehaviour, IWeapon {
         hilt   = transform.FindChild("Hilt").gameObject.GetComponent<WeaponComponent>();
         handle = transform.FindChild("Handle").gameObject.GetComponent<WeaponComponent>();
 
-        blade.spriteRenderer.material.SetColor("_Color", MColor.orange);
-        hilt.spriteRenderer.material.SetColor("_Color", MColor.deepBrightBlue);
-        handle.spriteRenderer.material.SetColor("_Color", MColor.black);
+        // set weapon colors here
+        blade.spriteRenderer.material.SetColor("_Color", MColor.defaultGrayBlade);
+        hilt.spriteRenderer.material.SetColor("_Color", MColor.defaultWoodHandle);
+        handle.spriteRenderer.material.SetColor("_Color", MColor.defaultWoodHandle);
 	}
 
     public void PlayIdleAnimation(float xOffset, float yOffset)

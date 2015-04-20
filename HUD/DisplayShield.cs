@@ -10,7 +10,6 @@ public class DisplayShield : CacheBehaviour
     public Sprite equippedShield;
     private Camera mainCamera;
     private SpriteRenderer HUDShield;
-    private float timeToFade = 2f;
 
     void Start()
     {
@@ -32,12 +31,12 @@ public class DisplayShield : CacheBehaviour
     {
         // fade weapon to zero instantly, then fade up slowly
         MTween.FadeOut(HUDShield, 0, 0);
-        MTween.FadeIn(HUDShield, HUD_FADE_IN_AFTER, timeToFade);
+        MTween.FadeIn(HUDShield, HUD_FADE_IN_AFTER, HUD_TIME_TO_FADE);
     }
 
     void OnFadeHud(bool status)
     {
-        MTween.FadeOut(HUDShield, HUD_FADE_OUT_AFTER, timeToFade);
+        MTween.FadeOut(HUDShield, HUD_FADE_OUT_AFTER, HUD_TIME_TO_FADE);
     }
 
     void OnScreenSizeChanged(float vExtent, float hExtent)

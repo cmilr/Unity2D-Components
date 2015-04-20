@@ -12,7 +12,6 @@ public class DisplayHearts : CacheBehaviour
     public Sprite oneHearts;
     private Camera mainCamera;
     private SpriteRenderer HUDHearts;
-    private float timeToFade = 2f;
 
     void Start()
     {
@@ -27,20 +26,22 @@ public class DisplayHearts : CacheBehaviour
 
     void PositionHUDElements()
     {
-        transform.position = mainCamera.ScreenToWorldPoint(new Vector3
-            (Screen.width - 115, Screen.height - 70, HUD_Z));
+        transform.position = mainCamera.ScreenToWorldPoint(new Vector3(
+            Screen.width - 112,
+            Screen.height - 70,
+            HUD_Z));
     }
 
     void FadeInShield()
     {
-        // fade weapon to zero instantly, then fade up slowly
+        // fade to zero instantly, then fade up slowly
         MTween.FadeOut(HUDHearts, 0, 0);
-        MTween.FadeIn(HUDHearts, HUD_FADE_IN_AFTER, timeToFade);
+        MTween.FadeIn(HUDHearts, HUD_FADE_IN_AFTER, HUD_TIME_TO_FADE);
     }
 
     void OnFadeHud(bool status)
     {
-        MTween.FadeOut(HUDHearts, HUD_FADE_OUT_AFTER, timeToFade);
+        MTween.FadeOut(HUDHearts, HUD_FADE_OUT_AFTER, HUD_TIME_TO_FADE);
     }
 
     void OnScreenSizeChanged(float vExtent, float hExtent)

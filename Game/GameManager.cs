@@ -11,6 +11,10 @@ public class GameManager : BaseBehaviour
 		gameData = GameObject.Find(_GAME_DATA).GetComponent<_GameData>();
 
 		Messenger.Broadcast<int>("init score", gameData.CurrentScore);
+		Messenger.Broadcast<int>("init xp", 1503);
+		Messenger.Broadcast<int>("init lvl", 1);
+		Messenger.Broadcast<int>("init hp", 78);
+		Messenger.Broadcast<int>("init ac", 6);
 	}
 
 	void OnPrizeCollected(int worth)

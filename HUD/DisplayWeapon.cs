@@ -10,7 +10,6 @@ public class DisplayWeapon : CacheBehaviour
     public Sprite equippedWeapon;
     private Camera mainCamera;
     private SpriteRenderer HUDWeapon;
-    private float timeToFade = 2f;
 
     void Start()
     {
@@ -32,12 +31,12 @@ public class DisplayWeapon : CacheBehaviour
     {
         // fade weapon to zero instantly, then fade up slowly
         MTween.FadeOut(HUDWeapon, 0, 0);
-        MTween.FadeIn(HUDWeapon, HUD_FADE_IN_AFTER, timeToFade);
+        MTween.FadeIn(HUDWeapon, HUD_FADE_IN_AFTER, HUD_TIME_TO_FADE);
     }
 
     void OnFadeHud(bool status)
     {
-        MTween.FadeOut(HUDWeapon, HUD_FADE_OUT_AFTER, timeToFade);
+        MTween.FadeOut(HUDWeapon, HUD_FADE_OUT_AFTER, HUD_TIME_TO_FADE);
     }
 
     void OnScreenSizeChanged(float vExtent, float hExtent)
