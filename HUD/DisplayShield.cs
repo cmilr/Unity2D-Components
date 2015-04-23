@@ -24,7 +24,8 @@ public class DisplayShield : CacheBehaviour
 
     void PositionHUDElements()
     {
-        transform.position = mainCamera.ScreenToWorldPoint(new Vector3 (Screen.width / 2, Screen.height - HUD_EQUIPPED_TOP_MARGIN, HUD_Z));
+        transform.position = mainCamera.ScreenToWorldPoint(new Vector3
+            (Screen.width / 2, Screen.height - HUD_EQUIPPED_TOP_MARGIN, HUD_Z));
     }
 
     void FadeInShield()
