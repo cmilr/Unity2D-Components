@@ -19,6 +19,21 @@ public class WeaponHandler : CacheBehaviour {
         runAnimation = weapon + "_Run";
         jumpAnimation = weapon + "_Jump";
     }
+
+    void OnPlayerDead(string methodOfDeath, Collider2D coll)
+    {
+        spriteRenderer.enabled = false;
+    }
+
+    void OnEnable()
+    {
+        Messenger.AddListener<string, Collider2D>("player dead", OnPlayerDead);
+    }
+
+    void OnDestroy()
+    {
+        Messenger.RemoveListener<string, Collider2D>( "player dead", OnPlayerDead);
+    }
 }
 
 

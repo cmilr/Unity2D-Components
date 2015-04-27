@@ -45,4 +45,19 @@ public class WeaponComponent : CacheBehaviour {
         animator.speed = SWING_SPEED;
         animator.Play(Animator.StringToHash(swingAnimation));
     }
+
+    void OnPlayerDead(string methodOfDeath, Collider2D coll)
+    {
+        spriteRenderer.enabled = false;
+    }
+
+    void OnEnable()
+    {
+        Messenger.AddListener<string, Collider2D>("player dead", OnPlayerDead);
+    }
+
+    void OnDestroy()
+    {
+        Messenger.RemoveListener<string, Collider2D>( "player dead", OnPlayerDead);
+    }
 }

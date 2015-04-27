@@ -15,6 +15,7 @@ public class BaseBehaviour : MonoBehaviour {
     protected string character                    = "LAURA";
     protected const float ONE_PIXEL               = .03125f;
     protected const float ONE_HUD_PIXEL           = 5f;
+    protected const float ONE_COLLIDER_PIXEL      = .62f;
     protected const int TOP                       = 0;
     protected const int BOTTOM                    = 1;
     protected const int LEFT                      = 2;
@@ -43,7 +44,7 @@ public class BaseBehaviour : MonoBehaviour {
 
     // player/death animation speeds
     protected const float STRUCKDOWN_SPEED        = 1f;
-    protected const float DROWNED_SPEED           = 5f;
+    protected const float DROWNED_SPEED           = 8f;
 
 
     // entity auto-alignment settings

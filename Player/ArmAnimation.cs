@@ -48,4 +48,19 @@ public class ArmAnimation : AnimationBehaviour, IPlayerAnimation {
         animator.Play(Animator.StringToHash(swingAnimation));
         OffsetAnimation(xOffset, yOffset);
     }
+
+    void OnPlayerDead(string methodOfDeath, Collider2D coll)
+    {
+        spriteRenderer.enabled = false;
+    }
+
+    void OnEnable()
+    {
+        Messenger.AddListener<string, Collider2D>("player dead", OnPlayerDead);
+    }
+
+    void OnDestroy()
+    {
+        Messenger.RemoveListener<string, Collider2D>( "player dead", OnPlayerDead);
+    }
 }
