@@ -45,7 +45,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		controller = GetComponent<CharacterController2D>();
 		weapon = GetComponentInChildren<IWeapon>();
 		arm = GetComponentInChildren<ArmAnimation>();
-		SetCharacterAnimations(character);
+		SetCharacterAnimations(state.Character);
 	}
 
 	// set animations depending on which character is chosen

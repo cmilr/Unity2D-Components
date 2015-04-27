@@ -41,6 +41,11 @@ public class BaseBehaviour : MonoBehaviour {
     protected const float JUMP_SPEED              = 10f;
     protected const float SWING_SPEED             = 1f;
 
+    // player/death animation speeds
+    protected const float STRUCKDOWN_SPEED        = 1f;
+    protected const float DROWNED_SPEED           = 5f;
+
+
     // entity auto-alignment settings
     protected const float ALIGN_ENTITY_TO         = .124f;
 
