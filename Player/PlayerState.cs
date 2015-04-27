@@ -6,6 +6,7 @@ using System.Collections;
 public class PlayerState : BaseBehaviour, IPlayerStateReadOnly, IPlayerStateFullAccess
 {
 	// player state
+	public string Character 		{ get; set; }
 	public bool FacingRight 		{ get; set; }
 	public bool RidingFastPlatform 	{ get; set; }
 	public bool TouchingWall 		{ get; set; }
@@ -19,6 +20,7 @@ public class PlayerState : BaseBehaviour, IPlayerStateReadOnly, IPlayerStateFull
 
 	void OnEnable()
 	{
+		Character = "LAURA";
 		Messenger.AddListener<bool>("touching wall", OnTouchingWall);
 		Messenger.AddListener<bool>("riding fast platform", OnRidingFastPlatform);
 		Messenger.AddListener<bool>("player above ground", OnPlayerAboveGround);

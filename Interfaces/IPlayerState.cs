@@ -3,6 +3,7 @@ using System.Collections;
 
 public interface IPlayerStateReadOnly {
 
+    string Character            { get; }
     bool FacingRight            { get; }
     bool RidingFastPlatform     { get; }
     bool TouchingWall           { get; }
@@ -17,6 +18,7 @@ public interface IPlayerStateReadOnly {
 
 public interface IPlayerStateFullAccess {
 
+    string Character            { get; set; }
     bool FacingRight            { get; set; }
     bool RidingFastPlatform     { get; set; }
     bool TouchingWall           { get; set; }
