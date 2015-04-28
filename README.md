@@ -1,4 +1,6 @@
-[![Join the chat at https://gitter.im/jguarShark/Unity2D-Components](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jguarShark/Unity2D-Components?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Stories in Ready](https://badge.waffle.io/jguarshark/unity2d-components.png?label=ready&title=Ready)](https://waffle.io/jguarshark/unity2d-components)
+[![Join the chat at https://gitter.im/jguarShark/Unity2D-Components](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jguarShark/Unity2D-Components?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) 
+
+[![Stories in Ready](https://badge.waffle.io/jguarshark/unity2d-components.png?label=ready&title=Ready)](https://waffle.io/jguarshark/unity2d-components)
 # Unity2D Components
 
 **Disclaimer:** I'm a complete noob, and you should use this codebase at your own risk.
