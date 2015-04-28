@@ -7,14 +7,14 @@ using Matcha.Lib;
 
 public class PlayerMovement : CacheBehaviour, ICreatureController
 {
-	public float gravity         = -35f;                // set gravity for player
-	public float runSpeed        = 8f;                  // set player's run speed
-	public float groundDamping   = 20f;                 // how fast do we change direction? higher means faster
-	public float inAirDamping    = 5f;                  // how fast do we change direction mid-air?
-	public float jumpHeight      = 2.6f;                // player's jump height
-	public float maxFallingSpeed = 100f;                // max falling speed, for throttling falls, etc
-	public float maxRisingSpeed  = 2f;                  // max rising speed, for throttling player on moving platforms, etc
-	private float speedCheck     = .1f;                 // compare against to see if we need to throttle rising speed
+	public float gravity         = -35f;         // set gravity for player
+	public float runSpeed        = 8f;           // set player's run speed
+	public float groundDamping   = 20f;          // how fast do we change direction? higher means faster
+	public float inAirDamping    = 5f;           // how fast do we change direction mid-air?
+	public float jumpHeight      = 2.6f;         // player's jump height
+	public float maxFallingSpeed = 100f;         // max falling speed, for throttling falls, etc
+	public float maxRisingSpeed  = 2f;           // max rising speed, for throttling player on moving platforms, etc
+	private float speedCheck     = .1f;          // compare against to see if we need to throttle rising speed
 
 	private float normalizedHorizontalSpeed;
 	private float previousX;
@@ -35,7 +35,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
     private string runAnimation;
     private string jumpAnimation;
     private string swingAnimation;
-	private enum AnimationAction { Idle, Run, Jump, Fall, Attack, Defend, RunAttack };
+	private enum AnimationAction { Idle, Run, Jump, Fall, Attack, Defend, RunAttack, JumpAttack };
 	private AnimationAction animationAction;
 
 
@@ -104,9 +104,14 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 				MovePlayerLeft();
 				AttackWhileRunning();
 			}
-			else
+			else if (controller.isGrounded)
 			{
 				AttackWhileIdle();
+			}
+
+			if (!controller.isGrounded)
+			{
+				AttackWhileJumping();
 			}
 		}
 
@@ -156,7 +161,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			velocity.y = 0;
 			state.Grounded = true;
 		}
-
 		// falling state
 		else
 		{
@@ -171,10 +175,12 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		if (transform.localScale.x < 0f)
 		{
 			// reverse sprite direction
-			transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+			transform.localScale = new Vector3(
+				-transform.localScale.x, transform.localScale.y, transform.localScale.z);
 
 			// offset so player isn't pushed too far forward when sprite flips
-			transform.position = new Vector3(transform.position.x - ABOUTFACE_OFFSET, transform.position.y, transform.position.z);
+			transform.position = new Vector3(
+				transform.position.x - ABOUTFACE_OFFSET, transform.position.y, transform.position.z);
 		}
 
 		if (controller.isGrounded)
@@ -194,10 +200,12 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		if (transform.localScale.x > 0f)
 		{
 			// reverse sprite direction
-			transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+			transform.localScale = new Vector3(
+				-transform.localScale.x, transform.localScale.y, transform.localScale.z);
 
 			// offset so player isn't pushed too far forward when sprite flips
-			transform.position = new Vector3(transform.position.x + ABOUTFACE_OFFSET, transform.position.y, transform.position.z);
+			transform.position = new Vector3(
+				transform.position.x + ABOUTFACE_OFFSET, transform.position.y, transform.position.z);
 		}
 
 		if (controller.isGrounded)
@@ -249,6 +257,26 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		jump = false;
 	}
+
+	void AttackWhileJumping()
+	{
+		animationAction = AnimationAction.JumpAttack;
+
+		jump = false;
+
+		attack = false;
+	}
+
+	// void AttackWhileJumpingBUG()
+	// {
+	// 	velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
+
+	// 	animationAction = AnimationAction.JumpAttack;
+
+	// 	jump = false;
+
+	// 	attack = false;
+	// }
 
 	// mix & match animations for various activity states
 	void PlayAnimation()
@@ -306,6 +334,15 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 				animator.Play(Animator.StringToHash(runAnimation));
 				arm.PlaySwingAnimation(0, ONE_PIXEL);
 				weapon.PlaySwingAnimation(0, ONE_PIXEL);
+				break;
+			}
+
+			case AnimationAction.JumpAttack:
+			{
+				animator.speed = JUMP_SPEED;
+				animator.Play(Animator.StringToHash(jumpAnimation));
+				arm.PlaySwingAnimation(0, ONE_PIXEL * 2);
+				weapon.PlaySwingAnimation(0, ONE_PIXEL * 2);
 				break;
 			}
 
@@ -371,7 +408,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		// compute x and y movements
 		var smoothedMovementFactor = controller.isGrounded ? groundDamping : inAirDamping;
-		velocity.x = Mathf.Lerp(velocity.x, normalizedHorizontalSpeed * runSpeed, Time.deltaTime * smoothedMovementFactor);
+		velocity.x = Mathf.Lerp(
+			velocity.x, normalizedHorizontalSpeed * runSpeed, Time.deltaTime * smoothedMovementFactor);
 	}
 
 	void SavePreviousPosition()
