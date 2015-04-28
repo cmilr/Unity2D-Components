@@ -23,6 +23,7 @@ public class BaseBehaviour : MonoBehaviour {
 
     // gameObject names
     protected const string PLAYER                 = "Player";
+    protected const string _PLAYER_DATA           = "_PlayerData";
     protected const string _GAME_DATA             = "_GameData";
     protected const string GAME_STATE             = "GameState";
     protected const string TILE_MAP               = "TileMap";

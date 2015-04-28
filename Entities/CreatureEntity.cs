@@ -7,7 +7,7 @@ using System.Collections;
 
 public class CreatureEntity : Entity
 {
-	public enum EntityType { enemy };
+	public enum EntityType { Enemy };
 	public EntityType entityType;
 	public int hp;
 	public int ac;
@@ -19,7 +19,7 @@ public class CreatureEntity : Entity
 	{
 		thisCollider = GetComponent<BoxCollider2D>();
 
-		if (entityType == EntityType.enemy) { AutoAlign(); }
+		if (entityType == EntityType.Enemy) { AutoAlign(); }
 	}
 
 	override public void OnBodyCollisionEnter()
@@ -30,7 +30,7 @@ public class CreatureEntity : Entity
 		{
 			switch (entityType)
 			{
-				case EntityType.enemy:
+				case EntityType.Enemy:
 					// ultimately, this event will be broadcast from the player
 					Messenger.Broadcast<string, Collider2D>("player dead", "struckdown", thisCollider);
 				break;
@@ -50,7 +50,7 @@ public class CreatureEntity : Entity
 		{
 			switch (entityType)
 			{
-				case EntityType.enemy:
+				case EntityType.Enemy:
 				break;
 			}
 		}

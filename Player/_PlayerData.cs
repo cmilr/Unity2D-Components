@@ -14,11 +14,19 @@ public class _PlayerData : BaseBehaviour {
 	public string Character 	{ get; set; }
 	public int HP 				{ get; set; }
 	public int AC 				{ get; set; }
-	public int Damage			{ get; set; }
+	public int XP				{ get; set; }
+	public int LVL				{ get; set; }
 
 	void Awake()
 	{
 		MakePseudoSingleton();
+
+		// initialize settings
+		Character = "LAURA";
+		HP        = 25;
+		AC        = 4;
+		XP        = 0;
+		LVL       = 1;
 	}
 
 	public void Save()
@@ -31,7 +39,8 @@ public class _PlayerData : BaseBehaviour {
 		container.character = Character;
 		container.hp        = HP;
 		container.ac        = AC;
-		container.damage    = Damage;
+		container.xp        = XP;
+		container.lvl       = LVL;
 
 		bf.Serialize(file, container);
 		file.Close();
@@ -49,7 +58,8 @@ public class _PlayerData : BaseBehaviour {
 			Character = container.character;
 			HP        = container.hp;
 			AC        = container.ac;
-			Damage    = container.damage;
+			XP    	  = container.xp;
+			LVL    	  = container.lvl;
 		}
 	}
 
@@ -95,5 +105,6 @@ class PlayerDataContainer
 	public string character;
 	public int hp;
 	public int ac;
-	public int damage;
+	public int xp;
+	public int lvl;
 }

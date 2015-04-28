@@ -1,0 +1,45 @@
+﻿using UnityEngine;
+using System.Collections;
+
+
+public class PlayerManager : BaseBehaviour
+{
+    private _PlayerData playerData;
+
+    void Start()
+    {
+        playerData = GameObject.Find(_PLAYER_DATA).GetComponent<_PlayerData>();
+
+        Messenger.Broadcast<int>("init xp", playerData.XP);
+        Messenger.Broadcast<int>("init lvl", playerData.LVL);
+        Messenger.Broadcast<int>("init hp", playerData.HP);
+        Messenger.Broadcast<int>("init ac", playerData.AC);
+        Messenger.Broadcast<string>("init weapon title", "-2 Blade of Woeful Inadequacy");
+    }
+
+    void OnPrizeCollected(int worth)
+    {
+        // gameData.CurrentScore += worth;
+        // Messenger.Broadcast<int>("change score", gameData.CurrentScore);
+    }
+
+    void OnLevelCompleted(bool status)
+    {
+        // gameData.LastSavedScore = gameData.CurrentScore;
+        // gameData.CurrentLevel = gameData.CurrentLevel;
+        // Messenger.Broadcast<bool>("fade hud", true);
+        // Messenger.Broadcast<int>("load level", gameData.CurrentLevel);
+    }
+
+    void OnEnable()
+    {
+        Messenger.AddListener<int>( "prize collected", OnPrizeCollected);
+        Messenger.AddListener<bool>( "level completed", OnLevelCompleted);
+    }
+
+    void OnDestroy()
+    {
+        Messenger.RemoveListener<int>( "prize collected", OnPrizeCollected );
+        Messenger.RemoveListener<bool>( "level completed", OnLevelCompleted);
+    }
+}

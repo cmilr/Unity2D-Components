@@ -8,8 +8,6 @@ using Matcha.Game.Tweens;
 public class DisplayWeaponTitle : BaseBehaviour
 {
     private Text textComponent;
-    private int intToDisplay;
-    private string legend = "";
 
     void Awake()
     {
@@ -26,13 +24,13 @@ public class DisplayWeaponTitle : BaseBehaviour
 
     void OnInitWeaponTitle(string weaponTitle)
     {
-        textComponent.text = legend + weaponTitle;
+        textComponent.text = weaponTitle;
         FadeInText();
     }
 
-    void OnChangeWeaponTitle(int newWeaponTitle)
+    void OnChangeWeaponTitle(string newWeaponTitle)
     {
-        textComponent.text = legend + newWeaponTitle.ToString();
+        textComponent.text = newWeaponTitle;
 
         // MTween.DisplayScore(gameObject, textComponent);
     }
