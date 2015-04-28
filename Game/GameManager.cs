@@ -15,6 +15,7 @@ public class GameManager : BaseBehaviour
 		Messenger.Broadcast<int>("init lvl", 1);
 		Messenger.Broadcast<int>("init hp", 78);
 		Messenger.Broadcast<int>("init ac", 6);
+		Messenger.Broadcast<string>("init weapon title", "+3 Blade of Screaming Squirrels");
 	}
 
 	void OnPrizeCollected(int worth)
