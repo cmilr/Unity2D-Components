@@ -4,7 +4,7 @@ using Matcha.Game.Colors;
 
 public class Sword : AnimationBehaviour, IWeapon {
 
-    public string weaponName;
+    public string title;
     public int damage;
 
     private WeaponComponent blade;

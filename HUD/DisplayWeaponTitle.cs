@@ -22,15 +22,15 @@ public class DisplayWeaponTitle : BaseBehaviour
         MTween.FadeIn(textComponent, HUD_FADE_IN_AFTER, HUD_TIME_TO_FADE);
     }
 
-    void OnInitWeaponTitle(string weaponTitle)
+    void OnInitWeaponTitle(GameObject weapon)
     {
-        textComponent.text = weaponTitle;
+        textComponent.text = weapon.GetComponent<Sword>().title;
         FadeInText();
     }
 
-    void OnChangeWeaponTitle(string newWeaponTitle)
+    void OnChangeWeaponTitle(GameObject newWeapon)
     {
-        textComponent.text = newWeaponTitle;
+        textComponent.text = newWeapon.GetComponent<Sword>().title;
 
         // MTween.DisplayScore(gameObject, textComponent);
     }
@@ -42,15 +42,15 @@ public class DisplayWeaponTitle : BaseBehaviour
 
     void OnEnable()
     {
-        Messenger.AddListener<string>("init weapon title", OnInitWeaponTitle);
-        // Messenger.AddListener<string>("change weapon title", OnChangeWeaponTitle);
+        Messenger.AddListener<GameObject>("init weapon title", OnInitWeaponTitle);
+        // Messenger.AddListener<GameObject>("change weapon title", OnChangeWeaponTitle);
         Messenger.AddListener<bool>("fade hud", OnFadeHud);
     }
 
     void OnDestroy()
     {
-        Messenger.RemoveListener<string>("init weapon title", OnInitWeaponTitle);
-        // Messenger.RemoveListener<string>("change weapon title", OnChangeWeaponTitle);
+        Messenger.RemoveListener<GameObject>("init weapon title", OnInitWeaponTitle);
+        // Messenger.RemoveListener<GameObject>("change weapon title", OnChangeWeaponTitle);
         Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
     }
 }

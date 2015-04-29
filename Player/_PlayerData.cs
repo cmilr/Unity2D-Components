@@ -16,6 +16,7 @@ public class _PlayerData : BaseBehaviour {
 	public int AC 				{ get; set; }
 	public int XP				{ get; set; }
 	public int LVL				{ get; set; }
+	public GameObject sword;
 
 	void Awake()
 	{
@@ -27,6 +28,9 @@ public class _PlayerData : BaseBehaviour {
 		AC        = 4;
 		XP        = 0;
 		LVL       = 1;
+		sword = GameObject.Find("Player/Sword");
+
+
 	}
 
 	public void Save()

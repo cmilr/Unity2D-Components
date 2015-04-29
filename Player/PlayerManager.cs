@@ -14,7 +14,7 @@ public class PlayerManager : BaseBehaviour
         Messenger.Broadcast<int>("init lvl", playerData.LVL);
         Messenger.Broadcast<int>("init hp", playerData.HP);
         Messenger.Broadcast<int>("init ac", playerData.AC);
-        Messenger.Broadcast<string>("init weapon title", "-2 Blade of Woeful Inadequacy");
+        Messenger.Broadcast<GameObject>("init weapon title", playerData.sword);
     }
 
     void OnPrizeCollected(int worth)
