@@ -52,4 +52,11 @@ public class Sword : WeaponBehaviour, IWeapon {
         handle.PlaySwingAnimation();
         OffsetAnimation(xOffset, yOffset);
     }
+
+    public void EnableAnimation(bool status)
+    {
+        blade.spriteRenderer.enabled = status;
+        hilt.spriteRenderer.enabled = status;
+        handle.spriteRenderer.enabled = status;
+    }
 }
