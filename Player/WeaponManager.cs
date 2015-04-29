@@ -8,8 +8,8 @@ public class WeaponManager : CacheBehaviour {
     private GameObject weapon3;
 
     private IWeapon equipped;
-    private IWeapon leftWeapon;
-    private IWeapon rightWeapon;
+    private WeaponBehaviour leftWeapon;
+    private WeaponBehaviour rightWeapon;
 
     private ArmAnimation arm;
 
@@ -27,11 +27,11 @@ public class WeaponManager : CacheBehaviour {
         weapon3 = GameObject.Find("Player/WeaponManager/Slot3/Weapon");
 
         equipped = weapon1.GetComponent<IWeapon>();
-        leftWeapon = weapon2.GetComponent<IWeapon>();
-        rightWeapon = weapon3.GetComponent<IWeapon>();
+        leftWeapon = weapon2.GetComponent<WeaponBehaviour>();
+        rightWeapon = weapon3.GetComponent<WeaponBehaviour>();
 
-        Debug.Log(leftWeapon);
-        Debug.Log(rightWeapon);
+        Debug.Log(leftWeapon.title);
+        Debug.Log(rightWeapon.title);
         // leftWeapon.EnableAnimation(false);
         // rightWeapon.EnableAnimation(false);
     }
