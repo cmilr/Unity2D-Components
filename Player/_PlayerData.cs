@@ -28,7 +28,7 @@ public class _PlayerData : BaseBehaviour {
 		AC        = 4;
 		XP        = 0;
 		LVL       = 1;
-		sword = GameObject.Find("Player/Sword");
+		sword = GameObject.Find("Player/WeaponManager/Slot1/Weapon");
 
 
 	}

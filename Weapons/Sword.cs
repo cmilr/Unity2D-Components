@@ -2,10 +2,7 @@
 using System.Collections;
 using Matcha.Game.Colors;
 
-public class Sword : AnimationBehaviour, IWeapon {
-
-    public string title;
-    public int damage;
+public class Sword : WeaponBehaviour, IWeapon {
 
     private WeaponComponent blade;
     private WeaponComponent hilt;
@@ -13,6 +10,7 @@ public class Sword : AnimationBehaviour, IWeapon {
 
 	void Start ()
     {
+        // set weapon components on initialization
         blade  = transform.FindChild("Blade").gameObject.GetComponent<WeaponComponent>();
         hilt   = transform.FindChild("Hilt").gameObject.GetComponent<WeaponComponent>();
         handle = transform.FindChild("Handle").gameObject.GetComponent<WeaponComponent>();
