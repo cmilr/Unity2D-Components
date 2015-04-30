@@ -22,7 +22,7 @@ public class DisplayHearts : CacheBehaviour
         HUDHearts.DOKill();
         FadeInShield();
 
-        Invoke("PositionHUDElements", .1f);
+        Invoke("PositionHUDElements", .01f);
     }
 
     void PositionHUDElements()

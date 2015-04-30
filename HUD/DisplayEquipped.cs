@@ -7,18 +7,14 @@ using Matcha.Game.Tweens;
 
 public class DisplayEquipped : CacheBehaviour
 {
-    public Sprite equippedWeapon;
-    private Camera mainCamera;
     private SpriteRenderer HUDWeapon;
+    private Camera mainCamera;
 
     void Start()
     {
         mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-
         HUDWeapon = spriteRenderer;
-        HUDWeapon.sprite = equippedWeapon;
         HUDWeapon.DOKill();
-        FadeInWeapon();
 
         Invoke("PositionHUDElements", .01f);
     }
@@ -29,6 +25,12 @@ public class DisplayEquipped : CacheBehaviour
             Screen.width / 2,
             Screen.height - HUD_WEAPON_TOP_MARGIN,
             HUD_Z));
+    }
+
+    void OnInitEquippedWeapon(GameObject weapon)
+    {
+        HUDWeapon.sprite = weapon.GetComponent<Weapon>().sprite;
+        FadeInWeapon();
     }
 
     void FadeInWeapon()
@@ -50,12 +52,14 @@ public class DisplayEquipped : CacheBehaviour
 
     void OnEnable()
     {
+        Messenger.AddListener<GameObject>("init equipped weapon", OnInitEquippedWeapon);
         Messenger.AddListener<bool>("fade hud", OnFadeHud);
         Messenger.AddListener<float, float>( "screen size changed", OnScreenSizeChanged);
     }
 
     void OnDestroy()
     {
+        Messenger.RemoveListener<GameObject>("init equipped weapon", OnInitEquippedWeapon);
         Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
         Messenger.RemoveListener<float, float>( "screen size changed", OnScreenSizeChanged);
     }

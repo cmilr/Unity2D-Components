@@ -11,6 +11,7 @@ public abstract class Weapon : AnimationBehaviour {
     public int hp;
     public int ac;
     public int damage;
+    public Sprite sprite;
 
     // animation state methods
     public abstract void PlayIdleAnimation(float xOffset, float yOffset);

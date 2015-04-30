@@ -7,20 +7,15 @@ using Matcha.Game.Tweens;
 
 public class DisplayStashed : CacheBehaviour
 {
-
     private float offset;
-    public Sprite weapon;
     private Camera mainCamera;
     private SpriteRenderer HUDWeapon;
 
     void Start()
     {
         mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-
         HUDWeapon = spriteRenderer;
-        HUDWeapon.sprite = weapon;
         HUDWeapon.DOKill();
-        FadeInWeapon();
 
         Invoke("PositionHUDElements", .01f);
         // HUDWeapon.color = new Color (1f, 1f, 1f, .3f);
@@ -35,6 +30,22 @@ public class DisplayStashed : CacheBehaviour
             Screen.width / 2 + offset,
             Screen.height - HUD_WEAPON_TOP_MARGIN,
             HUD_Z));
+    }
+
+    void OnInitStashedWeaponLeft(GameObject weapon)
+    {
+        if (name == "StashedWeapon_L") { InitStashedWeapon(weapon); };
+    }
+
+    void OnInitStashedWeaponRight(GameObject weapon)
+    {
+        if (name == "StashedWeapon_R") { InitStashedWeapon(weapon); };
+    }
+
+    void InitStashedWeapon(GameObject weapon)
+    {
+        HUDWeapon.sprite = weapon.GetComponent<Weapon>().sprite;
+        FadeInWeapon();
     }
 
     void FadeInWeapon()
@@ -56,12 +67,16 @@ public class DisplayStashed : CacheBehaviour
 
     void OnEnable()
     {
+        Messenger.AddListener<GameObject>("init stashed weapon left", OnInitStashedWeaponLeft);
+        Messenger.AddListener<GameObject>("init stashed weapon right", OnInitStashedWeaponRight);
         Messenger.AddListener<bool>("fade hud", OnFadeHud);
         Messenger.AddListener<float, float>( "screen size changed", OnScreenSizeChanged);
     }
 
     void OnDestroy()
     {
+        Messenger.RemoveListener<GameObject>("init stashed weapon left", OnInitStashedWeaponLeft);
+        Messenger.RemoveListener<GameObject>("init stashed weapon right", OnInitStashedWeaponRight);
         Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
         Messenger.RemoveListener<float, float>( "screen size changed", OnScreenSizeChanged);
     }
