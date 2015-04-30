@@ -11,7 +11,7 @@ public class DisplayAC : BaseBehaviour
     private int intToDisplay;
     private string legend = "AC: ";
 
-    void Awake()
+    void Start()
     {
         textComponent = gameObject.GetComponent<Text>();
         textComponent.DOKill();

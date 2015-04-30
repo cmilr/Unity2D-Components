@@ -21,7 +21,8 @@ public class DisplayHearts : CacheBehaviour
         HUDHearts.sprite = threeHearts;
         HUDHearts.DOKill();
         FadeInShield();
-        Invoke("PositionHUDElements", .5f);
+
+        Invoke("PositionHUDElements", .1f);
     }
 
     void PositionHUDElements()

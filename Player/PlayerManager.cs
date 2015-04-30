@@ -9,7 +9,11 @@ public class PlayerManager : BaseBehaviour
     void Start()
     {
         playerData = GameObject.Find(_PLAYER_DATA).GetComponent<_PlayerData>();
+        Invoke("Init", .1f);
+    }
 
+    void Init()
+    {
         Messenger.Broadcast<int>("init xp", playerData.XP);
         Messenger.Broadcast<int>("init lvl", playerData.LVL);
         Messenger.Broadcast<int>("init hp", playerData.HP);

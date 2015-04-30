@@ -10,7 +10,7 @@ public class DisplayScore : BaseBehaviour
 	public bool topLayer;
 	private Text HUDScore;
 
-	void Awake()
+	void Start()
 	{
 		HUDScore = gameObject.GetComponent<Text>();
 		HUDScore.DOKill();

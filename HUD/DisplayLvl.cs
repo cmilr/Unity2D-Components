@@ -11,7 +11,7 @@ public class DisplayLvl : BaseBehaviour
     private int intToDisplay;
     private string legend = "Lvl: ";
 
-    void Awake()
+    void Start()
     {
         textComponent = gameObject.GetComponent<Text>();
         textComponent.DOKill();

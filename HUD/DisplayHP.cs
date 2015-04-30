@@ -11,7 +11,7 @@ public class DisplayHP : BaseBehaviour
     private int intToDisplay;
     private string legend = "HP: ";
 
-    void Awake()
+    void Start()
     {
         textComponent = gameObject.GetComponent<Text>();
         textComponent.DOKill();

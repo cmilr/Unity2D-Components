@@ -9,7 +9,7 @@ public class DisplayWeaponTitle : BaseBehaviour
 {
     private Text textComponent;
 
-    void Awake()
+    void Start()
     {
         textComponent = gameObject.GetComponent<Text>();
         textComponent.DOKill();

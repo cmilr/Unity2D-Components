@@ -14,12 +14,13 @@ public class DisplayShield : CacheBehaviour
     void Start()
     {
         mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-        PositionHUDElements();
 
         HUDShield = spriteRenderer;
         HUDShield.sprite = equippedShield;
         HUDShield.DOKill();
         FadeInShield();
+
+        Invoke("PositionHUDElements", .1f);
     }
 
     void PositionHUDElements()

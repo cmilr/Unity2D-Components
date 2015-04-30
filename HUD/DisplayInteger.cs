@@ -13,7 +13,7 @@ public class DisplayInteger : BaseBehaviour
     private int intToDisplay;
     private string legend = "XP: ";
 
-    void Awake()
+    void Start()
     {
         textComponent = gameObject.GetComponent<Text>();
         textComponent.DOKill();

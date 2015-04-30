@@ -7,25 +7,34 @@ using Matcha.Game.Tweens;
 
 public class DisplayWeapon : CacheBehaviour
 {
+    public enum WeaponPosition { Equipped, Left, Right };
+    public WeaponPosition weaponPosition;
+
     public Sprite equippedWeapon;
+    public float offset;
     private Camera mainCamera;
     private SpriteRenderer HUDWeapon;
 
     void Start()
     {
         mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-        PositionHUDElements();
 
         HUDWeapon = spriteRenderer;
         HUDWeapon.sprite = equippedWeapon;
         HUDWeapon.DOKill();
-        FadeInWeapon();
+        // FadeInWeapon();
+
+
+        Invoke("PositionHUDElements", .1f);
+        HUDWeapon.color = new Color (.5f, .5f, .5f, .3f);
     }
 
     void PositionHUDElements()
     {
-        transform.position = mainCamera.ScreenToWorldPoint(new Vector3
-            (Screen.width / 2, Screen.height - HUD_EQUIPPED_TOP_MARGIN, HUD_Z));
+        transform.position = mainCamera.ScreenToWorldPoint(new Vector3(
+            Screen.width / 2 + offset,
+            Screen.height - HUD_EQUIPPED_TOP_MARGIN,
+            HUD_Z));
     }
 
     void FadeInWeapon()
