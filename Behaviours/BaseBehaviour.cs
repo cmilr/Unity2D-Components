@@ -3,7 +3,7 @@
 //      \ \ \-./\ \  \ \  __ \  \/_/\ \/ \ \ \____  \ \  __ \  \ \  __ \
 //       \ \_\ \ \_\  \ \_\ \_\    \ \_\  \ \_____\  \ \_\ \_\  \ \_\ \_\
 //        \/_/  \/_/   \/_/\/_/     \/_/   \/_____/   \/_/\/_/   \/_/\/_/
-//         I  N  D  U  S  T  R  I  E  S             www.matcha.industries
+//         I  N  D  U  S  T  R  I  E  S       http://jguarshark.github.io
 
 using UnityEngine;
 using System.Collections;

@@ -16,7 +16,6 @@ public class WeaponManager : CacheBehaviour {
     void Start()
     {
         InitWeapons();
-
         arm = GetComponentInChildren<ArmAnimation>();
     }
 
