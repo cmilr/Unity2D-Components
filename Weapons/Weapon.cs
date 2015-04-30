@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class WeaponBehaviour : AnimationBehaviour {
+public abstract class Weapon : AnimationBehaviour {
 
     public enum WeaponType { Sword, Bow, Hammer };
     public WeaponType weaponType;

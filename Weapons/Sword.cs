@@ -2,13 +2,13 @@
 using System.Collections;
 using Matcha.Game.Colors;
 
-public class Sword : WeaponBehaviour, IWeapon {
+public class Sword : Weapon {
 
     private WeaponComponent blade;
     private WeaponComponent hilt;
     private WeaponComponent handle;
 
-	void Start ()
+	void Awake ()
     {
         // set weapon components on initialization
         blade  = transform.FindChild("Blade").gameObject.GetComponent<WeaponComponent>();
@@ -21,7 +21,7 @@ public class Sword : WeaponBehaviour, IWeapon {
         handle.spriteRenderer.material.SetColor("_Color", MColor.defaultGrayHandle);
 	}
 
-    public void PlayIdleAnimation(float xOffset, float yOffset)
+    override public void PlayIdleAnimation(float xOffset, float yOffset)
     {
         blade.PlayIdleAnimation();
         hilt.PlayIdleAnimation();
@@ -29,7 +29,7 @@ public class Sword : WeaponBehaviour, IWeapon {
         OffsetAnimation(xOffset, yOffset);
     }
 
-    public void PlayRunAnimation(float xOffset, float yOffset)
+    override public void PlayRunAnimation(float xOffset, float yOffset)
     {
         blade.PlayRunAnimation();
         hilt.PlayRunAnimation();
@@ -37,7 +37,7 @@ public class Sword : WeaponBehaviour, IWeapon {
         OffsetAnimation(xOffset, yOffset);
     }
 
-    public void PlayJumpAnimation(float xOffset, float yOffset)
+    override public void PlayJumpAnimation(float xOffset, float yOffset)
     {
         blade.PlayJumpAnimation();
         hilt.PlayJumpAnimation();
@@ -45,7 +45,7 @@ public class Sword : WeaponBehaviour, IWeapon {
         OffsetAnimation(xOffset, yOffset);
     }
 
-    public void PlaySwingAnimation(float xOffset, float yOffset)
+    override public void PlaySwingAnimation(float xOffset, float yOffset)
     {
         blade.PlaySwingAnimation();
         hilt.PlaySwingAnimation();
@@ -53,7 +53,7 @@ public class Sword : WeaponBehaviour, IWeapon {
         OffsetAnimation(xOffset, yOffset);
     }
 
-    public void EnableAnimation(bool status)
+    override public void EnableAnimation(bool status)
     {
         blade.spriteRenderer.enabled = status;
         hilt.spriteRenderer.enabled = status;
