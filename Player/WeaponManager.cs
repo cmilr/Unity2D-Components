@@ -7,9 +7,9 @@ public class WeaponManager : CacheBehaviour {
     private GameObject weapon2;
     private GameObject weapon3;
 
-    private WeaponBehaviour equippedWeapon;
-    private WeaponBehaviour leftWeapon;
-    private WeaponBehaviour rightWeapon;
+    private Weapon equippedWeapon;
+    private Weapon leftWeapon;
+    private Weapon rightWeapon;
 
     private ArmAnimation arm;
 
@@ -26,9 +26,9 @@ public class WeaponManager : CacheBehaviour {
         weapon2 = GameObject.Find("Player/WeaponManager/Slot2/Weapon");
         weapon3 = GameObject.Find("Player/WeaponManager/Slot3/Weapon");
 
-        equippedWeapon = weapon1.GetComponent<WeaponBehaviour>();
-        leftWeapon = weapon2.GetComponent<WeaponBehaviour>();
-        rightWeapon = weapon3.GetComponent<WeaponBehaviour>();
+        equippedWeapon = weapon1.GetComponent<Weapon>();
+        leftWeapon = weapon2.GetComponent<Weapon>();
+        rightWeapon = weapon3.GetComponent<Weapon>();
 
         leftWeapon.EnableAnimation(false);
         rightWeapon.EnableAnimation(false);
