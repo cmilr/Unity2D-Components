@@ -5,13 +5,11 @@ using DG.Tweening;
 using Matcha.Game.Tweens;
 
 
-public class DisplayWeapon : CacheBehaviour
+public class DisplayStashed : CacheBehaviour
 {
-    public enum WeaponPosition { Equipped, Left, Right };
-    public WeaponPosition weaponPosition;
 
-    public Sprite equippedWeapon;
-    public float offset;
+    private float offset;
+    public Sprite weapon;
     private Camera mainCamera;
     private SpriteRenderer HUDWeapon;
 
@@ -20,17 +18,19 @@ public class DisplayWeapon : CacheBehaviour
         mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
 
         HUDWeapon = spriteRenderer;
-        HUDWeapon.sprite = equippedWeapon;
+        HUDWeapon.sprite = weapon;
         HUDWeapon.DOKill();
-        // FadeInWeapon();
+        FadeInWeapon();
 
-
-        Invoke("PositionHUDElements", .1f);
-        HUDWeapon.color = new Color (.5f, .5f, .5f, .3f);
+        Invoke("PositionHUDElements", .01f);
+        // HUDWeapon.color = new Color (1f, 1f, 1f, .3f);
     }
 
     void PositionHUDElements()
     {
+        // shift to left or right, depending on name of GameObject
+        offset = (name == "StashedWeapon_L") ? -HUD_STASHED_WEAPON_OFFSET : HUD_STASHED_WEAPON_OFFSET;
+
         transform.position = mainCamera.ScreenToWorldPoint(new Vector3(
             Screen.width / 2 + offset,
             Screen.height - HUD_WEAPON_TOP_MARGIN,
@@ -41,7 +41,7 @@ public class DisplayWeapon : CacheBehaviour
     {
         // fade weapon to zero instantly, then fade up slowly
         MTween.FadeOut(HUDWeapon, 0, 0);
-        MTween.FadeIn(HUDWeapon, HUD_FADE_IN_AFTER, HUD_TIME_TO_FADE);
+        MTween.FadeIn(HUDWeapon, HUD_STASHED_TRANSPARENCY, HUD_FADE_IN_AFTER, HUD_TIME_TO_FADE);
     }
 
     void OnFadeHud(bool status)
