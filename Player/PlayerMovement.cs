@@ -29,7 +29,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	private CharacterController2D controller;
 	private IPlayerStateFullAccess state;
 	private WeaponManager weaponManager;
-	// private ArmAnimation arm;
 
     private string idleAnimation;
     private string runAnimation;
@@ -44,7 +43,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		state = GetComponent<IPlayerStateFullAccess>();
 		controller = GetComponent<CharacterController2D>();
 		weaponManager = GetComponentInChildren<WeaponManager>();
-		// arm = GetComponentInChildren<ArmAnimation>();
 		SetCharacterAnimations(state.Character);
 	}
 

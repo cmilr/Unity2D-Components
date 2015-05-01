@@ -9,7 +9,7 @@ public class PlayerManager : BaseBehaviour
     void Start()
     {
         playerData = GameObject.Find(_PLAYER_DATA).GetComponent<_PlayerData>();
-        Invoke("Init", .1f);
+        Invoke("Init", .01f);
     }
 
     void Init()

@@ -15,7 +15,7 @@ public class ScreenUtilities : CacheBehaviour
 
 	void Start()
 	{
-		objectToTrack = GameObject.Find("Player");
+		objectToTrack = GameObject.Find(PLAYER);
 		trackedObject = objectToTrack.transform;
 
 		vertExtent = Camera.main.GetComponent<Camera>().orthographicSize;
