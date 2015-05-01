@@ -32,16 +32,6 @@ public class DisplayStashed : CacheBehaviour
             HUD_Z));
     }
 
-    void OnInitStashedWeaponLeft(GameObject weapon)
-    {
-        if (name == "StashedWeapon_L") { InitStashedWeapon(weapon); };
-    }
-
-    void OnInitStashedWeaponRight(GameObject weapon)
-    {
-        if (name == "StashedWeapon_R") { InitStashedWeapon(weapon); };
-    }
-
     void InitStashedWeapon(GameObject weapon)
     {
         HUDWeapon.sprite = weapon.GetComponent<Weapon>().sprite;
@@ -65,6 +55,15 @@ public class DisplayStashed : CacheBehaviour
         PositionHUDElements();
     }
 
+    void OnInitStashedWeaponLeft(GameObject weapon)
+    {
+        if (name == "StashedWeapon_L") { InitStashedWeapon(weapon); };
+    }
+
+    void OnInitStashedWeaponRight(GameObject weapon)
+    {
+        if (name == "StashedWeapon_R") { InitStashedWeapon(weapon); };
+    }
     void OnEnable()
     {
         Messenger.AddListener<GameObject>("init stashed weapon left", OnInitStashedWeaponLeft);
