@@ -27,12 +27,12 @@ public class LevelManager : CacheBehaviour {
 
 	void FadeInNewLevel()
 	{
-		MTween.FadeOut(spriteRenderer, fadeOutAfter, timeToFade);
+		MTween.FadeInLevel(spriteRenderer, fadeOutAfter, timeToFade);
 	}
 
 	void FadeOutCurrentLevel()
 	{
-		MTween.FadeIn(spriteRenderer, fadeInAfter, timeToFade);
+		MTween.FadeOutLevel(spriteRenderer, fadeInAfter, timeToFade);
 	}
 
 	void OnLoadLevel(int newLevel)
