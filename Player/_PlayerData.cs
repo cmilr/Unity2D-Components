@@ -16,21 +16,23 @@ public class _PlayerData : BaseBehaviour {
 	public int AC 				{ get; set; }
 	public int XP				{ get; set; }
 	public int LVL				{ get; set; }
-	public GameObject sword;
+	public GameObject equippedWeapon;
+	public GameObject leftWeapon;
+	public GameObject rightWeapon;
 
 	void Awake()
 	{
 		MakePseudoSingleton();
 
 		// initialize settings
-		Character = "LAURA";
-		HP        = 25;
-		AC        = 4;
-		XP        = 0;
-		LVL       = 1;
-		sword = GameObject.Find("Player/WeaponManager/Slot1/Weapon");
-
-
+		Character      = "LAURA";
+		HP             = 25;
+		AC             = 4;
+		XP             = 0;
+		LVL            = 1;
+		equippedWeapon = GameObject.Find("Player/WeaponManager/Slot1/Weapon");
+		leftWeapon     = GameObject.Find("Player/WeaponManager/Slot2/Weapon");
+		rightWeapon    = GameObject.Find("Player/WeaponManager/Slot3/Weapon");
 	}
 
 	public void Save()

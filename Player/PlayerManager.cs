@@ -9,16 +9,20 @@ public class PlayerManager : BaseBehaviour
     void Start()
     {
         playerData = GameObject.Find(_PLAYER_DATA).GetComponent<_PlayerData>();
-        Invoke("Init", .01f);
+
+        Init();
     }
 
     void Init()
     {
-        Messenger.Broadcast<int>("init xp", playerData.XP);
+
         Messenger.Broadcast<int>("init lvl", playerData.LVL);
         Messenger.Broadcast<int>("init hp", playerData.HP);
         Messenger.Broadcast<int>("init ac", playerData.AC);
-        Messenger.Broadcast<GameObject>("init weapon title", playerData.sword);
+
+        Messenger.Broadcast<int>("init xp", playerData.XP);
+        Messenger.Broadcast<GameObject, GameObject, GameObject>
+            ("init weapons", playerData.equippedWeapon, playerData.leftWeapon, playerData.rightWeapon);
     }
 
     void OnPrizeCollected(int worth)

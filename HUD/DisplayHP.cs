@@ -11,12 +11,6 @@ public class DisplayHP : BaseBehaviour
     private int intToDisplay;
     private string legend = "HP: ";
 
-    void Start()
-    {
-        textComponent = gameObject.GetComponent<Text>();
-        textComponent.DOKill();
-    }
-
     void FadeInText()
     {
         // fade to zero instantly, then fade up slowly
@@ -26,7 +20,9 @@ public class DisplayHP : BaseBehaviour
 
     void OnInitInteger(int initInt)
     {
+        textComponent = gameObject.GetComponent<Text>();
         textComponent.text = legend + initInt.ToString();
+        textComponent.DOKill();
         FadeInText();
     }
 

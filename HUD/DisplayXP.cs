@@ -11,12 +11,6 @@ public class DisplayXP : BaseBehaviour
     private int intToDisplay;
     private string legend = "XP: ";
 
-    void Start()
-    {
-        textComponent = gameObject.GetComponent<Text>();
-        textComponent.DOKill();
-    }
-
     void FadeInText()
     {
         // fade to zero instantly, then fade up slowly
@@ -26,7 +20,9 @@ public class DisplayXP : BaseBehaviour
 
     void OnInitInteger(int initInt)
     {
+        textComponent = gameObject.GetComponent<Text>();
         textComponent.text = legend + initInt.ToString();
+        textComponent.DOKill();
         FadeInText();
     }
 
