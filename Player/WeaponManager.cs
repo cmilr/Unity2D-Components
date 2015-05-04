@@ -29,11 +29,11 @@ public class WeaponManager : CacheBehaviour {
         weapon3 = rWeapon;
 
         // keep track of weapons as they're equipped/stashed
-        equippedWeapon = eWeapon;
-        leftWeapon     = lWeapon;
-        rightWeapon    = rWeapon;
+        equippedWeapon = weapon1;
+        leftWeapon     = weapon2;
+        rightWeapon    = weapon3;
 
-        // cache specific weapon components (Sword, etc) via parent class Weapon
+        // cache specific weapon components (Sword, etc) via parent class 'Weapon'
         equippedComp   = equippedWeapon.GetComponent<Weapon>();
         leftComp       = leftWeapon.GetComponent<Weapon>();
         rightComp      = rightWeapon.GetComponent<Weapon>();

@@ -9,12 +9,6 @@ public class DisplayWeaponTitle : BaseBehaviour
 {
     private Text textComponent;
 
-    void Start()
-    {
-        textComponent = gameObject.GetComponent<Text>();
-        textComponent.DOKill();
-    }
-
     void FadeInText()
     {
         // fade to zero instantly, then fade up slowly
@@ -24,7 +18,9 @@ public class DisplayWeaponTitle : BaseBehaviour
 
     void OnInitEquippedWeapon(GameObject weapon)
     {
+        textComponent = gameObject.GetComponent<Text>();
         textComponent.text = weapon.GetComponent<Weapon>().title;
+        textComponent.DOKill();
         FadeInText();
     }
 

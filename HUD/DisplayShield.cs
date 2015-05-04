@@ -20,7 +20,7 @@ public class DisplayShield : CacheBehaviour
         HUDShield.DOKill();
         FadeInShield();
 
-        Invoke("PositionHUDElements", .01f);
+        PositionHUDElements();
     }
 
     void PositionHUDElements()

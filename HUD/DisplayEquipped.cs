@@ -12,11 +12,8 @@ public class DisplayEquipped : CacheBehaviour
 
     void Start()
     {
-        mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-        HUDWeapon = spriteRenderer;
-        HUDWeapon.DOKill();
-
-        Invoke("PositionHUDElements", .01f);
+        mainCamera = Camera.main.GetComponent<Camera>();
+        PositionHUDElements();
     }
 
     void PositionHUDElements()
@@ -29,7 +26,9 @@ public class DisplayEquipped : CacheBehaviour
 
     void OnInitEquippedWeapon(GameObject weapon)
     {
+        HUDWeapon = spriteRenderer;
         HUDWeapon.sprite = weapon.GetComponent<Weapon>().sprite;
+        HUDWeapon.DOKill();
         FadeInWeapon();
     }
 

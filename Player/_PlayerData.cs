@@ -28,7 +28,7 @@ public class _PlayerData : BaseBehaviour {
 		Character      = "LAURA";
 		HP             = 25;
 		AC             = 4;
-		XP             = 0;
+		XP             = 875;
 		LVL            = 1;
 		equippedWeapon = GameObject.Find("Player/WeaponManager/Slot1/Weapon");
 		leftWeapon     = GameObject.Find("Player/WeaponManager/Slot2/Weapon");

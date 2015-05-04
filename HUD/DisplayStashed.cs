@@ -13,11 +13,8 @@ public class DisplayStashed : CacheBehaviour
 
     void Start()
     {
-        mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-        HUDWeapon = spriteRenderer;
-        HUDWeapon.DOKill();
-
-        Invoke("PositionHUDElements", .01f);
+        mainCamera = Camera.main.GetComponent<Camera>();
+        Invoke("PositionHUDElements", .001f);
         // HUDWeapon.color = new Color (1f, 1f, 1f, .3f);
     }
 
@@ -34,7 +31,9 @@ public class DisplayStashed : CacheBehaviour
 
     void InitStashedWeapon(GameObject weapon)
     {
+        HUDWeapon = spriteRenderer;
         HUDWeapon.sprite = weapon.GetComponent<Weapon>().sprite;
+        HUDWeapon.DOKill();
         FadeInWeapon();
     }
 
@@ -57,13 +56,16 @@ public class DisplayStashed : CacheBehaviour
 
     void OnInitStashedWeaponLeft(GameObject weapon)
     {
-        if (name == "StashedWeapon_L") { InitStashedWeapon(weapon); };
+        if (name == "StashedWeapon_L")
+            InitStashedWeapon(weapon);
     }
 
     void OnInitStashedWeaponRight(GameObject weapon)
     {
-        if (name == "StashedWeapon_R") { InitStashedWeapon(weapon); };
+        if (name == "StashedWeapon_R")
+            InitStashedWeapon(weapon);
     }
+
     void OnEnable()
     {
         Messenger.AddListener<GameObject>("init stashed weapon left", OnInitStashedWeaponLeft);

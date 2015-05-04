@@ -15,11 +15,9 @@ public class PlayerManager : BaseBehaviour
 
     void Init()
     {
-
         Messenger.Broadcast<int>("init lvl", playerData.LVL);
         Messenger.Broadcast<int>("init hp", playerData.HP);
         Messenger.Broadcast<int>("init ac", playerData.AC);
-
         Messenger.Broadcast<int>("init xp", playerData.XP);
         Messenger.Broadcast<GameObject, GameObject, GameObject>
             ("init weapons", playerData.equippedWeapon, playerData.leftWeapon, playerData.rightWeapon);

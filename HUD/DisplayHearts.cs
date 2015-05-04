@@ -15,14 +15,14 @@ public class DisplayHearts : CacheBehaviour
 
     void Start()
     {
-        mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+        mainCamera = Camera.main.GetComponent<Camera>();
 
         HUDHearts = spriteRenderer;
         HUDHearts.sprite = threeHearts;
         HUDHearts.DOKill();
         FadeInShield();
 
-        Invoke("PositionHUDElements", .01f);
+        Invoke("PositionHUDElements", .001f);
     }
 
     void PositionHUDElements()
