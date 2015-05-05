@@ -18,6 +18,8 @@ public class ImageEffectsHandler : CacheBehaviour
 
     void OnPlayerAboveGround(bool aboveGround)
     {
+        // uses the DOTween.To routine, which allows us to call a function of our choosing multiple times,
+        // providing it a starting and ending value, and a time over which to tween between those values
         if (aboveGround)
             DOTween.To(AdjustSunShaftIntensity,
                 shaftIntensityBelowGround,
