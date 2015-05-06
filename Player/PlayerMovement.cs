@@ -49,10 +49,21 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	// set animations depending on which character is chosen
 	void SetCharacterAnimations(string character)
 	{
-		idleAnimation = character + "_Idle";
-		runAnimation = character + "_Run";
-		jumpAnimation = character + "_Jump";
-		swingAnimation = character + "_Swing";
+		// uses string literals over concatenation in order to reduce GC calls
+		if (character == "LAURA")
+		{
+		    idleAnimation = "LAURA_Idle";
+		    runAnimation = "LAURA_Run";
+		    jumpAnimation = "LAURA_Jump";
+		    swingAnimation = "LAURA_Swing";
+		}
+		else
+		{
+		    idleAnimation = "MAC_Idle";
+		    runAnimation = "MAC_Run";
+		    jumpAnimation = "MAC_Jump";
+		    swingAnimation = "MAC_Swing";
+		}
 	}
 
 	// input methods required by ICreatureController

@@ -7,18 +7,31 @@ public class ArmAnimation : AnimationBehaviour, IPlayerAnimation {
     private string runAnimation;
     private string jumpAnimation;
     private string swingAnimation;
+    private IPlayerStateFullAccess state;
 
     void Start ()
     {
-        SetAnimations();
+        state = GameObject.Find(PLAYER).GetComponent<IPlayerStateFullAccess>();
+        SetAnimations(state.Character);
     }
 
-    void SetAnimations()
+    void SetAnimations(string character)
     {
-        idleAnimation = character + "_ARM_Idle";
-        runAnimation = character + "_ARM_Run";
-        jumpAnimation = character + "_ARM_Jump";
-        swingAnimation = character + "_ARM_Swing";
+        // uses string literals over concatenation in order to reduce GC calls
+        if (character == "LAURA")
+        {
+            idleAnimation = "LAURA_ARM_Idle";
+            runAnimation = "LAURA_ARM_Run";
+            jumpAnimation = "LAURA_ARM_Jump";
+            swingAnimation = "LAURA_ARM_Swing";
+        }
+        else
+        {
+            idleAnimation = "MAC_ARM_Idle";
+            runAnimation = "MAC_ARM_Run";
+            jumpAnimation = "MAC_ARM_Jump";
+            swingAnimation = "MAC_ARM_Swing";
+        }
     }
 
     public void PlayIdleAnimation(float xOffset, float yOffset)
