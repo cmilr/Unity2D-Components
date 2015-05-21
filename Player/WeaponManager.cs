@@ -3,15 +3,20 @@ using System.Collections;
 
 public class WeaponManager : CacheBehaviour {
 
-    private GameObject equippedWeapon;
-    private GameObject leftWeapon;
-    private GameObject rightWeapon;
-    private GameObject tempWeapon;
+    // private GameObject equippedWeapon;
+    // private GameObject leftWeapon;
+    // private GameObject rightWeapon;
+    // private GameObject tempWeapon;
 
     private Weapon equippedWeaponComponent;
     private Weapon leftWeaponComponent;
     private Weapon rightWeaponComponent;
     private ArmAnimation arm;
+
+    private GameObject[] weaponBelt;
+    private int left = 0;
+    private int equipped = 1;
+    private int right = 2;
 
     void Start()
     {
@@ -24,18 +29,20 @@ public class WeaponManager : CacheBehaviour {
         // WEAPON GAMEOBJECTS
         // ~~~~~~~~~~~~~~~~~~
         // keep track of weapon GameObjects as they're equipped/stashed
-        equippedWeapon = eWeapon;
-        leftWeapon     = lWeapon;
-        rightWeapon    = rWeapon;
-        tempWeapon     = rWeapon;
+        if(weaponBelt == null)
+            weaponBelt = new GameObject[3];
+
+        weaponBelt[left]     = lWeapon;
+        weaponBelt[equipped] = eWeapon;
+        weaponBelt[right]    = rWeapon;
 
 
         // WEAPON GAMEOBJECT'S 'WEAPON' COMPONENT
         // ~~~~~~~~~~~~~~~~~~~~~~~~
         // cache specific weapons (Sword, Hammer, etc) via parent class 'Weapon'
-        equippedWeaponComponent   = equippedWeapon.GetComponent<Weapon>();
-        leftWeaponComponent       = leftWeapon.GetComponent<Weapon>();
-        rightWeaponComponent      = rightWeapon.GetComponent<Weapon>();
+        leftWeaponComponent       = weaponBelt[left].GetComponent<Weapon>();
+        equippedWeaponComponent   = weaponBelt[equipped].GetComponent<Weapon>();
+        rightWeaponComponent      = weaponBelt[right].GetComponent<Weapon>();
 
 
         // disable animations for weapons that are not equipped
@@ -48,9 +55,9 @@ public class WeaponManager : CacheBehaviour {
 
     void PassWeaponObjectsToHUD()
     {
-        Messenger.Broadcast<GameObject>("init equipped weapon", equippedWeapon);
-        Messenger.Broadcast<GameObject>("init stashed weapon left", leftWeapon);
-        Messenger.Broadcast<GameObject>("init stashed weapon right", rightWeapon);
+        Messenger.Broadcast<GameObject>("init stashed weapon left", weaponBelt[left]);
+        Messenger.Broadcast<GameObject>("init equipped weapon", weaponBelt[equipped]);
+        Messenger.Broadcast<GameObject>("init stashed weapon right", weaponBelt[right]);
     }
 
     // mix & match animations for various activity states
