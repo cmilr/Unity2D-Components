@@ -3,11 +3,6 @@ using System.Collections;
 
 public class WeaponManager : CacheBehaviour {
 
-    // private GameObject equippedWeapon;
-    // private GameObject leftWeapon;
-    // private GameObject rightWeapon;
-    // private GameObject tempWeapon;
-
     private Weapon equippedWeaponComponent;
     private Weapon leftWeaponComponent;
     private Weapon rightWeaponComponent;
@@ -25,7 +20,6 @@ public class WeaponManager : CacheBehaviour {
 
     void OnInitWeapons(GameObject eWeapon, GameObject lWeapon, GameObject rWeapon)
     {
-
         // WEAPON GAMEOBJECTS
         // ~~~~~~~~~~~~~~~~~~
         // keep track of weapon GameObjects as they're equipped/stashed
