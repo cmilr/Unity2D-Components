@@ -30,7 +30,7 @@ public class WeaponManager : CacheBehaviour {
         tempWeapon     = rWeapon;
 
 
-        // PLAYER WEAPON ANIMATIONS
+        // WEAPON GAMEOBJECT'S 'WEAPON' COMPONENT
         // ~~~~~~~~~~~~~~~~~~~~~~~~
         // cache specific weapons (Sword, Hammer, etc) via parent class 'Weapon'
         equippedWeaponComponent   = equippedWeapon.GetComponent<Weapon>();
