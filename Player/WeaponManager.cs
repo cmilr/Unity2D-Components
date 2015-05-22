@@ -30,7 +30,45 @@ public class WeaponManager : CacheBehaviour {
         weaponBelt[equipped] = eWeapon;
         weaponBelt[right]    = rWeapon;
 
+        CacheAndSetupWeapons();
+        PassInitialWeaponsToHUD();
+    }
 
+    void OnSwitchWeapon(int shiftDirection)
+    {
+        switch (equipped)
+        {
+            case 0:
+            {
+                left = 1;
+                equipped = 2;
+                right = 0;
+                break;
+            }
+
+            case 1:
+            {
+                left = 2;
+                equipped = 0;
+                right = 1;
+                break;
+            }
+
+            case 2:
+            {
+                left = 0;
+                equipped = 1;
+                right = 2;
+                break;
+            }
+        }
+
+        CacheAndSetupWeapons();
+        PassNewWeaponsToHUD();
+    }
+
+    void CacheAndSetupWeapons()
+    {
         // WEAPON GAMEOBJECT'S 'WEAPON' COMPONENT
         // ~~~~~~~~~~~~~~~~~~~~~~~~
         // cache specific weapons (Sword, Hammer, etc) via parent class 'Weapon'
@@ -39,20 +77,24 @@ public class WeaponManager : CacheBehaviour {
         equippedWeaponComponent   = weaponBelt[equipped].GetComponent<Weapon>();
         rightWeaponComponent      = weaponBelt[right].GetComponent<Weapon>();
 
-
         // disable animations for weapons that are not equipped
         leftWeaponComponent.EnableAnimation(false);
+        equippedWeaponComponent.EnableAnimation(true);
         rightWeaponComponent.EnableAnimation(false);
-
-
-        PassWeaponObjectsToHUD();
     }
 
-    void PassWeaponObjectsToHUD()
+    void PassInitialWeaponsToHUD()
     {
         Messenger.Broadcast<GameObject>("init stashed weapon left", weaponBelt[left]);
         Messenger.Broadcast<GameObject>("init equipped weapon", weaponBelt[equipped]);
         Messenger.Broadcast<GameObject>("init stashed weapon right", weaponBelt[right]);
+    }
+
+    void PassNewWeaponsToHUD()
+    {
+        Messenger.Broadcast<GameObject>("new stashed weapon left", weaponBelt[left]);
+        Messenger.Broadcast<GameObject>("new equipped weapon", weaponBelt[equipped]);
+        Messenger.Broadcast<GameObject>("new stashed weapon right", weaponBelt[right]);
     }
 
     // mix & match animations for various activity states
@@ -120,12 +162,12 @@ public class WeaponManager : CacheBehaviour {
     void OnEnable()
     {
         Messenger.AddListener<GameObject, GameObject, GameObject>( "init weapons", OnInitWeapons);
-        // Messenger.AddListener<int>( "switch weapon", OnSwitchWeapon);
+        Messenger.AddListener<int>( "switch weapon", OnSwitchWeapon);
     }
 
     void OnDestroy()
     {
         Messenger.RemoveListener<GameObject, GameObject, GameObject>( "init weapons", OnInitWeapons);
-        // Messenger.RemoveListener<int>( "switch weapon", OnSwitchWeapon);
+        Messenger.RemoveListener<int>( "switch weapon", OnSwitchWeapon);
     }
 }

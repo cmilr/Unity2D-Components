@@ -37,6 +37,14 @@ public class DisplayStashed : CacheBehaviour
         FadeInWeapon();
     }
 
+    void NewStashedWeapon(GameObject weapon)
+    {
+        HUDWeapon = spriteRenderer;
+        HUDWeapon.sprite = weapon.GetComponent<Weapon>().sprite;
+        HUDWeapon.DOKill();
+        MTween.FadeIn(HUDWeapon, HUD_STASHED_TRANSPARENCY, 0f, 0f);
+    }
+
     void FadeInWeapon()
     {
         // fade weapon to zero instantly, then fade up slowly
@@ -66,10 +74,24 @@ public class DisplayStashed : CacheBehaviour
             InitStashedWeapon(weapon);
     }
 
+    void OnNewStashedWeaponLeft(GameObject weapon)
+    {
+        if (name == "StashedWeapon_L")
+            NewStashedWeapon(weapon);
+    }
+
+    void OnNewStashedWeaponRight(GameObject weapon)
+    {
+        if (name == "StashedWeapon_R")
+            NewStashedWeapon(weapon);
+    }
+
     void OnEnable()
     {
         Messenger.AddListener<GameObject>("init stashed weapon left", OnInitStashedWeaponLeft);
         Messenger.AddListener<GameObject>("init stashed weapon right", OnInitStashedWeaponRight);
+        Messenger.AddListener<GameObject>("new stashed weapon left", OnNewStashedWeaponLeft);
+        Messenger.AddListener<GameObject>("new stashed weapon right", OnNewStashedWeaponRight);
         Messenger.AddListener<bool>("fade hud", OnFadeHud);
         Messenger.AddListener<float, float>( "screen size changed", OnScreenSizeChanged);
     }
@@ -78,6 +100,8 @@ public class DisplayStashed : CacheBehaviour
     {
         Messenger.RemoveListener<GameObject>("init stashed weapon left", OnInitStashedWeaponLeft);
         Messenger.RemoveListener<GameObject>("init stashed weapon right", OnInitStashedWeaponRight);
+        Messenger.RemoveListener<GameObject>("new stashed weapon left", OnNewStashedWeaponLeft);
+        Messenger.RemoveListener<GameObject>("new stashed weapon right", OnNewStashedWeaponRight);
         Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
         Messenger.RemoveListener<float, float>( "screen size changed", OnScreenSizeChanged);
     }

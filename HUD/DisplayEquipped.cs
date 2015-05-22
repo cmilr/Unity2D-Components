@@ -32,6 +32,14 @@ public class DisplayEquipped : CacheBehaviour
         FadeInWeapon();
     }
 
+    void OnNewEquippedWeapon(GameObject weapon)
+    {
+        HUDWeapon = spriteRenderer;
+        HUDWeapon.sprite = weapon.GetComponent<Weapon>().sprite;
+        HUDWeapon.DOKill();
+        MTween.FadeIn(HUDWeapon, 1f, 0f, 0f);
+    }
+
     void FadeInWeapon()
     {
         // fade weapon to zero instantly, then fade up slowly
@@ -52,6 +60,7 @@ public class DisplayEquipped : CacheBehaviour
     void OnEnable()
     {
         Messenger.AddListener<GameObject>("init equipped weapon", OnInitEquippedWeapon);
+        Messenger.AddListener<GameObject>("new equipped weapon", OnNewEquippedWeapon);
         Messenger.AddListener<bool>("fade hud", OnFadeHud);
         Messenger.AddListener<float, float>( "screen size changed", OnScreenSizeChanged);
     }
@@ -59,6 +68,7 @@ public class DisplayEquipped : CacheBehaviour
     void OnDestroy()
     {
         Messenger.RemoveListener<GameObject>("init equipped weapon", OnInitEquippedWeapon);
+        Messenger.RemoveListener<GameObject>("new equipped weapon", OnNewEquippedWeapon);
         Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
         Messenger.RemoveListener<float, float>( "screen size changed", OnScreenSizeChanged);
     }
