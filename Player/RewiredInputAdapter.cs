@@ -31,5 +31,11 @@ public class RewiredInputAdapter : BaseBehaviour {
 
         if (playerControls.GetButton("Attack"))
             creature.Attack();
+
+        if (playerControls.GetButtonDown("Weapon Shift Right"))
+            Debug.Log("Shift weapon to right.");
+
+        if (playerControls.GetButtonDown("Weapon Shift Left"))
+            Debug.Log("Shift weapon to left.");
     }
 }

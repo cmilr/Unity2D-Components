@@ -3,15 +3,15 @@ using System.Collections;
 
 public class WeaponManager : CacheBehaviour {
 
+    private ArmAnimation arm;
     private Weapon equippedWeaponComponent;
     private Weapon leftWeaponComponent;
     private Weapon rightWeaponComponent;
-    private ArmAnimation arm;
 
-    private GameObject[] weaponBelt;
     private int left = 0;
     private int equipped = 1;
     private int right = 2;
+    private GameObject[] weaponBelt;
 
     void Start()
     {
@@ -34,6 +34,7 @@ public class WeaponManager : CacheBehaviour {
         // WEAPON GAMEOBJECT'S 'WEAPON' COMPONENT
         // ~~~~~~~~~~~~~~~~~~~~~~~~
         // cache specific weapons (Sword, Hammer, etc) via parent class 'Weapon'
+        // use to call currently equipped weapon animations
         leftWeaponComponent       = weaponBelt[left].GetComponent<Weapon>();
         equippedWeaponComponent   = weaponBelt[equipped].GetComponent<Weapon>();
         rightWeaponComponent      = weaponBelt[right].GetComponent<Weapon>();
@@ -119,10 +120,12 @@ public class WeaponManager : CacheBehaviour {
     void OnEnable()
     {
         Messenger.AddListener<GameObject, GameObject, GameObject>( "init weapons", OnInitWeapons);
+        // Messenger.AddListener<int>( "switch weapon", OnSwitchWeapon);
     }
 
     void OnDestroy()
     {
         Messenger.RemoveListener<GameObject, GameObject, GameObject>( "init weapons", OnInitWeapons);
+        // Messenger.RemoveListener<int>( "switch weapon", OnSwitchWeapon);
     }
 }
