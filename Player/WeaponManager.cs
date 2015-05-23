@@ -3,6 +3,17 @@ using System.Collections;
 
 public class WeaponManager : CacheBehaviour {
 
+<<<<<<< HEAD
+=======
+    private GameObject equippedWeapon;
+    private GameObject leftWeapon;
+    private GameObject rightWeapon;
+    private GameObject tempWeapon;
+
+    private Weapon equippedWeaponComponent;
+    private Weapon leftWeaponComponent;
+    private Weapon rightWeaponComponent;
+>>>>>>> origin/master
     private ArmAnimation arm;
     private Weapon equippedWeaponComponent;
     private Weapon leftWeaponComponent;
@@ -20,6 +31,7 @@ public class WeaponManager : CacheBehaviour {
 
     void OnInitWeapons(GameObject eWeapon, GameObject lWeapon, GameObject rWeapon)
     {
+<<<<<<< HEAD
         // WEAPON GAMEOBJECTS
         // ~~~~~~~~~~~~~~~~~~
         // keep track of weapon GameObjects as they're equipped/stashed
@@ -82,6 +94,30 @@ public class WeaponManager : CacheBehaviour {
         equippedWeaponComponent.EnableAnimation(true);
         rightWeaponComponent.EnableAnimation(false);
     }
+=======
+
+        // WEAPON GAMEOBJECTS
+        // ~~~~~~~~~~~~~~~~~~
+        // keep track of weapon GameObjects as they're equipped/stashed
+        equippedWeapon = eWeapon;
+        leftWeapon     = lWeapon;
+        rightWeapon    = rWeapon;
+        tempWeapon     = rWeapon;
+
+
+        // PLAYER WEAPON ANIMATIONS
+        // ~~~~~~~~~~~~~~~~~~~~~~~~
+        // cache specific weapons (Sword, Hammer, etc) via parent class 'Weapon'
+        equippedWeaponComponent   = equippedWeapon.GetComponent<Weapon>();
+        leftWeaponComponent       = leftWeapon.GetComponent<Weapon>();
+        rightWeaponComponent      = rightWeapon.GetComponent<Weapon>();
+
+
+        // disable animations for weapons that are not equipped
+        leftWeaponComponent.EnableAnimation(false);
+        rightWeaponComponent.EnableAnimation(false);
+
+>>>>>>> origin/master
 
     void PassInitialWeaponsToHUD()
     {

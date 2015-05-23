@@ -30,9 +30,15 @@ public class _PlayerData : BaseBehaviour {
 		AC             = 4;
 		XP             = 875;
 		LVL            = 1;
+<<<<<<< HEAD
 		equippedWeapon = GameObject.Find("Player/Inventory/DefaultSword");
 		leftWeapon     = GameObject.Find("Player/Inventory/DefaultDagger");
 		rightWeapon    = GameObject.Find("Player/Inventory/DefaultHammer");
+=======
+		equippedWeapon = GameObject.Find("Player/WeaponManager/EquippedSlot/Weapon");
+		leftWeapon     = GameObject.Find("Player/WeaponManager/LeftSlot/Weapon");
+		rightWeapon    = GameObject.Find("Player/WeaponManager/RightSlot/Weapon");
+>>>>>>> origin/master
 	}
 
 	public void Save()
