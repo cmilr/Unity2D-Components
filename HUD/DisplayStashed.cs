@@ -7,9 +7,25 @@ using Matcha.Game.Tweens;
 
 public class DisplayStashed : CacheBehaviour
 {
+    private int hudSide;
     private float offset;
     private Camera mainCamera;
     private SpriteRenderer HUDWeapon;
+
+    void Awake()
+    {
+        // check which HUD side this is, and set paramaters accordingly
+        if (name == "RightWeapon")
+        {
+            hudSide = RIGHT;
+            offset  = HUD_STASHED_WEAPON_OFFSET;
+        }
+        else if (name == "LeftWeapon")
+        {
+            hudSide = LEFT;
+            offset  = -HUD_STASHED_WEAPON_OFFSET;
+        }
+    }
 
     void Start()
     {
@@ -20,9 +36,7 @@ public class DisplayStashed : CacheBehaviour
 
     void PositionHUDElements()
     {
-        // shift to left or right, depending on name of GameObject
-        offset = (name == "StashedWeapon_L") ? -HUD_STASHED_WEAPON_OFFSET : HUD_STASHED_WEAPON_OFFSET;
-
+        // shift to left or right, depending on which GameObject this is attached to
         transform.position = mainCamera.ScreenToWorldPoint(new Vector3(
             Screen.width / 2 + offset,
             Screen.height - HUD_WEAPON_TOP_MARGIN,
@@ -63,46 +77,30 @@ public class DisplayStashed : CacheBehaviour
         PositionHUDElements();
     }
 
-    void OnInitStashedWeaponLeft(GameObject weapon)
+    void OnInitStashedWeapon(GameObject weapon, int weaponSide)
     {
-        if (name == "StashedWeapon_L")
+        if (weaponSide == hudSide)
             InitStashedWeapon(weapon);
     }
 
-    void OnInitStashedWeaponRight(GameObject weapon)
+    void OnChangeStashedWeapon(GameObject weapon, int weaponSide)
     {
-        if (name == "StashedWeapon_R")
-            InitStashedWeapon(weapon);
-    }
-
-    void OnChangeStashedWeaponLeft(GameObject weapon)
-    {
-        if (name == "StashedWeapon_L")
-            ChangeStashedWeapon(weapon);
-    }
-
-    void OnChangeStashedWeaponRight(GameObject weapon)
-    {
-        if (name == "StashedWeapon_R")
+        if (weaponSide == hudSide)
             ChangeStashedWeapon(weapon);
     }
 
     void OnEnable()
     {
-        Messenger.AddListener<GameObject>("init stashed weapon left", OnInitStashedWeaponLeft);
-        Messenger.AddListener<GameObject>("init stashed weapon right", OnInitStashedWeaponRight);
-        Messenger.AddListener<GameObject>("change stashed weapon left", OnChangeStashedWeaponLeft);
-        Messenger.AddListener<GameObject>("change stashed weapon right", OnChangeStashedWeaponRight);
+        Messenger.AddListener<GameObject, int>("init stashed weapon", OnInitStashedWeapon);
+        Messenger.AddListener<GameObject, int>("change stashed weapon", OnChangeStashedWeapon);
         Messenger.AddListener<bool>("fade hud", OnFadeHud);
         Messenger.AddListener<float, float>( "screen size changed", OnScreenSizeChanged);
     }
 
     void OnDestroy()
     {
-        Messenger.RemoveListener<GameObject>("init stashed weapon left", OnInitStashedWeaponLeft);
-        Messenger.RemoveListener<GameObject>("init stashed weapon right", OnInitStashedWeaponRight);
-        Messenger.RemoveListener<GameObject>("change stashed weapon left", OnChangeStashedWeaponLeft);
-        Messenger.RemoveListener<GameObject>("change stashed weapon right", OnChangeStashedWeaponRight);
+        Messenger.RemoveListener<GameObject, int>("init stashed weapon", OnInitStashedWeapon);
+        Messenger.RemoveListener<GameObject, int>("change stashed weapon", OnChangeStashedWeapon);
         Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
         Messenger.RemoveListener<float, float>( "screen size changed", OnScreenSizeChanged);
     }
