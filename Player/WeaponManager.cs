@@ -3,18 +3,15 @@ using System.Collections;
 
 public class WeaponManager : CacheBehaviour {
 
-    private GameObject weapon1;
-    private GameObject weapon2;
-    private GameObject weapon3;
-
-    private GameObject equippedWeapon;
-    private GameObject leftWeapon;
-    private GameObject rightWeapon;
-
-    private Weapon equippedComp;
-    private Weapon leftComp;
-    private Weapon rightComp;
     private ArmAnimation arm;
+    private Weapon equippedWeaponComponent;
+    private Weapon leftWeaponComponent;
+    private Weapon rightWeaponComponent;
+
+    private int left = 0;
+    private int equipped = 1;
+    private int right = 2;
+    private GameObject[] weaponBelt;
 
     void Start()
     {
@@ -23,33 +20,81 @@ public class WeaponManager : CacheBehaviour {
 
     void OnInitWeapons(GameObject eWeapon, GameObject lWeapon, GameObject rWeapon)
     {
-        // keep track of weapons via their permanent slots
-        weapon1 = eWeapon;
-        weapon2 = lWeapon;
-        weapon3 = rWeapon;
+        // WEAPON GAMEOBJECTS
+        // ~~~~~~~~~~~~~~~~~~
+        // keep track of weapon GameObjects as they're equipped/stashed
+        if(weaponBelt == null)
+            weaponBelt = new GameObject[3];
 
-        // keep track of weapons as they're equipped/stashed
-        equippedWeapon = weapon1;
-        leftWeapon     = weapon2;
-        rightWeapon    = weapon3;
+        weaponBelt[left]     = lWeapon;
+        weaponBelt[equipped] = eWeapon;
+        weaponBelt[right]    = rWeapon;
 
-        // cache specific weapon components (Sword, etc) via parent class 'Weapon'
-        equippedComp   = equippedWeapon.GetComponent<Weapon>();
-        leftComp       = leftWeapon.GetComponent<Weapon>();
-        rightComp      = rightWeapon.GetComponent<Weapon>();
-
-        // disable animations for weapons that are not equipped
-        leftComp.EnableAnimation(false);
-        rightComp.EnableAnimation(false);
-
-        PassWeaponObjectsToHUD();
+        CacheAndSetupWeapons();
+        PassInitialWeaponsToHUD();
     }
 
-    void PassWeaponObjectsToHUD()
+    void OnSwitchWeapon(int shiftDirection)
     {
-        Messenger.Broadcast<GameObject>("init equipped weapon", equippedWeapon);
-        Messenger.Broadcast<GameObject>("init stashed weapon left", leftWeapon);
-        Messenger.Broadcast<GameObject>("init stashed weapon right", rightWeapon);
+        switch (equipped)
+        {
+            case 0:
+            {
+                left = 1;
+                equipped = 2;
+                right = 0;
+                break;
+            }
+
+            case 1:
+            {
+                left = 2;
+                equipped = 0;
+                right = 1;
+                break;
+            }
+
+            case 2:
+            {
+                left = 0;
+                equipped = 1;
+                right = 2;
+                break;
+            }
+        }
+
+        CacheAndSetupWeapons();
+        PassNewWeaponsToHUD();
+    }
+
+    void CacheAndSetupWeapons()
+    {
+        // WEAPON GAMEOBJECT'S 'WEAPON' COMPONENT
+        // ~~~~~~~~~~~~~~~~~~~~~~~~
+        // cache specific weapons (Sword, Hammer, etc) via parent class 'Weapon'
+        // use to call currently equipped weapon animations
+        leftWeaponComponent       = weaponBelt[left].GetComponent<Weapon>();
+        equippedWeaponComponent   = weaponBelt[equipped].GetComponent<Weapon>();
+        rightWeaponComponent      = weaponBelt[right].GetComponent<Weapon>();
+
+        // disable animations for weapons that are not equipped
+        leftWeaponComponent.EnableAnimation(false);
+        equippedWeaponComponent.EnableAnimation(true);
+        rightWeaponComponent.EnableAnimation(false);
+    }
+
+    void PassInitialWeaponsToHUD()
+    {
+        Messenger.Broadcast<GameObject, int>("init stashed weapon", weaponBelt[left], LEFT);
+        Messenger.Broadcast<GameObject>("init equipped weapon", weaponBelt[equipped]);
+        Messenger.Broadcast<GameObject, int>("init stashed weapon", weaponBelt[right], RIGHT);
+    }
+
+    void PassNewWeaponsToHUD()
+    {
+        Messenger.Broadcast<GameObject, int>("change stashed weapon", weaponBelt[left], LEFT);
+        Messenger.Broadcast<GameObject>("change equipped weapon", weaponBelt[equipped]);
+        Messenger.Broadcast<GameObject, int>("change stashed weapon", weaponBelt[right], RIGHT);
     }
 
     // mix & match animations for various activity states
@@ -59,49 +104,49 @@ public class WeaponManager : CacheBehaviour {
         {
             case IDLE:
             {
-                equippedComp.PlayIdleAnimation(0, 0);
+                equippedWeaponComponent.PlayIdleAnimation(0, 0);
                 arm.PlayIdleAnimation(0, 0);
                 break;
             }
 
             case RUN:
             {
-                equippedComp.PlayRunAnimation(0, 0);
+                equippedWeaponComponent.PlayRunAnimation(0, 0);
                 arm.PlayRunAnimation(0, 0);
                 break;
             }
 
             case JUMP:
             {
-                equippedComp.PlayJumpAnimation(0, 0);
+                equippedWeaponComponent.PlayJumpAnimation(0, 0);
                 arm.PlayJumpAnimation(0, 0);
                 break;
             }
 
             case FALL:
             {
-                equippedComp.PlayJumpAnimation(0, 0);
+                equippedWeaponComponent.PlayJumpAnimation(0, 0);
                 arm.PlayJumpAnimation(0, 0);
                 break;
             }
 
             case ATTACK:
             {
-                equippedComp.PlaySwingAnimation(0, 0);
+                equippedWeaponComponent.PlaySwingAnimation(0, 0);
                 arm.PlaySwingAnimation(0, 0);
                 break;
             }
 
             case RUN_ATTACK:
             {
-                equippedComp.PlaySwingAnimation(0, ONE_PIXEL);
+                equippedWeaponComponent.PlaySwingAnimation(0, ONE_PIXEL);
                 arm.PlaySwingAnimation(0, ONE_PIXEL);
                 break;
             }
 
             case JUMP_ATTACK:
             {
-                equippedComp.PlaySwingAnimation(0, ONE_PIXEL * 2);
+                equippedWeaponComponent.PlaySwingAnimation(0, ONE_PIXEL * 2);
                 arm.PlaySwingAnimation(0, ONE_PIXEL * 2);
                 break;
             }
@@ -117,10 +162,12 @@ public class WeaponManager : CacheBehaviour {
     void OnEnable()
     {
         Messenger.AddListener<GameObject, GameObject, GameObject>( "init weapons", OnInitWeapons);
+        Messenger.AddListener<int>( "switch weapon", OnSwitchWeapon);
     }
 
     void OnDestroy()
     {
         Messenger.RemoveListener<GameObject, GameObject, GameObject>( "init weapons", OnInitWeapons);
+        Messenger.RemoveListener<int>( "switch weapon", OnSwitchWeapon);
     }
 }

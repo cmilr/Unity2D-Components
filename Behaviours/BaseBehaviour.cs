@@ -12,13 +12,17 @@ using System.Collections;
 public class BaseBehaviour : MonoBehaviour {
 
     // global stuff
-    protected const float ONE_PIXEL                     = .03125f;
-    protected const float ONE_HUD_PIXEL                 = 5f;
-    protected const float ONE_COLLIDER_PIXEL            = .62f;
     protected const int TOP                             = 0;
     protected const int BOTTOM                          = 1;
     protected const int LEFT                            = 2;
     protected const int RIGHT                           = 3;
+    protected const int UP                              = 4;
+    protected const int DOWN                            = 5;
+
+    // global measurements
+    protected const float ONE_PIXEL                     = .03125f;
+    protected const float ONE_HUD_PIXEL                 = 5f;
+    protected const float ONE_COLLIDER_PIXEL            = .62f;
 
     // gameObject names
     protected const string PLAYER                       = "Player";
@@ -67,7 +71,8 @@ public class BaseBehaviour : MonoBehaviour {
     protected const float HUD_Z                         = 10f;
     protected const float HUD_FADE_IN_AFTER             = .75f;
     protected const float HUD_FADE_OUT_AFTER            = .25f;
-    protected const float HUD_TIME_TO_FADE              = 2f;
+    protected const float HUD_INITIAL_TIME_TO_FADE      = 2f;
+    protected const float HUD_WEAPON_CHANGE_FADE        = 0f;
 
 
     protected void Dbug()
