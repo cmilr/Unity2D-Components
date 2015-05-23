@@ -37,24 +37,25 @@ public class DisplayStashed : CacheBehaviour
         FadeInWeapon();
     }
 
-    void NewStashedWeapon(GameObject weapon)
+    void ChangeStashedWeapon(GameObject weapon)
     {
         HUDWeapon = spriteRenderer;
         HUDWeapon.sprite = weapon.GetComponent<Weapon>().sprite;
         HUDWeapon.DOKill();
-        MTween.FadeIn(HUDWeapon, HUD_STASHED_TRANSPARENCY, 0f, 0f);
+        MTween.FadeOut(HUDWeapon, 0, 0);
+        MTween.FadeIn(HUDWeapon, HUD_STASHED_TRANSPARENCY, 0f, HUD_WEAPON_CHANGE_FADE);
     }
 
     void FadeInWeapon()
     {
         // fade weapon to zero instantly, then fade up slowly
         MTween.FadeOut(HUDWeapon, 0, 0);
-        MTween.FadeIn(HUDWeapon, HUD_STASHED_TRANSPARENCY, HUD_FADE_IN_AFTER, HUD_TIME_TO_FADE);
+        MTween.FadeIn(HUDWeapon, HUD_STASHED_TRANSPARENCY, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
     }
 
     void OnFadeHud(bool status)
     {
-        MTween.FadeOut(HUDWeapon, HUD_FADE_OUT_AFTER, HUD_TIME_TO_FADE);
+        MTween.FadeOut(HUDWeapon, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE);
     }
 
     void OnScreenSizeChanged(float vExtent, float hExtent)
@@ -74,24 +75,24 @@ public class DisplayStashed : CacheBehaviour
             InitStashedWeapon(weapon);
     }
 
-    void OnNewStashedWeaponLeft(GameObject weapon)
+    void OnChangeStashedWeaponLeft(GameObject weapon)
     {
         if (name == "StashedWeapon_L")
-            NewStashedWeapon(weapon);
+            ChangeStashedWeapon(weapon);
     }
 
-    void OnNewStashedWeaponRight(GameObject weapon)
+    void OnChangeStashedWeaponRight(GameObject weapon)
     {
         if (name == "StashedWeapon_R")
-            NewStashedWeapon(weapon);
+            ChangeStashedWeapon(weapon);
     }
 
     void OnEnable()
     {
         Messenger.AddListener<GameObject>("init stashed weapon left", OnInitStashedWeaponLeft);
         Messenger.AddListener<GameObject>("init stashed weapon right", OnInitStashedWeaponRight);
-        Messenger.AddListener<GameObject>("new stashed weapon left", OnNewStashedWeaponLeft);
-        Messenger.AddListener<GameObject>("new stashed weapon right", OnNewStashedWeaponRight);
+        Messenger.AddListener<GameObject>("change stashed weapon left", OnChangeStashedWeaponLeft);
+        Messenger.AddListener<GameObject>("change stashed weapon right", OnChangeStashedWeaponRight);
         Messenger.AddListener<bool>("fade hud", OnFadeHud);
         Messenger.AddListener<float, float>( "screen size changed", OnScreenSizeChanged);
     }
@@ -100,8 +101,8 @@ public class DisplayStashed : CacheBehaviour
     {
         Messenger.RemoveListener<GameObject>("init stashed weapon left", OnInitStashedWeaponLeft);
         Messenger.RemoveListener<GameObject>("init stashed weapon right", OnInitStashedWeaponRight);
-        Messenger.RemoveListener<GameObject>("new stashed weapon left", OnNewStashedWeaponLeft);
-        Messenger.RemoveListener<GameObject>("new stashed weapon right", OnNewStashedWeaponRight);
+        Messenger.RemoveListener<GameObject>("change stashed weapon left", OnChangeStashedWeaponLeft);
+        Messenger.RemoveListener<GameObject>("change stashed weapon right", OnChangeStashedWeaponRight);
         Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
         Messenger.RemoveListener<float, float>( "screen size changed", OnScreenSizeChanged);
     }

@@ -92,9 +92,9 @@ public class WeaponManager : CacheBehaviour {
 
     void PassNewWeaponsToHUD()
     {
-        Messenger.Broadcast<GameObject>("new stashed weapon left", weaponBelt[left]);
-        Messenger.Broadcast<GameObject>("new equipped weapon", weaponBelt[equipped]);
-        Messenger.Broadcast<GameObject>("new stashed weapon right", weaponBelt[right]);
+        Messenger.Broadcast<GameObject>("change stashed weapon left", weaponBelt[left]);
+        Messenger.Broadcast<GameObject>("change equipped weapon", weaponBelt[equipped]);
+        Messenger.Broadcast<GameObject>("change stashed weapon right", weaponBelt[right]);
     }
 
     // mix & match animations for various activity states
