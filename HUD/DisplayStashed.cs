@@ -20,7 +20,7 @@ public class DisplayStashed : CacheBehaviour
             hudSide = RIGHT;
             offset  = HUD_STASHED_WEAPON_OFFSET;
         }
-        else if (name == "LeftWeapon")
+        else
         {
             hudSide = LEFT;
             offset  = -HUD_STASHED_WEAPON_OFFSET;
