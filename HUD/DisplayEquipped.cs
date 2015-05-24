@@ -9,6 +9,7 @@ public class DisplayEquipped : CacheBehaviour
 {
     private SpriteRenderer HUDWeapon;
     private Camera mainCamera;
+    private Vector3 hudPosition;
 
     void Start()
     {
@@ -22,6 +23,8 @@ public class DisplayEquipped : CacheBehaviour
             Screen.width / 2,
             Screen.height - HUD_WEAPON_TOP_MARGIN,
             HUD_Z));
+
+        hudPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z);
     }
 
     void OnInitEquippedWeapon(GameObject weapon)
@@ -37,8 +40,30 @@ public class DisplayEquipped : CacheBehaviour
         HUDWeapon = spriteRenderer;
         HUDWeapon.sprite = weapon.GetComponent<Weapon>().sprite;
         HUDWeapon.DOKill();
-        MTween.FadeOut(HUDWeapon, 0, 0);
-        MTween.FadeIn(HUDWeapon, 1f, 0f, HUD_WEAPON_CHANGE_FADE);
+
+        // upon receiving new weapon for the equipped slot, instantly relocate it back to its previous location,
+        // while setting opacity to that of a stashed weapon, then tween the image to the right, into the final
+        // equipped slot position, all while tweening the opacity back to 100%
+        MTween.FadeOut(HUDWeapon, HUD_STASHED_TRANSPARENCY, 0, 0);
+        MTween.FadeIn(HUDWeapon, 1f, 0f, .2f);
+
+        // shift weapon left, to roughly the position it was just in
+        transform.localPosition = new Vector3(
+            transform.localPosition.x -1.1f,
+            transform.localPosition.y,
+            transform.localPosition.z);
+
+        // tween weapon to new position
+        transform.DOLocalMove(new Vector3(
+            transform.localPosition.x + 1.1f,
+            transform.localPosition.y,
+            transform.localPosition.z), .1f, false).OnComplete(()=>SetFinalPosition());
+    }
+
+    void SetFinalPosition()
+    {
+        // set weapon into final position; fixes graphical bugs is operation gets interrupted by a new click
+        transform.localPosition = hudPosition;
     }
 
     void FadeInWeapon()

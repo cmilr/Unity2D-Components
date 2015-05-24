@@ -11,20 +11,13 @@ public class DisplayStashed : CacheBehaviour
     private float offset;
     private Camera mainCamera;
     private SpriteRenderer HUDWeapon;
+    private Vector3 hudPosition;
 
     void Awake()
     {
-        // check which HUD side this is, and set paramaters accordingly
-        if (name == "RightWeapon")
-        {
-            hudSide = RIGHT;
-            offset  = HUD_STASHED_WEAPON_OFFSET;
-        }
-        else
-        {
-            hudSide = LEFT;
-            offset  = -HUD_STASHED_WEAPON_OFFSET;
-        }
+        // determine which side of HUD this is attached to, and set paramaters accordingly
+        hudSide = (name == "RightWeapon") ? RIGHT : LEFT;
+        offset  = (hudSide == RIGHT) ? HUD_STASHED_WEAPON_OFFSET : -HUD_STASHED_WEAPON_OFFSET;
     }
 
     void Start()
@@ -36,11 +29,13 @@ public class DisplayStashed : CacheBehaviour
 
     void PositionHUDElements()
     {
-        // shift to left or right, depending on which GameObject this is attached to
+        // shift to left or right, depending on which side of HUD we're on
         transform.position = mainCamera.ScreenToWorldPoint(new Vector3(
             Screen.width / 2 + offset,
             Screen.height - HUD_WEAPON_TOP_MARGIN,
             HUD_Z));
+
+        hudPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z);
     }
 
     void InitStashedWeapon(GameObject weapon)
@@ -56,8 +51,38 @@ public class DisplayStashed : CacheBehaviour
         HUDWeapon = spriteRenderer;
         HUDWeapon.sprite = weapon.GetComponent<Weapon>().sprite;
         HUDWeapon.DOKill();
-        MTween.FadeOut(HUDWeapon, 0, 0);
-        MTween.FadeIn(HUDWeapon, HUD_STASHED_TRANSPARENCY, 0f, HUD_WEAPON_CHANGE_FADE);
+
+        if (hudSide == RIGHT)
+        {
+            // upon receiving new weapon for the right slot, instantly relocate it back to its previous location,
+            // while setting opacity to 100%, then tween the image to the right, into the final right slot position,
+            // all while tweening the transparency down to that of stashed weapons
+            MTween.FadeOut(HUDWeapon, 1f, 0, 0);
+            MTween.FadeIn(HUDWeapon, HUD_STASHED_TRANSPARENCY, 0f, .1f);
+
+            // shift weapon left, to roughly the position it was just in
+            transform.localPosition = new Vector3(
+                transform.localPosition.x -1.1f,
+                transform.localPosition.y,
+                transform.localPosition.z);
+
+            // tween weapon to new position
+            transform.DOLocalMove(new Vector3(
+                transform.localPosition.x + 1.1f,
+                transform.localPosition.y,
+                transform.localPosition.z), .1f, false).OnComplete(()=>SetFinalPosition());
+        }
+        else
+        {
+            MTween.FadeOut(HUDWeapon, 0, 0);
+            MTween.FadeIn(HUDWeapon, HUD_STASHED_TRANSPARENCY, 0f, .05f);
+        }
+    }
+
+    void SetFinalPosition()
+    {
+        // set weapon into final position; fixes graphical bugs is operation gets interrupted by a new click
+        transform.localPosition = hudPosition;
     }
 
     void FadeInWeapon()
