@@ -39,6 +39,7 @@ public class DisplayWeaponTitle : BaseBehaviour
     void OnEnable()
     {
         Messenger.AddListener<GameObject>("init equipped weapon", OnInitEquippedWeapon);
+        Messenger.AddListener<GameObject>("new equipped weapon", OnInitEquippedWeapon);
         // Messenger.AddListener<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
         Messenger.AddListener<bool>("fade hud", OnFadeHud);
     }
@@ -46,6 +47,7 @@ public class DisplayWeaponTitle : BaseBehaviour
     void OnDestroy()
     {
         Messenger.RemoveListener<GameObject>("init equipped weapon", OnInitEquippedWeapon);
+        Messenger.RemoveListener<GameObject>("new equipped weapon", OnInitEquippedWeapon);
         // Messenger.RemoveListener<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
         Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
     }
