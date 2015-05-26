@@ -62,13 +62,13 @@ public class DisplayStashed : CacheBehaviour
 
             // shift weapon left, to roughly the position it was just in
             transform.localPosition = new Vector3(
-                transform.localPosition.x -1.1f,
+                transform.localPosition.x -1.3281f,
                 transform.localPosition.y,
                 transform.localPosition.z);
 
             // tween weapon to new position
             transform.DOLocalMove(new Vector3(
-                transform.localPosition.x + 1.1f,
+                transform.localPosition.x + SPACE_BETWEEN_WEAPONS,
                 transform.localPosition.y,
                 transform.localPosition.z), .1f, false).OnComplete(()=>SetFinalPosition());
         }
