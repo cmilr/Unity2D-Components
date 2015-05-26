@@ -71,7 +71,8 @@ public class BaseBehaviour : MonoBehaviour {
     protected const float HUD_Z                         = 10f;
     protected const float HUD_FADE_IN_AFTER             = .75f;
     protected const float HUD_FADE_OUT_AFTER            = .25f;
-    protected const float HUD_TIME_TO_FADE              = 2f;
+    protected const float HUD_INITIAL_TIME_TO_FADE      = 2f;
+    protected const float HUD_WEAPON_CHANGE_FADE        = 0f;
 
 
     protected void Dbug()
