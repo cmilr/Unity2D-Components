@@ -4,6 +4,7 @@ using System.Collections;
 public class WeaponManager : CacheBehaviour {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     private GameObject equippedWeapon;
     private GameObject leftWeapon;
@@ -18,6 +19,12 @@ public class WeaponManager : CacheBehaviour {
     private Weapon equippedWeaponComponent;
     private Weapon leftWeaponComponent;
     private Weapon rightWeaponComponent;
+=======
+    private ArmAnimation arm;
+    private Weapon equippedWeaponComponent;
+    private Weapon leftWeaponComponent;
+    private Weapon rightWeaponComponent;
+>>>>>>> weapon-belt-exp
 
     private int left = 0;
     private int equipped = 1;
@@ -31,6 +38,7 @@ public class WeaponManager : CacheBehaviour {
 
     void OnInitWeapons(GameObject eWeapon, GameObject lWeapon, GameObject rWeapon)
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
         // WEAPON GAMEOBJECTS
         // ~~~~~~~~~~~~~~~~~~
@@ -96,29 +104,76 @@ public class WeaponManager : CacheBehaviour {
     }
 =======
 
+=======
+>>>>>>> weapon-belt-exp
         // WEAPON GAMEOBJECTS
         // ~~~~~~~~~~~~~~~~~~
         // keep track of weapon GameObjects as they're equipped/stashed
-        equippedWeapon = eWeapon;
-        leftWeapon     = lWeapon;
-        rightWeapon    = rWeapon;
-        tempWeapon     = rWeapon;
+        if(weaponBelt == null)
+            weaponBelt = new GameObject[3];
 
+        weaponBelt[left]     = lWeapon;
+        weaponBelt[equipped] = eWeapon;
+        weaponBelt[right]    = rWeapon;
 
-        // PLAYER WEAPON ANIMATIONS
+        CacheAndSetupWeapons();
+        PassInitialWeaponsToHUD();
+    }
+
+    void OnSwitchWeapon(int shiftDirection)
+    {
+        switch (equipped)
+        {
+            case 0:
+            {
+                left = 1;
+                equipped = 2;
+                right = 0;
+                break;
+            }
+
+            case 1:
+            {
+                left = 2;
+                equipped = 0;
+                right = 1;
+                break;
+            }
+
+            case 2:
+            {
+                left = 0;
+                equipped = 1;
+                right = 2;
+                break;
+            }
+        }
+
+        CacheAndSetupWeapons();
+        PassNewWeaponsToHUD();
+    }
+
+    void CacheAndSetupWeapons()
+    {
+        // WEAPON GAMEOBJECT'S 'WEAPON' COMPONENT
         // ~~~~~~~~~~~~~~~~~~~~~~~~
         // cache specific weapons (Sword, Hammer, etc) via parent class 'Weapon'
-        equippedWeaponComponent   = equippedWeapon.GetComponent<Weapon>();
-        leftWeaponComponent       = leftWeapon.GetComponent<Weapon>();
-        rightWeaponComponent      = rightWeapon.GetComponent<Weapon>();
-
+        // use to call currently equipped weapon animations
+        leftWeaponComponent       = weaponBelt[left].GetComponent<Weapon>();
+        equippedWeaponComponent   = weaponBelt[equipped].GetComponent<Weapon>();
+        rightWeaponComponent      = weaponBelt[right].GetComponent<Weapon>();
 
         // disable animations for weapons that are not equipped
         leftWeaponComponent.EnableAnimation(false);
+        equippedWeaponComponent.EnableAnimation(true);
         rightWeaponComponent.EnableAnimation(false);
+    }
 
+<<<<<<< HEAD
 >>>>>>> origin/master
 
+=======
+>>>>>>> weapon-belt-exp
     void PassInitialWeaponsToHUD()
     {
         Messenger.Broadcast<GameObject, int>("init stashed weapon", weaponBelt[left], LEFT);

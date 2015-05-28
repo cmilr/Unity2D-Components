@@ -20,6 +20,21 @@ public class DisplayStashed : CacheBehaviour
         offset  = (hudSide == RIGHT) ? HUD_STASHED_WEAPON_OFFSET : -HUD_STASHED_WEAPON_OFFSET;
     }
 
+    void Awake()
+    {
+        // check which HUD side this is, and set paramaters accordingly
+        if (name == "RightWeapon")
+        {
+            hudSide = RIGHT;
+            offset  = HUD_STASHED_WEAPON_OFFSET;
+        }
+        else if (name == "LeftWeapon")
+        {
+            hudSide = LEFT;
+            offset  = -HUD_STASHED_WEAPON_OFFSET;
+        }
+    }
+
     void Start()
     {
         mainCamera = Camera.main.GetComponent<Camera>();
@@ -29,7 +44,11 @@ public class DisplayStashed : CacheBehaviour
 
     void PositionHUDElements()
     {
+<<<<<<< HEAD
         // shift to left or right, depending on which side of HUD we're on
+=======
+        // shift to left or right, depending on which GameObject this is attached to
+>>>>>>> weapon-belt-exp
         transform.position = mainCamera.ScreenToWorldPoint(new Vector3(
             Screen.width / 2 + offset,
             Screen.height - HUD_WEAPON_TOP_MARGIN,
@@ -51,6 +70,7 @@ public class DisplayStashed : CacheBehaviour
         HUDWeapon = spriteRenderer;
         HUDWeapon.sprite = weapon.GetComponent<Weapon>().sprite;
         HUDWeapon.DOKill();
+<<<<<<< HEAD
 
         if (hudSide == RIGHT)
         {
@@ -83,6 +103,10 @@ public class DisplayStashed : CacheBehaviour
     {
         // set weapon into final position; fixes graphical bugs is operation gets interrupted by a new click
         transform.localPosition = hudPosition;
+=======
+        MTween.FadeOut(HUDWeapon, 0, 0);
+        MTween.FadeIn(HUDWeapon, HUD_STASHED_TRANSPARENCY, 0f, HUD_WEAPON_CHANGE_FADE);
+>>>>>>> weapon-belt-exp
     }
 
     void FadeInWeapon()

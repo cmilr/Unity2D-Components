@@ -40,6 +40,7 @@ public class DisplayEquipped : CacheBehaviour
         HUDWeapon = spriteRenderer;
         HUDWeapon.sprite = weapon.GetComponent<Weapon>().sprite;
         HUDWeapon.DOKill();
+<<<<<<< HEAD
 
         // upon receiving new weapon for the equipped slot, instantly relocate it back to its previous location,
         // while setting opacity to that of a stashed weapon, then tween the image to the right, into the final
@@ -64,6 +65,10 @@ public class DisplayEquipped : CacheBehaviour
     {
         // set weapon into final position; fixes graphical bugs is operation gets interrupted by a new click
         transform.localPosition = hudPosition;
+=======
+        MTween.FadeOut(HUDWeapon, 0, 0);
+        MTween.FadeIn(HUDWeapon, 1f, 0f, HUD_WEAPON_CHANGE_FADE);
+>>>>>>> weapon-belt-exp
     }
 
     void FadeInWeapon()
