@@ -73,10 +73,8 @@ public class BaseBehaviour : MonoBehaviour {
     protected const float HUD_FADE_OUT_AFTER            = .25f;
     protected const float HUD_INITIAL_TIME_TO_FADE      = 2f;
     protected const float HUD_WEAPON_CHANGE_FADE        = 0f;
-<<<<<<< HEAD
     protected const float SPACE_BETWEEN_WEAPONS         = 1.3281f;
-=======
->>>>>>> weapon-belt-exp
+    protected const float INVENTORY_SHIFT_SPEED         = .15f;
 
 
     protected void Dbug()
