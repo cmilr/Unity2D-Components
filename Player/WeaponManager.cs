@@ -162,6 +162,10 @@ public class WeaponManager : CacheBehaviour {
             {
                 equippedWeapon.PlaySwingAnimation(0, 0);
                 arm.PlaySwingAnimation(0, 0);
+<<<<<<< HEAD
+=======
+                projectileManager.FireProjectile();
+>>>>>>> origin/master
                 break;
             }
 
