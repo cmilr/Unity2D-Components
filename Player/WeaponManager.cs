@@ -3,43 +3,28 @@ using System.Collections;
 
 public class WeaponManager : CacheBehaviour {
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    private GameObject equippedWeapon;
-    private GameObject leftWeapon;
-    private GameObject rightWeapon;
-    private GameObject tempWeapon;
-
-    private Weapon equippedWeaponComponent;
-    private Weapon leftWeaponComponent;
-    private Weapon rightWeaponComponent;
->>>>>>> origin/master
     private ArmAnimation arm;
-    private Weapon equippedWeaponComponent;
-    private Weapon leftWeaponComponent;
-    private Weapon rightWeaponComponent;
-=======
-    private ArmAnimation arm;
-    private Weapon equippedWeaponComponent;
-    private Weapon leftWeaponComponent;
-    private Weapon rightWeaponComponent;
->>>>>>> weapon-belt-exp
+    private Weapon equippedWeapon;
+    private Weapon leftWeapon;
+    private Weapon rightWeapon;
 
     private int left = 0;
     private int equipped = 1;
     private int right = 2;
     private GameObject[] weaponBelt;
 
+    private IPlayerStateFullAccess state;
+    private ProjectileManager projectileManager;
+
     void Start()
     {
         arm = GetComponentInChildren<ArmAnimation>();
+        state = transform.parent.GetComponent<IPlayerStateFullAccess>();
+        projectileManager = transform.parent.GetComponent<ProjectileManager>();
     }
 
     void OnInitWeapons(GameObject eWeapon, GameObject lWeapon, GameObject rWeapon)
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
         // WEAPON GAMEOBJECTS
         // ~~~~~~~~~~~~~~~~~~
         // keep track of weapon GameObjects as they're equipped/stashed
@@ -93,87 +78,16 @@ public class WeaponManager : CacheBehaviour {
         // ~~~~~~~~~~~~~~~~~~~~~~~~
         // cache specific weapons (Sword, Hammer, etc) via parent class 'Weapon'
         // use to call currently equipped weapon animations
-        leftWeaponComponent       = weaponBelt[left].GetComponent<Weapon>();
-        equippedWeaponComponent   = weaponBelt[equipped].GetComponent<Weapon>();
-        rightWeaponComponent      = weaponBelt[right].GetComponent<Weapon>();
+        leftWeapon       = weaponBelt[left].GetComponent<Weapon>();
+        equippedWeapon   = weaponBelt[equipped].GetComponent<Weapon>();
+        rightWeapon      = weaponBelt[right].GetComponent<Weapon>();
 
         // disable animations for weapons that are not equipped
-        leftWeaponComponent.EnableAnimation(false);
-        equippedWeaponComponent.EnableAnimation(true);
-        rightWeaponComponent.EnableAnimation(false);
-    }
-=======
-
-=======
->>>>>>> weapon-belt-exp
-        // WEAPON GAMEOBJECTS
-        // ~~~~~~~~~~~~~~~~~~
-        // keep track of weapon GameObjects as they're equipped/stashed
-        if(weaponBelt == null)
-            weaponBelt = new GameObject[3];
-
-        weaponBelt[left]     = lWeapon;
-        weaponBelt[equipped] = eWeapon;
-        weaponBelt[right]    = rWeapon;
-
-        CacheAndSetupWeapons();
-        PassInitialWeaponsToHUD();
+        leftWeapon.EnableAnimation(false);
+        equippedWeapon.EnableAnimation(true);
+        rightWeapon.EnableAnimation(false);
     }
 
-    void OnSwitchWeapon(int shiftDirection)
-    {
-        switch (equipped)
-        {
-            case 0:
-            {
-                left = 1;
-                equipped = 2;
-                right = 0;
-                break;
-            }
-
-            case 1:
-            {
-                left = 2;
-                equipped = 0;
-                right = 1;
-                break;
-            }
-
-            case 2:
-            {
-                left = 0;
-                equipped = 1;
-                right = 2;
-                break;
-            }
-        }
-
-        CacheAndSetupWeapons();
-        PassNewWeaponsToHUD();
-    }
-
-    void CacheAndSetupWeapons()
-    {
-        // WEAPON GAMEOBJECT'S 'WEAPON' COMPONENT
-        // ~~~~~~~~~~~~~~~~~~~~~~~~
-        // cache specific weapons (Sword, Hammer, etc) via parent class 'Weapon'
-        // use to call currently equipped weapon animations
-        leftWeaponComponent       = weaponBelt[left].GetComponent<Weapon>();
-        equippedWeaponComponent   = weaponBelt[equipped].GetComponent<Weapon>();
-        rightWeaponComponent      = weaponBelt[right].GetComponent<Weapon>();
-
-        // disable animations for weapons that are not equipped
-        leftWeaponComponent.EnableAnimation(false);
-        equippedWeaponComponent.EnableAnimation(true);
-        rightWeaponComponent.EnableAnimation(false);
-    }
-
-<<<<<<< HEAD
->>>>>>> origin/master
-
-=======
->>>>>>> weapon-belt-exp
     void PassInitialWeaponsToHUD()
     {
         Messenger.Broadcast<GameObject, int>("init stashed weapon", weaponBelt[left], LEFT);
@@ -195,49 +109,50 @@ public class WeaponManager : CacheBehaviour {
         {
             case IDLE:
             {
-                equippedWeaponComponent.PlayIdleAnimation(0, 0);
+                equippedWeapon.PlayIdleAnimation(0, 0);
                 arm.PlayIdleAnimation(0, 0);
                 break;
             }
 
             case RUN:
             {
-                equippedWeaponComponent.PlayRunAnimation(0, 0);
+                equippedWeapon.PlayRunAnimation(0, 0);
                 arm.PlayRunAnimation(0, 0);
                 break;
             }
 
             case JUMP:
             {
-                equippedWeaponComponent.PlayJumpAnimation(0, 0);
+                equippedWeapon.PlayJumpAnimation(0, 0);
                 arm.PlayJumpAnimation(0, 0);
                 break;
             }
 
             case FALL:
             {
-                equippedWeaponComponent.PlayJumpAnimation(0, 0);
+                equippedWeapon.PlayJumpAnimation(0, 0);
                 arm.PlayJumpAnimation(0, 0);
                 break;
             }
 
             case ATTACK:
             {
-                equippedWeaponComponent.PlaySwingAnimation(0, 0);
+                equippedWeapon.PlaySwingAnimation(0, 0);
                 arm.PlaySwingAnimation(0, 0);
+                projectileManager.FireProjectile();
                 break;
             }
 
             case RUN_ATTACK:
             {
-                equippedWeaponComponent.PlaySwingAnimation(0, ONE_PIXEL);
+                equippedWeapon.PlaySwingAnimation(0, ONE_PIXEL);
                 arm.PlaySwingAnimation(0, ONE_PIXEL);
                 break;
             }
 
             case JUMP_ATTACK:
             {
-                equippedWeaponComponent.PlaySwingAnimation(0, ONE_PIXEL * 2);
+                equippedWeapon.PlaySwingAnimation(0, ONE_PIXEL * 2);
                 arm.PlaySwingAnimation(0, ONE_PIXEL * 2);
                 break;
             }
