@@ -4,9 +4,9 @@ using System.Collections;
 public class WeaponManager : CacheBehaviour {
 
     private ArmAnimation arm;
-    private Weapon equippedWeaponComponent;
-    private Weapon leftWeaponComponent;
-    private Weapon rightWeaponComponent;
+    private Weapon equippedWeapon;
+    private Weapon leftWeapon;
+    private Weapon rightWeapon;
 
     private int left = 0;
     private int equipped = 1;
@@ -78,14 +78,14 @@ public class WeaponManager : CacheBehaviour {
         // ~~~~~~~~~~~~~~~~~~~~~~~~
         // cache specific weapons (Sword, Hammer, etc) via parent class 'Weapon'
         // use to call currently equipped weapon animations
-        leftWeaponComponent       = weaponBelt[left].GetComponent<Weapon>();
-        equippedWeaponComponent   = weaponBelt[equipped].GetComponent<Weapon>();
-        rightWeaponComponent      = weaponBelt[right].GetComponent<Weapon>();
+        leftWeapon       = weaponBelt[left].GetComponent<Weapon>();
+        equippedWeapon   = weaponBelt[equipped].GetComponent<Weapon>();
+        rightWeapon      = weaponBelt[right].GetComponent<Weapon>();
 
         // disable animations for weapons that are not equipped
-        leftWeaponComponent.EnableAnimation(false);
-        equippedWeaponComponent.EnableAnimation(true);
-        rightWeaponComponent.EnableAnimation(false);
+        leftWeapon.EnableAnimation(false);
+        equippedWeapon.EnableAnimation(true);
+        rightWeapon.EnableAnimation(false);
     }
 
     void PassInitialWeaponsToHUD()
@@ -105,61 +105,148 @@ public class WeaponManager : CacheBehaviour {
     // mix & match animations for various activity states
     public void PlayAnimation(int animationAction)
     {
-        switch (animationAction)
+        switch (equippedWeapon.weaponType)
         {
-            case IDLE:
+            case Weapon.WeaponType.Sword:
             {
-                equippedWeaponComponent.PlayIdleAnimation(0, 0);
-                arm.PlayIdleAnimation(0, 0);
+                PlaySwordAnimation(animationAction);
                 break;
             }
 
-            case RUN:
+            case Weapon.WeaponType.Projectile:
             {
-                equippedWeaponComponent.PlayRunAnimation(0, 0);
-                arm.PlayRunAnimation(0, 0);
-                break;
-            }
-
-            case JUMP:
-            {
-                equippedWeaponComponent.PlayJumpAnimation(0, 0);
-                arm.PlayJumpAnimation(0, 0);
-                break;
-            }
-
-            case FALL:
-            {
-                equippedWeaponComponent.PlayJumpAnimation(0, 0);
-                arm.PlayJumpAnimation(0, 0);
-                break;
-            }
-
-            case ATTACK:
-            {
-                equippedWeaponComponent.PlaySwingAnimation(0, 0);
-                arm.PlaySwingAnimation(0, 0);
-                projectileManager.FireProjectile(state.FacingRight);
-                break;
-            }
-
-            case RUN_ATTACK:
-            {
-                equippedWeaponComponent.PlaySwingAnimation(0, ONE_PIXEL);
-                arm.PlaySwingAnimation(0, ONE_PIXEL);
-                break;
-            }
-
-            case JUMP_ATTACK:
-            {
-                equippedWeaponComponent.PlaySwingAnimation(0, ONE_PIXEL * 2);
-                arm.PlaySwingAnimation(0, ONE_PIXEL * 2);
+                PlayProjectileAnimation(animationAction);
                 break;
             }
 
             default:
             {
                 Debug.Log("ERROR: No animationAction was set in WeaponManager.cs >> PlayAnimation()");
+                break;
+            }
+        }
+    }
+
+    // mix & match animations for various activity states
+    public void PlaySwordAnimation(int animationAction)
+    {
+        switch (animationAction)
+        {
+            case IDLE:
+            {
+                equippedWeapon.PlayIdleAnimation(0, 0);
+                arm.PlayIdleAnimation(0, 0);
+                break;
+            }
+
+            case RUN:
+            {
+                equippedWeapon.PlayRunAnimation(0, 0);
+                arm.PlayRunAnimation(0, 0);
+                break;
+            }
+
+            case JUMP:
+            {
+                equippedWeapon.PlayJumpAnimation(0, 0);
+                arm.PlayJumpAnimation(0, 0);
+                break;
+            }
+
+            case FALL:
+            {
+                equippedWeapon.PlayJumpAnimation(0, 0);
+                arm.PlayJumpAnimation(0, 0);
+                break;
+            }
+
+            case ATTACK:
+            {
+                equippedWeapon.PlaySwingAnimation(0, 0);
+                arm.PlaySwingAnimation(0, 0);
+                break;
+            }
+
+            case RUN_ATTACK:
+            {
+                equippedWeapon.PlaySwingAnimation(0, ONE_PIXEL);
+                arm.PlaySwingAnimation(0, ONE_PIXEL);
+                break;
+            }
+
+            case JUMP_ATTACK:
+            {
+                equippedWeapon.PlaySwingAnimation(0, ONE_PIXEL * 2);
+                arm.PlaySwingAnimation(0, ONE_PIXEL * 2);
+                break;
+            }
+
+            default:
+            {
+                Debug.Log("ERROR: No animationAction was set in WeaponManager.cs >> PlayWeaponAnimation()");
+                break;
+            }
+        }
+    }
+
+    // mix & match animations for various activity states
+    public void PlayProjectileAnimation(int animationAction)
+    {
+        switch (animationAction)
+        {
+            case IDLE:
+            {
+                equippedWeapon.PlayIdleAnimation(0, 0);
+                arm.PlayIdleAnimation(0, 0);
+                break;
+            }
+
+            case RUN:
+            {
+                equippedWeapon.PlayRunAnimation(0, 0);
+                arm.PlayRunAnimation(0, 0);
+                break;
+            }
+
+            case JUMP:
+            {
+                equippedWeapon.PlayJumpAnimation(0, 0);
+                arm.PlayJumpAnimation(0, 0);
+                break;
+            }
+
+            case FALL:
+            {
+                equippedWeapon.PlayJumpAnimation(0, 0);
+                arm.PlayJumpAnimation(0, 0);
+                break;
+            }
+
+            case ATTACK:
+            {
+                equippedWeapon.PlayIdleAnimation(0, 0);
+                arm.PlayIdleAnimation(0, 0);
+                projectileManager.FireProjectile(equippedWeapon);
+                break;
+            }
+
+            case RUN_ATTACK:
+            {
+                equippedWeapon.PlaySwingAnimation(0, ONE_PIXEL);
+                arm.PlaySwingAnimation(0, ONE_PIXEL);
+                break;
+            }
+
+            case JUMP_ATTACK:
+            {
+                equippedWeapon.PlaySwingAnimation(0, ONE_PIXEL * 2);
+                arm.PlaySwingAnimation(0, ONE_PIXEL * 2);
+                break;
+            }
+
+            default:
+            {
+                Debug.Log("ERROR: No animationAction was set in WeaponManager.cs >> PlayProjectileAnimation()");
                 break;
             }
         }

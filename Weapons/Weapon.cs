@@ -3,7 +3,7 @@ using System.Collections;
 
 public abstract class Weapon : AnimationBehaviour {
 
-    public enum WeaponType { Sword, Bow, Hammer };
+    public enum WeaponType { Sword, Bow, Hammer, Projectile };
     public WeaponType weaponType;
 
     // weapon stats
