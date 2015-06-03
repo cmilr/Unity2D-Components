@@ -13,13 +13,11 @@ public class WeaponManager : CacheBehaviour {
     private int right = 2;
     private GameObject[] weaponBelt;
 
-    private IPlayerStateFullAccess state;
     private ProjectileManager projectileManager;
 
     void Start()
     {
         arm = GetComponentInChildren<ArmAnimation>();
-        state = transform.parent.GetComponent<IPlayerStateFullAccess>();
         projectileManager = transform.parent.GetComponent<ProjectileManager>();
     }
 

@@ -23,7 +23,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	private bool moveLeft;
 	private bool jump;
 	private bool attack;
-	private bool defend;
+	// private bool defend;
 	private RaycastHit2D lastControllerColliderHit;
 	private Vector3 velocity;
 	private CharacterController2D controller;
@@ -88,10 +88,10 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
     	attack = true;
     }
 
-    public void Defend()
-    {
-    	defend = true;
-    }
+    // public void Defend()
+    // {
+    // 	defend = true;
+    // }
 
     // main movement loop — keep in LateUpdate() to prevent player falling through edge colliders
 	void LateUpdate()

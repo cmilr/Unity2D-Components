@@ -3,15 +3,38 @@ using System.Collections;
 
 public class Projectile : CacheBehaviour {
 
-    public float speed;
+    private float direction;
+    private int hp;
+    private int ac;
+    private int damage;
+    private float speed;
 
-    public void Shoot (float direction)
+    private float xOrigin;
+    private float yOrigin;
+    private float distance = 100f;
+
+    public void InitAndFire(Sprite initSprite, float direction, float speed)
     {
+        this.direction = direction;
+
+        // get initial coordinates
+        xOrigin = transform.position.x;
+        yOrigin = transform.position.y;
+
+        // set sprite to that of equipped weapon
+        spriteRenderer.sprite = initSprite;
+
+        // fire projectile
         rigidbody2D.velocity = transform.right * speed * direction;
+
+        // check for distance traveled, then disable when passes threshold
+        InvokeRepeating("CheckDistanceTraveled", 1, 0.3F);
     }
 
-    public void Init(Sprite initSprite)
+    void CheckDistanceTraveled()
     {
-        spriteRenderer.sprite = initSprite;
+        if (Mathf.Abs(transform.position.x - xOrigin) > distance ||
+            Mathf.Abs(transform.position.y - yOrigin) > distance)
+            gameObject.SetActive(false);
     }
 }

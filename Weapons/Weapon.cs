@@ -5,13 +5,15 @@ public abstract class Weapon : AnimationBehaviour {
 
     public enum WeaponType { Sword, Bow, Hammer, Projectile };
     public WeaponType weaponType;
+    public Sprite sprite;
 
     // weapon stats
     public string title;
     public int hp;
     public int ac;
     public int damage;
-    public Sprite sprite;
+    public float rateOfAttack;
+    public float projectileSpeed;
 
     // animation state methods
     public abstract void PlayIdleAnimation(float xOffset, float yOffset);
