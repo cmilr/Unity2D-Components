@@ -1,17 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WeaponPiece : CacheBehaviour {
+public class WeaponComponent : CacheBehaviour {
 
-    [HideInInspector]
     public string idleAnimation;
-    [HideInInspector]
     public string runAnimation;
-    [HideInInspector]
     public string jumpAnimation;
-    [HideInInspector]
     public string swingAnimation;
-
     private Material material;
 
     void Start ()

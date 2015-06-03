@@ -4,16 +4,16 @@ using Matcha.Game.Colors;
 
 public class Sword : Weapon {
 
-    private WeaponPiece blade;
-    private WeaponPiece hilt;
-    private WeaponPiece handle;
+    private WeaponComponent blade;
+    private WeaponComponent hilt;
+    private WeaponComponent handle;
 
 	void Awake ()
     {
         // set weapon components on initialization
-        blade  = transform.FindChild("Blade").gameObject.GetComponent<WeaponPiece>();
-        hilt   = transform.FindChild("Hilt").gameObject.GetComponent<WeaponPiece>();
-        handle = transform.FindChild("Handle").gameObject.GetComponent<WeaponPiece>();
+        blade  = transform.FindChild("Blade").gameObject.GetComponent<WeaponComponent>();
+        hilt   = transform.FindChild("Hilt").gameObject.GetComponent<WeaponComponent>();
+        handle = transform.FindChild("Handle").gameObject.GetComponent<WeaponComponent>();
 
         // set weapon colors here
         blade.spriteRenderer.material.SetColor("_Color", MColor.white);

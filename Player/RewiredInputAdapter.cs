@@ -31,8 +31,5 @@ public class RewiredInputAdapter : BaseBehaviour {
 
         if (playerControls.GetButton("Attack"))
             creature.Attack();
-
-        if (playerControls.GetButtonDown("Next Weapon"))
-            Messenger.Broadcast<int>("switch weapon", RIGHT);
     }
 }
