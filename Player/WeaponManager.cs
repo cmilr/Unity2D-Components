@@ -13,12 +13,12 @@ public class WeaponManager : CacheBehaviour {
     private int right = 2;
     private GameObject[] weaponBelt;
 
-    private ProjectileManager projectileManager;
+    private ProjectileManager projectile;
 
     void Start()
     {
         arm = GetComponentInChildren<ArmAnimation>();
-        projectileManager = transform.parent.GetComponent<ProjectileManager>();
+        projectile = transform.parent.GetComponent<ProjectileManager>();
     }
 
     void OnInitWeapons(GameObject eWeapon, GameObject lWeapon, GameObject rWeapon)
@@ -162,10 +162,6 @@ public class WeaponManager : CacheBehaviour {
             {
                 equippedWeapon.PlaySwingAnimation(0, 0);
                 arm.PlaySwingAnimation(0, 0);
-<<<<<<< HEAD
-=======
-                projectileManager.FireProjectile();
->>>>>>> origin/master
                 break;
             }
 
@@ -228,7 +224,7 @@ public class WeaponManager : CacheBehaviour {
             {
                 equippedWeapon.PlayIdleAnimation(0, 0);
                 arm.PlayIdleAnimation(0, 0);
-                projectileManager.FireProjectile(equippedWeapon);
+                projectile.Fire(equippedWeapon);
                 break;
             }
 
