@@ -12,10 +12,10 @@ using System.Collections;
 public class BaseBehaviour : MonoBehaviour {
 
     // global stuff
-    protected const int TOP                             = 0;
-    protected const int BOTTOM                          = 1;
-    protected const int LEFT                            = 2;
-    protected const int RIGHT                           = 3;
+    protected const int RIGHT                           = 1;
+    protected const int LEFT                            = -1;
+    protected const int TOP                             = 2;
+    protected const int BOTTOM                          = 3;
     protected const int UP                              = 4;
     protected const int DOWN                            = 5;
 

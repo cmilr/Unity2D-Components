@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Matcha.Game.Tweens;
 
 public class Projectile : CacheBehaviour {
 
     private float xOrigin;
     private float yOrigin;
     private float distance = 100f;
-
-    // public void InitAndFire(Sprite initSprite, float direction, float speed)
 
     public void Init(Weapon weapon)
     {
@@ -25,6 +24,9 @@ public class Projectile : CacheBehaviour {
 
     public void Fire(Weapon weapon, GameObject target)
     {
+        MTween.Fade(spriteRenderer, 0f, 0f, 0f);
+        MTween.Fade(spriteRenderer, 1f, 0f, .3f);
+
         // fire projectile
         rigidbody2D.velocity = (target.transform.position - transform.position).normalized * weapon.projectileSpeed;
     }

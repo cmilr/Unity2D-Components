@@ -4,11 +4,17 @@ using System.Collections;
 public class ProjectileManager : CacheBehaviour {
 
 	public GameObject projectilePrefab;
-    public Transform projectileSpawnPoint;
+    private Transform projectileSpawnPoint;
     private Projectile projectile;
     private float fireRate;
     private float nextFire;
 
+    void Start()
+    {
+        projectileSpawnPoint = GetComponentInChildren<SpawnPointManager>().transform;
+    }
+
+    // fire in direction actor is facing
     public void Fire(Weapon equippedWeapon)
     {
         fireRate = equippedWeapon.rateOfAttack;
@@ -27,6 +33,7 @@ public class ProjectileManager : CacheBehaviour {
         }
     }
 
+    // fire specifically at target
     public void FireAtTarget(Weapon equippedWeapon, GameObject target)
     {
         fireRate = equippedWeapon.rateOfAttack;
