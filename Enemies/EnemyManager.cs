@@ -12,10 +12,19 @@ public class EnemyManager : CacheBehaviour {
         projectile = GetComponent<ProjectileManager>();
         weapon = GetComponentInChildren<Weapon>();
         target = GameObject.Find("Player");
+	}
 
+    void OnBecameVisible()
+    {
         InvokeRepeating("LookAtTarget", 1f, .3f);
         InvokeRepeating("AttackRandomly", 2f, 1f);
-	}
+    }
+
+    void OnBecameInvisible()
+    {
+        CancelInvoke("LookAtTarget");
+        CancelInvoke("AttackRandomly");
+    }
 
     void LookAtTarget()
     {

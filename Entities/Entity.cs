@@ -10,6 +10,7 @@ public abstract class Entity : CacheBehaviour {
 	protected int layer;
 	protected bool collidedWithBody;
 	protected bool collidedWithWeapon;
+	protected bool onScreen;
 	protected IGameStateReadOnly game;
 	protected IPlayerStateReadOnly player;
 
@@ -75,5 +76,17 @@ public abstract class Entity : CacheBehaviour {
 	public void OnTweenCompleted()
 	{
 		LifecycleOver();
+	}
+
+	void OnBecameVisible()
+	{
+	    enabled = true;
+	    onScreen = true;
+	}
+
+	void OnBecameInvisible()
+	{
+	    enabled = false;
+	    onScreen = false;
 	}
 }

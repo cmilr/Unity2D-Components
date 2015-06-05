@@ -7,13 +7,16 @@ public abstract class Weapon : AnimationBehaviour {
     public WeaponType weaponType;
     public Sprite sprite;
 
-    // weapon stats
+    [Header("All Weapons")]
     public string title;
     public int hp;
     public int ac;
     public int damage;
     public float rateOfAttack;
-    public float projectileSpeed;
+
+    [Header("Projectile Weapons")]
+    public float speed;
+    public float maxDistance;
 
     // animation state methods
     public abstract void PlayIdleAnimation(float xOffset, float yOffset);
