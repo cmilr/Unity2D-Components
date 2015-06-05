@@ -25,8 +25,8 @@ public class DisplayScore : BaseBehaviour
 	void FadeInScore()
 	{
 		// fade to zero instantly, then fade up slowly
-		MTween.FadeOut(HUDScore, 0, 0);
-		MTween.FadeIn(HUDScore, HUD_FADE_IN_AFTER, HUD_TIME_TO_FADE);
+		MTween.Fade(HUDScore, 0, 0, 0);
+		MTween.Fade(HUDScore, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
 	}
 	void OnChangeScore(int newScore)
 	{
@@ -44,7 +44,7 @@ public class DisplayScore : BaseBehaviour
 
 	void OnFadeHud(bool status)
 	{
-		MTween.FadeOut(HUDScore, HUD_FADE_OUT_AFTER, HUD_TIME_TO_FADE);
+		MTween.Fade(HUDScore, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE);
 	}
 
 	void OnEnable()

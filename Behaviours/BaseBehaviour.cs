@@ -12,13 +12,17 @@ using System.Collections;
 public class BaseBehaviour : MonoBehaviour {
 
     // global stuff
+    protected const int RIGHT                           = 1;
+    protected const int LEFT                            = -1;
+    protected const int TOP                             = 2;
+    protected const int BOTTOM                          = 3;
+    protected const int UP                              = 4;
+    protected const int DOWN                            = 5;
+
+    // global measurements
     protected const float ONE_PIXEL                     = .03125f;
     protected const float ONE_HUD_PIXEL                 = 5f;
     protected const float ONE_COLLIDER_PIXEL            = .62f;
-    protected const int TOP                             = 0;
-    protected const int BOTTOM                          = 1;
-    protected const int LEFT                            = 2;
-    protected const int RIGHT                           = 3;
 
     // gameObject names
     protected const string PLAYER                       = "Player";
@@ -62,12 +66,15 @@ public class BaseBehaviour : MonoBehaviour {
     // hud specs
     protected const float HUD_WEAPON_TOP_MARGIN         = 125f;
     protected const float HUD_STASHED_WEAPON_OFFSET     = 85f;
-    protected const float HUD_STASHED_TRANSPARENCY      = .3f;
+    protected const float HUD_STASHED_TRANSPARENCY      = .25f;
     protected const float HUD_HEARTS_TOP_MARGIN         = 17f;
     protected const float HUD_Z                         = 10f;
     protected const float HUD_FADE_IN_AFTER             = .75f;
     protected const float HUD_FADE_OUT_AFTER            = .25f;
-    protected const float HUD_TIME_TO_FADE              = 2f;
+    protected const float HUD_INITIAL_TIME_TO_FADE      = 2f;
+    protected const float HUD_WEAPON_CHANGE_FADE        = 0f;
+    protected const float SPACE_BETWEEN_WEAPONS         = 1.3281f;
+    protected const float INVENTORY_SHIFT_SPEED         = .15f;
 
 
     protected void Dbug()

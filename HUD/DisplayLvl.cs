@@ -14,8 +14,8 @@ public class DisplayLvl : BaseBehaviour
     void FadeInText()
     {
         // fade to zero instantly, then fade up slowly
-        MTween.FadeOut(textComponent, 0, 0);
-        MTween.FadeIn(textComponent, HUD_FADE_IN_AFTER, HUD_TIME_TO_FADE);
+        MTween.Fade(textComponent, 0, 0, 0);
+        MTween.Fade(textComponent, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
     }
 
     void OnInitInteger(int initInt)
@@ -35,7 +35,7 @@ public class DisplayLvl : BaseBehaviour
 
     void OnFadeHud(bool status)
     {
-        MTween.FadeOut(textComponent, HUD_FADE_OUT_AFTER, HUD_TIME_TO_FADE);
+        MTween.Fade(textComponent, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE);
     }
 
     void OnEnable()

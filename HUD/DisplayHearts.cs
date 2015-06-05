@@ -36,13 +36,13 @@ public class DisplayHearts : CacheBehaviour
     void FadeInShield()
     {
         // fade to zero instantly, then fade up slowly
-        MTween.FadeOut(HUDHearts, 0, 0);
-        MTween.FadeIn(HUDHearts, HUD_FADE_IN_AFTER, HUD_TIME_TO_FADE);
+        MTween.Fade(HUDHearts, 0, 0, 0);
+        MTween.Fade(HUDHearts, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
     }
 
     void OnFadeHud(bool status)
     {
-        MTween.FadeOut(HUDHearts, HUD_FADE_OUT_AFTER, HUD_TIME_TO_FADE);
+        MTween.Fade(HUDHearts, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE);
     }
 
     void OnScreenSizeChanged(float vExtent, float hExtent)
