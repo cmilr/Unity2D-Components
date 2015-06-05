@@ -2,35 +2,38 @@
 using System.Collections;
 using Matcha.Game.Tweens;
 
-public class Projectile : CacheBehaviour {
+public class Projectile : Weapon {
 
-    private float maxDistance;
     private Vector3 origin;
+    private Weapon weapon;
 
-    public void Init(Weapon weapon)
+    public void Fire(Weapon incomingWeapon, float direction)
     {
-        origin = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-        spriteRenderer.sprite = weapon.sprite;
-        maxDistance = weapon.maxDistance;
-        InvokeRepeating("CheckDistanceTraveled", 1, 0.3F);
-    }
-
-    public void Fire(Weapon weapon, float direction)
-    {
+        weapon = incomingWeapon;
+        Init();
         rigidbody2D.velocity = transform.right * weapon.speed * direction;
     }
 
-    public void Fire(Weapon weapon, GameObject target)
+    public void Fire(Weapon incomingWeapon, GameObject target)
     {
+        weapon = incomingWeapon;
+        Init();
         MTween.Fade(spriteRenderer, 0f, 0f, 0f);
         MTween.Fade(spriteRenderer, 1f, 0f, .3f);
         rigidbody2D.velocity = (target.transform.position - transform.position).normalized * weapon.speed;
     }
 
+    void Init()
+    {
+        origin = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        spriteRenderer.sprite = weapon.sprite;
+        InvokeRepeating("CheckDistanceTraveled", 1, 0.3F);
+    }
+
     void CheckDistanceTraveled()
     {
         float distance = Vector3.Distance(origin, transform.position);
-        if (distance > maxDistance)
+        if (distance > weapon.maxDistance)
         {
             MTween.FadeOutProjectile(spriteRenderer, 0f, 0f, .6f);
             Invoke("Deactivate", 1.5f);
@@ -41,4 +44,10 @@ public class Projectile : CacheBehaviour {
     {
         gameObject.SetActive(false);
     }
+
+    override public void PlayIdleAnimation(float xOffset, float yOffset) {}
+    override public void PlayRunAnimation(float xOffset, float yOffset) {}
+    override public void PlayJumpAnimation(float xOffset, float yOffset) {}
+    override public void PlaySwingAnimation(float xOffset, float yOffset) {}
+    override public void EnableAnimation(bool status) {}
 }

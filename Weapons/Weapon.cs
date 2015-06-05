@@ -7,6 +7,9 @@ public abstract class Weapon : AnimationBehaviour {
     public WeaponType weaponType;
     public Sprite sprite;
 
+    [HideInInspector]
+    public bool alreadyCollided;
+
     [Header("All Weapons")]
     public string title;
     public int hp;

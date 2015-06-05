@@ -6,6 +6,7 @@ using System.Collections;
 public abstract class Entity : CacheBehaviour {
 
 	public int worth;
+	public bool alreadyCollided;
 
 	protected int layer;
 	protected bool collidedWithBody;

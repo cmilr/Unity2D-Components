@@ -11,7 +11,7 @@ public class ProjectileManager : CacheBehaviour {
 
     void Start()
     {
-        projectileSpawnPoint = GetComponentInChildren<SpawnPointManager>().transform;
+        projectileSpawnPoint = GetComponentInChildren<SpawnPointTrace>().transform;
     }
 
     // fire in direction actor is facing
@@ -22,13 +22,12 @@ public class ProjectileManager : CacheBehaviour {
         if (Time.time > nextFire)
         {
             nextFire = Time.time + fireRate;
-
             GameObject go = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation) as GameObject;
             projectile = go.GetComponent<Projectile>();
 
             // flip projectile sprite so it's pointing the same direction as the actor
             go.transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-            projectile.Init(equippedWeapon);
+            // projectile.Init(equippedWeapon);
             projectile.Fire(equippedWeapon, transform.localScale.x);
         }
     }
@@ -41,13 +40,12 @@ public class ProjectileManager : CacheBehaviour {
         if (Time.time > nextFire)
         {
             nextFire = Time.time + fireRate;
-
             GameObject go = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation) as GameObject;
             projectile = go.GetComponent<Projectile>();
 
             // flip projectile sprite so it's pointing the same direction as the actor
             go.transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-            projectile.Init(equippedWeapon);
+            // projectile.Init(equippedWeapon);
             projectile.Fire(equippedWeapon, target);
         }
     }
