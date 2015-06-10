@@ -7,8 +7,10 @@ using Matcha.Lib;
 public class BodyCollider : CacheBehaviour
 {
     private int layer;
+    private int hitFrom;
     private IPlayerStateFullAccess state;
     private IGameStateReadOnly game;
+    private Weapon enemyWeapon;
 
     void Start()
     {
@@ -21,10 +23,71 @@ public class BodyCollider : CacheBehaviour
         // check for layer instead of name — it's much quicker
         layer = coll.gameObject.layer;
 
-        if (layer == ENEMY_WEAPON && !coll.GetComponent<Weapon>().alreadyCollided && !game.LevelLoading && !state.Dead)
+        if (layer == ENEMY_WEAPON)
         {
-            coll.GetComponent<Weapon>().alreadyCollided = true;
-            Messenger.Broadcast<string, Collider2D>("player dead", "struckdown", coll);
+            enemyWeapon = coll.GetComponent<Weapon>();
+
+            if (!enemyWeapon.alreadyCollided && !game.LevelLoading && !state.Dead)
+            {
+                hitFrom = HorizontalCollisionSide(coll);
+
+                if (enemyWeapon.weaponType == Weapon.WeaponType.Projectile)
+                {
+                    enemyWeapon.alreadyCollided = true;
+
+                    Messenger.Broadcast<string, Collider2D, int>("player dead", "projectile", coll, hitFrom);
+                }
+            }
+        }
+    }
+
+    private int HorizontalCollisionSide(Collider2D coll)
+    {
+        Vector3 relativePosition = transform.InverseTransformPoint(coll.transform.position);
+
+        // if scale is positive: ie, facing right
+        if (transform.lossyScale.x == 1)
+        {
+            if (relativePosition.x > 0)
+            {
+                return RIGHT;
+            }
+            else
+            {
+                return LEFT;
+            }
+        }
+        // if scale is negative: ie, facing left
+        else if (transform.lossyScale.x == -1)
+        {
+            if (relativePosition.x < 0)
+            {
+                return RIGHT;
+            }
+            else
+            {
+                return LEFT;
+            }
+        }
+
+        // else default
+        else
+        {
+            return RIGHT;
+        }
+    }
+
+    private int VerticalCollisionSide(Collider2D coll)
+    {
+        Vector3 relativePosition = transform.InverseTransformPoint(coll.transform.position);
+
+        if (relativePosition.y > 0)
+        {
+            return TOP;
+        }
+        else
+        {
+            return BOTTOM;
         }
     }
 }

@@ -17,14 +17,15 @@ public class PlayerState : BaseBehaviour, IPlayerStateReadOnly, IPlayerStateFull
 	public float PreviousY			{ get; set; }
 	public float X					{ get; set; }
 	public float Y					{ get; set; }
+    public int HitFrom              { get; set; }
 
 	void OnEnable()
 	{
-		Character = "MAC";
+		Character = "LAURA";
 		Messenger.AddListener<bool>("touching wall", OnTouchingWall);
 		Messenger.AddListener<bool>("riding fast platform", OnRidingFastPlatform);
 		Messenger.AddListener<bool>("player above ground", OnPlayerAboveGround);
-		Messenger.AddListener<string, Collider2D>("player dead", OnPlayerDead);
+		Messenger.AddListener<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 
 	void OnDestroy()
@@ -32,7 +33,7 @@ public class PlayerState : BaseBehaviour, IPlayerStateReadOnly, IPlayerStateFull
 		Messenger.RemoveListener<bool>("touching wall", OnTouchingWall);
 		Messenger.RemoveListener<bool>("riding fast platform", OnRidingFastPlatform);
 		Messenger.RemoveListener<bool>("player above ground", OnPlayerAboveGround);
-		Messenger.RemoveListener<string, Collider2D>("player dead", OnPlayerDead);
+		Messenger.RemoveListener<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 
 	void OnTouchingWall(bool status)
@@ -50,9 +51,10 @@ public class PlayerState : BaseBehaviour, IPlayerStateReadOnly, IPlayerStateFull
 		AboveGround = status;
 	}
 
-	void OnPlayerDead (string methodOfDeath, Collider2D coll)
+	void OnPlayerDead (string methodOfDeath, Collider2D coll, int hitFrom)
 	{
 		Dead = true;
+        HitFrom = hitFrom;
 	}
 }
 

@@ -2,7 +2,7 @@
 using System.Collections;
 using Matcha.Game.Tweens;
 
-public class Projectile : Weapon {
+public class ProjectileContainer : Weapon {
 
     private Vector3 origin;
     private Weapon weapon;

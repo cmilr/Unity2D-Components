@@ -13,7 +13,7 @@ public class WaterEntity : Entity
 	override public void OnBodyCollisionEnter()
 	{
         collidedWithBody = true;
-		Messenger.Broadcast<string, Collider2D>("player dead", "drowned", thisCollider);
+		Messenger.Broadcast<string, Collider2D, int>("player dead", "drowned", thisCollider, 0);
 
 	}
 

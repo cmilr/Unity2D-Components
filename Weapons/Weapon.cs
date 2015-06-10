@@ -7,6 +7,9 @@ public abstract class Weapon : AnimationBehaviour {
     public WeaponType weaponType;
     public Sprite sprite;
 
+    // Projectile Containers don't need any of the fields below,
+    // as they receive these values via passed-in projectile objects
+
     [HideInInspector]
     public bool alreadyCollided;
 

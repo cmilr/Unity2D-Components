@@ -51,18 +51,18 @@ public class WeaponPiece : CacheBehaviour {
         animator.Play(Animator.StringToHash(swingAnimation));
     }
 
-    void OnPlayerDead(string methodOfDeath, Collider2D coll)
+    void OnPlayerDead(string methodOfDeath, Collider2D coll, int hitFrom)
     {
         spriteRenderer.enabled = false;
     }
 
     void OnEnable()
     {
-        Messenger.AddListener<string, Collider2D>("player dead", OnPlayerDead);
+        Messenger.AddListener<string, Collider2D, int>("player dead", OnPlayerDead);
     }
 
     void OnDestroy()
     {
-        Messenger.RemoveListener<string, Collider2D>( "player dead", OnPlayerDead);
+        Messenger.RemoveListener<string, Collider2D, int>( "player dead", OnPlayerDead);
     }
 }
