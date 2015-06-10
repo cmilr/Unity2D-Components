@@ -7,6 +7,14 @@ public class Projectile : Weapon {
     private Vector3 origin;
     private Weapon weapon;
 
+    // Init() is called by the various Fire() functions
+    void Init()
+    {
+        origin = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        spriteRenderer.sprite = weapon.sprite;
+        InvokeRepeating("CheckDistanceTraveled", 1, 0.3F);
+    }
+
     public void Fire(Weapon incomingWeapon, float direction)
     {
         weapon = incomingWeapon;
@@ -21,13 +29,6 @@ public class Projectile : Weapon {
         MTween.Fade(spriteRenderer, 0f, 0f, 0f);
         MTween.Fade(spriteRenderer, 1f, 0f, .3f);
         rigidbody2D.velocity = (target.transform.position - transform.position).normalized * weapon.speed;
-    }
-
-    void Init()
-    {
-        origin = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-        spriteRenderer.sprite = weapon.sprite;
-        InvokeRepeating("CheckDistanceTraveled", 1, 0.3F);
     }
 
     void CheckDistanceTraveled()

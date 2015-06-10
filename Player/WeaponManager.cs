@@ -80,6 +80,11 @@ public class WeaponManager : CacheBehaviour {
         equippedWeapon   = weaponBelt[equipped].GetComponent<Weapon>();
         rightWeapon      = weaponBelt[right].GetComponent<Weapon>();
 
+        // set weapons to player's Weapon Collider layer
+        weaponBelt[left].layer = 9;
+        weaponBelt[equipped].layer = 9;
+        weaponBelt[right].layer = 9;
+
         // disable animations for weapons that are not equipped
         leftWeapon.EnableAnimation(false);
         equippedWeapon.EnableAnimation(true);

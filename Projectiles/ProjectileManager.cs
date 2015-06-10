@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ProjectileManager : CacheBehaviour {
 
-	public GameObject projectilePrefab;
+	private GameObject projectilePrefab;
     private Transform projectileSpawnPoint;
     private Projectile projectile;
     private float fireRate;
@@ -12,6 +12,17 @@ public class ProjectileManager : CacheBehaviour {
     void Start()
     {
         projectileSpawnPoint = GetComponentInChildren<SpawnPointTrace>().transform;
+
+        // instantiate correct projectile depending on who is firing: Player or Enemy
+        // the only difference between projectiles is the layer they reside on
+        if(gameObject.layer == PLAYER_LAYER)
+        {
+            projectilePrefab = (GameObject)Resources.Load("Prefabs/Projectiles/PlayerProjectile", typeof(GameObject));
+        }
+        else
+        {
+            projectilePrefab = (GameObject)Resources.Load("Prefabs/Projectiles/EnemyProjectile", typeof(GameObject));
+        }
     }
 
     // fire in direction actor is facing
