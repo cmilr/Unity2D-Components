@@ -29,6 +29,34 @@ public abstract class Entity : CacheBehaviour {
 		player = GameObject.Find(PLAYER).GetComponent<IPlayerStateReadOnly>();
 	}
 
+	protected void AutoAlign()
+	{
+		float targetY = (float)(Math.Round(transform.position.y) - ALIGN_ENTITY_TO);
+		transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
+	}
+
+	protected void LifecycleOver()
+	{
+		gameObject.SetActive(false);
+	}
+
+	public void OnTweenCompleted()
+	{
+		LifecycleOver();
+	}
+
+	void OnBecameVisible()
+	{
+	    enabled = true;
+	    onScreen = true;
+	}
+
+	void OnBecameInvisible()
+	{
+	    enabled = false;
+	    onScreen = false;
+	}
+
 	void OnTriggerEnter2D(Collider2D coll)
 	{
 		// check for layer instead of name — it's much quicker
@@ -61,33 +89,5 @@ public abstract class Entity : CacheBehaviour {
 
 		if (layer == WEAPON_COLLIDER)
 			OnWeaponCollisionExit();
-	}
-
-	protected void AutoAlign()
-	{
-		float targetY = (float)(Math.Round(transform.position.y) - ALIGN_ENTITY_TO);
-		transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
-	}
-
-	protected void LifecycleOver()
-	{
-		gameObject.SetActive(false);
-	}
-
-	public void OnTweenCompleted()
-	{
-		LifecycleOver();
-	}
-
-	void OnBecameVisible()
-	{
-	    enabled = true;
-	    onScreen = true;
-	}
-
-	void OnBecameInvisible()
-	{
-	    enabled = false;
-	    onScreen = false;
 	}
 }

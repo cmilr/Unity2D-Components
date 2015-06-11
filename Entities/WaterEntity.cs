@@ -18,12 +18,8 @@ public class WaterEntity : Entity
 	}
 
 	override public void OnBodyCollisionStay() {}
-
 	override public void OnBodyCollisionExit() {}
-
     override public void OnWeaponCollisionEnter() {}
-
     override public void OnWeaponCollisionStay() {}
-
     override public void OnWeaponCollisionExit() {}
 }

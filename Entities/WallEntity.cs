@@ -19,8 +19,6 @@ public class WallEntity : Entity
 	}
 
 	override public void OnWeaponCollisionEnter() {}
-
 	override public void OnWeaponCollisionStay() {}
-
 	override public void OnWeaponCollisionExit() {}
 }

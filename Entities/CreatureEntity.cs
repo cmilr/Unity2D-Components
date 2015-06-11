@@ -22,37 +22,34 @@ public class CreatureEntity : Entity
 
 	override public void OnBodyCollisionEnter()
 	{
-		collidedWithBody = true;
+		// collidedWithBody = true;
 
-		if (!game.LevelLoading && !player.Dead)
-		{
-			switch (entityType)
-			{
-				case EntityType.Enemy:
-				break;
-			}
-		}
+		// if (!game.LevelLoading && !player.Dead)
+		// {
+		// 	switch (entityType)
+		// 	{
+		// 		case EntityType.Enemy:
+		// 		break;
+		// 	}
+		// }
 	}
-
-	override public void OnBodyCollisionStay() {}
-
-	override public void OnBodyCollisionExit() {}
 
 	override public void OnWeaponCollisionEnter()
 	{
-		collidedWithWeapon = true;
+		// collidedWithWeapon = true;
 
-		if (!game.LevelLoading && !player.Dead)
-		{
-			switch (entityType)
-			{
-				case EntityType.Enemy:
-				break;
-			}
-		}
+		// if (!game.LevelLoading && !player.Dead)
+		// {
+		// 	switch (entityType)
+		// 	{
+		// 		case EntityType.Enemy:
+		// 		break;
+		// 	}
+		// }
 	}
 
+	override public void OnBodyCollisionStay() {}
+	override public void OnBodyCollisionExit() {}
 	override public void OnWeaponCollisionStay() {}
-
 	override public void OnWeaponCollisionExit() {}
 }
