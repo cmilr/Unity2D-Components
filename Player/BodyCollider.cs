@@ -11,6 +11,7 @@ public class BodyCollider : CacheBehaviour
     private IPlayerStateFullAccess state;
     private IGameStateReadOnly game;
     private Weapon enemyWeapon;
+    private CreatureEntity enemy;
 
     void Start()
     {
@@ -36,6 +37,22 @@ public class BodyCollider : CacheBehaviour
                     enemyWeapon.alreadyCollided = true;
 
                     Messenger.Broadcast<string, Collider2D, int>("player dead", "projectile", coll, hitFrom);
+                }
+            }
+        }
+        else if (layer == ENEMY_COLLIDER)
+        {
+            enemy = coll.GetComponent<CreatureEntity>();
+
+            if (!enemy.alreadyCollided && !game.LevelLoading && !state.Dead)
+            {
+                hitFrom = HorizontalCollisionSide(coll);
+
+                if (enemy.entityType == CreatureEntity.EntityType.Enemy)
+                {
+                    enemy.alreadyCollided = true;
+
+                    Messenger.Broadcast<string, Collider2D, int>("player dead", "struckdown", coll, hitFrom);
                 }
             }
         }
