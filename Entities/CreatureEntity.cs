@@ -17,8 +17,6 @@ public class CreatureEntity : Entity
 
 	void Start()
 	{
-		thisCollider = GetComponent<BoxCollider2D>();
-
 		if (entityType == EntityType.Enemy) { AutoAlign(); }
 	}
 
@@ -31,8 +29,6 @@ public class CreatureEntity : Entity
 			switch (entityType)
 			{
 				case EntityType.Enemy:
-					// ultimately, this event will be broadcast from the player
-					// Messenger.Broadcast<string, Collider2D>("player dead", "struckdown", thisCollider, HorizontalCollisionSide());
 				break;
 			}
 		}

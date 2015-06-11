@@ -18,6 +18,7 @@ public class BaseBehaviour : MonoBehaviour {
     protected const int BOTTOM                          = 3;
     protected const int UP                              = 4;
     protected const int DOWN                            = 5;
+    protected const int ERROR                           = 0;
 
     // global measurements
     protected const float ONE_PIXEL                     = .03125f;
