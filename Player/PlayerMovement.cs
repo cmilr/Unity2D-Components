@@ -168,6 +168,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		else
 		{
 			animationAction = AnimationAction.Fall;
+			state.Grounded = false;
 		}
 	}
 
@@ -250,6 +251,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		{
 			animationAction = AnimationAction.Idle;
 		}
+
+		state.Grounded = true;
 	}
 
 	void PlayerJump()
@@ -259,6 +262,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		animationAction = AnimationAction.Jump;
 
 		jump = false;
+
+		state.Grounded = false;
 	}
 
 	void AttackWhileJumping()
@@ -379,7 +384,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		// clamp to maxRisingSpeed to eliminate jitteriness when rising too fast,
 		// otherwise, clamp to maxFallingSpeed to prevent player leaving screen
-		if (MovingTooFast() && state.RidingFastPlatform)
+		if (MovingTooFast() && state.RidingFastPlatform && !state.MovingHorizontally)
 		{
 			velocity.y = Mathf.Clamp(velocity.y, -maxFallingSpeed, maxRisingSpeed);
 		}
@@ -410,6 +415,11 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 	void SavePreviousPosition()
 	{
+		if (previousX != transform.position.x)
+			state.MovingHorizontally = true;
+		else
+			state.MovingHorizontally = false;
+
 		previousX = transform.position.x;
 		previousY = transform.position.y;
 		state.PreviousX = previousX;
