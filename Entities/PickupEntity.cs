@@ -14,8 +14,8 @@ public class PickupEntity : Entity
 	{
 		glow = gameObject.GetComponent<Light>() as Light;
 
-		if (entityType == EntityType.prize
-		 || entityType == EntityType.levelUp) { AutoAlign(); }
+		if ((entityType == EntityType.prize || entityType == EntityType.levelUp) && autoAlign)
+			AutoAlign();
 	}
 
 	override public void OnBodyCollisionEnter()

@@ -6,6 +6,8 @@ using System.Collections;
 public abstract class Entity : CacheBehaviour {
 
 	public int worth;
+	public bool autoAlign = true;
+	[HideInInspector]
 	public bool alreadyCollided;
 
 	protected int layer;
