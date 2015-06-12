@@ -163,6 +163,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		{
 			velocity.y = 0;
 			state.Grounded = true;
+			state.JumpedFromFastPlatform = false;
 		}
 		// falling state
 		else
@@ -253,6 +254,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		}
 
 		state.Grounded = true;
+		state.JumpedFromFastPlatform = false;
 	}
 
 	void PlayerJump()
@@ -264,6 +266,11 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		jump = false;
 
 		state.Grounded = false;
+
+		if (state.RidingFastPlatform && state.MovingHorizontally)
+		{
+			state.JumpedFromFastPlatform = true;
+		}
 	}
 
 	void AttackWhileJumping()
