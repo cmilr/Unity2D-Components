@@ -391,14 +391,14 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		// clamp to maxRisingSpeed to eliminate jitteriness when rising too fast,
 		// otherwise, clamp to maxFallingSpeed to prevent player leaving screen
-		if (MovingTooFast() && state.RidingFastPlatform && !state.MovingHorizontally)
-		{
-			velocity.y = Mathf.Clamp(velocity.y, -maxFallingSpeed, maxRisingSpeed);
-		}
-		else
-		{
+		// if (MovingTooFast() && state.RidingFastPlatform && !state.MovingHorizontally)
+		// {
+		// 	velocity.y = Mathf.Clamp(velocity.y, -maxFallingSpeed, maxRisingSpeed);
+		// }
+		// else
+		// {
 			velocity.y = Mathf.Clamp(velocity.y, -maxFallingSpeed, maxFallingSpeed);
-		}
+		// }
 	}
 
 	void ApplyMovement()
