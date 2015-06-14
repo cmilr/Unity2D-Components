@@ -3,6 +3,10 @@ using System.Collections;
 
 public class EnemyManager : CacheBehaviour {
 
+    public float attackInterval = 1f;
+    public float chanceOfAttack = 40f;
+    public float attackRange = 20f;
+
     private ProjectileManager projectile;
     private Weapon weapon;
     private GameObject target;
@@ -17,7 +21,7 @@ public class EnemyManager : CacheBehaviour {
     void OnBecameVisible()
     {
         InvokeRepeating("LookAtTarget", 1f, .3f);
-        InvokeRepeating("AttackRandomly", 2f, 1f);
+        InvokeRepeating("AttackRandomly", 2f, attackInterval);
     }
 
     void OnBecameInvisible()
@@ -34,7 +38,12 @@ public class EnemyManager : CacheBehaviour {
 
     void AttackRandomly()
     {
-        if (Random.Range(1, 11) <= 4)
-            projectile.FireAtTarget(weapon, target);
+        float distance = Vector3.Distance(target.transform.position, transform.position);
+
+        if (distance <= attackRange)
+        {
+            if (Random.Range(1, 101) <= chanceOfAttack)
+                projectile.FireAtTarget(weapon, target);
+        }
     }
 }
