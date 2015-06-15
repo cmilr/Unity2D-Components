@@ -43,7 +43,7 @@ public class ProjectileManager : CacheBehaviour {
     }
 
     // fire specifically at target
-    public void FireAtTarget(Weapon equippedWeapon, GameObject target)
+    public void FireAtTarget(Weapon equippedWeapon, Transform target)
     {
         fireRate = equippedWeapon.rateOfAttack;
 

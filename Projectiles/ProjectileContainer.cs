@@ -22,13 +22,13 @@ public class ProjectileContainer : Weapon {
         rigidbody2D.velocity = transform.right * weapon.speed * direction;
     }
 
-    public void Fire(Weapon incomingWeapon, GameObject target)
+    public void Fire(Weapon incomingWeapon, Transform target)
     {
         weapon = incomingWeapon;
         Init();
         MTween.Fade(spriteRenderer, 0f, 0f, 0f);
         MTween.Fade(spriteRenderer, 1f, 0f, .3f);
-        rigidbody2D.velocity = (target.transform.position - transform.position).normalized * weapon.speed;
+        rigidbody2D.velocity = (target.position - transform.position).normalized * weapon.speed;
     }
 
     void CheckDistanceTraveled()
