@@ -130,12 +130,8 @@ public class EnemyAI : CacheBehaviour {
             targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.orange);
             targets[i-1].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.white);
             projectile.FireAtTarget(weapon, targets[i].transform);
-            i++;
-            yield return new WaitForSeconds(2);
-            targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.orange);
-            targets[i-1].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.white);
-            projectile.FireAtTarget(weapon, targets[i].transform);
             i=0;
+            yield return new WaitForSeconds(2);
         }
     }
 

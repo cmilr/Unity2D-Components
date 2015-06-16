@@ -67,6 +67,7 @@ public class ProjectileContainer : Weapon {
         float xDist;
         float yDist;
         float yComp;
+        float xComp;
 
         //the farther away the target is horizontally, the higher the enemy aims to make up for gravity
         xDist = Mathf.Abs(transform.position.x - target.position.x);
@@ -103,13 +104,19 @@ public class ProjectileContainer : Weapon {
 
         // if target is below the enemy
         if (target.position.y < transform.position.y)
-            yComp += yDist * .1f;
+        {
+            // yComp += yDist * -.1f;
+            xComp = yDist * (xDist/10f) * -.9f;
+        }
 
         // if target is above the enemy
         else
-            yComp += yDist * .3f;
+        {
+            // yComp += yDist * .3f;
+            xComp = 0;
+        }
 
-        return new Vector3(target.position.x, target.position.y + yComp, target.position.z);
+        return new Vector3(target.position.x + xComp, target.position.y + yComp, target.position.z);
     }
 
     override public void PlayIdleAnimation(float xOffset, float yOffset) {}
