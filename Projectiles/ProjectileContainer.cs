@@ -74,30 +74,29 @@ public class ProjectileContainer : Weapon {
 
         Debug.Log(xDist);
 
+        // at zero
         if (xDist >= 0 && xDist <= 2)
             yComp = xDist * 0f;
         else if (xDist > 2 && xDist <= 4)
-            yComp = xDist * .1f;
+            yComp = xDist * .15f;
         else if (xDist > 4 && xDist <= 6)
-            yComp = xDist * .13f;
+            yComp = xDist * .17f;
         else if (xDist > 6 && xDist <= 8)
-            yComp = xDist * .18f;
+            yComp = xDist * .20f;
         else if (xDist > 8 && xDist <= 10)
-            yComp = xDist * .22f;
+            yComp = xDist * .25f;
         else if (xDist > 10 && xDist <= 12)
-            yComp = xDist * .26f;
+            yComp = xDist * .3f;
         else if (xDist > 12 && xDist <= 14)
-            yComp = xDist * .31f;
+            yComp = xDist * .37f;
         else if (xDist > 14 && xDist <= 16)
-            yComp = xDist * .36f;
+            yComp = xDist * .44f;
         else if (xDist > 16 && xDist <= 18)
-            yComp = xDist * .42f;
+            yComp = xDist * .53f;
         else if (xDist > 18 && xDist <= 20)
-            yComp = xDist * .50f;
-        else if (xDist > 20 && xDist <= 22)
-            yComp = xDist * .59f;
+            yComp = xDist * .65f;
         else
-            yComp = xDist * .4f;
+            yComp = xDist * .99f;
 
         // get distance vertically
         yDist = Mathf.Abs(transform.position.y - target.position.y);
@@ -119,3 +118,30 @@ public class ProjectileContainer : Weapon {
     override public void PlaySwingAnimation(float xOffset, float yOffset) {}
     override public void EnableAnimation(bool status) {}
 }
+
+
+// 4 below
+// if (xDist >= 0 && xDist <= 2)
+//     yComp = xDist * 0f;
+// else if (xDist > 2 && xDist <= 4)
+//     yComp = xDist * .1f;
+// else if (xDist > 4 && xDist <= 6)
+//     yComp = xDist * .13f;
+// else if (xDist > 6 && xDist <= 8)
+//     yComp = xDist * .18f;
+// else if (xDist > 8 && xDist <= 10)
+//     yComp = xDist * .22f;
+// else if (xDist > 10 && xDist <= 12)
+//     yComp = xDist * .26f;
+// else if (xDist > 12 && xDist <= 14)
+//     yComp = xDist * .31f;
+// else if (xDist > 14 && xDist <= 16)
+//     yComp = xDist * .36f;
+// else if (xDist > 16 && xDist <= 18)
+//     yComp = xDist * .42f;
+// else if (xDist > 18 && xDist <= 20)
+//     yComp = xDist * .50f;
+// else if (xDist > 20 && xDist <= 22)
+//     yComp = xDist * .59f;
+// else
+//     yComp = xDist * .73f;
