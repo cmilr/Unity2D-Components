@@ -13,7 +13,7 @@ public class GameInit : BaseBehaviour
 
         // initialize DOTween before first use.
         DOTween.Init(true, true, LogBehaviour.Verbose).SetCapacity(200, 10);
-        DOTween.SetTweensCapacity(2000, 100);
+        DOTween.SetTweensCapacity(2000, 300);
 
         MLib.IgnoreLayerCollision2D("BodyCollider", "Platform", true);
         MLib.IgnoreLayerCollision2D("BodyCollider", "One-Way Platform", true);
