@@ -71,14 +71,31 @@ public class ProjectileContainer : Weapon {
         //the farther away the target is horizontally, the higher the enemy aims to make up for gravity
         xDist = Mathf.Abs(transform.position.x - target.position.x);
 
+
         Debug.Log(xDist);
 
-        if (xDist >= 0 && xDist <= 5)
+        if (xDist >= 0 && xDist <= 2)
             yComp = xDist * 0f;
-        else if (xDist > 5 && xDist <= 10)
-            yComp = xDist * .2f;
-        else if (xDist > 10 && xDist <= 15)
-            yComp = xDist * .3f;
+        else if (xDist > 2 && xDist <= 4)
+            yComp = xDist * .1f;
+        else if (xDist > 4 && xDist <= 6)
+            yComp = xDist * .13f;
+        else if (xDist > 6 && xDist <= 8)
+            yComp = xDist * .18f;
+        else if (xDist > 8 && xDist <= 10)
+            yComp = xDist * .22f;
+        else if (xDist > 10 && xDist <= 12)
+            yComp = xDist * .26f;
+        else if (xDist > 12 && xDist <= 14)
+            yComp = xDist * .31f;
+        else if (xDist > 14 && xDist <= 16)
+            yComp = xDist * .36f;
+        else if (xDist > 16 && xDist <= 18)
+            yComp = xDist * .42f;
+        else if (xDist > 18 && xDist <= 20)
+            yComp = xDist * .50f;
+        else if (xDist > 20 && xDist <= 22)
+            yComp = xDist * .59f;
         else
             yComp = xDist * .4f;
 
