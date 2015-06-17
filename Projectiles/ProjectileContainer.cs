@@ -5,45 +5,66 @@ using Matcha.Game.Tweens;
 
 public class ProjectileContainer : Weapon {
 
-    [HideInInspector]
-    public Transform target;
-
+    private Transform target;
     private Vector3 origin;
-    private Weapon weapon;
     private bool linear;
+    private Weapon weapon;
 
-    void Init(Weapon weapon)
+    void Init(Weapon weapon, Transform target)
     {
-        origin = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         this.weapon = weapon;
+        this.target = target;
+        rigidbody2D.mass = weapon.mass;
         spriteRenderer.sprite = weapon.sprite;
-        GetWeaponMass();
+        origin = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         InvokeRepeating("CheckDistanceTraveled", 1, 0.3F);
     }
 
     public void Fire(Weapon weapon, float direction)
     {
-        // Init(weapon);
-        // rigidbody2D.velocity = transform.right * weapon.speed * direction;
+        Init(weapon, target);
+        rigidbody2D.velocity = transform.right * weapon.speed * direction;
     }
 
     public void Fire(Weapon weapon, Transform target)
     {
-        this.target = target;
-        Init(weapon);
+        Init(weapon, target);
         MTween.Fade(spriteRenderer, 0f, 0f, 0f);
         MTween.Fade(spriteRenderer, 1f, 0f, .3f);
 
-        float distance = target.position.x - transform.position.x;
-        float angleToPoint = (float)Math.Atan2(target.position.y - transform.position.y, target.position.x - transform.position.x);
-        float distanceFactor = .0465f;
-        float angleCorrection = (float)(3.14*0.18) * (distance * distanceFactor);
-
-        if (linear)
+        // if weapon has no mass, fire projectile linearally
+        if (rigidbody2D.mass <= .001f)
+        {
+            rigidbody2D.gravityScale = 0;
             rigidbody2D.velocity = (target.position - transform.position).normalized * weapon.speed;
-        else // lobbed
-            rigidbody2D.velocity = new Vector2((float)Math.Cos(angleToPoint+angleCorrection) * 10f,
-                                               (float)Math.Sin(angleToPoint+angleCorrection) * 10f);
+        }
+        else
+        {
+            float distance;
+            float yDifference;
+            float angleToPoint;
+            float distanceFactor;
+            float distanceCompensation;
+            float angleCorrection;
+            float speed;
+
+            distance = target.position.x - transform.position.x;
+            yDifference = target.position.y - origin.y;
+            angleToPoint = (float)Math.Atan2(target.position.y - transform.position.y, target.position.x - transform.position.x);
+            speed = weapon.speed;
+
+            distanceFactor = .034f;
+
+            if (yDifference >= -2f)
+                distanceCompensation = .001f;
+            else
+                distanceCompensation = .00065f;
+
+            distanceFactor += yDifference * distanceCompensation;
+            angleCorrection = (float)(3.14*0.18) * (distance * distanceFactor);
+            rigidbody2D.velocity = new Vector2((float)Math.Cos(angleToPoint+angleCorrection) * speed,
+                                               (float)Math.Sin(angleToPoint+angleCorrection) * speed);
+        }
     }
 
     void CheckDistanceTraveled()
@@ -61,30 +82,6 @@ public class ProjectileContainer : Weapon {
         gameObject.SetActive(false);
     }
 
-    void GetWeaponMass()
-    {
-        // if weapon has appreciable mass it will be lobbed, otherwise, turn off gravity
-        rigidbody2D.mass = weapon.mass;
-
-        if (rigidbody2D.mass <= .001f)
-        {
-            rigidbody2D.gravityScale = 0;
-            linear = true;
-        }
-    }
-
-    // Vector3 CompensatedTarget(Transform target)
-    // {
-    //     float xDist;
-    //     float yDist;
-    //     float yComp;
-    //     float xComp;
-
-    //     //the farther away the target is horizontally, the higher the enemy aims to make up for gravity
-    //     xDist = Mathf.Abs(transform.position.x - target.position.x);
-
-
-    //     Debug.Log(xDist);
 
     //     // at zero
     //     if (xDist >= 0 && xDist <= 2)
@@ -109,94 +106,7 @@ public class ProjectileContainer : Weapon {
     //         yComp = xDist * .65f;
     //     else
     //         yComp = xDist * .99f;
-
-    //     // get distance vertically
-    //     yDist = Mathf.Abs(transform.position.y - target.position.y);
-
-    //     // if target is below the enemy
-    //     if (target.position.y < transform.position.y)
-    //     {
-    //         // yComp += yDist * -.1f;
-    //         xComp = yDist * (xDist/10f) * -.9f;
-    //     }
-
-    //     // if target is above the enemy
-    //     else
-    //     {
-    //         // yComp += yDist * .3f;
-    //         xComp = 0;
-    //     }
-
-    //     return new Vector3(target.position.x + xComp, target.position.y + yComp, target.position.z);
-    // }
-
-    // float CalculateMaximumRange()
-    // {
-    //     float g = Physics.gravity.y;
-    //     float y = origin.position.y;
-    //     float v = 10f;
-    //     float a = 45 * Mathf.Deg2Rad;
-
-    //  float vSin = v * Mathf.Cos(a);
-    //  float vCos = v * Mathf.Sin(a);
-
-    //  float sqrt = Mathf.Sqrt(vSin * vSin + 2 * g * y);
-
-    //  return Mathf.Abs((vSin / g) * (vCos + sqrt));
-    // }
-
-    float CalculateProjectileFiringSolution()
-    {
-        Vector3 targetTransform = target.transform.position;
-        Vector3 barrelTransform = transform.position;
-
-     float y = barrelTransform.y - targetTransform.y;
-
-     targetTransform.y = barrelTransform.y = 0;
-
-     float x = (targetTransform - barrelTransform).magnitude;
-     float v = 10f;
-     float g = Physics.gravity.y;
-
-     float sqrt = (v*v*v*v) - (g * (g * (x*x) + 2 * y * (v*v)));
-
-     // Not enough range
-
-     if (sqrt < 0) {
-         // haveFiringSolution = false;
-         return 0.0f;
-     }
-
-     // haveFiringSolution = true;
-
-     sqrt = Mathf.Sqrt(sqrt);
-
-     // DirectFire chooses the low trajectory, otherwise high trajectory.
-
-     // if (directFire) {
-     //     return Mathf.Atan(((v*v) - sqrt) / (g*x));
-
-      // else {
-         return Mathf.Atan(((v*v) + sqrt) / (g*x));
-
-     // }
-    }
-
-    float CalculateFlightTime(float angle)
-    {
-        Vector3 targetTransform = target.transform.position;
-        Vector3 barrelTransform = transform.position;
-
-     float x = (targetTransform - barrelTransform).magnitude;
-     float v = 10f;
-
-     angle = angle == 0 ? 45 : angle;
-
-     float time = x / (v * Mathf.Cos(angle * Mathf.Deg2Rad));
-
-     return time * .7f;
-
-    }
+        // }
 
     override public void PlayIdleAnimation(float xOffset, float yOffset) {}
     override public void PlayRunAnimation(float xOffset, float yOffset) {}
@@ -204,31 +114,4 @@ public class ProjectileContainer : Weapon {
     override public void PlaySwingAnimation(float xOffset, float yOffset) {}
     override public void EnableAnimation(bool status) {}
 }
-
-
-// 4 below
-// if (xDist >= 0 && xDist <= 2)
-//     yComp = xDist * 0f;
-// else if (xDist > 2 && xDist <= 4)
-//     yComp = xDist * .1f;
-// else if (xDist > 4 && xDist <= 6)
-//     yComp = xDist * .13f;
-// else if (xDist > 6 && xDist <= 8)
-//     yComp = xDist * .18f;
-// else if (xDist > 8 && xDist <= 10)
-//     yComp = xDist * .22f;
-// else if (xDist > 10 && xDist <= 12)
-//     yComp = xDist * .26f;
-// else if (xDist > 12 && xDist <= 14)
-//     yComp = xDist * .31f;
-// else if (xDist > 14 && xDist <= 16)
-//     yComp = xDist * .36f;
-// else if (xDist > 16 && xDist <= 18)
-//     yComp = xDist * .42f;
-// else if (xDist > 18 && xDist <= 20)
-//     yComp = xDist * .50f;
-// else if (xDist > 20 && xDist <= 22)
-//     yComp = xDist * .59f;
-// else
-//     yComp = xDist * .73f;
 
