@@ -34,22 +34,16 @@ public class ProjectileContainer : Weapon {
         MTween.Fade(spriteRenderer, 0f, 0f, 0f);
         MTween.Fade(spriteRenderer, 1f, 0f, .3f);
 
-
         float distance = target.position.x - transform.position.x;
         float angleToPoint = (float)Math.Atan2(target.position.y - transform.position.y, target.position.x - transform.position.x);
-        float distanceFactor = .046f;
+        float distanceFactor = .0465f;
         float angleCorrection = (float)(3.14*0.18) * (distance * distanceFactor);
 
-        // if (linear)
-        //     rigidbody2D.velocity = (target.position - transform.position).normalized * weapon.speed;
-        // else // lobbed
-        Debug.Log("Fire!");
+        if (linear)
+            rigidbody2D.velocity = (target.position - transform.position).normalized * weapon.speed;
+        else // lobbed
             rigidbody2D.velocity = new Vector2((float)Math.Cos(angleToPoint+angleCorrection) * 10f,
                                                (float)Math.Sin(angleToPoint+angleCorrection) * 10f);
-            // rigidbody2D.velocity.x = Math.Cos(angleToPoint+angleCorrection) * 10f;
-            // rigidbody2D.velocity.y = Math.Sin(angleToPoint+angleCorrection) * 10f;
-
-            // rigidbody2D.velocity.x = (CalculateProjectileFiringSolution()).normalized * weapon.speed;
     }
 
     void CheckDistanceTraveled()
