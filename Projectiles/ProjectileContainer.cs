@@ -1,8 +1,12 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using Matcha.Game.Tweens;
 
 public class ProjectileContainer : Weapon {
+
+    [HideInInspector]
+    public Transform target;
 
     private Vector3 origin;
     private Weapon weapon;
@@ -19,20 +23,33 @@ public class ProjectileContainer : Weapon {
 
     public void Fire(Weapon weapon, float direction)
     {
-        Init(weapon);
-        rigidbody2D.velocity = transform.right * weapon.speed * direction;
+        // Init(weapon);
+        // rigidbody2D.velocity = transform.right * weapon.speed * direction;
     }
 
     public void Fire(Weapon weapon, Transform target)
     {
+        this.target = target;
         Init(weapon);
         MTween.Fade(spriteRenderer, 0f, 0f, 0f);
         MTween.Fade(spriteRenderer, 1f, 0f, .3f);
 
-        if (linear)
-            rigidbody2D.velocity = (target.position - transform.position).normalized * weapon.speed;
-        else // lobbed
-            rigidbody2D.velocity = (CompensatedTarget(target) - transform.position).normalized * weapon.speed;
+
+        float distance = target.position.x - transform.position.x;
+        float angleToPoint = (float)Math.Atan2(target.position.y - transform.position.y, target.position.x - transform.position.x);
+        float distanceFactor = .046f;
+        float angleCorrection = (float)(3.14*0.18) * (distance * distanceFactor);
+
+        // if (linear)
+        //     rigidbody2D.velocity = (target.position - transform.position).normalized * weapon.speed;
+        // else // lobbed
+        Debug.Log("Fire!");
+            rigidbody2D.velocity = new Vector2((float)Math.Cos(angleToPoint+angleCorrection) * 10f,
+                                               (float)Math.Sin(angleToPoint+angleCorrection) * 10f);
+            // rigidbody2D.velocity.x = Math.Cos(angleToPoint+angleCorrection) * 10f;
+            // rigidbody2D.velocity.y = Math.Sin(angleToPoint+angleCorrection) * 10f;
+
+            // rigidbody2D.velocity.x = (CalculateProjectileFiringSolution()).normalized * weapon.speed;
     }
 
     void CheckDistanceTraveled()
@@ -62,61 +79,129 @@ public class ProjectileContainer : Weapon {
         }
     }
 
-    Vector3 CompensatedTarget(Transform target)
+    // Vector3 CompensatedTarget(Transform target)
+    // {
+    //     float xDist;
+    //     float yDist;
+    //     float yComp;
+    //     float xComp;
+
+    //     //the farther away the target is horizontally, the higher the enemy aims to make up for gravity
+    //     xDist = Mathf.Abs(transform.position.x - target.position.x);
+
+
+    //     Debug.Log(xDist);
+
+    //     // at zero
+    //     if (xDist >= 0 && xDist <= 2)
+    //         yComp = xDist * 0f;
+    //     else if (xDist > 2 && xDist <= 4)
+    //         yComp = xDist * .15f;
+    //     else if (xDist > 4 && xDist <= 6)
+    //         yComp = xDist * .17f;
+    //     else if (xDist > 6 && xDist <= 8)
+    //         yComp = xDist * .20f;
+    //     else if (xDist > 8 && xDist <= 10)
+    //         yComp = xDist * .25f;
+    //     else if (xDist > 10 && xDist <= 12)
+    //         yComp = xDist * .3f;
+    //     else if (xDist > 12 && xDist <= 14)
+    //         yComp = xDist * .37f;
+    //     else if (xDist > 14 && xDist <= 16)
+    //         yComp = xDist * .44f;
+    //     else if (xDist > 16 && xDist <= 18)
+    //         yComp = xDist * .53f;
+    //     else if (xDist > 18 && xDist <= 20)
+    //         yComp = xDist * .65f;
+    //     else
+    //         yComp = xDist * .99f;
+
+    //     // get distance vertically
+    //     yDist = Mathf.Abs(transform.position.y - target.position.y);
+
+    //     // if target is below the enemy
+    //     if (target.position.y < transform.position.y)
+    //     {
+    //         // yComp += yDist * -.1f;
+    //         xComp = yDist * (xDist/10f) * -.9f;
+    //     }
+
+    //     // if target is above the enemy
+    //     else
+    //     {
+    //         // yComp += yDist * .3f;
+    //         xComp = 0;
+    //     }
+
+    //     return new Vector3(target.position.x + xComp, target.position.y + yComp, target.position.z);
+    // }
+
+    // float CalculateMaximumRange()
+    // {
+    //     float g = Physics.gravity.y;
+    //     float y = origin.position.y;
+    //     float v = 10f;
+    //     float a = 45 * Mathf.Deg2Rad;
+
+    //  float vSin = v * Mathf.Cos(a);
+    //  float vCos = v * Mathf.Sin(a);
+
+    //  float sqrt = Mathf.Sqrt(vSin * vSin + 2 * g * y);
+
+    //  return Mathf.Abs((vSin / g) * (vCos + sqrt));
+    // }
+
+    float CalculateProjectileFiringSolution()
     {
-        float xDist;
-        float yDist;
-        float yComp;
-        float xComp;
+        Vector3 targetTransform = target.transform.position;
+        Vector3 barrelTransform = transform.position;
 
-        //the farther away the target is horizontally, the higher the enemy aims to make up for gravity
-        xDist = Mathf.Abs(transform.position.x - target.position.x);
+     float y = barrelTransform.y - targetTransform.y;
 
+     targetTransform.y = barrelTransform.y = 0;
 
-        Debug.Log(xDist);
+     float x = (targetTransform - barrelTransform).magnitude;
+     float v = 10f;
+     float g = Physics.gravity.y;
 
-        // at zero
-        if (xDist >= 0 && xDist <= 2)
-            yComp = xDist * 0f;
-        else if (xDist > 2 && xDist <= 4)
-            yComp = xDist * .15f;
-        else if (xDist > 4 && xDist <= 6)
-            yComp = xDist * .17f;
-        else if (xDist > 6 && xDist <= 8)
-            yComp = xDist * .20f;
-        else if (xDist > 8 && xDist <= 10)
-            yComp = xDist * .25f;
-        else if (xDist > 10 && xDist <= 12)
-            yComp = xDist * .3f;
-        else if (xDist > 12 && xDist <= 14)
-            yComp = xDist * .37f;
-        else if (xDist > 14 && xDist <= 16)
-            yComp = xDist * .44f;
-        else if (xDist > 16 && xDist <= 18)
-            yComp = xDist * .53f;
-        else if (xDist > 18 && xDist <= 20)
-            yComp = xDist * .65f;
-        else
-            yComp = xDist * .99f;
+     float sqrt = (v*v*v*v) - (g * (g * (x*x) + 2 * y * (v*v)));
 
-        // get distance vertically
-        yDist = Mathf.Abs(transform.position.y - target.position.y);
+     // Not enough range
 
-        // if target is below the enemy
-        if (target.position.y < transform.position.y)
-        {
-            // yComp += yDist * -.1f;
-            xComp = yDist * (xDist/10f) * -.9f;
-        }
+     if (sqrt < 0) {
+         // haveFiringSolution = false;
+         return 0.0f;
+     }
 
-        // if target is above the enemy
-        else
-        {
-            // yComp += yDist * .3f;
-            xComp = 0;
-        }
+     // haveFiringSolution = true;
 
-        return new Vector3(target.position.x + xComp, target.position.y + yComp, target.position.z);
+     sqrt = Mathf.Sqrt(sqrt);
+
+     // DirectFire chooses the low trajectory, otherwise high trajectory.
+
+     // if (directFire) {
+     //     return Mathf.Atan(((v*v) - sqrt) / (g*x));
+
+      // else {
+         return Mathf.Atan(((v*v) + sqrt) / (g*x));
+
+     // }
+    }
+
+    float CalculateFlightTime(float angle)
+    {
+        Vector3 targetTransform = target.transform.position;
+        Vector3 barrelTransform = transform.position;
+
+     float x = (targetTransform - barrelTransform).magnitude;
+     float v = 10f;
+
+     angle = angle == 0 ? 45 : angle;
+
+     float time = x / (v * Mathf.Cos(angle * Mathf.Deg2Rad));
+
+     return time * .7f;
+
     }
 
     override public void PlayIdleAnimation(float xOffset, float yOffset) {}
@@ -152,3 +237,4 @@ public class ProjectileContainer : Weapon {
 //     yComp = xDist * .59f;
 // else
 //     yComp = xDist * .73f;
+
