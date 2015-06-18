@@ -28,6 +28,15 @@ public class ProjectileContainer : Weapon {
 
     public void Fire(Weapon weapon, Transform target)
     {
+        float distance;
+        float yDifference;
+        float angleToPoint;
+        float distanceFactor;
+        float distanceCompensation;
+        float speedCompensation;
+        float angleCorrection;
+        float speed;
+
         Init(weapon, target);
         MTween.Fade(spriteRenderer, 0f, 0f, 0f);
         MTween.Fade(spriteRenderer, 1f, 0f, .3f);
@@ -39,26 +48,53 @@ public class ProjectileContainer : Weapon {
             rigidbody2D.velocity = (target.position - transform.position).normalized * weapon.speed;
         }
         else
-        {
-            float distance;
-            float yDifference;
-            float angleToPoint;
-            float distanceFactor;
-            float distanceCompensation;
-            float angleCorrection;
-            float speed;
+        {   // otherwise, lob projectile like a cannon ball
+            // the below formula is accurate given the following settings: gravity of .5,
+            // angular drag of .05, mass of 1, and projectile speeds between 8 and 20
 
             distance = target.position.x - transform.position.x;
             yDifference = target.position.y - origin.y;
             angleToPoint = (float)Math.Atan2(target.position.y - transform.position.y, target.position.x - transform.position.x);
             speed = weapon.speed;
 
-            distanceFactor = .034f;
+            // compensate for various projectile speeds
+            // in terms of accuracy, the data set below supports speeds between 8 and 20
+            if (speed < 8)
+                speedCompensation = 3.2f;
+            else if (speed >= 8 && speed < 9)
+                speedCompensation = 2.2f;
+            else if (speed >= 9 && speed < 10)
+                speedCompensation = 1.85f;
+            else if (speed >= 10 && speed < 11)
+                speedCompensation = 1.50f;
+            else if (speed >= 11 && speed < 12)
+                speedCompensation = 1.25f;
+            else if (speed >= 12 && speed < 13)
+                speedCompensation = 1f;
+            else if (speed >= 13 && speed < 14)
+                speedCompensation = .85f;
+            else if (speed >= 14 && speed < 15)
+                speedCompensation = .75f;
+            else if (speed >= 15 && speed < 16)
+                speedCompensation = .65f;
+            else if (speed >= 16 && speed < 17)
+                speedCompensation = .55f;
+            else if (speed >= 17 && speed < 18)
+                speedCompensation = .5f;
+            else if (speed >= 18 && speed < 19)
+                speedCompensation = .45f;
+            else if (speed >= 19 && speed < 20)
+                speedCompensation = .4f;
+            else
+                speedCompensation = .35f;
+
+            // compensate for both positive and negative distances between origin and target
+            distanceFactor = .034f * speedCompensation;
 
             if (yDifference >= -2f)
-                distanceCompensation = .001f;
+                distanceCompensation = .001f * speedCompensation;
             else
-                distanceCompensation = .00065f;
+                distanceCompensation = .00065f * speedCompensation;
 
             distanceFactor += yDifference * distanceCompensation;
             angleCorrection = (float)(3.14*0.18) * (distance * distanceFactor);

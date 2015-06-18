@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Matcha.Game.Colors;   // testing only
+using UnityEngine;
 using System.Collections;
 
 public class EnemyAI : CacheBehaviour {
@@ -11,6 +12,9 @@ public class EnemyAI : CacheBehaviour {
     private Weapon weapon;
     private Transform target;
 
+    public bool test;
+    public GameObject[] targets;    // testing only
+
 	void Start()
     {
         projectile = GetComponent<ProjectileManager>();
@@ -21,13 +25,21 @@ public class EnemyAI : CacheBehaviour {
     void OnBecameVisible()
     {
         InvokeRepeating("LookAtTarget", 1f, .3f);
-        InvokeRepeating("AttackRandomly", 2f, attackInterval);
+        if (test)
+        {
+            StartCoroutine(LobCompTest());
+        }
+        else
+        {
+            InvokeRepeating("AttackRandomly", 2f, attackInterval);
+        }
     }
 
     void OnBecameInvisible()
     {
         CancelInvoke("LookAtTarget");
-        CancelInvoke("AttackRandomly");
+        if (!test)
+            CancelInvoke("AttackRandomly");
     }
 
     void LookAtTarget()
@@ -62,86 +74,35 @@ public class EnemyAI : CacheBehaviour {
 
 
 
+
+
+
+
+
     // TARGET TESTING SUITE
     // ####################
 
+    IEnumerator LobCompTest()
+    {
+        int i = 0;
+        int j = i - 1;
 
-    // using Matcha.Game.Colors;
+        while (true)
+        {
+            if (i >= targets.Length)
+                i = 0;
+            if (j >= targets.Length)
+                j = 0;
+            if (j < 0)
+                j = 10;
 
-    // public GameObject[] targets;
-
-    // void Start()
-    // {
-        // StartCoroutine(LobCompTest());
-    // }
-
-    // IEnumerator LobCompTest()
-    // {
-    //     while (true)
-    //     {
-    //         int i = 0;
-
-    //         // yield return new WaitForSeconds(1);
-    //         // targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.orange);
-    //         // projectile.FireAtTarget(weapon, targets[i].transform);
-
-    //         yield return new WaitForSeconds(2);
-    //         targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.orange);
-    //         targets[10].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.white);
-    //         projectile.FireAtTarget(weapon, targets[i].transform);
-    //         i++;
-    //         yield return new WaitForSeconds(2);
-    //         targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.orange);
-    //         targets[i-1].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.white);
-    //         projectile.FireAtTarget(weapon, targets[i].transform);
-    //         i++;
-    //         yield return new WaitForSeconds(2);
-    //         targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.orange);
-    //         targets[i-1].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.white);
-    //         projectile.FireAtTarget(weapon, targets[i].transform);
-    //         i++;
-    //         yield return new WaitForSeconds(2);
-    //         targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.orange);
-    //         targets[i-1].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.white);
-    //         projectile.FireAtTarget(weapon, targets[i].transform);
-    //         i++;
-    //         yield return new WaitForSeconds(2);
-    //         targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.orange);
-    //         targets[i-1].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.white);
-    //         projectile.FireAtTarget(weapon, targets[i].transform);
-    //         i++;
-    //         yield return new WaitForSeconds(2);
-    //         targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.orange);
-    //         targets[i-1].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.white);
-    //         projectile.FireAtTarget(weapon, targets[i].transform);
-    //         i++;
-    //         yield return new WaitForSeconds(2);
-    //         targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.orange);
-    //         targets[i-1].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.white);
-    //         projectile.FireAtTarget(weapon, targets[i].transform);
-    //         i++;
-    //         yield return new WaitForSeconds(2);
-    //         targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.orange);
-    //         targets[i-1].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.white);
-    //         projectile.FireAtTarget(weapon, targets[i].transform);
-    //         i++;
-    //         yield return new WaitForSeconds(2);
-    //         targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.orange);
-    //         targets[i-1].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.white);
-    //         projectile.FireAtTarget(weapon, targets[i].transform);
-    //         i++;
-    //         yield return new WaitForSeconds(2);
-    //         targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.orange);
-    //         targets[i-1].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.white);
-    //         projectile.FireAtTarget(weapon, targets[i].transform);
-    //         i++;
-    //         yield return new WaitForSeconds(2);
-    //         targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.orange);
-    //         targets[i-1].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.white);
-    //         projectile.FireAtTarget(weapon, targets[i].transform);
-    //         i=0;
-    //         yield return new WaitForSeconds(2);
-    //     }
-    // }
+            targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.orange);
+            targets[j].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.white);
+            projectile.FireAtTarget(weapon, targets[i].transform);
+            i++;
+            j++;
+            yield return new WaitForSeconds(2);
+        }
+    }
 
 }

@@ -21,7 +21,8 @@ public abstract class Weapon : AnimationBehaviour {
     public float rateOfAttack;
 
     [Header("Projectile Weapons")]
-    public float speed;
+    [Range (8, 20)]
+    public float speed = 12;
     public float maxDistance;
 
     [Tooltip("zero mass will be fired linearly, positive mass will be lobbed at at its target")]
