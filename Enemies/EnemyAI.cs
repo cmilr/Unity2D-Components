@@ -19,18 +19,16 @@ public class EnemyAI : CacheBehaviour {
     {
         projectile = GetComponent<ProjectileManager>();
         weapon = GetComponentInChildren<Weapon>();
-        target = GameObject.Find("Player").transform;
+        target = GameObject.Find(PLAYER).transform;
 	}
 
     void OnBecameVisible()
     {
         InvokeRepeating("LookAtTarget", 1f, .3f);
-        if (test)
-        {
+
+        if (test) {
             StartCoroutine(LobCompTest());
-        }
-        else
-        {
+        } else {
             InvokeRepeating("AttackRandomly", 2f, attackInterval);
         }
     }

@@ -6,10 +6,11 @@ using Matcha.Lib;
 
 public class ProjectileContainer : Weapon {
 
+    // this class acts as a container to be shot across the screen
+
+    private Weapon weapon;
     private Transform target;
     private Vector3 origin;
-    private bool linear;
-    private Weapon weapon;
 
     void Init(Weapon weapon, Transform target)
     {
@@ -50,11 +51,17 @@ public class ProjectileContainer : Weapon {
         if (distance > weapon.maxDistance)
         {
             MTween.FadeOutProjectile(spriteRenderer, 0f, 0f, .6f);
-            Invoke("Deactivate", 1.5f);
+            Invoke("DeactivateCollider", .1f);
+            Invoke("DeactivateEntireObject", 1.5f);
         }
     }
 
-    void Deactivate()
+    void DeactivateCollider()
+    {
+        collider2D.enabled = false;
+    }
+
+    void DeactivateEntireObject()
     {
         gameObject.SetActive(false);
     }
