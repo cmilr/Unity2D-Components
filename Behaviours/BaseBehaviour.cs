@@ -33,6 +33,7 @@ public class BaseBehaviour : MonoBehaviour {
     protected const string GAME_STATE                   = "GameState";
     protected const string TILE_MAP                     = "TileMap";
     protected const string DEFAULT_TILE                 = "DefaultTile";
+    protected const string _OBJECT_POOL                 = "_ObjectPool";
 
     // layer names
     protected const int PLAYER_LAYER                    = 12;

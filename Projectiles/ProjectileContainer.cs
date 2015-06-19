@@ -12,6 +12,12 @@ public class ProjectileContainer : Weapon {
     private Transform target;
     private Vector3 origin;
 
+    void OnEnable()
+    {
+        rigidbody2D.mass = mass;
+        spriteRenderer.sprite = sprite;
+    }
+
     void Init(Weapon weapon, Transform target)
     {
         this.weapon = weapon;
@@ -63,7 +69,7 @@ public class ProjectileContainer : Weapon {
 
     void DeactivateEntireObject()
     {
-        gameObject.SetActive(false);
+        this.Recycle();
     }
 
     override public void PlayIdleAnimation(float xOffset, float yOffset) {}

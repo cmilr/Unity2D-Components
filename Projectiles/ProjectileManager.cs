@@ -6,22 +6,24 @@ public class ProjectileManager : CacheBehaviour {
 	private GameObject projectilePrefab;
     private Transform projectileSpawnPoint;
     private ProjectileContainer projectile;
+    private _ObjectPool pool;
     private float fireRate;
     private float nextFire;
 
     void Start()
     {
         projectileSpawnPoint = GetComponentInChildren<SpawnPointTrace>().transform;
+        pool = GameObject.Find(_OBJECT_POOL).GetComponent<_ObjectPool>();
 
         // instantiate correct projectile depending on who is firing--Player or Enemy?
         // the only difference between projectiles is the layer they reside on
         if(gameObject.layer == PLAYER_LAYER)
         {
-            projectilePrefab = (GameObject)Resources.Load("Prefabs/Projectiles/PlayerProjectile", typeof(GameObject));
+            projectilePrefab = pool.playerProjectile;
         }
         else
         {
-            projectilePrefab = (GameObject)Resources.Load("Prefabs/Projectiles/EnemyProjectile", typeof(GameObject));
+            projectilePrefab = pool.enemyProjectile;
         }
     }
 
@@ -33,7 +35,7 @@ public class ProjectileManager : CacheBehaviour {
         if (Time.time > nextFire)
         {
             nextFire = Time.time + fireRate;
-            GameObject go = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation) as GameObject;
+            GameObject go = projectilePrefab.Spawn(projectileSpawnPoint.position, projectileSpawnPoint.rotation);
             projectile = go.GetComponent<ProjectileContainer>();
 
             // flip projectile sprite so it's pointing the same direction as the actor
@@ -50,7 +52,7 @@ public class ProjectileManager : CacheBehaviour {
         if (Time.time > nextFire)
         {
             nextFire = Time.time + fireRate;
-            GameObject go = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation) as GameObject;
+            GameObject go = projectilePrefab.Spawn(projectileSpawnPoint.position, projectileSpawnPoint.rotation);
             projectile = go.GetComponent<ProjectileContainer>();
 
             // flip projectile sprite so it's pointing the same direction as the actor
