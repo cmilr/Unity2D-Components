@@ -15,7 +15,7 @@ public class SoundManager : CacheBehaviour
 
 	void OnPrizeCollected(int worth)
 	{
-		audio.PlayOneShot(collectPrize, 0F);
+		GetComponent<AudioSource>().PlayOneShot(collectPrize, 0F);
 	}
 
 	void OnEnable()

@@ -11,12 +11,16 @@ public class ProjectileContainer : Weapon {
     private Weapon weapon;
     private Transform target;
     private Vector3 origin;
+    private SpriteRenderer spriteRenderer;
+    private Rigidbody2D rigidbody2D;
+    private Collider2D collider2D;
 
-    void OnEnable()
-    {
-        rigidbody2D.mass = mass;
-        spriteRenderer.sprite = sprite;
-    }
+    // void Awake()
+    // {
+    //     collider2D = GetComponent<Collider2D>();
+    //     rigidbody2D = GetComponent<Rigidbody2D>();
+    //     spriteRenderer = GetComponent<SpriteRenderer>();
+    // }
 
     void Init(Weapon weapon, Transform target)
     {
@@ -24,6 +28,7 @@ public class ProjectileContainer : Weapon {
         this.target = target;
         rigidbody2D.mass = weapon.mass;
         spriteRenderer.sprite = weapon.sprite;
+        collider2D.enabled = true;
         origin = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         InvokeRepeating("CheckDistanceTraveled", 1, 0.3F);
     }
@@ -69,7 +74,7 @@ public class ProjectileContainer : Weapon {
 
     void DeactivateEntireObject()
     {
-        this.Recycle();
+        gameObject.Recycle();
     }
 
     override public void PlayIdleAnimation(float xOffset, float yOffset) {}
