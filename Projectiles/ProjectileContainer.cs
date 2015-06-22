@@ -4,24 +4,18 @@ using System.Collections;
 using Matcha.Game.Tweens;
 using Matcha.Lib;
 
+// this class acts as a container for projectile weapons
+
 public class ProjectileContainer : Weapon {
 
-    // this class acts as a container to be shot across the screen
-
     private Weapon weapon;
-    private Transform target;
     private Vector3 origin;
-    // private SpriteRenderer spriteRenderer;
-    // private Rigidbody2D rigidbody2D;
-    // private Collider2D collider2D;
-    private int awakeCalled;
+    private Transform target;
 
-    void Init(Weapon weapon, Transform target)
+    // FIRE DIRECTIONALLY
+    void Init(Weapon weapon)
     {
-        awakeCalled += 1;
-        Debug.Log(awakeCalled);
         this.weapon = weapon;
-        this.target = target;
         rigidbody2D.mass = weapon.mass;
         spriteRenderer.sprite = weapon.sprite;
         collider2D.enabled = true;
@@ -31,8 +25,22 @@ public class ProjectileContainer : Weapon {
 
     public void Fire(Weapon weapon, float direction)
     {
-        Init(weapon, target);
+        Init(weapon);
+        MTween.Fade(spriteRenderer, 1f, 0f, 0f);
         rigidbody2D.velocity = transform.right * weapon.speed * direction;
+    }
+
+
+    // FIRE AT TARGET
+    void Init(Weapon weapon, Transform target)
+    {
+        this.weapon = weapon;
+        this.target = target;
+        rigidbody2D.mass = weapon.mass;
+        spriteRenderer.sprite = weapon.sprite;
+        collider2D.enabled = true;
+        origin = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        InvokeRepeating("CheckDistanceTraveled", 1, 0.3F);
     }
 
     public void Fire(Weapon weapon, Transform target)
@@ -51,6 +59,7 @@ public class ProjectileContainer : Weapon {
             rigidbody2D.velocity = MLib.LobProjectile(weapon, transform, target);
         }
     }
+
 
     void CheckDistanceTraveled()
     {
@@ -76,6 +85,15 @@ public class ProjectileContainer : Weapon {
     void OnDisable()
     {
         CancelInvoke();
+    }
+
+    public void AllocateMemory()
+    {
+        // at time of instantiation in the pool, allocate memory for GetComponent() calls
+        rigidbody2D.mass = rigidbody2D.mass;
+        spriteRenderer.sprite = spriteRenderer.sprite;
+        transform.position = transform.position;
+        collider2D.enabled = true;
     }
 
     override public void PlayIdleAnimation(float xOffset, float yOffset) {}

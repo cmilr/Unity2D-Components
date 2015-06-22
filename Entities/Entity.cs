@@ -71,16 +71,16 @@ public abstract class Entity : CacheBehaviour {
 			OnWeaponCollisionEnter();
 	}
 
-	void OnTriggerStay2D(Collider2D coll)
-	{
-		layer = coll.gameObject.layer;
+	// void OnTriggerStay2D(Collider2D coll)
+	// {
+	// 	layer = coll.gameObject.layer;
 
-		if (layer == BODY_COLLIDER)
-			OnBodyCollisionStay();
+	// 	if (layer == BODY_COLLIDER)
+	// 		OnBodyCollisionStay();
 
-		if (layer == WEAPON_COLLIDER)
-			OnWeaponCollisionStay();
-	}
+	// 	if (layer == WEAPON_COLLIDER)
+	// 		OnWeaponCollisionStay();
+	// }
 
 	void OnTriggerExit2D(Collider2D coll)
 	{
