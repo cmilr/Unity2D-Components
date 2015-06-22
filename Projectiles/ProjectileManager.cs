@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ProjectileManager : CacheBehaviour {
 
@@ -8,6 +9,8 @@ public class ProjectileManager : CacheBehaviour {
     private ProjectileContainer projectile;
     private float fireRate;
     private float nextFire;
+    public int pooledAmount = 20;
+    List<GameObject> bullets;
 
     void Start()
     {
@@ -23,11 +26,32 @@ public class ProjectileManager : CacheBehaviour {
         {
             projectilePrefab = (GameObject)Resources.Load("Prefabs/Projectiles/EnemyProjectile", typeof(GameObject));
         }
+
+        // object pooling
+        bullets = new List<GameObject>;
+
+        for (int i = 0; i < pooledAmount; i++)
+        {
+            GameObject obj = (GameObject) Instantiate(projectilePrefab);
+            obj.SetActive(false);
+            bullets.Add(obj);
+        }
     }
 
     // fire in direction actor is facing
     public void Fire(Weapon equippedWeapon)
     {
+        for (int i = 0; i < bullets.Count; i++)
+        {
+            if (!bullets[i].activeInHierarchy)
+            {
+                bullets[i].transform.position = transform.position
+                bullets[i].transform.rotation = transform.rotation
+                bullets[i].SetActive(true);
+                break;
+            }
+        }
+
         fireRate = equippedWeapon.rateOfAttack;
 
         if (Time.time > nextFire)
@@ -45,6 +69,17 @@ public class ProjectileManager : CacheBehaviour {
     // fire specifically at target
     public void FireAtTarget(Weapon equippedWeapon, Transform target)
     {
+        for (int i = 0; i < bullets.Count; i++)
+        {
+            if (!bullets[i].activeInHierarchy)
+            {
+                bullets[i].transform.position = transform.position
+                bullets[i].transform.rotation = transform.rotation
+                bullets[i].SetActive(true);
+                break;
+            }
+        }
+
         fireRate = equippedWeapon.rateOfAttack;
 
         if (Time.time > nextFire)

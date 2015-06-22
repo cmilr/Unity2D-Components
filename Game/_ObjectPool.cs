@@ -12,8 +12,8 @@ public class _ObjectPool : BaseBehaviour {
         MakePseudoSingleton();
         playerProjectile = (GameObject)Resources.Load("Prefabs/Projectiles/PlayerProjectile", typeof(GameObject));
         enemyProjectile = (GameObject)Resources.Load("Prefabs/Projectiles/EnemyProjectile", typeof(GameObject));
-        playerProjectile.CreatePool(20);
-        enemyProjectile.CreatePool(20);
+        playerProjectile.CreatePool(2);
+        enemyProjectile.CreatePool(2);
     }
 
     void MakePseudoSingleton()

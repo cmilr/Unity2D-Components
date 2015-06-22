@@ -11,19 +11,15 @@ public class ProjectileContainer : Weapon {
     private Weapon weapon;
     private Transform target;
     private Vector3 origin;
-    private SpriteRenderer spriteRenderer;
-    private Rigidbody2D rigidbody2D;
-    private Collider2D collider2D;
-
-    // void Awake()
-    // {
-    //     collider2D = GetComponent<Collider2D>();
-    //     rigidbody2D = GetComponent<Rigidbody2D>();
-    //     spriteRenderer = GetComponent<SpriteRenderer>();
-    // }
+    // private SpriteRenderer spriteRenderer;
+    // private Rigidbody2D rigidbody2D;
+    // private Collider2D collider2D;
+    private int awakeCalled;
 
     void Init(Weapon weapon, Transform target)
     {
+        awakeCalled += 1;
+        Debug.Log(awakeCalled);
         this.weapon = weapon;
         this.target = target;
         rigidbody2D.mass = weapon.mass;
@@ -74,7 +70,12 @@ public class ProjectileContainer : Weapon {
 
     void DeactivateEntireObject()
     {
-        gameObject.Recycle();
+        gameObject.SetActive(false);
+    }
+
+    void OnDisable()
+    {
+        CancelInvoke();
     }
 
     override public void PlayIdleAnimation(float xOffset, float yOffset) {}
