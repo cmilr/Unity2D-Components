@@ -3,6 +3,7 @@
 
 public class Tile : BaseBehaviour
 {
+
 	void Start()
 	{
 		// customized tiles with colliders, etc, need to have their parent gameObject's

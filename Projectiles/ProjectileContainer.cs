@@ -4,13 +4,11 @@ using System.Collections;
 using Matcha.Game.Tweens;
 using Matcha.Lib;
 
-// this class acts as a container for projectile weapons
 
 public class ProjectileContainer : Weapon {
 
     private Weapon weapon;
     private Vector3 origin;
-    private Transform target;
 
     // FIRE DIRECTIONALLY
     void Init(Weapon weapon)
@@ -30,12 +28,10 @@ public class ProjectileContainer : Weapon {
         rigidbody2D.velocity = transform.right * weapon.speed * direction;
     }
 
-
     // FIRE AT TARGET
     void Init(Weapon weapon, Transform target)
     {
         this.weapon = weapon;
-        this.target = target;
         rigidbody2D.mass = weapon.mass;
         spriteRenderer.sprite = weapon.sprite;
         collider2D.enabled = true;
@@ -59,7 +55,6 @@ public class ProjectileContainer : Weapon {
             rigidbody2D.velocity = MLib.LobProjectile(weapon, transform, target);
         }
     }
-
 
     void CheckDistanceTraveled()
     {

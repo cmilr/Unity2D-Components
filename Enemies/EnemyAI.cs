@@ -1,30 +1,41 @@
 ﻿using Matcha.Game.Colors;   // testing only
 using UnityEngine;
+using System;
 using System.Collections;
+using Rotorz.Tile;
+using Matcha.Extensions;
 
 public class EnemyAI : CacheBehaviour {
-
-    public float attackInterval = 1f;
-    public float chanceOfAttack = 40f;
-    public float attackWhenInRange = 20f;
-
-    private ProjectileManager projectile;
-    private Weapon weapon;
-    private Transform target;
 
     public bool test;
     public GameObject[] targets;    // testing only
 
+    public float attackInterval    = 1f;
+    public float chanceOfAttack    = 40f;
+    public float attackWhenInRange = 20f;
+
+    private TileSystem tileSystem;
+    private TileData tile;
+    private ProjectileManager projectile;
+    private Weapon weapon;
+    private int tileConvertedX;
+    private int tileConvertedY;
+    private Transform target;
+    private bool moving;
+    private bool stopped;
+
 	void Start()
     {
         projectile = GetComponent<ProjectileManager>();
-        weapon = GetComponentInChildren<Weapon>();
-        target = GameObject.Find(PLAYER).transform;
+        weapon     = GetComponentInChildren<Weapon>();
+        target     = GameObject.Find(PLAYER).transform;
+        tileSystem = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
 	}
 
     void OnBecameVisible()
     {
         InvokeRepeating("LookAtTarget", 1f, .3f);
+        InvokeRepeating("Wander", 1f, .2f);
 
         if (test) {
             StartCoroutine(LobCompTest());
@@ -36,6 +47,7 @@ public class EnemyAI : CacheBehaviour {
     void OnBecameInvisible()
     {
         CancelInvoke("LookAtTarget");
+
         if (!test)
             CancelInvoke("AttackRandomly");
     }
@@ -46,13 +58,37 @@ public class EnemyAI : CacheBehaviour {
         transform.localScale = new Vector3((float)direction, transform.localScale.y, transform.localScale.z);
     }
 
+    void Wander()
+    {
+        if (!moving && !stopped)
+        {
+            rigidbody2D.velocity = transform.right * 2f * -1f;
+            moving = true;
+        }
+        else if (stopped)
+        {
+            rigidbody2D.velocity = Vector2.zero;
+        }
+
+
+        GameObject obj = transform.GetTileBelowLeft(tileSystem);
+        if (obj != null)
+        {
+            Debug.Log("TILE DETECTED: " + obj);
+        }
+        else
+        {
+            stopped = true;
+        }
+    }
+
     void AttackRandomly()
     {
         float distance = Vector3.Distance(target.position, transform.position);
 
         if (distance <= attackWhenInRange)
         {
-            if (Random.Range(1, 101) <= chanceOfAttack)
+            if (UnityEngine.Random.Range(1, 101) <= chanceOfAttack)
                 projectile.FireAtTarget(weapon, target);
         }
     }
@@ -68,6 +104,11 @@ public class EnemyAI : CacheBehaviour {
     {
         float power = 1;
         return (new Vector2(toPos.x, toPos.y) - new Vector2(fromPos.x, fromPos.y))*power;
+    }
+
+    void OnDisable()
+    {
+        CancelInvoke();
     }
 
 
