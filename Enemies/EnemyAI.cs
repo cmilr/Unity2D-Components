@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using Rotorz.Tile;
 using Matcha.Extensions;
+using Matcha.Lib;
 
 public class EnemyAI : CacheBehaviour {
 
@@ -23,8 +24,8 @@ public class EnemyAI : CacheBehaviour {
     private Transform target;
 
     // current state
-    private bool facingRight;
-    private bool moving;
+    // private bool facingRight;
+    private bool currentlyMoving;
     private bool paused;
     private int walkingDirection;
 
@@ -72,14 +73,25 @@ public class EnemyAI : CacheBehaviour {
 
     void FollowTarget()
     {
-        walkingDirection = (target.position.x > transform.position.x) ? RIGHT : LEFT;
-
-        // if not intentionally stopped, start moving!
-        if (!moving && !paused)
+        // if actor and target are on roughly same x axis, pause actor
+        if (MLib.FloatEqual(transform.position.x, target.position.x, .5f))
         {
-            moving = true;
+            paused = true;
+            currentlyMoving = false;
+        }
+        // otherwise, let's get the proper direction for the actor to move
+        else
+        {
+            walkingDirection = (target.position.x > transform.position.x) ? RIGHT : LEFT;
+        }
+
+        // if not intentionally paused, start moving!
+        if (!currentlyMoving && !paused)
+        {
+            currentlyMoving = true;
 
             // ensure that actor is always facing in the direction it is moving
+
             transform.localScale = new Vector3((float)walkingDirection, transform.localScale.y, transform.localScale.z);
             rigidbody2D.velocity = transform.right * movementSpeed * walkingDirection;
 
@@ -94,18 +106,17 @@ public class EnemyAI : CacheBehaviour {
             animator.Play(Animator.StringToHash(idleAnimation));
         }
 
-
         GameObject nextTile = transform.GetTileBelow(tileSystem, walkingDirection);
 
         if (nextTile == null)
         {
             paused = true;
-            moving = false;
+            currentlyMoving = false;
         }
         else
         {
             paused = false;
-            moving = false;
+            currentlyMoving = false;
         }
     }
 
