@@ -7,9 +7,6 @@ using Matcha.Extensions;
 
 public class EnemyAI : CacheBehaviour {
 
-    public bool test;
-    public GameObject[] targets;    // testing only
-
     public float attackInterval    = 1f;
     public float chanceOfAttack    = 40f;
     public float attackWhenInRange = 20f;
@@ -20,22 +17,25 @@ public class EnemyAI : CacheBehaviour {
     private Weapon weapon;
     private int tileConvertedX;
     private int tileConvertedY;
+    private int walkDirection;
     private Transform target;
     private bool moving;
     private bool stopped;
 
 	void Start()
     {
-        projectile = GetComponent<ProjectileManager>();
-        weapon     = GetComponentInChildren<Weapon>();
-        target     = GameObject.Find(PLAYER).transform;
-        tileSystem = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
+        projectile    = GetComponent<ProjectileManager>();
+        weapon        = GetComponentInChildren<Weapon>();
+        target        = GameObject.Find(PLAYER).transform;
+        tileSystem    = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
+        walkDirection = LEFT;
 	}
 
     void OnBecameVisible()
     {
         InvokeRepeating("LookAtTarget", 1f, .3f);
-        InvokeRepeating("Wander", 1f, .2f);
+
+        InvokeRepeating("Walk", 1f, .2f);
 
         if (test) {
             StartCoroutine(LobCompTest());
@@ -58,27 +58,25 @@ public class EnemyAI : CacheBehaviour {
         transform.localScale = new Vector3((float)direction, transform.localScale.y, transform.localScale.z);
     }
 
-    void Wander()
+    void Walk()
     {
         if (!moving && !stopped)
         {
-            rigidbody2D.velocity = transform.right * 2f * -1f;
+            rigidbody2D.velocity = transform.right * 2f * walkDirection;
             moving = true;
         }
         else if (stopped)
         {
             rigidbody2D.velocity = Vector2.zero;
+
         }
 
-
-        GameObject obj = transform.GetTileBelowLeft(tileSystem);
-        if (obj != null)
-        {
-            Debug.Log("TILE DETECTED: " + obj);
-        }
-        else
+        // stop when reaching edge of platform
+        GameObject obj = transform.GetTileBelow(tileSystem, walkDirection);
+        if (obj == null)
         {
             stopped = true;
+            moving = false;
         }
     }
 
@@ -115,6 +113,8 @@ public class EnemyAI : CacheBehaviour {
 
 
 
+    public bool test;
+    public GameObject[] targets;    // testing only
 
 
 

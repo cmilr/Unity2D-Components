@@ -37,6 +37,8 @@ public class BodyCollider : CacheBehaviour
                     enemyWeapon.alreadyCollided = true;
 
                     Messenger.Broadcast<string, Collider2D, int>("player dead", "projectile", coll, hitFrom);
+
+                    transform.parent.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                 }
             }
         }
@@ -53,6 +55,8 @@ public class BodyCollider : CacheBehaviour
                     enemy.alreadyCollided = true;
 
                     Messenger.Broadcast<string, Collider2D, int>("player dead", "struckdown", coll, hitFrom);
+
+                    transform.parent.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                 }
             }
         }
