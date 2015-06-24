@@ -74,7 +74,7 @@ public class EnemyAI : CacheBehaviour {
     void FollowTarget()
     {
         // if actor and target are on roughly same x axis, pause actor
-        if (MLib.FloatEqual(transform.position.x, target.position.x, .5f))
+        if (MLib.FloatEqual(transform.position.x, target.position.x, .2f))
         {
             paused = true;
             currentlyMoving = false;
