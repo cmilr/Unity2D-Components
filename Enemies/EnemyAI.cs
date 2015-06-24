@@ -10,6 +10,7 @@ public class EnemyAI : CacheBehaviour {
     public float attackInterval    = 1f;
     public float chanceOfAttack    = 40f;
     public float attackWhenInRange = 20f;
+    public float movementSpeed = 2f;
 
     private TileSystem tileSystem;
     private TileData tile;
@@ -17,10 +18,15 @@ public class EnemyAI : CacheBehaviour {
     private Weapon weapon;
     private int tileConvertedX;
     private int tileConvertedY;
-    private int walkDirection;
+    private string idleAnimation;
+    private string walkAnimation;
     private Transform target;
+
+    // current state
+    private bool facingRight;
     private bool moving;
-    private bool stopped;
+    private bool paused;
+    private int walkingDirection;
 
 	void Start()
     {
@@ -28,14 +34,19 @@ public class EnemyAI : CacheBehaviour {
         weapon        = GetComponentInChildren<Weapon>();
         target        = GameObject.Find(PLAYER).transform;
         tileSystem    = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
-        walkDirection = LEFT;
+
+        SetAnimations();
 	}
+
+    void SetAnimations()
+    {
+        idleAnimation = name;
+        walkAnimation = name + "_WALK";
+    }
 
     void OnBecameVisible()
     {
-        InvokeRepeating("LookAtTarget", 1f, .3f);
-
-        InvokeRepeating("Walk", 1f, .2f);
+        MasterController();
 
         if (test) {
             StartCoroutine(LobCompTest());
@@ -44,41 +55,83 @@ public class EnemyAI : CacheBehaviour {
         }
     }
 
-    void OnBecameInvisible()
+    void MasterController()
     {
-        CancelInvoke("LookAtTarget");
-
-        if (!test)
-            CancelInvoke("AttackRandomly");
+        InvokeRepeating("LookAtTarget", 1f, .2f);
+        InvokeRepeating("FollowTarget", 1f, .1f);
     }
 
     void LookAtTarget()
     {
-        int direction = (target.position.x > transform.position.x) ? RIGHT : LEFT;
-        transform.localScale = new Vector3((float)direction, transform.localScale.y, transform.localScale.z);
+        if (paused)
+        {
+            int direction = (target.position.x > transform.position.x) ? RIGHT : LEFT;
+            transform.localScale = new Vector3((float)direction, transform.localScale.y, transform.localScale.z);
+        }
     }
 
-    void Walk()
+    void FollowTarget()
     {
-        if (!moving && !stopped)
+        walkingDirection = (target.position.x > transform.position.x) ? RIGHT : LEFT;
+
+        // if not intentionally stopped, start moving!
+        if (!moving && !paused)
         {
-            rigidbody2D.velocity = transform.right * 2f * walkDirection;
             moving = true;
+
+            // ensure that actor is always facing in the direction it is moving
+            transform.localScale = new Vector3((float)walkingDirection, transform.localScale.y, transform.localScale.z);
+            rigidbody2D.velocity = transform.right * movementSpeed * walkingDirection;
+
+            animator.speed = ENEMY_WALK_SPEED;
+            animator.Play(Animator.StringToHash(walkAnimation));
         }
-        else if (stopped)
+        else if (paused)
         {
             rigidbody2D.velocity = Vector2.zero;
 
+            animator.speed = ENEMY_IDLE_SPEED;
+            animator.Play(Animator.StringToHash(idleAnimation));
         }
 
-        // stop when reaching edge of platform
-        GameObject obj = transform.GetTileBelow(tileSystem, walkDirection);
-        if (obj == null)
+
+        GameObject nextTile = transform.GetTileBelow(tileSystem, walkingDirection);
+
+        if (nextTile == null)
         {
-            stopped = true;
+            paused = true;
+            moving = false;
+        }
+        else
+        {
+            paused = false;
             moving = false;
         }
     }
+
+    // void Walk()
+    // {
+    //     // if not intentionally stopped, start moving!
+    //     if (!moving && !paused && !edgeReached)
+    //     {
+    //         // ensure that enemy is always facing in the direction it is moving
+    //         transform.localScale = new Vector3((float)walkingDirection, transform.localScale.y, transform.localScale.z);
+    //         rigidbody2D.velocity = transform.right * movementSpeed * walkingDirection;
+    //         moving = true;
+    //     }
+    //     else if (edgeReached)
+    //     {
+    //         rigidbody2D.velocity = Vector2.zero;
+    //     }
+
+    //     // stop when reaching edge of platform
+    //     GameObject obj = transform.GetTileBelow(tileSystem, walkingDirection);
+    //     if (obj == null)
+    //     {
+    //         edgeReached = true;
+    //         moving = false;
+    //     }
+    // }
 
     void AttackRandomly()
     {
@@ -102,6 +155,14 @@ public class EnemyAI : CacheBehaviour {
     {
         float power = 1;
         return (new Vector2(toPos.x, toPos.y) - new Vector2(fromPos.x, fromPos.y))*power;
+    }
+
+    void OnBecameInvisible()
+    {
+        CancelInvoke("LookAtTarget");
+
+        if (!test)
+            CancelInvoke("AttackRandomly");
     }
 
     void OnDisable()
