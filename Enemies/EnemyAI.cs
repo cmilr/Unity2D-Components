@@ -106,7 +106,7 @@ public class EnemyAI : CacheBehaviour {
             animator.Play(Animator.StringToHash(idleAnimation));
         }
 
-        GameObject nextTile = transform.GetTileBelow(tileSystem, walkingDirection);
+        GameObject nextTile = transform.GetTileBelow(tileSystem, walkingDirection * 2);
 
         if (nextTile == null)
         {
@@ -118,6 +118,23 @@ public class EnemyAI : CacheBehaviour {
             paused = false;
             currentlyMoving = false;
         }
+
+        // random pauses
+        if (UnityEngine.Random.Range(0, 201) <= 1){
+            rigidbody2D.velocity = Vector2.zero;
+            StartCoroutine(PauseFollowTarget());
+        }
+    }
+
+    IEnumerator PauseFollowTarget()
+    {
+        CancelInvoke("FollowTarget");
+
+        Debug.Log("Pause Called");
+
+        yield return new WaitForSeconds(UnityEngine.Random.Range(1, 4));
+
+        InvokeRepeating("FollowTarget", 1f, .1f);
     }
 
     // void Walk()
