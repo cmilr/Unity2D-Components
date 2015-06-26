@@ -24,6 +24,8 @@ public class MovementAI : CacheBehaviour {
     [HideInInspector]
     public bool paused;
     [HideInInspector]
+    public bool pauseJustReleased;
+    [HideInInspector]
     public int walkingDirection;
     [HideInInspector]
     public GameObject nextTile;
@@ -37,6 +39,68 @@ public class MovementAI : CacheBehaviour {
     }
 
     void Update()
+    {
+        switch (movementStyle)
+        {
+            case MovementStyle.Scout:
+                StopCheck();
+            break;
+        }
+    }
+
+    // MASTER CONTROLLER
+    void OnBecameVisible()
+    {
+        switch (movementStyle)
+        {
+            case MovementStyle.Sentinel:
+                InvokeRepeating("LookAtTarget", 1f, .2f);
+            break;
+
+            case MovementStyle.Scout:
+                InvokeRepeating("LookAtTarget", 1f, .2f);
+                InvokeRepeating("FollowTarget", 1f, .2f);
+            break;
+        }
+    }
+
+    void LookAtTarget()
+    {
+        int direction = (target.position.x > transform.position.x) ? RIGHT : LEFT;
+        transform.localScale = new Vector3((float)direction, transform.localScale.y, transform.localScale.z);
+    }
+
+    void FollowTarget()
+    {
+        // get the proper direction for the enemy to move, then send him moving
+        if (!paused)
+        {
+            walkingDirection = (target.position.x > transform.position.x) ? RIGHT : LEFT;
+            rigidbody2D.velocity = transform.right * movementSpeed * walkingDirection;
+
+            // ensure that actor is always facing in the direction it is moving
+            transform.localScale = new Vector3((float)walkingDirection, transform.localScale.y, transform.localScale.z);
+
+            animator.speed = ENEMY_WALK_SPEED;
+            animator.Play(Animator.StringToHash(walkAnimation));
+
+            // add some random pauses
+            if (UnityEngine.Random.Range(0, 101) <= 1)
+            {
+                rigidbody2D.velocity = Vector2.zero;
+                StartCoroutine(PauseFollowTarget());
+            }
+        }
+    }
+
+    IEnumerator PauseFollowTarget()
+    {
+        CancelInvoke("FollowTarget");
+        yield return new WaitForSeconds(UnityEngine.Random.Range(1, 4));
+        InvokeRepeating("FollowTarget", 1f, .2f);
+    }
+
+    void StopCheck()
     {
         // if next tile is null, clamp movement beyond current tile
         nextTile = transform.GetTileBelow(tileSystem, walkingDirection);
@@ -58,99 +122,18 @@ public class MovementAI : CacheBehaviour {
 
             rigidbody2D.velocity = Vector2.zero;
         }
-    }
-
-    // MASTER CONTROLLER
-    void OnBecameVisible()
-    {
-        switch (movementStyle)
-        {
-            case MovementStyle.Sentinel:
-                InvokeRepeating("LookAtTarget", 1f, .2f);
-            break;
-
-            case MovementStyle.Scout:
-                InvokeRepeating("FollowTarget", 1f, .01f);
-                InvokeRepeating("LookAtTargetWhenPaused", 1f, .2f);
-            break;
-        }
-    }
-
-    void LookAtTarget()
-    {
-        int direction = (target.position.x > transform.position.x) ? RIGHT : LEFT;
-        transform.localScale = new Vector3((float)direction, transform.localScale.y, transform.localScale.z);
-    }
-
-    void LookAtTargetWhenPaused()
-    {
-        if (paused)
-        {
-            int direction = (target.position.x > transform.position.x) ? RIGHT : LEFT;
-            transform.localScale = new Vector3((float)direction, transform.localScale.y, transform.localScale.z);
-        }
-    }
-
-    void FollowTarget()
-    {
-        // if actor and target are on roughly same x axis, pause actor
-        if (MLib.FloatEqual(transform.position.x, target.position.x, .5f))
-        {
-            paused = true;
-            currentlyMoving = false;
-        }
-        // otherwise, let's get the proper direction for the actor to move
-        else
-        {
-            walkingDirection = (target.position.x > transform.position.x) ? RIGHT : LEFT;
-        }
-
-        // if not intentionally paused, start moving!
-        if (!currentlyMoving && !paused)
-        {
-            currentlyMoving = true;
-
-            // ensure that actor is always facing in the direction it is moving
-
-            transform.localScale = new Vector3((float)walkingDirection, transform.localScale.y, transform.localScale.z);
-            rigidbody2D.velocity = transform.right * movementSpeed * walkingDirection;
-
-            animator.speed = ENEMY_WALK_SPEED;
-            animator.Play(Animator.StringToHash(walkAnimation));
-        }
-        else if (paused)
+        // if enemy and player are on roughly same x axis, pause enemy
+        else if (MLib.FloatEqual(transform.position.x, target.position.x, .3f))
         {
             rigidbody2D.velocity = Vector2.zero;
-
             animator.speed = ENEMY_IDLE_SPEED;
             animator.Play(Animator.StringToHash(idleAnimation));
-        }
-
-        if (nextTile == null)
-        {
             paused = true;
-            currentlyMoving = false;
         }
         else
         {
             paused = false;
-            currentlyMoving = false;
         }
-
-        // random pauses
-        if (UnityEngine.Random.Range(0, 201) <= 1){
-            rigidbody2D.velocity = Vector2.zero;
-            StartCoroutine(PauseFollowTarget());
-        }
-    }
-
-    IEnumerator PauseFollowTarget()
-    {
-        CancelInvoke("FollowTarget");
-
-        yield return new WaitForSeconds(UnityEngine.Random.Range(1, 4));
-
-        InvokeRepeating("FollowTarget", 1f, .1f);
     }
 
     void RotateTowardsTarget()
