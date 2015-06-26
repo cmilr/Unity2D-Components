@@ -9,6 +9,8 @@ public class MovementAI : CacheBehaviour {
     public enum MovementStyle { Sentinel, Scout, HesitantScout, Wanderer };
     public MovementStyle movementStyle;
     public float movementSpeed = 2f;
+    public float idleAnimationSpeed = .5f;
+    public float walkAnimationSpeed = .5f;
 
     private TileSystem tileSystem;
     private TileData tile;
@@ -54,7 +56,9 @@ public class MovementAI : CacheBehaviour {
         switch (movementStyle)
         {
             case MovementStyle.Sentinel:
-                InvokeRepeating("LookAtTarget", 1f, .2f);
+                InvokeRepeating("LookAtTarget", 1f, 1f);
+                animator.speed = idleAnimationSpeed;
+                animator.Play(Animator.StringToHash(idleAnimation));
             break;
 
             case MovementStyle.Scout:
@@ -81,7 +85,7 @@ public class MovementAI : CacheBehaviour {
             // ensure that actor is always facing in the direction it is moving
             transform.localScale = new Vector3((float)walkingDirection, transform.localScale.y, transform.localScale.z);
 
-            animator.speed = ENEMY_WALK_SPEED;
+            animator.speed = walkAnimationSpeed;
             animator.Play(Animator.StringToHash(walkAnimation));
 
             // add some random pauses
@@ -126,7 +130,7 @@ public class MovementAI : CacheBehaviour {
         else if (MLib.FloatEqual(transform.position.x, target.position.x, .3f))
         {
             rigidbody2D.velocity = Vector2.zero;
-            animator.speed = ENEMY_IDLE_SPEED;
+            animator.speed = idleAnimationSpeed;
             animator.Play(Animator.StringToHash(idleAnimation));
             paused = true;
         }

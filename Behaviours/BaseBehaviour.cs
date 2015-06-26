@@ -69,10 +69,6 @@ public class BaseBehaviour : MonoBehaviour {
     // entity auto-alignment settings
     protected const float ALIGN_ENTITY_TO               = .124f;
 
-    // enemy animation speeds
-    protected const float ENEMY_IDLE_SPEED              = 1f;
-    protected const float ENEMY_WALK_SPEED              = 1f;
-
     // hud specs
     protected const float HUD_WEAPON_TOP_MARGIN         = 125f;
     protected const float HUD_STASHED_WEAPON_OFFSET     = 85f;
