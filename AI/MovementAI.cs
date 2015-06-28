@@ -38,6 +38,8 @@ public class MovementAI : CacheBehaviour {
         tileSystem    = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
         idleAnimation = name;
         walkAnimation = name + "_WALK";
+        animator.speed = walkAnimationSpeed;
+        animator.Play(Animator.StringToHash(walkAnimation));
     }
 
     void Update()
@@ -57,8 +59,6 @@ public class MovementAI : CacheBehaviour {
         {
             case MovementStyle.Sentinel:
                 InvokeRepeating("LookAtTarget", 1f, 1f);
-                animator.speed = idleAnimationSpeed;
-                animator.Play(Animator.StringToHash(idleAnimation));
             break;
 
             case MovementStyle.Scout:
@@ -84,9 +84,6 @@ public class MovementAI : CacheBehaviour {
 
             // ensure that actor is always facing in the direction it is moving
             transform.localScale = new Vector3((float)walkingDirection, transform.localScale.y, transform.localScale.z);
-
-            animator.speed = walkAnimationSpeed;
-            animator.Play(Animator.StringToHash(walkAnimation));
 
             // add some random pauses
             if (UnityEngine.Random.Range(0, 101) <= 1)
@@ -130,8 +127,6 @@ public class MovementAI : CacheBehaviour {
         else if (MLib.FloatEqual(transform.position.x, target.position.x, .3f))
         {
             rigidbody2D.velocity = Vector2.zero;
-            animator.speed = idleAnimationSpeed;
-            animator.Play(Animator.StringToHash(idleAnimation));
             paused = true;
         }
         else
