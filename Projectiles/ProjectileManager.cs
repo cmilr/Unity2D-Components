@@ -37,8 +37,8 @@ public class ProjectileManager : CacheBehaviour {
             obj.transform.rotation = projectileSpawnPoint.rotation;
             obj.SetActive(true);
 
-            // flip projectile sprite so it's pointing the same direction as the actor
-            obj.transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            // ensure projectile sprite is pointing the same direction as the shooter
+            obj.transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z);
             obj.layer = (player) ? WEAPON_COLLIDER : ENEMY_WEAPON;
             obj.GetComponent<ProjectileContainer>().Fire(equippedWeapon, transform.localScale.x);
         }
@@ -65,8 +65,8 @@ public class ProjectileManager : CacheBehaviour {
             obj.transform.rotation = projectileSpawnPoint.rotation;
             obj.SetActive(true);
 
-            // flip projectile sprite so it's pointing the same direction as the actor
-            obj.transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            // ensure projectile sprite is pointing the same direction as the shooter
+            obj.transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z);
             obj.layer = (player) ? WEAPON_COLLIDER : ENEMY_WEAPON;
             obj.GetComponent<ProjectileContainer>().Fire(equippedWeapon, target);
         }

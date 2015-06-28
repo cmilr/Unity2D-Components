@@ -9,8 +9,15 @@ public class ProjectileContainer : Weapon {
 
     private Weapon weapon;
     private Vector3 origin;
+    private RuntimeAnimatorController anim;
 
-    // FIRE DIRECTIONALLY
+    // clear out previous references upun respawn
+    void OnEnable()
+    {
+        weapon = null;
+        animator.runtimeAnimatorController = null;
+    }
+
     void Init(Weapon weapon)
     {
         this.weapon = weapon;
@@ -18,9 +25,21 @@ public class ProjectileContainer : Weapon {
         spriteRenderer.sprite = weapon.sprite;
         collider2D.enabled = true;
         origin = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+
+        // initialize animation controller
+        if (weapon.GetComponent<Projectile>().animatedProjectile)
+        {
+            anim = (RuntimeAnimatorController)RuntimeAnimatorController.Instantiate
+                (Resources.Load(("AnimControllers/Projectiles/" + weapon.name + "_0"), typeof(RuntimeAnimatorController )));
+            animator.runtimeAnimatorController = anim;
+            animator.speed = .5f;
+            // animator.Play("Flaming Skull");
+        }
+
         InvokeRepeating("CheckDistanceTraveled", 1, 0.3F);
     }
 
+    // FIRE DIRECTIONALLY
     public void Fire(Weapon weapon, float direction)
     {
         Init(weapon);
@@ -29,19 +48,9 @@ public class ProjectileContainer : Weapon {
     }
 
     // FIRE AT TARGET
-    void Init(Weapon weapon, Transform target)
-    {
-        this.weapon = weapon;
-        rigidbody2D.mass = weapon.mass;
-        spriteRenderer.sprite = weapon.sprite;
-        collider2D.enabled = true;
-        origin = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-        InvokeRepeating("CheckDistanceTraveled", 1, 0.3F);
-    }
-
     public void Fire(Weapon weapon, Transform target)
     {
-        Init(weapon, target);
+        Init(weapon);
         MTween.Fade(spriteRenderer, 0f, 0f, 0f);
         MTween.Fade(spriteRenderer, 1f, 0f, .3f);
 
@@ -79,6 +88,7 @@ public class ProjectileContainer : Weapon {
 
     void OnDisable()
     {
+        anim = null;
         CancelInvoke();
     }
 
