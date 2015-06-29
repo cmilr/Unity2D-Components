@@ -9,14 +9,12 @@ public class MovementAI : CacheBehaviour {
     public enum MovementStyle { Sentinel, Scout, HesitantScout, Wanderer };
     public MovementStyle movementStyle;
     public float movementSpeed = 2f;
-    public float idleAnimationSpeed = .5f;
     public float walkAnimationSpeed = .5f;
 
     private TileSystem tileSystem;
     private TileData tile;
     private int tileConvertedX;
     private int tileConvertedY;
-    private string idleAnimation;
     private string walkAnimation;
     private Transform target;
 
@@ -32,7 +30,6 @@ public class MovementAI : CacheBehaviour {
     {
         target        = GameObject.Find(PLAYER).transform;
         tileSystem    = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
-        idleAnimation = name;
         walkAnimation = name + "_WALK_";
         animator.speed = walkAnimationSpeed;
         animator.Play(Animator.StringToHash(walkAnimation));
