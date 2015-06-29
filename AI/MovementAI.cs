@@ -22,11 +22,7 @@ public class MovementAI : CacheBehaviour {
 
     // current state
     [HideInInspector]
-    public bool currentlyMoving;
-    [HideInInspector]
     public bool paused;
-    [HideInInspector]
-    public bool pauseJustReleased;
     [HideInInspector]
     public int walkingDirection;
     [HideInInspector]
@@ -37,7 +33,7 @@ public class MovementAI : CacheBehaviour {
         target        = GameObject.Find(PLAYER).transform;
         tileSystem    = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
         idleAnimation = name;
-        walkAnimation = name + "_WALK";
+        walkAnimation = name + "_WALK_";
         animator.speed = walkAnimationSpeed;
         animator.Play(Animator.StringToHash(walkAnimation));
     }
