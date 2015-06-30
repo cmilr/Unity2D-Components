@@ -11,13 +11,6 @@ public class ProjectileContainer : Weapon {
     private Vector3 origin;
     private RuntimeAnimatorController anim;
 
-    // clear out previous references upun respawn
-    void OnEnable()
-    {
-        weapon = null;
-        animator.runtimeAnimatorController = null;
-    }
-
     void Init(Weapon weapon)
     {
         this.weapon = weapon;
@@ -86,9 +79,13 @@ public class ProjectileContainer : Weapon {
         gameObject.SetActive(false);
     }
 
+    // upon recycling, clear previous references and fade gameObject to zero
     void OnDisable()
     {
         anim = null;
+        weapon = null;
+        animator.runtimeAnimatorController = null;
+        MTween.Fade(spriteRenderer, 0f, 0f, 0f);
         CancelInvoke();
     }
 

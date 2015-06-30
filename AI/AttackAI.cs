@@ -7,19 +7,22 @@ public class AttackAI : CacheBehaviour {
 
     public enum AttackStyle { RandomProjectile, Scout, HesitantScout, Wanderer };
     public AttackStyle attackStyle;
-    public float attackInterval    = 1f;
+    // public float attackInterval    = 1f;
     public float chanceOfAttack    = 40f;
     public float attackWhenInRange = 20f;
 
     private ProjectileManager projectile;
     private Weapon weapon;
+    private float attackInterval;
     private Transform target;
 
 	void Start()
     {
-        projectile    = GetComponent<ProjectileManager>();
-        weapon        = GetComponentInChildren<Weapon>();
-        target        = GameObject.Find(PLAYER).transform;
+        projectile     = GetComponent<ProjectileManager>();
+        weapon         = GetComponentInChildren<Weapon>();
+        target         = GameObject.Find(PLAYER).transform;
+
+        attackInterval = UnityEngine.Random.Range(1.5f, 2.5f);
 	}
 
     // MASTER CONTROLLER
