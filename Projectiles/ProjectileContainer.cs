@@ -63,7 +63,7 @@ public class ProjectileContainer : Weapon {
         float distance = Vector3.Distance(origin, transform.position);
         if (distance > weapon.maxDistance)
         {
-            MTween.FadeOutProjectile(spriteRenderer, 0f, 0f, .6f);
+            // MTween.FadeOutProjectile(spriteRenderer, 0f, 0f, .6f);
             Invoke("DeactivateCollider", .1f);
             Invoke("DeactivateEntireObject", 1.5f);
         }
@@ -91,7 +91,7 @@ public class ProjectileContainer : Weapon {
         weapon = null;
         animator.runtimeAnimatorController = null;
         spriteRenderer.sprite = null;
-        // MTween.Fade(spriteRenderer, 0f, 0f, 0f);
+        MTween.Fade(spriteRenderer, 0f, 0f, 0f);
         CancelInvoke();
     }
 
