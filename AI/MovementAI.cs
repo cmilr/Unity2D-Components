@@ -6,20 +6,20 @@ using Matcha.Lib;
 
 public class MovementAI : CacheBehaviour {
 
-    public enum MovementStyle { Sentinel, Scout, HesitantScout, Patrol, Wanderer };
+    public enum MovementStyle { Sentinel, Scout, HesitantScout, Wanderer };
     public MovementStyle movementStyle;
     public float movementSpeed      = 2f;
     public float walkAnimationSpeed = .5f;
-    public float chanceOfPause      = 1f;                // chance of pause during any given interval
+    public float chanceOfPause      = 1f;           // chance of pause during any given interval
 
     private TileSystem tileSystem;
     private TileData tile;
     private int tileConvertedX;
     private int tileConvertedY;
     private string walkAnimation;
-    private float lookInterval;
     private float movementInterval;
-    private float xAxisOffset         = .3f;
+    private float lookInterval      = .3f;
+    private float xAxisOffset       = .3f;
     private bool hesitant;
     private Transform target;
 
@@ -39,8 +39,7 @@ public class MovementAI : CacheBehaviour {
         animator.speed = walkAnimationSpeed;
         animator.Play(Animator.StringToHash(walkAnimation));
 
-        lookInterval = UnityEngine.Random.Range(1f, 1.5f);
-        movementInterval = UnityEngine.Random.Range(.15f, .35f);
+        movementInterval = UnityEngine.Random.Range(.15f, 1f);
 
         if (movementStyle == MovementStyle.HesitantScout)
             hesitant = true;
@@ -52,7 +51,6 @@ public class MovementAI : CacheBehaviour {
         {
             case MovementStyle.Scout:
             case MovementStyle.HesitantScout:
-            case MovementStyle.Patrol:
                 StopCheck();
             break;
         }
@@ -71,10 +69,6 @@ public class MovementAI : CacheBehaviour {
             case MovementStyle.HesitantScout:
                 InvokeRepeating("LookAtTarget", 1f, lookInterval);
                 InvokeRepeating("FollowTarget", 1f, movementInterval);
-            break;
-
-            case MovementStyle.Patrol:
-                WalkBackAndForth();
             break;
         }
     }
@@ -109,47 +103,38 @@ public class MovementAI : CacheBehaviour {
     {
         CancelInvoke("FollowTarget");
         yield return new WaitForSeconds(UnityEngine.Random.Range(2, 5));
-        InvokeRepeating("FollowTarget", 1f, .2f);
-    }
-
-    void WalkBackAndForth()
-    {
-        walkingDirection = (UnityEngine.Random.Range(0f, 100f) < 50) ? RIGHT : LEFT;
-        rigidbody2D.velocity = transform.right * movementSpeed * walkingDirection;
+        InvokeRepeating("FollowTarget", 1f, movementInterval);
     }
 
     void StopCheck()
     {
+        walkingDirection = (target.position.x > transform.position.x) ? RIGHT : LEFT;
+
         nextTile = transform.GetTileBelow(tileSystem, walkingDirection);
 
         if (nextTile == null)
         {
             GameObject currentTile = transform.GetTileBelow(tileSystem, 0);
 
-            // if next tile is null, clamp movement beyond current tile
+            // clamp movement beyond current tile
             if (walkingDirection == RIGHT)
             {
                 if (transform.position.x > currentTile.transform.position.x)
-                    transform.position = new Vector3(currentTile.transform.position.x, transform.position.y, transform.position.z);
+                    transform.position = new Vector3
+                        (currentTile.transform.position.x, transform.position.y, transform.position.z);
             }
             else if (walkingDirection == LEFT)
             {
                 if (transform.position.x < currentTile.transform.position.x)
-                    transform.position = new Vector3(currentTile.transform.position.x, transform.position.y, transform.position.z);
+                    transform.position = new Vector3
+                        (currentTile.transform.position.x, transform.position.y, transform.position.z);
             }
 
             rigidbody2D.velocity = Vector2.zero;
-
-            // if on patrol, turn around when reaching the end of a platform
-            if (movementStyle == MovementStyle.Patrol)
-            {
-                walkingDirection = -walkingDirection;
-                rigidbody2D.velocity = transform.right * movementSpeed * walkingDirection;
-                transform.localScale = new Vector3((float)walkingDirection, transform.localScale.y, transform.localScale.z);
-            }
+            paused = true;
         }
         // if enemy and player are on roughly same x axis, pause enemy
-        else if (MLib.FloatEqual(transform.position.x, target.position.x, xAxisOffset) && movementStyle != MovementStyle.Patrol)
+        else if (MLib.FloatEqual(transform.position.x, target.position.x, xAxisOffset))
         {
             rigidbody2D.velocity = Vector2.zero;
             paused = true;

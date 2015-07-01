@@ -25,7 +25,7 @@ public abstract class Weapon : AnimationBehaviour {
     public float speed = 12f;
     public float maxDistance = 40f;
 
-    [Tooltip("zero mass will be fired linearly, positive mass will be lobbed at at its target")]
+    [Tooltip("zero mass will be fired linearly, positive mass will be lobbed at its target")]
     public float mass = 1f;
 
     // animation state methods
