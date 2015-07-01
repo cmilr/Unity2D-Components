@@ -79,13 +79,19 @@ public class ProjectileContainer : Weapon {
         gameObject.SetActive(false);
     }
 
+    void OnEnable()
+    {
+        MTween.Fade(spriteRenderer, 1f, 0f, 0f);
+    }
+
     // upon recycling, clear previous references and fade gameObject to zero
     void OnDisable()
     {
         anim = null;
         weapon = null;
         animator.runtimeAnimatorController = null;
-        MTween.Fade(spriteRenderer, 0f, 0f, 0f);
+        spriteRenderer.sprite = null;
+        // MTween.Fade(spriteRenderer, 0f, 0f, 0f);
         CancelInvoke();
     }
 
