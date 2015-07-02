@@ -11,6 +11,8 @@ using System.Collections;
 
 public class BaseBehaviour : MonoBehaviour {
 
+    protected static bool attackDisabled                = false;
+
     // global stuff
     protected const int RIGHT                           = 1;
     protected const int LEFT                            = -1;

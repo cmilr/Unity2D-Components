@@ -46,7 +46,7 @@ public class AttackAI : CacheBehaviour {
     {
         float distance = Vector3.Distance(target.position, transform.position);
 
-        if (distance <= attackWhenInRange)
+        if (distance <= attackWhenInRange && !attackDisabled)
         {
             if (UnityEngine.Random.Range(1, 101) <= chanceOfAttack)
             {

@@ -5,8 +5,12 @@ using System.Collections;
 public class GameManager : BaseBehaviour
 {
 	private _GameData gameData;
-	public GameObject playerProjectile;
-	public GameObject enemyProjectile;
+	public bool disableAttack;
+
+	void Awake()
+	{
+		attackDisabled = disableAttack;
+	}
 
 	void Start()
 	{
