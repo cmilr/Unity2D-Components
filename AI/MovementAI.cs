@@ -158,8 +158,24 @@ public class MovementAI : CacheBehaviour {
         return (new Vector2(toPos.x, toPos.y) - new Vector2(fromPos.x, fromPos.y))*power;
     }
 
+    void OnPlayerDead(string causeOfDeath, Collider2D coll, int directionHit)
+    {
+        // causes enemy to do a victory dance
+        xAxisOffset = .005f;
+    }
+
     void OnDisable()
     {
         CancelInvoke();
+    }
+
+    void OnEnable()
+    {
+        Messenger.AddListener<string, Collider2D, int>( "player dead", OnPlayerDead);
+    }
+
+    void OnDestroy()
+    {
+        Messenger.RemoveListener<string, Collider2D, int>( "player dead", OnPlayerDead);
     }
 }
