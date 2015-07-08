@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class ProjectileManager : CacheBehaviour {
 
 	private GameObject projectilePrefab;
+    private GameObject pooledProjectile;
     private Transform projectileSpawnPoint;
     private ProjectileContainer projectile;
     private float fireRate;
@@ -25,22 +26,14 @@ public class ProjectileManager : CacheBehaviour {
         if (Time.time > nextFire)
         {
             nextFire = Time.time + fireRate;
+            GetPooledProjectile(equippedWeapon);
+            InitPooledProjectile();
 
-            GameObject obj = ProjectilePool.current.Spawn();
-
-            if (obj == null)
-            {
-                Debug.Log("ERROR in ProjectileManager.Fire()");
-            }
-
-            obj.transform.position = projectileSpawnPoint.position;
-            obj.transform.rotation = projectileSpawnPoint.rotation;
-            obj.SetActive(true);
-
-            // ensure projectile sprite is pointing the same direction as the shooter
-            obj.transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z);
-            obj.layer = (player) ? WEAPON_COLLIDER : ENEMY_WEAPON;
-            obj.GetComponent<ProjectileContainer>().Fire(equippedWeapon, transform.localScale.x);
+            // call correct Fire method, based on type of weapon selected (magical or not)
+            if (equippedWeapon.GetComponent<Projectile>().magicWeapon)
+                pooledProjectile.GetComponent<MagicProjectileContainer>().Fire(equippedWeapon, transform.localScale.x);
+            else
+                pooledProjectile.GetComponent<ProjectileContainer>().Fire(equippedWeapon, transform.localScale.x);
         }
 
     }
@@ -53,22 +46,41 @@ public class ProjectileManager : CacheBehaviour {
         if (Time.time > nextFire)
         {
             nextFire = Time.time + fireRate;
+            GetPooledProjectile(equippedWeapon);
+            InitPooledProjectile();
 
-            GameObject obj = ProjectilePool.current.Spawn();
-
-            if (obj == null)
-            {
-                Debug.Log("ERROR in ProjectileManager.FireAtTarget()");
-            }
-
-            obj.transform.position = projectileSpawnPoint.position;
-            obj.transform.rotation = projectileSpawnPoint.rotation;
-            obj.SetActive(true);
-
-            // ensure projectile sprite is pointing the same direction as the shooter
-            obj.transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z);
-            obj.layer = (player) ? WEAPON_COLLIDER : ENEMY_WEAPON;
-            obj.GetComponent<ProjectileContainer>().Fire(equippedWeapon, target);
+            // call correct Fire method, based on type of weapon selected (magical or not)
+            if (equippedWeapon.GetComponent<Projectile>().magicWeapon)
+                pooledProjectile.GetComponent<MagicProjectileContainer>().Fire(equippedWeapon, target);
+            else
+                pooledProjectile.GetComponent<ProjectileContainer>().Fire(equippedWeapon, target);
         }
+    }
+
+    void GetPooledProjectile(Weapon equippedWeapon)
+    {
+        // set correct Object Pool type based on type of weapon (magical or not)
+        if (equippedWeapon.GetComponent<Projectile>().magicWeapon)
+            pooledProjectile = MagicProjectilePool.current.Spawn();
+        else
+            pooledProjectile = ProjectilePool.current.Spawn();
+
+        if (pooledProjectile == null)
+        {
+            Debug.Log("ERROR in ProjectileManager.Fire()");
+        }
+    }
+
+    void InitPooledProjectile()
+    {
+        pooledProjectile.transform.position = projectileSpawnPoint.position;
+        pooledProjectile.transform.rotation = projectileSpawnPoint.rotation;
+        pooledProjectile.SetActive(true);
+
+        // ensure projectile sprite is pointing the same direction as the shooter
+        pooledProjectile.transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z);
+
+        // set weapon to proper collider layer——enemy or player
+        pooledProjectile.layer = (player) ? WEAPON_COLLIDER : ENEMY_WEAPON;
     }
 }
