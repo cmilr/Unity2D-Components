@@ -237,6 +237,7 @@ public class WeaponManager : CacheBehaviour {
             {
                 equippedWeapon.PlaySwingAnimation(0, ONE_PIXEL);
                 arm.PlaySwingAnimation(0, ONE_PIXEL);
+                projectile.Fire(equippedWeapon);
                 break;
             }
 
@@ -244,6 +245,7 @@ public class WeaponManager : CacheBehaviour {
             {
                 equippedWeapon.PlaySwingAnimation(0, ONE_PIXEL * 2);
                 arm.PlaySwingAnimation(0, ONE_PIXEL * 2);
+                projectile.Fire(equippedWeapon);
                 break;
             }
 
