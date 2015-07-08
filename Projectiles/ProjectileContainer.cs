@@ -11,6 +11,11 @@ public class ProjectileContainer : Weapon {
     private Vector3 origin;
     private RuntimeAnimatorController anim;
 
+    void OnEnable()
+    {
+        MTween.Fade(spriteRenderer, 0f, 0f, 0f);
+    }
+
     void Init(Weapon weapon)
     {
         this.weapon = weapon;
@@ -29,7 +34,7 @@ public class ProjectileContainer : Weapon {
             // animator.Play("Flaming Skull");
         }
 
-        // MTween.Fade(spriteRenderer, 1f, 0f, 0f);
+        MTween.Fade(spriteRenderer, 0f, 0f, 0f);
 
         InvokeRepeating("CheckDistanceTraveled", 1, 0.3F);
     }
@@ -38,6 +43,7 @@ public class ProjectileContainer : Weapon {
     public void Fire(Weapon weapon, float direction)
     {
         Init(weapon);
+        MTween.Fade(spriteRenderer, 1f, 0f, 0f);
         rigidbody2D.velocity = transform.right * weapon.speed * direction;
     }
 
@@ -45,7 +51,7 @@ public class ProjectileContainer : Weapon {
     public void Fire(Weapon weapon, Transform target)
     {
         Init(weapon);
-        // MTween.Fade(spriteRenderer, 1f, 0f, .3f);
+        MTween.Fade(spriteRenderer, 1f, 0f, .3f);
 
         if (rigidbody2D.mass <= .001f)
         {   // if weapon has no mass, fire projectile linearally
@@ -63,7 +69,6 @@ public class ProjectileContainer : Weapon {
         float distance = Vector3.Distance(origin, transform.position);
         if (distance > weapon.maxDistance)
         {
-            // MTween.FadeOutProjectile(spriteRenderer, .001f, 0f, .6f);
             Invoke("DeactivateCollider", .1f);
             Invoke("DeactivateEntireObject", 1.5f);
         }
@@ -87,6 +92,7 @@ public class ProjectileContainer : Weapon {
         animator.runtimeAnimatorController = null;
         spriteRenderer.sprite = null;
         CancelInvoke();
+        MTween.Fade(spriteRenderer, 0f, 0f, 0f);
     }
 
     public void AllocateMemory()
