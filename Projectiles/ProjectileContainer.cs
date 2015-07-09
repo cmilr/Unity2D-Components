@@ -13,11 +13,20 @@ public class ProjectileContainer : Weapon {
 
     void Init(Weapon weapon)
     {
-        this.weapon = weapon;
-        rigidbody2D.mass = weapon.mass;
+        this.weapon           = weapon;
+        title                 = weapon.title;
+        hp                    = weapon.hp;
+        ac                    = weapon.ac;
+        damage                = weapon.damage;
+        rateOfAttack          = weapon.rateOfAttack;
+        speed                 = weapon.speed;
+        maxDistance           = weapon.maxDistance;
+        mass                  = weapon.mass;
+        rigidbody2D.mass      = weapon.mass;
         spriteRenderer.sprite = weapon.sprite;
-        collider2D.enabled = true;
-        origin = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        collider2D.enabled    = true;
+        alreadyCollided       = false;
+        origin                = new Vector3(transform.position.x, transform.position.y, transform.position.z);
 
         // initialize animation controller
         if (weapon.GetComponent<Projectile>().animatedProjectile)
