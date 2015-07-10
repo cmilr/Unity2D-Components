@@ -65,10 +65,10 @@ public abstract class Entity : CacheBehaviour {
 		layer = coll.gameObject.layer;
 
 		if (layer == BODY_COLLIDER && !collidedWithBody)
-			OnBodyCollisionEnter();
+			OnBodyCollisionEnter(Collider2D coll);
 
 		if (layer == WEAPON_COLLIDER && !collidedWithWeapon)
-			OnWeaponCollisionEnter();
+			OnWeaponCollisionEnter(Collider2D coll);
 	}
 
 	// void OnTriggerStay2D(Collider2D coll)

@@ -54,9 +54,7 @@ public class BodyCollider : CacheBehaviour
                 {
                     enemy.alreadyCollided = true;
 
-                    Messenger.Broadcast<string, Collider2D, int>("player dead", "struckdown", coll, hitFrom);
-
-                    transform.parent.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                    player.TouchesEnemy("touch", enemy, coll, hitFrom);
                 }
             }
         }
@@ -77,7 +75,7 @@ public class BodyCollider : CacheBehaviour
         {
             enemy = coll.GetComponent<CreatureEntity>();
 
-            enemy.alreadyCollided = true;
+            enemy.alreadyCollided = false;
 
         }
     }

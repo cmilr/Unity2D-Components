@@ -28,9 +28,12 @@ public class PlayerManager : CacheBehaviour
 
     public void TakesHit(string weaponType, Weapon weapon, Collider2D coll, int hitFrom)
     {
-        playerData.HP -= weapon.damage;
-        // params = duration, strength, vibrato, randomness
-        Messenger.Broadcast<float, float, int, float>("shake camera", .5f, .5f, 20, 5f);
+        // calculate damage
+        playerData.HP -= (int)(weapon.damage * DIFFICULTY_DAMAGE_MODIFIER);
+
+        // produce effects
+        // params for ShakeCamera = duration, strength, vibrato, randomness
+        Messenger.Broadcast<float, float, int, float>("shake camera", .5f, .3f, 20, 5f);
         Messenger.Broadcast<int>("reduce hp", playerData.HP);
 
         // transform.DOJump(new Vector3(transform.position.x - 3f, transform.position.y, transform.position.z), 1f, 1, .5f, false);
@@ -42,6 +45,24 @@ public class PlayerManager : CacheBehaviour
         else
         {
             Messenger.Broadcast<string, Collider2D, int>("player dead", "projectile", coll, hitFrom);
+        }
+    }
+
+    public void TouchesEnemy(string weaponType, CreatureEntity enemy, Collider2D coll, int hitFrom)
+    {
+        // calculate damage
+        playerData.HP -= (int)(enemy.touchDamage * DIFFICULTY_DAMAGE_MODIFIER);
+
+        // produce effects
+        Messenger.Broadcast<int>("reduce hp", playerData.HP);
+
+        if (playerData.HP > 0)
+        {
+            MTween.FadeToColorAndBack(spriteRenderer, MColor.bloodRed, 0f, .2f);
+        }
+        else
+        {
+            Messenger.Broadcast<string, Collider2D, int>("player dead", "struckdown", coll, hitFrom);
         }
     }
 
