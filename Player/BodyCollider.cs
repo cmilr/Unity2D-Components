@@ -8,6 +8,7 @@ public class BodyCollider : CacheBehaviour
 {
     private int layer;
     private int hitFrom;
+    private PlayerManager player;
     private IPlayerStateFullAccess state;
     private IGameStateReadOnly game;
     private Weapon enemyWeapon;
@@ -15,6 +16,7 @@ public class BodyCollider : CacheBehaviour
 
     void Start()
     {
+        player = transform.parent.GetComponent<PlayerManager>();
         state = transform.parent.GetComponent<IPlayerStateFullAccess>();
         game = GameObject.Find(GAME_STATE).GetComponent<IGameStateReadOnly>();
     }
@@ -36,9 +38,7 @@ public class BodyCollider : CacheBehaviour
                 {
                     enemyWeapon.alreadyCollided = true;
 
-                    Messenger.Broadcast<string, Collider2D, int>("player dead", "projectile", coll, hitFrom);
-
-                    transform.parent.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                    player.TakesHit("projectile", enemyWeapon, coll, hitFrom);
                 }
             }
         }
@@ -54,11 +54,29 @@ public class BodyCollider : CacheBehaviour
                 {
                     enemy.alreadyCollided = true;
 
-                    Messenger.Broadcast<string, Collider2D, int>("player dead", "struckdown", coll, hitFrom);
-
-                    transform.parent.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                    player.TouchesEnemy("touch", enemy, coll, hitFrom);
                 }
             }
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D coll)
+    {
+        // check for layer instead of name — it's much quicker
+        layer = coll.gameObject.layer;
+
+        if (layer == ENEMY_WEAPON)
+        {
+            enemyWeapon = coll.GetComponent<Weapon>();
+
+            enemyWeapon.alreadyCollided = false;
+        }
+        else if (layer == ENEMY_COLLIDER)
+        {
+            enemy = coll.GetComponent<CreatureEntity>();
+
+            enemy.alreadyCollided = false;
+
         }
     }
 }

@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ProjectilePool : BaseBehaviour {
+public class MagicProjectilePool : BaseBehaviour {
 
-    public static ProjectilePool current;
+    public static MagicProjectilePool current;
     public GameObject pooledObject;
     public int pooledAmount = 20;
     public bool increaseWhenNeeded = true;
@@ -23,7 +23,7 @@ public class ProjectilePool : BaseBehaviour {
             GameObject obj = (GameObject) Instantiate(pooledObject);
             obj.SetActive(false);
             // allocate memory for references at instantiation
-            obj.GetComponent<ProjectileContainer>().AllocateMemory();
+            obj.GetComponent<MagicProjectileContainer>().AllocateMemory();
             pooledObjects.Add(obj);
         }
     }
@@ -43,7 +43,7 @@ public class ProjectilePool : BaseBehaviour {
             GameObject obj = (GameObject) Instantiate(pooledObject);
             obj.SetActive(false);
             // allocate memory for references at instantiation
-            obj.GetComponent<ProjectileContainer>().AllocateMemory();
+            obj.GetComponent<MagicProjectileContainer>().AllocateMemory();
             pooledObjects.Add(obj);
             return obj;
         }
@@ -51,7 +51,3 @@ public class ProjectilePool : BaseBehaviour {
         return null;
     }
 }
-
-
-
-

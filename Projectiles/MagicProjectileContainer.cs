@@ -5,7 +5,7 @@ using Matcha.Game.Tweens;
 using Matcha.Lib;
 
 
-public class ProjectileContainer : Weapon {
+public class MagicProjectileContainer : Weapon {
 
     private Weapon weapon;
     private Vector3 origin;
@@ -54,6 +54,8 @@ public class ProjectileContainer : Weapon {
     {
         Init(weapon);
 
+        MTween.Fade(spriteRenderer, 1f, 0f, .3f);
+
         if (rigidbody2D.mass <= .001f)
         {   // if weapon has no mass, fire projectile linearally
             rigidbody2D.gravityScale = 0;
@@ -93,6 +95,7 @@ public class ProjectileContainer : Weapon {
         animator.runtimeAnimatorController = null;
         spriteRenderer.sprite = null;
         CancelInvoke();
+        MTween.Fade(spriteRenderer, 0f, 0f, 0f);
     }
 
     public void AllocateMemory()

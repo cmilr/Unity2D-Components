@@ -22,7 +22,7 @@ public class LightManager : CacheBehaviour {
 	private float pickupAboveGround            = 1.95f;
 	private float illuminatedPickupAboveGround = 1.95f;
 	// below ground light intensity
-	private float playerBelowGround            = 1.95f;
+	private float playerBelowGround            = 1.62f;
 	private float creatureBelowGround          = 2f;
 	private float tileBelowGround              = 1.4f;
 	private float planeBelowGround             = 0f;

@@ -11,16 +11,17 @@ public abstract class Entity : CacheBehaviour {
 	public bool alreadyCollided;
 
 	protected int layer;
+	protected int hitFrom;
 	protected bool collidedWithBody;
 	protected bool collidedWithWeapon;
 	protected bool onScreen;
 	protected IGameStateReadOnly game;
 	protected IPlayerStateReadOnly player;
 
-	public abstract void OnBodyCollisionEnter();
+	public abstract void OnBodyCollisionEnter(Collider2D coll);
 	public abstract void OnBodyCollisionStay();
 	public abstract void OnBodyCollisionExit();
-	public abstract void OnWeaponCollisionEnter();
+	public abstract void OnWeaponCollisionEnter(Collider2D coll);
 	public abstract void OnWeaponCollisionStay();
 	public abstract void OnWeaponCollisionExit();
 
@@ -65,10 +66,16 @@ public abstract class Entity : CacheBehaviour {
 		layer = coll.gameObject.layer;
 
 		if (layer == BODY_COLLIDER && !collidedWithBody)
-			OnBodyCollisionEnter();
+		{
+			OnBodyCollisionEnter(coll);
+			collidedWithBody = true;
+		}
 
 		if (layer == WEAPON_COLLIDER && !collidedWithWeapon)
-			OnWeaponCollisionEnter();
+		{
+			OnWeaponCollisionEnter(coll);
+			collidedWithWeapon = true;
+		}
 	}
 
 	// void OnTriggerStay2D(Collider2D coll)
@@ -87,9 +94,15 @@ public abstract class Entity : CacheBehaviour {
 		layer = coll.gameObject.layer;
 
 		if (layer == BODY_COLLIDER)
+		{
 			OnBodyCollisionExit();
+			collidedWithBody = false;
+		}
 
 		if (layer == WEAPON_COLLIDER)
+		{
 			OnWeaponCollisionExit();
+			collidedWithWeapon = false;
+		}
 	}
 }

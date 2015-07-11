@@ -18,7 +18,7 @@ public class PickupEntity : Entity
 			AutoAlign();
 	}
 
-	override public void OnBodyCollisionEnter()
+	override public void OnBodyCollisionEnter(Collider2D coll)
 	{
 		collidedWithBody = true;
 
@@ -56,7 +56,7 @@ public class PickupEntity : Entity
 
 	override public void OnBodyCollisionStay() {}
 	override public void OnBodyCollisionExit() {}
-	override public void OnWeaponCollisionEnter() {}
+	override public void OnWeaponCollisionEnter(Collider2D coll) {}
 	override public void OnWeaponCollisionStay() {}
 	override public void OnWeaponCollisionExit() {}
 }
