@@ -2,6 +2,8 @@
 using System;
 using System.Collections;
 using Matcha.Lib;
+using Matcha.Game.Tweens;
+using DG.Tweening;
 
 [RequireComponent(typeof(BoxCollider2D))]
 
@@ -16,28 +18,20 @@ public class CreatureEntity : Entity
 
 	private BoxCollider2D thisCollider;
 	private Weapon playerWeapon;
+	private AttackAI attackAI;
+	private MovementAI movementAI;
 
 	void Start()
 	{
+		attackAI = gameObject.GetComponent<AttackAI>();
+		movementAI = gameObject.GetComponent<MovementAI>();
+
 		if (entityType == EntityType.Enemy) { AutoAlign(); }
-	}
-
-	override public void OnBodyCollisionEnter(Collider2D coll)
-	{
-		// collidedWithBody = true;
-
-		// if (!game.LevelLoading && !player.Dead)
-		// {
-		// 	switch (entityType)
-		// 	{
-		// 		case EntityType.Enemy:
-		// 		break;
-		// 	}
-		// }
 	}
 
 	override public void OnWeaponCollisionEnter(Collider2D coll)
 	{
+<<<<<<< HEAD
 		collidedWithWeapon = true;
 		// check for layer instead of name — it's much quicker
 		  layer = coll.gameObject.layer;
@@ -53,44 +47,50 @@ public class CreatureEntity : Entity
 		          if (playerWeapon.weaponType == Weapon.WeaponType.Projectile)
 		          {
 		              playerWeapon.alreadyCollided = true;
+=======
+		playerWeapon = coll.GetComponent<Weapon>();
+>>>>>>> origin/master
 
-		              TakesHit(playerWeapon, coll, hitFrom);
-		          }
-		      }
-		  }
-		  else if (layer == ENEMY_COLLIDER)
-		  {
-		      // enemy = coll.GetComponent<CreatureEntity>();
+		hitFrom = MLib.HorizSideThatWasHit(gameObject, coll);
 
-		      // if (!enemy.alreadyCollided && !game.LevelLoading && !state.Dead)
-		      // {
-		      //     hitFrom = MLib.HorizSideThatWasHit(gameObject, coll);
-
-		      //     if (enemy.entityType == CreatureEntity.EntityType.Enemy)
-		      //     {
-		      //         enemy.alreadyCollided = true;
-
-		      //         player.TouchesEnemy("touch", enemy, coll, hitFrom);
-		      //     }
-		      // }
-		  }
+		if (playerWeapon.weaponType == Weapon.WeaponType.Projectile)
+		{
+			TakesProjectileHit(playerWeapon, coll, hitFrom);
+		}
 	}
 
-	void TakesHit(Weapon playerWeapon, Collider2D coll, int hitFrom)
+	void TakesProjectileHit(Weapon playerWeapon, Collider2D coll, int hitFrom)
 	{
 		hp -= (int)(playerWeapon.damage * DIFFICULTY_DAMAGE_MODIFIER);
 
+		// bounceback from projectile
+		if (hitFrom == RIGHT)
+			transform.DOMove(new Vector3(transform.position.x - .5f, transform.position.y, transform.position.z), .2f, false);
+		else
+			transform.DOMove(new Vector3(transform.position.x + .5f, transform.position.y, transform.position.z), .2f, false);
+
 		if (hp <= 0)
-			Dbug();
+			KillSelf();
 	}
 
-	override public void OnBodyCollisionStay() {}
-
-	override public void OnBodyCollisionExit()
+	void KillSelf()
 	{
-		collidedWithWeapon = false;
-		playerWeapon.alreadyCollided = false;
+		rigidbody2D.velocity = Vector2.zero;
+		collider2D.enabled   = false;
+		attackAI.enabled     = false;
+		movementAI.enabled   = false;
+		MTween.Fade(spriteRenderer, 0f, 0f, 2f);
+		Invoke("DeactivateObject", 2f);
 	}
+
+	void DeactivateObject()
+	{
+		gameObject.SetActive(false);
+	}
+
+	override public void OnBodyCollisionEnter(Collider2D coll) {}
+	override public void OnBodyCollisionStay() {}
+	override public void OnBodyCollisionExit() {}
 	override public void OnWeaponCollisionStay() {}
 	override public void OnWeaponCollisionExit() {}
 }

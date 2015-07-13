@@ -116,20 +116,17 @@ public class MovementAI : CacheBehaviour {
         {
             GameObject currentTile = transform.GetTileBelow(tileSystem, 0);
 
+            // clamp movement beyond current tile
             if (currentTile != null)
             {
-                // clamp movement beyond current tile
                 if (walkingDirection == RIGHT)
                 {
-                    if (transform.position.x > currentTile.transform.position.x)
-                        transform.position = new Vector3
-                            (currentTile.transform.position.x, transform.position.y, transform.position.z);
+                    transform.position = new Vector3(Mathf.Clamp(transform.position.x, 0f, currentTile.transform.position.x), transform.position.y, transform.position.z);
+
                 }
                 else if (walkingDirection == LEFT)
                 {
-                    if (transform.position.x < currentTile.transform.position.x)
-                        transform.position = new Vector3
-                            (currentTile.transform.position.x, transform.position.y, transform.position.z);
+                    transform.position = new Vector3(Mathf.Clamp(transform.position.x, currentTile.transform.position.x, 10000F), transform.position.y, transform.position.z);
                 }
             }
 
