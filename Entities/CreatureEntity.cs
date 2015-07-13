@@ -31,25 +31,7 @@ public class CreatureEntity : Entity
 
 	override public void OnWeaponCollisionEnter(Collider2D coll)
 	{
-<<<<<<< HEAD
-		collidedWithWeapon = true;
-		// check for layer instead of name — it's much quicker
-		  layer = coll.gameObject.layer;
-
-		  if (layer == WEAPON_COLLIDER)
-		  {
-		      playerWeapon = coll.GetComponent<Weapon>();
-
-		      if (!playerWeapon.alreadyCollided)
-		      {
-		          hitFrom = MLib.HorizSideThatWasHit(gameObject, coll);
-
-		          if (playerWeapon.weaponType == Weapon.WeaponType.Projectile)
-		          {
-		              playerWeapon.alreadyCollided = true;
-=======
 		playerWeapon = coll.GetComponent<Weapon>();
->>>>>>> origin/master
 
 		hitFrom = MLib.HorizSideThatWasHit(gameObject, coll);
 

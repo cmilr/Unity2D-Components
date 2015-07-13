@@ -66,7 +66,6 @@ public abstract class Entity : CacheBehaviour {
 		layer = coll.gameObject.layer;
 
 		if (layer == BODY_COLLIDER && !collidedWithBody)
-<<<<<<< HEAD
 		{
 			OnBodyCollisionEnter(coll);
 			collidedWithBody = true;
@@ -77,12 +76,6 @@ public abstract class Entity : CacheBehaviour {
 			OnWeaponCollisionEnter(coll);
 			collidedWithWeapon = true;
 		}
-=======
-			OnBodyCollisionEnter(coll);
-
-		if (layer == WEAPON_COLLIDER && !collidedWithWeapon)
-			OnWeaponCollisionEnter(coll);
->>>>>>> origin/master
 	}
 
 	// void OnTriggerStay2D(Collider2D coll)

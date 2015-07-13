@@ -3,11 +3,16 @@
 
 public class Tile : BaseBehaviour
 {
-    public Shader shader1;
+    private Shader shader1;
+    private MeshRenderer meshRenderer;
+
 
     void Start() {
-        shader1 = Shader.Find("Sprites/Diffuse");
-        transform.parent.GetComponent<MeshRenderer>().material.shader = shader1;
+        meshRenderer                   = transform.parent.GetComponent<MeshRenderer>();
+        shader1                        = Shader.Find("Sprites/Diffuse");
+        meshRenderer.material.shader   = shader1;
+        meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        meshRenderer.receiveShadows    = false;
     }
 }
 
