@@ -46,7 +46,7 @@ public class CreatureEntity : Entity
 		  {
 		      playerWeapon = coll.GetComponent<Weapon>();
 
-		      if (!playerWeapon.alreadyCollided && !game.LevelLoading)
+		      if (!playerWeapon.alreadyCollided)
 		      {
 		          hitFrom = MLib.HorizSideThatWasHit(gameObject, coll);
 
