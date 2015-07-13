@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using Matcha.Lib;
 using Matcha.Game.Tweens;
+using DG.Tweening;
 
 [RequireComponent(typeof(BoxCollider2D))]
 
@@ -44,24 +45,29 @@ public class CreatureEntity : Entity
 	{
 		hp -= (int)(playerWeapon.damage * DIFFICULTY_DAMAGE_MODIFIER);
 
+		// bounceback from projectile
+		if (hitFrom == RIGHT)
+			transform.DOMove(new Vector3(transform.position.x - .5f, transform.position.y, transform.position.z), .2f, false);
+		else
+			transform.DOMove(new Vector3(transform.position.x + .5f, transform.position.y, transform.position.z), .2f, false);
+
 		if (hp <= 0)
-		{
-			collider2D.enabled = false;
-			attackAI.enabled   = false;
-			movementAI.enabled = false;
-			MTween.Fade(spriteRenderer, 0f, 0f, 2f);
-			Invoke("DeactivateObject", 5f);
-		}
+			KillSelf();
+	}
+
+	void KillSelf()
+	{
+		rigidbody2D.velocity = Vector2.zero;
+		collider2D.enabled   = false;
+		attackAI.enabled     = false;
+		movementAI.enabled   = false;
+		MTween.Fade(spriteRenderer, 0f, 0f, 2f);
+		Invoke("DeactivateObject", 2f);
 	}
 
 	void DeactivateObject()
 	{
 		gameObject.SetActive(false);
-	}
-
-	void OnDisable()
-	{
-	    CancelInvoke();
 	}
 
 	override public void OnBodyCollisionEnter(Collider2D coll) {}
