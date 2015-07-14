@@ -162,12 +162,12 @@ public class MovementAI : CacheBehaviour {
     {
         // causes enemy to do a victory dance
         xAxisOffset = .005f;
-        CancelInvoke();
     }
 
     void OnDisable()
     {
         CancelInvoke();
+        StopCoroutine(PauseFollowTarget());
     }
 
     void OnEnable()

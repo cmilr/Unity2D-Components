@@ -74,12 +74,16 @@ public class AttackAI : CacheBehaviour {
     void OnBecameInvisible()
     {
         if (!test)
+        {
             CancelInvoke("AttackRandomly");
+            StopCoroutine(LobCompTest());
+        }
     }
 
     void OnDisable()
     {
         CancelInvoke();
+        StopCoroutine(LobCompTest());
     }
 
 
