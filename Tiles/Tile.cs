@@ -11,6 +11,7 @@ public class Tile : BaseBehaviour
 
     void Start() {
 
+        // change the default tile specs given by Rotorz
         shader1                        = Shader.Find("Sprites/Diffuse");
         meshRenderer                   = transform.parent.GetComponent<MeshRenderer>();
         meshRenderer.material.shader   = shader1;
@@ -18,16 +19,3 @@ public class Tile : BaseBehaviour
         meshRenderer.receiveShadows    = false;
     }
 }
-
-
-
-
-// void Start()
-// {
-//  // customized tiles with colliders, etc, need to have their parent gameObject's
-//  // Mesh Renderer turned off, to expose the prefab sprite renderer underneath.
-//  // this allows use of the Diffusion Sprite Renderer, for reflective light, etc.
-
-//  // if (gameObject.name != DEFAULT_TILE)
-//  //  transform.parent.GetComponent<MeshRenderer>().enabled = false;
-// }

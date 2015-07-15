@@ -44,6 +44,7 @@ public class BaseBehaviour : MonoBehaviour {
     protected const int BODY_COLLIDER                 = 10;
     protected const int ENEMY_COLLIDER                = 14;
     protected const int ENEMY_WEAPON                  = 17;
+    protected const int EDGE_BLOCKER                  = 24;
 
     // player offsets
     protected const float ABOUTFACE_OFFSET            = .15f;

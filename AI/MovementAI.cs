@@ -12,14 +12,14 @@ public class MovementAI : CacheBehaviour {
     public float walkAnimationSpeed = .5f;
     public float chanceOfPause      = 1f;           // chance of pause during any given interval
 
-    private TileSystem tileSystem;
-    private TileData tile;
-    private int tileConvertedX;
-    private int tileConvertedY;
     private string walkAnimation;
     private float movementInterval;
     private float lookInterval      = .3f;
     private float xAxisOffset       = .3f;
+    private float previousX;
+    private float blockedAt;
+    private bool blockedLeft;
+    private bool blockedRight;
     private bool hesitant;
     private Transform target;
 
@@ -28,14 +28,11 @@ public class MovementAI : CacheBehaviour {
     public bool paused;
     [HideInInspector]
     public int walkingDirection;
-    [HideInInspector]
-    public GameObject nextTile;
 
     void Start()
     {
-        target        = GameObject.Find(PLAYER).transform;
-        tileSystem    = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
-        walkAnimation = name + "_WALK_";
+        target         = GameObject.Find(PLAYER).transform;
+        walkAnimation  = name + "_WALK_";
         animator.speed = walkAnimationSpeed;
         animator.Play(Animator.StringToHash(walkAnimation));
 
@@ -54,6 +51,7 @@ public class MovementAI : CacheBehaviour {
                 StopCheck();
             break;
         }
+        previousX = transform.position.x;
     }
 
     // MASTER CONTROLLER
@@ -82,9 +80,10 @@ public class MovementAI : CacheBehaviour {
     void FollowTarget()
     {
         // get the proper direction for the enemy to move, then send him moving
+        walkingDirection = (target.position.x > transform.position.x) ? RIGHT : LEFT;
+
         if (!paused)
         {
-            walkingDirection = (target.position.x > transform.position.x) ? RIGHT : LEFT;
             rigidbody2D.velocity = transform.right * movementSpeed * walkingDirection;
 
             // ensure that actor is always facing in the direction it is moving
@@ -110,27 +109,9 @@ public class MovementAI : CacheBehaviour {
     {
         walkingDirection = (target.position.x > transform.position.x) ? RIGHT : LEFT;
 
-        nextTile = transform.GetTileBelow(tileSystem, walkingDirection);
-
-        if (nextTile == null)
+        if ((blockedRight && walkingDirection == RIGHT) || (blockedLeft && walkingDirection == LEFT))
         {
-            GameObject currentTile = transform.GetTileBelow(tileSystem, 0);
-
-            // clamp movement beyond current tile
-            if (currentTile != null)
-            {
-                if (walkingDirection == RIGHT)
-                {
-                    transform.position = new Vector3(Mathf.Clamp(transform.position.x, 0f, currentTile.transform.position.x), transform.position.y, transform.position.z);
-
-                }
-                else if (walkingDirection == LEFT)
-                {
-                    transform.position = new Vector3(Mathf.Clamp(transform.position.x, currentTile.transform.position.x, 10000F), transform.position.y, transform.position.z);
-                }
-            }
-
-            rigidbody2D.velocity = Vector2.zero;
+            transform.position = new Vector3(blockedAt, transform.position.y, transform.position.z);
             paused = true;
         }
         // if enemy and player are on roughly same x axis, pause enemy
@@ -158,9 +139,40 @@ public class MovementAI : CacheBehaviour {
         return (new Vector2(toPos.x, toPos.y) - new Vector2(fromPos.x, fromPos.y))*power;
     }
 
+    // check for edge blockers
+    void OnTriggerEnter2D(Collider2D coll)
+    {
+        // check for layer instead of name — it's much quicker
+        int layer = coll.gameObject.layer;
+
+        if (layer == EDGE_BLOCKER)
+        {
+            if(transform.position.x > previousX)
+                blockedRight = true;
+            else
+                blockedLeft = true;
+        }
+
+        blockedAt = transform.position.x;
+    }
+
+    // check if cleared edge blocker
+    void OnTriggerExit2D(Collider2D coll)
+    {
+        // check for layer instead of name — it's much quicker
+        int layer = coll.gameObject.layer;
+
+        if (layer == EDGE_BLOCKER)
+        {
+            blockedRight = false;
+            blockedLeft = false;
+            paused = false;
+        }
+    }
+
     void OnPlayerDead(string causeOfDeath, Collider2D coll, int directionHit)
     {
-        // causes enemy to do a victory dance
+        // causes enemy to periodically do a victory dance
         xAxisOffset = .005f;
     }
 
