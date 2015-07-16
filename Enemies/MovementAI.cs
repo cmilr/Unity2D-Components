@@ -42,7 +42,7 @@ public class MovementAI : CacheBehaviour {
             hesitant = true;
     }
 
-    void Update()
+    void LateUpdate()
     {
         switch (movementStyle)
         {
@@ -147,10 +147,18 @@ public class MovementAI : CacheBehaviour {
 
         if (layer == EDGE_BLOCKER)
         {
-            if(transform.position.x > previousX)
+            EdgeBlocker blocked = coll.GetComponent<EdgeBlocker>();
+
+            if (blocked.edge == EdgeBlocker.Edge.Right)
+            {
                 blockedRight = true;
-            else
+                gameObject.BroadcastMessage("SetBlockedRightState", true);
+            }
+            else if (blocked.edge == EdgeBlocker.Edge.Left)
+            {
                 blockedLeft = true;
+                gameObject.BroadcastMessage("SetBlockedLeftState", true);
+            }
         }
 
         blockedAt = transform.position.x;
@@ -164,8 +172,19 @@ public class MovementAI : CacheBehaviour {
 
         if (layer == EDGE_BLOCKER)
         {
-            blockedRight = false;
-            blockedLeft = false;
+            EdgeBlocker blocked = coll.GetComponent<EdgeBlocker>();
+
+            if (blocked.edge == EdgeBlocker.Edge.Right)
+            {
+                blockedRight = false;
+                gameObject.BroadcastMessage("SetBlockedRightState", false);
+            }
+            else if (blocked.edge == EdgeBlocker.Edge.Left)
+            {
+                blockedLeft = false;
+                gameObject.BroadcastMessage("SetBlockedLeftState", false);
+            }
+
             paused = false;
         }
     }

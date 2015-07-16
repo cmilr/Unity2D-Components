@@ -20,6 +20,8 @@ public class CreatureEntity : Entity
 	private Weapon playerWeapon;
 	private AttackAI attackAI;
 	private MovementAI movementAI;
+	private bool blockedRight;
+	private bool blockedLeft;
 
 	void Start()
 	{
@@ -27,6 +29,16 @@ public class CreatureEntity : Entity
 		movementAI = gameObject.GetComponent<MovementAI>();
 
 		if (entityType == EntityType.Enemy) { AutoAlign(); }
+	}
+
+	private void SetBlockedRightState(bool status)
+	{
+	    blockedRight = status;
+	}
+
+	private void SetBlockedLeftState(bool status)
+	{
+	    blockedLeft = status;
 	}
 
 	override public void OnWeaponCollisionEnter(Collider2D coll)
@@ -46,10 +58,14 @@ public class CreatureEntity : Entity
 		hp -= (int)(playerWeapon.damage * DIFFICULTY_DAMAGE_MODIFIER);
 
 		// bounceback from projectile
-		if (hitFrom == RIGHT)
+		if (hitFrom == RIGHT && !blockedLeft)
+		{
 			transform.DOMove(new Vector3(transform.position.x - .5f, transform.position.y, transform.position.z), .2f, false);
-		else
+		}
+		else if (hitFrom == LEFT && !blockedRight)
+		{
 			transform.DOMove(new Vector3(transform.position.x + .5f, transform.position.y, transform.position.z), .2f, false);
+		}
 
 		if (hp <= 0)
 			KillSelf();
