@@ -16,8 +16,6 @@ public class MovementAI : CacheBehaviour {
     private float movementInterval;
     private float lookInterval      = .3f;
     private float xAxisOffset       = .3f;
-    private float previousX;
-    private float blockedAt;
     private bool blockedLeft;
     private bool blockedRight;
     private bool hesitant;
@@ -51,7 +49,6 @@ public class MovementAI : CacheBehaviour {
                 StopCheck();
             break;
         }
-        previousX = transform.position.x;
     }
 
     // MASTER CONTROLLER
@@ -160,9 +157,9 @@ public class MovementAI : CacheBehaviour {
                 blockedLeft = true;
                 gameObject.BroadcastMessage("SetBlockedLeftState", true);
             }
-        }
 
-        blockedAt = transform.position.x;
+            rigidbody2D.velocity = Vector2.zero;
+        }
     }
 
     // check if cleared edge blocker
