@@ -111,7 +111,8 @@ public class MovementAI : CacheBehaviour {
 
         if ((blockedRight && walkingDirection == RIGHT) || (blockedLeft && walkingDirection == LEFT))
         {
-            transform.position = new Vector3(blockedAt, transform.position.y, transform.position.z);
+            // transform.position = new Vector3(blockedAt, transform.position.y, transform.position.z);
+            rigidbody2D.velocity = Vector2.zero;
             paused = true;
         }
         // if enemy and player are on roughly same x axis, pause enemy
@@ -147,14 +148,14 @@ public class MovementAI : CacheBehaviour {
 
         if (layer == EDGE_BLOCKER)
         {
-            EdgeBlocker blocked = coll.GetComponent<EdgeBlocker>();
+            int sideHit = MLib.HorizSideThatWasHit(gameObject, coll);
 
-            if (blocked.edge == EdgeBlocker.Edge.Right)
+            if (sideHit == RIGHT)
             {
                 blockedRight = true;
                 gameObject.BroadcastMessage("SetBlockedRightState", true);
             }
-            else if (blocked.edge == EdgeBlocker.Edge.Left)
+            else if (sideHit == LEFT)
             {
                 blockedLeft = true;
                 gameObject.BroadcastMessage("SetBlockedLeftState", true);
@@ -172,14 +173,14 @@ public class MovementAI : CacheBehaviour {
 
         if (layer == EDGE_BLOCKER)
         {
-            EdgeBlocker blocked = coll.GetComponent<EdgeBlocker>();
+            int sideHit = MLib.HorizSideThatWasHit(gameObject, coll);
 
-            if (blocked.edge == EdgeBlocker.Edge.Right)
+            if (sideHit == RIGHT)
             {
                 blockedRight = false;
                 gameObject.BroadcastMessage("SetBlockedRightState", false);
             }
-            else if (blocked.edge == EdgeBlocker.Edge.Left)
+            else if (sideHit == LEFT)
             {
                 blockedLeft = false;
                 gameObject.BroadcastMessage("SetBlockedLeftState", false);
