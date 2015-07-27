@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using Rotorz.Tile;
+using Matcha.Extensions;
 
 
 public class DontLeaveMap : CacheBehaviour
@@ -42,18 +43,18 @@ public class DontLeaveMap : CacheBehaviour
 	{
 		// check left bound.
 		if (transform.position.x - (GetComponent<Renderer>().bounds.size.x / 2 - leftOffset) < leftBound)
-			transform.position = new Vector3(leftBound + (GetComponent<Renderer>().bounds.size.x / 2  - leftOffset), transform.position.y, transform.position.z);
+			transform.SetXPosition(leftBound + (GetComponent<Renderer>().bounds.size.x / 2  - leftOffset));
 
 		// check right bound.
 		if (transform.position.x + (GetComponent<Renderer>().bounds.size.x / 2 - rightOffset) > rightBound)
-			transform.position = new Vector3(rightBound - (GetComponent<Renderer>().bounds.size.x / 2 - rightOffset), transform.position.y, transform.position.z);
+			transform.SetXPosition(rightBound - (GetComponent<Renderer>().bounds.size.x / 2 - rightOffset));
 
 		// check upper bound.
 		if (transform.position.y + (GetComponent<Renderer>().bounds.size.y - upperOffset) > upperBound)
-			transform.position = new Vector3(transform.position.x, upperBound - (GetComponent<Renderer>().bounds.size.y - upperOffset), transform.position.z);
+			transform.SetYPosition(upperBound - (GetComponent<Renderer>().bounds.size.y - upperOffset));
 
 		// check lower bound.
 		if (transform.position.y - lowerOffset < lowerBound)
-			transform.position = new Vector3(transform.position.x, lowerBound - lowerOffset, transform.position.z);
+			transform.SetYPosition(lowerBound - lowerOffset);
 	}
 }

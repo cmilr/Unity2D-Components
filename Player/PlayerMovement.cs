@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Matcha.Lib;
+using Matcha.Extensions;
 
 [RequireComponent(typeof(CharacterController2D))]
 
@@ -180,12 +181,10 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		if (transform.localScale.x < 0f)
 		{
 			// reverse sprite direction
-			transform.localScale = new Vector3(
-				-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+			transform.SetLocalScaleX(-transform.localScale.x);
 
 			// offset so player isn't pushed too far forward when sprite flips
-			transform.position = new Vector3(
-				transform.position.x - ABOUTFACE_OFFSET, transform.position.y, transform.position.z);
+			transform.SetXPosition(transform.position.x - ABOUTFACE_OFFSET);
 		}
 
 		if (controller.isGrounded)
@@ -205,12 +204,10 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		if (transform.localScale.x > 0f)
 		{
 			// reverse sprite direction
-			transform.localScale = new Vector3(
-				-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+			transform.SetLocalScaleX(-transform.localScale.x);
 
 			// offset so player isn't pushed too far forward when sprite flips
-			transform.position = new Vector3(
-				transform.position.x + ABOUTFACE_OFFSET, transform.position.y, transform.position.z);
+			transform.SetXPosition(transform.position.x + ABOUTFACE_OFFSET);
 		}
 
 		if (controller.isGrounded)
