@@ -95,6 +95,12 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		CheckIfStandingOrFalling();
 
+		// idle state
+		if (controller.isGrounded)
+		{
+			PlayerGrounded();
+		}
+
 		// attack state
 		if (attack)
 		{
@@ -129,11 +135,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			MovePlayerLeft();
 		}
 
-		// idle state
-		else if (controller.isGrounded)
-		{
-			PlayerGrounded();
-		}
+
 
 		// jump state
 		if (jump)
@@ -297,9 +299,12 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		{
 			case AnimationAction.Idle:
 			{
-				animator.speed = IDLE_SPEED;
-				animator.Play(Animator.StringToHash(idleAnimation));
-				weaponManager.PlayAnimation(IDLE);
+				if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1 && !animator.IsInTransition(0))
+				{
+					animator.speed = IDLE_SPEED;
+					animator.Play(Animator.StringToHash(idleAnimation));
+					weaponManager.PlayAnimation(IDLE);
+				}
 				break;
 			}
 
