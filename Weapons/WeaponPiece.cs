@@ -10,23 +10,22 @@ public class WeaponPiece : CacheBehaviour {
     [HideInInspector]
     public string jumpAnimation;
     [HideInInspector]
-    public string swingAnimation;
+    public string attackAnimation;
 
     private string weaponType;
     private Material material;
 
     void Start ()
     {
-        weaponType = (transform.parent.GetComponent<Weapon>().weaponType).ToString();
         SetAnimations();
     }
 
     void SetAnimations()
     {
-        idleAnimation  = weaponType + "_Idle";
-        runAnimation   = weaponType + "_Run";
-        jumpAnimation  = weaponType + "_Jump";
-        swingAnimation = weaponType + "_Swing";
+        idleAnimation  = name + "_Idle_";
+        runAnimation   = name + "_Run_";
+        jumpAnimation  = name + "_Jump_";
+        attackAnimation = name + "_Attack_";
     }
 
     public void PlayIdleAnimation()
@@ -50,7 +49,7 @@ public class WeaponPiece : CacheBehaviour {
     public void PlaySwingAnimation()
     {
         animator.speed = SWING_SPEED;
-        animator.Play(Animator.StringToHash(swingAnimation));
+        animator.Play(Animator.StringToHash(attackAnimation));
     }
 
     void OnPlayerDead(string methodOfDeath, Collider2D coll, int hitFrom)
