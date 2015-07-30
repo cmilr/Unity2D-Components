@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Matcha.Lib;
+using Matcha.Extensions;
 
 [RequireComponent(typeof(CharacterController2D))]
 
@@ -134,6 +135,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			PlayerGrounded();
 		}
 
+
+
 		// jump state
 		if (jump)
 		{
@@ -180,12 +183,10 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		if (transform.localScale.x < 0f)
 		{
 			// reverse sprite direction
-			transform.localScale = new Vector3(
-				-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+			transform.SetLocalScaleX(-transform.localScale.x);
 
 			// offset so player isn't pushed too far forward when sprite flips
-			transform.position = new Vector3(
-				transform.position.x - ABOUTFACE_OFFSET, transform.position.y, transform.position.z);
+			transform.SetXPosition(transform.position.x - ABOUTFACE_OFFSET);
 		}
 
 		if (controller.isGrounded)
@@ -205,12 +206,10 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		if (transform.localScale.x > 0f)
 		{
 			// reverse sprite direction
-			transform.localScale = new Vector3(
-				-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+			transform.SetLocalScaleX(-transform.localScale.x);
 
 			// offset so player isn't pushed too far forward when sprite flips
-			transform.position = new Vector3(
-				transform.position.x + ABOUTFACE_OFFSET, transform.position.y, transform.position.z);
+			transform.SetXPosition(transform.position.x + ABOUTFACE_OFFSET);
 		}
 
 		if (controller.isGrounded)
@@ -300,17 +299,24 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		{
 			case AnimationAction.Idle:
 			{
-				animator.speed = IDLE_SPEED;
-				animator.Play(Animator.StringToHash(idleAnimation));
-				weaponManager.PlayAnimation(IDLE);
+				// if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1 && !animator.IsInTransition(0))
+				// // if (!animator.GetCurrentAnimatorStateInfo(0).IsName(swingAnimation))
+				// {
+					animator.speed = IDLE_SPEED;
+					animator.Play(Animator.StringToHash(idleAnimation));
+					weaponManager.PlayAnimation(IDLE);
+				// }
 				break;
 			}
 
 			case AnimationAction.Run:
 			{
-				animator.speed = RUN_SPEED;
-				animator.Play(Animator.StringToHash(runAnimation));
-				weaponManager.PlayAnimation(RUN);
+				{
+					animator.speed = RUN_SPEED;
+					animator.Play(Animator.StringToHash(runAnimation));
+					weaponManager.PlayAnimation(RUN);
+				}
+
 				break;
 			}
 

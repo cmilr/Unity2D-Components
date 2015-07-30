@@ -23,7 +23,7 @@ public class ProjectileContainer : Weapon {
         maxDistance           = weapon.maxDistance;
         mass                  = weapon.mass;
         rigidbody2D.mass      = weapon.mass;
-        spriteRenderer.sprite = weapon.sprite;
+        spriteRenderer.sprite = weapon.GetComponent<Projectile>().sprite;
         collider2D.enabled    = true;
         alreadyCollided       = false;
         origin                = new Vector3(transform.position.x, transform.position.y, transform.position.z);

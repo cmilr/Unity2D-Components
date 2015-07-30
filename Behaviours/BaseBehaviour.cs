@@ -38,8 +38,8 @@ public class BaseBehaviour : MonoBehaviour {
     protected const string _OBJECT_POOL               = "_ObjectPool";
 
     // layer names
-    protected const int PLAYER_LAYER                  = 12;
-    protected const int PLAYER_COLLIDER               = 12;
+    protected const int PLAYER_LAYER                  = 8;
+    protected const int PLAYER_COLLIDER               = 8;
     protected const int WEAPON_COLLIDER               = 9;
     protected const int BODY_COLLIDER                 = 10;
     protected const int ENEMY_COLLIDER                = 14;

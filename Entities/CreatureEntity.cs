@@ -60,11 +60,15 @@ public class CreatureEntity : Entity
 		// bounceback from projectile
 		if (hitFrom == RIGHT && !blockedLeft)
 		{
-			transform.DOMove(new Vector3(transform.position.x - .5f, transform.position.y, transform.position.z), .2f, false);
+			transform.DOMove(new Vector3(transform.position.x - .50f, transform.position.y, transform.position.z), .2f, false);
 		}
 		else if (hitFrom == LEFT && !blockedRight)
 		{
-			transform.DOMove(new Vector3(transform.position.x + .5f, transform.position.y, transform.position.z), .2f, false);
+			transform.DOMove(new Vector3(transform.position.x + .50f, transform.position.y, transform.position.z), .2f, false);
+		}
+		else
+		{
+			rigidbody2D.velocity = Vector2.zero;
 		}
 
 		if (hp <= 0)

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using Matcha.Extensions;
 
 
 public abstract class Entity : CacheBehaviour {
@@ -35,7 +36,7 @@ public abstract class Entity : CacheBehaviour {
 	protected void AutoAlign()
 	{
 		float targetY = (float)(Math.Round(transform.position.y) - ALIGN_ENTITY_TO);
-		transform.position = new Vector3(transform.position.x, targetY, transform.position.z);
+		transform.SetYPosition(targetY);
 	}
 
 	protected void LifecycleOver()
