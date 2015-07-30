@@ -135,8 +135,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			PlayerGrounded();
 		}
 
-
-
 		// jump state
 		if (jump)
 		{
@@ -311,11 +309,9 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 			case AnimationAction.Run:
 			{
-				{
-					animator.speed = RUN_SPEED;
-					animator.Play(Animator.StringToHash(runAnimation));
-					weaponManager.PlayAnimation(RUN);
-				}
+				animator.speed = RUN_SPEED;
+				animator.Play(Animator.StringToHash(runAnimation));
+				weaponManager.PlayAnimation(RUN);
 
 				break;
 			}
