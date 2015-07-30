@@ -29,7 +29,7 @@ public class MagicProjectileContainer : Weapon {
         origin                = new Vector3(transform.position.x, transform.position.y, transform.position.z);
 
         // initialize animation controller
-        if (weapon.GetComponent<Projectile>().animatedProjectile)
+        if (weapon.GetComponent<Weapon>().animatedProjectile)
         {
             anim = (RuntimeAnimatorController)RuntimeAnimatorController.Instantiate
                 (Resources.Load(("AnimControllers/Projectiles/" + weapon.name + "_0"), typeof(RuntimeAnimatorController )));
@@ -106,11 +106,5 @@ public class MagicProjectileContainer : Weapon {
         transform.position = transform.position;
         collider2D.enabled = true;
     }
-
-    override public void PlayIdleAnimation(float xOffset, float yOffset) {}
-    override public void PlayRunAnimation(float xOffset, float yOffset) {}
-    override public void PlayJumpAnimation(float xOffset, float yOffset) {}
-    override public void PlaySwingAnimation(float xOffset, float yOffset) {}
-    override public void EnableAnimation(bool status) {}
 }
 

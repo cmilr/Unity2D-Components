@@ -47,7 +47,9 @@ public class CreatureEntity : Entity
 
 		hitFrom = MLib.HorizSideThatWasHit(gameObject, coll);
 
-		if (playerWeapon.weaponType == Weapon.WeaponType.Projectile)
+		if (playerWeapon.weaponType == Weapon.WeaponType.MagicProjectile ||
+			playerWeapon.weaponType == Weapon.WeaponType.HurledProjectile ||
+			playerWeapon.weaponType == Weapon.WeaponType.Hammer)
 		{
 			TakesProjectileHit(playerWeapon, coll, hitFrom);
 		}

@@ -54,6 +54,7 @@ public class BaseBehaviour : MonoBehaviour {
     protected const float RUN_SPEED                   = .5f;
     protected const float JUMP_SPEED                  = 10f;
     protected const float SWING_SPEED                 = 1f;
+    protected const float HURL_SPEED                  = 1f;
 
     // player/weapon states
     protected const int IDLE                          = 0;

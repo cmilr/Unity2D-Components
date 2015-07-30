@@ -34,7 +34,8 @@ public class BodyCollider : CacheBehaviour
             {
                 hitFrom = MLib.HorizSideThatWasHit(gameObject, coll);
 
-                if (enemyWeapon.weaponType == Weapon.WeaponType.Projectile)
+                if (enemyWeapon.weaponType == Weapon.WeaponType.MagicProjectile ||
+                    enemyWeapon.weaponType == Weapon.WeaponType.HurledProjectile)
                 {
                     enemyWeapon.alreadyCollided = true;
 

@@ -7,6 +7,7 @@ public class ArmAnimation : AnimationBehaviour, IPlayerAnimation {
     private string runAnimation;
     private string jumpAnimation;
     private string swingAnimation;
+    private string hurlAnimation;
     private IPlayerStateFullAccess state;
 
     void Start ()
@@ -20,17 +21,19 @@ public class ArmAnimation : AnimationBehaviour, IPlayerAnimation {
         // uses string literals over concatenation in order to reduce GC calls
         if (character == "LAURA")
         {
-            idleAnimation = "LAURA_ARM_Idle";
-            runAnimation = "LAURA_ARM_Run";
-            jumpAnimation = "LAURA_ARM_Jump";
+            idleAnimation  = "LAURA_ARM_Idle";
+            runAnimation   = "LAURA_ARM_Run";
+            jumpAnimation  = "LAURA_ARM_Jump";
             swingAnimation = "LAURA_ARM_Swing";
-        }
-        else
-        {
-            idleAnimation = "MAC_ARM_Idle";
-            runAnimation = "MAC_ARM_Run";
-            jumpAnimation = "MAC_ARM_Jump";
+            hurlAnimation  = "LAURA_ARM_Hurl";
+            }
+            else
+            {
+            idleAnimation  = "MAC_ARM_Idle";
+            runAnimation   = "MAC_ARM_Run";
+            jumpAnimation  = "MAC_ARM_Jump";
             swingAnimation = "MAC_ARM_Swing";
+            hurlAnimation  = "Mac_ARM_Hurl";
         }
     }
 
@@ -59,6 +62,13 @@ public class ArmAnimation : AnimationBehaviour, IPlayerAnimation {
     {
         animator.speed = SWING_SPEED;
         animator.Play(Animator.StringToHash(swingAnimation));
+        OffsetAnimation(xOffset, yOffset);
+    }
+
+    public void PlayHurlAnimation(float xOffset, float yOffset)
+    {
+        animator.speed = HURL_SPEED;
+        animator.Play(Animator.StringToHash(hurlAnimation));
         OffsetAnimation(xOffset, yOffset);
     }
 

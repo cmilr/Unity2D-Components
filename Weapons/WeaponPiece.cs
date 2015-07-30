@@ -12,19 +12,21 @@ public class WeaponPiece : CacheBehaviour {
     [HideInInspector]
     public string swingAnimation;
 
+    private string weaponType;
     private Material material;
 
     void Start ()
     {
+        weaponType = (transform.parent.GetComponent<Weapon>().weaponType).ToString();
         SetAnimations();
     }
 
     void SetAnimations()
     {
-        idleAnimation = name + "_Idle";
-        runAnimation = name + "_Run";
-        jumpAnimation = name + "_Jump";
-        swingAnimation = name + "_Swing";
+        idleAnimation  = weaponType + "_Idle";
+        runAnimation   = weaponType + "_Run";
+        jumpAnimation  = weaponType + "_Jump";
+        swingAnimation = weaponType + "_Swing";
     }
 
     public void PlayIdleAnimation()
