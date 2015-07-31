@@ -10,12 +10,14 @@ public class ProjectileManager : CacheBehaviour {
     private ProjectileContainer projectile;
     private float fireRate;
     private float nextFire;
-    private bool player;
+    private bool firedByPlayer;
 
     void Start()
     {
         projectileSpawnPoint = GetComponentInChildren<SpawnPointTrace>().transform;
-        player = (gameObject.layer == PLAYER_LAYER) ? true : false;
+
+        // check if this is the player or an enemy
+        firedByPlayer = (gameObject.layer == PLAYER_LAYER) ? true : false;
     }
 
     // fire in direction actor is facing
@@ -28,12 +30,7 @@ public class ProjectileManager : CacheBehaviour {
             nextFire = Time.time + fireRate;
             GetPooledProjectile(equippedWeapon);
             InitPooledProjectile();
-
-            // call correct Fire method, based on type of weapon selected (magical or not)
-            if (equippedWeapon.GetComponent<Weapon>().fadeIn)
-                pooledProjectile.GetComponent<MagicProjectileContainer>().Fire(equippedWeapon, transform.localScale.x);
-            else
-                pooledProjectile.GetComponent<ProjectileContainer>().Fire(equippedWeapon, transform.localScale.x);
+            pooledProjectile.GetComponent<ProjectileContainer>().Fire(firedByPlayer, equippedWeapon, transform.localScale.x);
         }
 
     }
@@ -48,22 +45,13 @@ public class ProjectileManager : CacheBehaviour {
             nextFire = Time.time + fireRate;
             GetPooledProjectile(equippedWeapon);
             InitPooledProjectile();
-
-            // call correct Fire method, based on type of weapon selected (magical or not)
-            if (equippedWeapon.GetComponent<Weapon>().fadeIn)
-                pooledProjectile.GetComponent<MagicProjectileContainer>().Fire(equippedWeapon, target);
-            else
-                pooledProjectile.GetComponent<ProjectileContainer>().Fire(equippedWeapon, target);
+            pooledProjectile.GetComponent<ProjectileContainer>().Fire(firedByPlayer, equippedWeapon, target);
         }
     }
 
     void GetPooledProjectile(Weapon equippedWeapon)
     {
-        // set correct Object Pool type based on type of weapon (magical or not)
-        if (equippedWeapon.GetComponent<Weapon>().fadeIn)
-            pooledProjectile = MagicProjectilePool.current.Spawn();
-        else
-            pooledProjectile = ProjectilePool.current.Spawn();
+        pooledProjectile = ProjectilePool.current.Spawn();
 
         if (pooledProjectile == null)
         {
@@ -81,6 +69,6 @@ public class ProjectileManager : CacheBehaviour {
         pooledProjectile.transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z);
 
         // set weapon to proper collider layer——enemy or player
-        pooledProjectile.layer = (player) ? WEAPON_COLLIDER : ENEMY_WEAPON;
+        pooledProjectile.layer = (firedByPlayer) ? WEAPON_COLLIDER : ENEMY_WEAPON;
     }
 }

@@ -13,8 +13,6 @@ public class Weapon : AnimationBehaviour {
     [Tooltip("This is the pickup/HUD icon.")]
     public Sprite iconSprite;
 
-    // note: ProjectileContainers contain simple dummy values since they
-    // receive data for these fields via passed-in projectile objects
 
     [Header("ALL WEAPONS")]
     //~~~~~~~~~~~~~~~~~~~~~
@@ -45,6 +43,9 @@ public class Weapon : AnimationBehaviour {
 
     [Tooltip("Should projectile be lobbed?")]
     public bool lob;
+
+    [Tooltip("ONLY EFFECTS PLAYER: If 'Lob' is true, how much should gravity effect projectile?")]
+    public float lobGravity;
 
     [Tooltip("Should projectile fade in when thrown?")]
     public bool fadeIn;
