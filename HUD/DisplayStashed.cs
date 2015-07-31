@@ -41,7 +41,7 @@ public class DisplayStashed : CacheBehaviour
     void InitStashedWeapon(GameObject weapon)
     {
         HUDWeapon = spriteRenderer;
-        HUDWeapon.sprite = weapon.GetComponent<Weapon>().sprite;
+        HUDWeapon.sprite = weapon.GetComponent<Weapon>().iconSprite;
         HUDWeapon.DOKill();
         FadeInWeapon();
     }
@@ -49,7 +49,7 @@ public class DisplayStashed : CacheBehaviour
     void ChangeStashedWeapon(GameObject weapon)
     {
         HUDWeapon = spriteRenderer;
-        HUDWeapon.sprite = weapon.GetComponent<Weapon>().sprite;
+        HUDWeapon.sprite = weapon.GetComponent<Weapon>().iconSprite;
         transform.localPosition = hudPosition;
 
         if (hudSide == RIGHT)

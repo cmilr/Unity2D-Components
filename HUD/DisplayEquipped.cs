@@ -30,7 +30,7 @@ public class DisplayEquipped : CacheBehaviour
     void OnInitEquippedWeapon(GameObject weapon)
     {
         HUDWeapon = spriteRenderer;
-        HUDWeapon.sprite = weapon.GetComponent<Weapon>().sprite;
+        HUDWeapon.sprite = weapon.GetComponent<Weapon>().iconSprite;
         HUDWeapon.DOKill();
         FadeInWeapon();
     }
@@ -38,7 +38,7 @@ public class DisplayEquipped : CacheBehaviour
     void OnChangeEquippedWeapon(GameObject weapon)
     {
         HUDWeapon = spriteRenderer;
-        HUDWeapon.sprite = weapon.GetComponent<Weapon>().sprite;
+        HUDWeapon.sprite = weapon.GetComponent<Weapon>().iconSprite;
         transform.localPosition = hudPosition;
 
         // upon receiving new weapon for the equipped slot, instantly relocate it back to its previous location,

@@ -21,7 +21,6 @@ public class AttackAI : CacheBehaviour {
         projectile     = GetComponent<ProjectileManager>();
         weapon         = GetComponentInChildren<Weapon>();
         target         = GameObject.Find(PLAYER).transform;
-
         attackInterval = UnityEngine.Random.Range(1.5f, 2.5f);
 	}
 
@@ -53,7 +52,9 @@ public class AttackAI : CacheBehaviour {
                 // only attack if creature is facing the same direction as target
                 if ((target.position.x > transform.position.x && transform.localScale.x == 1f) ||
                     (target.position.x < transform.position.x && transform.localScale.x == -1f))
+                {
                     projectile.FireAtTarget(weapon, target);
+                }
             }
         }
     }

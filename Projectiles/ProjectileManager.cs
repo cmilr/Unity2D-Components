@@ -30,7 +30,7 @@ public class ProjectileManager : CacheBehaviour {
             InitPooledProjectile();
 
             // call correct Fire method, based on type of weapon selected (magical or not)
-            if (equippedWeapon.GetComponent<Weapon>().magicWeapon)
+            if (equippedWeapon.GetComponent<Weapon>().fadeIn)
                 pooledProjectile.GetComponent<MagicProjectileContainer>().Fire(equippedWeapon, transform.localScale.x);
             else
                 pooledProjectile.GetComponent<ProjectileContainer>().Fire(equippedWeapon, transform.localScale.x);
@@ -50,7 +50,7 @@ public class ProjectileManager : CacheBehaviour {
             InitPooledProjectile();
 
             // call correct Fire method, based on type of weapon selected (magical or not)
-            if (equippedWeapon.GetComponent<Weapon>().magicWeapon)
+            if (equippedWeapon.GetComponent<Weapon>().fadeIn)
                 pooledProjectile.GetComponent<MagicProjectileContainer>().Fire(equippedWeapon, target);
             else
                 pooledProjectile.GetComponent<ProjectileContainer>().Fire(equippedWeapon, target);
@@ -60,7 +60,7 @@ public class ProjectileManager : CacheBehaviour {
     void GetPooledProjectile(Weapon equippedWeapon)
     {
         // set correct Object Pool type based on type of weapon (magical or not)
-        if (equippedWeapon.GetComponent<Weapon>().magicWeapon)
+        if (equippedWeapon.GetComponent<Weapon>().fadeIn)
             pooledProjectile = MagicProjectilePool.current.Spawn();
         else
             pooledProjectile = ProjectilePool.current.Spawn();

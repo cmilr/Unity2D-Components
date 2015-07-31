@@ -6,33 +6,52 @@ public class Weapon : AnimationBehaviour {
 
     public enum WeaponType { Axe, Sword, Hammer, HurledProjectile, MagicProjectile };
     public WeaponType weaponType;
-    public Sprite sprite;
-
-    // note: ProjectileContainers contain simple dummy values since they
-    // receive data for these fields via passed-in projectile objects
 
     [HideInInspector]
     public bool alreadyCollided;
 
-    [Header("All Weapons")]
+    [Tooltip("This is the pickup/HUD icon.")]
+    public Sprite iconSprite;
+
+    // note: ProjectileContainers contain simple dummy values since they
+    // receive data for these fields via passed-in projectile objects
+
+    [Header("ALL WEAPONS")]
+    //~~~~~~~~~~~~~~~~~~~~~
+    [Tooltip("What title should be displayed when this weapon is equipped?")]
     public string title;
-    public int hp;
-    public int ac;
+
+    [Tooltip("How much damage does this weapon do?")]
     public int damage;
+
+    [Tooltip("How many hits can this weapon take before it's unuseable?")]
+    public int hp;
+
+    [Tooltip("How many times per second can this weapon be fired?")]
     public float rateOfAttack;
 
-    [Header("Ranged Weapons")]
+
+    [Header("RANGED WEAPONS ONLY")]
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    [Tooltip("Projectile sprite that will actually be fired.")]
+    public Sprite projectileSprite;
+
     [Range (8, 20)]
+    [Tooltip("How fast should projectiel travel?")]
     public float speed = 12f;
+
+    [Tooltip("How far should projectile travel before fading out?")]
     public float maxDistance = 40f;
 
-    [Tooltip("zero mass will be fired linearly, positive mass will be lobbed at its target")]
-    public float mass = 1f;
+    [Tooltip("Should projectile be lobbed?")]
+    public bool lob;
+
+    [Tooltip("Should projectile fade in when thrown?")]
+    public bool fadeIn;
 
     [Tooltip("If Animated, ProjectileContainer will attempt to load an animation.")]
     public bool animatedProjectile;
-    [Tooltip("If Magic Weapon, projectile will fade in when thrown.")]
-    public bool magicWeapon;
+
 
     // genericized weapon pieces
     private WeaponPiece upper;

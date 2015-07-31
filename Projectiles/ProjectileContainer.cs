@@ -15,18 +15,18 @@ public class ProjectileContainer : Weapon {
     {
         this.weapon           = weapon;
         weaponType            = weapon.weaponType;
+        alreadyCollided       = false;
+        iconSprite            = weapon.iconSprite;
         title                 = weapon.title;
-        hp                    = weapon.hp;
-        ac                    = weapon.ac;
         damage                = weapon.damage;
+        hp                    = weapon.hp;
         rateOfAttack          = weapon.rateOfAttack;
+        spriteRenderer.sprite = weapon.projectileSprite;
         speed                 = weapon.speed;
         maxDistance           = weapon.maxDistance;
-        mass                  = weapon.mass;
-        rigidbody2D.mass      = weapon.mass;
-        spriteRenderer.sprite = weapon.GetComponent<Weapon>().sprite;
+        lob                   = weapon.lob;
+        fadeIn                = weapon.fadeIn;
         collider2D.enabled    = true;
-        alreadyCollided       = false;
         origin                = new Vector3(transform.position.x, transform.position.y, transform.position.z);
 
         // initialize animation controller
@@ -46,24 +46,24 @@ public class ProjectileContainer : Weapon {
     public void Fire(Weapon weapon, float direction)
     {
         Init(weapon);
-
+        rigidbody2D.gravityScale = .15f;
         rigidbody2D.velocity = transform.right * weapon.speed * direction;
     }
 
     // FIRE AT TARGET
     public void Fire(Weapon weapon, Transform target)
     {
-        Init(weapon);
+        // Init(weapon);
 
-        if (rigidbody2D.mass <= .001f)
-        {   // if weapon has no mass, fire projectile linearally
-            rigidbody2D.gravityScale = 0;
-            rigidbody2D.velocity = (target.position - transform.position).normalized * weapon.speed;
-        }
-        else
-        {   // otherwise, lob projectile like a cannon ball
-            rigidbody2D.velocity = MLib.LobProjectile(weapon, transform, target);
-        }
+        // if (lob)
+        // {   // otherwise, lob projectile like a cannon ball
+        //     rigidbody2D.velocity = MLib.LobProjectile(weapon, transform, target);
+        // }
+        // else
+        // {   // if weapon has no mass, fire projectile linearally
+        //     rigidbody2D.gravityScale = 0;
+        //     rigidbody2D.velocity = (target.position - transform.position).normalized * weapon.speed;
+        // }
     }
 
     void CheckDistanceTraveled()
