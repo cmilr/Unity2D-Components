@@ -58,7 +58,7 @@ public class ArmAnimation : AnimationBehaviour, IPlayerAnimation {
         OffsetAnimation(xOffset, yOffset);
     }
 
-    public void PlaySwingAnimation(float xOffset, float yOffset)
+    public void PlayAttackAnimation(float xOffset, float yOffset)
     {
         animator.speed = SWING_SPEED;
         animator.Play(Animator.StringToHash(swingAnimation));

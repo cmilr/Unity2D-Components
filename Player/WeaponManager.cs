@@ -177,22 +177,22 @@ public class WeaponManager : CacheBehaviour {
 
             case ATTACK:
             {
-                equippedWeapon.PlaySwingAnimation(0, 0);
-                arm.PlaySwingAnimation(0, 0);
+                equippedWeapon.PlayAttackAnimation(0, 0);
+                arm.PlayAttackAnimation(0, 0);
                 break;
             }
 
             case RUN_ATTACK:
             {
-                equippedWeapon.PlaySwingAnimation(0, ONE_PIXEL);
-                arm.PlaySwingAnimation(0, ONE_PIXEL);
+                equippedWeapon.PlayAttackAnimation(0, ONE_PIXEL);
+                arm.PlayAttackAnimation(0, ONE_PIXEL);
                 break;
             }
 
             case JUMP_ATTACK:
             {
-                equippedWeapon.PlaySwingAnimation(0, ONE_PIXEL * 2);
-                arm.PlaySwingAnimation(0, ONE_PIXEL * 2);
+                equippedWeapon.PlayAttackAnimation(0, ONE_PIXEL * 2);
+                arm.PlayAttackAnimation(0, ONE_PIXEL * 2);
                 break;
             }
 
@@ -247,7 +247,7 @@ public class WeaponManager : CacheBehaviour {
 
             case RUN_ATTACK:
             {
-                equippedWeapon.PlaySwingAnimation(0, ONE_PIXEL);
+                equippedWeapon.PlayAttackAnimation(0, ONE_PIXEL);
                 arm.PlayHurlAnimation(0, ONE_PIXEL);
                 projectile.Fire(equippedWeapon);
                 break;
@@ -255,7 +255,7 @@ public class WeaponManager : CacheBehaviour {
 
             case JUMP_ATTACK:
             {
-                equippedWeapon.PlaySwingAnimation(0, ONE_PIXEL * 2);
+                equippedWeapon.PlayAttackAnimation(0, ONE_PIXEL * 2);
                 arm.PlayHurlAnimation(0, ONE_PIXEL * 2);
                 projectile.Fire(equippedWeapon);
                 break;
@@ -305,23 +305,23 @@ public class WeaponManager : CacheBehaviour {
             case ATTACK:
             {
                 equippedWeapon.PlayIdleAnimation(0, 0);
-                arm.PlaySwingAnimation(0, 0);
+                arm.PlayAttackAnimation(0, 0);
                 projectile.Fire(equippedWeapon);
                 break;
             }
 
             case RUN_ATTACK:
             {
-                equippedWeapon.PlaySwingAnimation(0, ONE_PIXEL);
-                arm.PlaySwingAnimation(0, ONE_PIXEL);
+                equippedWeapon.PlayAttackAnimation(0, ONE_PIXEL);
+                arm.PlayAttackAnimation(0, ONE_PIXEL);
                 projectile.Fire(equippedWeapon);
                 break;
             }
 
             case JUMP_ATTACK:
             {
-                equippedWeapon.PlaySwingAnimation(0, ONE_PIXEL * 2);
-                arm.PlaySwingAnimation(0, ONE_PIXEL * 2);
+                equippedWeapon.PlayAttackAnimation(0, ONE_PIXEL * 2);
+                arm.PlayAttackAnimation(0, ONE_PIXEL * 2);
                 projectile.Fire(equippedWeapon);
                 break;
             }

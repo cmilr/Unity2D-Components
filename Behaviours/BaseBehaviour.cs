@@ -47,7 +47,7 @@ public class BaseBehaviour : MonoBehaviour {
     protected const int EDGE_BLOCKER                  = 24;
 
     // player offsets
-    protected const float ABOUTFACE_OFFSET            = .15f;
+    protected const float ABOUTFACE_OFFSET            = 0f;
 
     // player/weapon animation speeds
     protected const float IDLE_SPEED                  = 1f;

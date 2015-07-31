@@ -22,9 +22,9 @@ public class WeaponPiece : CacheBehaviour {
 
     void SetAnimations()
     {
-        idleAnimation  = name + "_Idle_";
-        runAnimation   = name + "_Run_";
-        jumpAnimation  = name + "_Jump_";
+        idleAnimation   = name + "_Idle_";
+        runAnimation    = name + "_Run_";
+        jumpAnimation   = name + "_Jump_";
         attackAnimation = name + "_Attack_";
     }
 
@@ -46,7 +46,7 @@ public class WeaponPiece : CacheBehaviour {
         animator.Play(Animator.StringToHash(jumpAnimation));
     }
 
-    public void PlaySwingAnimation()
+    public void PlayAttackAnimation()
     {
         animator.speed = SWING_SPEED;
         animator.Play(Animator.StringToHash(attackAnimation));

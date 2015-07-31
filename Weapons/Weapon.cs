@@ -85,11 +85,11 @@ public class Weapon : AnimationBehaviour {
         OffsetAnimation(xOffset, yOffset);
     }
 
-    public void PlaySwingAnimation(float xOffset, float yOffset)
+    public void PlayAttackAnimation(float xOffset, float yOffset)
     {
-        upper.PlaySwingAnimation();
-        center.PlaySwingAnimation();
-        lower.PlaySwingAnimation();
+        upper.PlayAttackAnimation();
+        center.PlayAttackAnimation();
+        lower.PlayAttackAnimation();
         OffsetAnimation(xOffset, yOffset);
     }
 

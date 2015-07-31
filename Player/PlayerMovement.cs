@@ -33,7 +33,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
     private string idleAnimation;
     private string runAnimation;
     private string jumpAnimation;
-    private string swingAnimation;
+    private string attackAnimation;
 	private enum AnimationAction { Idle, Run, Jump, Fall, Attack, Defend, RunAttack, JumpAttack };
 	private AnimationAction animationAction;
 
@@ -55,14 +55,14 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		    idleAnimation = "LAURA_Idle";
 		    runAnimation = "LAURA_Run";
 		    jumpAnimation = "LAURA_Jump";
-		    swingAnimation = "LAURA_Swing";
+		    attackAnimation = "LAURA_Swing";
 		}
 		else
 		{
 		    idleAnimation = "MAC_Idle";
 		    runAnimation = "MAC_Run";
 		    jumpAnimation = "MAC_Jump";
-		    swingAnimation = "MAC_Swing";
+		    attackAnimation = "MAC_Swing";
 		}
 	}
 
@@ -134,6 +134,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		{
 			PlayerGrounded();
 		}
+
+
 
 		// jump state
 		if (jump)
@@ -297,13 +299,9 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		{
 			case AnimationAction.Idle:
 			{
-				// if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1 && !animator.IsInTransition(0))
-				// // if (!animator.GetCurrentAnimatorStateInfo(0).IsName(swingAnimation))
-				// {
-					animator.speed = IDLE_SPEED;
-					animator.Play(Animator.StringToHash(idleAnimation));
-					weaponManager.PlayAnimation(IDLE);
-				// }
+				animator.speed = IDLE_SPEED;
+				animator.Play(Animator.StringToHash(idleAnimation));
+				weaponManager.PlayAnimation(IDLE);
 				break;
 			}
 
@@ -312,7 +310,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 				animator.speed = RUN_SPEED;
 				animator.Play(Animator.StringToHash(runAnimation));
 				weaponManager.PlayAnimation(RUN);
-
 				break;
 			}
 
@@ -335,7 +332,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			case AnimationAction.Attack:
 			{
 				animator.speed = SWING_SPEED;
-				animator.Play(Animator.StringToHash(swingAnimation));
+				animator.Play(Animator.StringToHash(attackAnimation));
 				weaponManager.PlayAnimation(ATTACK);
 				break;
 			}
