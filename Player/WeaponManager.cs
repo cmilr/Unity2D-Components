@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Matcha.Dreadful.FX;
 
 public class WeaponManager : CacheBehaviour {
 
@@ -87,6 +88,16 @@ public class WeaponManager : CacheBehaviour {
         leftWeapon.EnableAnimation(false);
         equippedWeapon.EnableAnimation(true);
         rightWeapon.EnableAnimation(false);
+
+        // fade in newly equipped weapon
+        MFX.Fade(equippedWeapon.transform.Find("Upper").GetComponent<SpriteRenderer>(), 1f, 0f, .5f);
+        MFX.Fade(equippedWeapon.transform.Find("Center").GetComponent<SpriteRenderer>(), 1f, 0f, .5f);
+        MFX.Fade(equippedWeapon.transform.Find("Lower").GetComponent<SpriteRenderer>(), 1f, 0f, .5f);
+
+        // fade out newly stashed weapons
+        MFX.Fade(equippedWeapon.transform.Find("Upper").GetComponent<SpriteRenderer>(), 1f, 0f, .5f);
+        MFX.Fade(equippedWeapon.transform.Find("Center").GetComponent<SpriteRenderer>(), 1f, 0f, .5f);
+        MFX.Fade(equippedWeapon.transform.Find("Lower").GetComponent<SpriteRenderer>(), 1f, 0f, .5f);
     }
 
     void PassInitialWeaponsToHUD()

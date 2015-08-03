@@ -84,8 +84,8 @@ public class CreatureEntity : Entity
 		collider2D.enabled   = false;
 		attackAI.enabled     = false;
 		movementAI.enabled   = false;
-		MFX.FadeToColor(spriteRenderer, MColor.black, 0f, 1f);
-		MFX.Fade(spriteRenderer, 0f, 0f, 2f);
+		MFX.FadeToColor(spriteRenderer, MLib.HexToColor("5c0c01"), 0f, .75f);
+		MFX.Fade(spriteRenderer, 0f, 0f, 1.5f);
 		Invoke("DeactivateObject", 2f);
 	}
 

@@ -39,9 +39,9 @@ public class PlayerManager : CacheBehaviour
         // transform.DOJump(new Vector3(transform.position.x - 3f, transform.position.y, transform.position.z), 1f, 1, .5f, false);
 
         if (hitFrom == RIGHT)
-            MFX.RepulseToLeftRandomly(transform, .5f, 1.5f, .2f);
+            BroadcastMessage("RepulseToLeft", 5.0F);
         else
-            MFX.RepulseToRightRandomly(transform, .5f, 1.5f, .2f);
+            BroadcastMessage("RepulseToRight", 5.0F);
 
         if (playerData.HP > 0)
             MFX.FadeToColorAndBack(spriteRenderer, MColor.bloodRed, 0f, .2f);
@@ -58,13 +58,9 @@ public class PlayerManager : CacheBehaviour
         Messenger.Broadcast<int>("reduce hp", playerData.HP);
 
         if (playerData.HP > 0)
-        {
             MFX.FadeToColorAndBack(spriteRenderer, MColor.bloodRed, 0f, .2f);
-        }
         else
-        {
             Messenger.Broadcast<string, Collider2D, int>("player dead", "struckdown", coll, hitFrom);
-        }
     }
 
     void OnPlayerHit(string weaponType, Collider2D coll, int hitFrom)

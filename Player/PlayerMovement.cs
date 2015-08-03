@@ -20,10 +20,13 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	private float normalizedHorizontalSpeed;
 	private float previousX;
 	private float previousY;
+	private float repulseVelocity;
 	private bool moveRight;
 	private bool moveLeft;
 	private bool jump;
 	private bool attack;
+	private bool repulseRight;
+	private bool repulseLeft;
 	private RaycastHit2D lastControllerColliderHit;
 	private Vector3 velocity;
 	private CharacterController2D controller;
@@ -152,6 +155,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		ComputeMovement();
 
 		ApplyGravity();
+
+		ComputeRepulse();
 
 		ClampYMovement();
 
@@ -386,6 +391,18 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		velocity.y += gravity * Time.deltaTime;
 	}
 
+	void ComputeRepulse()
+	{
+		if (repulseLeft)
+		{
+			velocity.x = -repulseVelocity;
+		}
+		else if (repulseRight)
+		{
+			velocity.x = repulseVelocity;
+		}
+	}
+
 	void ClampYMovement()
 	{
 		// clamp to maxRisingSpeed to eliminate jitteriness when rising too fast,
@@ -431,6 +448,27 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		state.PreviousX = previousX;
 		state.PreviousY = previousY;
 	}
+
+	void RepulseToLeft(float maxVelocity)
+	{
+		repulseLeft = true;
+		repulseVelocity = UnityEngine.Random.Range(2f, maxVelocity);
+		StartCoroutine(RepulseTimer());
+	}
+
+	void RepulseToRight(float maxVelocity)
+	{
+		repulseRight = true;
+		repulseVelocity = UnityEngine.Random.Range(2f, maxVelocity);
+		StartCoroutine(RepulseTimer());
+	}
+
+    IEnumerator RepulseTimer()
+    {
+    	yield return new WaitForSeconds(UnityEngine.Random.Range(.1f, .3f));
+    	repulseLeft = false;
+    	repulseRight = false;
+    }
 
 	void OnPlayerDead(string methodOfDeath, Collider2D coll, int hitFrom)
 	{
