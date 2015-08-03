@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Matcha.Dreadful.Colors;
+using Matcha.Lib;
 
 public class Weapon : AnimationBehaviour {
 
@@ -10,8 +11,22 @@ public class Weapon : AnimationBehaviour {
     [HideInInspector]
     public bool alreadyCollided;
 
+    [Header("SPRITES")]
+    //~~~~~~~~~~~~~~~~~~~~~
     [Tooltip("This is the pickup/HUD icon.")]
     public Sprite iconSprite;
+
+    [Tooltip("Projectile sprite that will actually be fired.")]
+    public Sprite projectileSprite;
+
+    [Tooltip("Color of the upper element in the animated version of the weapon.")]
+    public string upperColor = "ffffff";
+
+    [Tooltip("Color of the center element in the animated version of the weapon.")]
+    public string centerColor = "ffffff";
+
+    [Tooltip("Color of the lower element in the animated version of the weapon.")]
+    public string lowerColor = "ffffff";
 
 
     [Header("ALL WEAPONS")]
@@ -31,9 +46,6 @@ public class Weapon : AnimationBehaviour {
 
     [Header("RANGED WEAPONS ONLY")]
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    [Tooltip("Projectile sprite that will actually be fired.")]
-    public Sprite projectileSprite;
-
     [Range (8, 20)]
     [Tooltip("How fast should projectile travel?")]
     public float speed = 12f;
@@ -73,9 +85,9 @@ public class Weapon : AnimationBehaviour {
                 lower  = transform.FindChild("Lower").gameObject.GetComponent<WeaponPiece>();
 
                 // set weapon colors here
-                upper.spriteRenderer.material.SetColor("_Color", MColor.white);
-                center.spriteRenderer.material.SetColor("_Color", MColor.defaultGrayHandle);
-                lower.spriteRenderer.material.SetColor("_Color", MColor.defaultGrayHandle);
+               upper.spriteRenderer.material.SetColor("_Color", MLib.HexToColor(upperColor));
+               center.spriteRenderer.material.SetColor("_Color", MLib.HexToColor(centerColor));
+               lower.spriteRenderer.material.SetColor("_Color", MLib.HexToColor(lowerColor));
             }
         }
     }

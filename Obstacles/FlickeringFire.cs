@@ -11,11 +11,12 @@ public class FlickeringFire : CacheBehaviour {
 
     IEnumerator FlickerFXLoop() {
 
-        MFX.Flicker(light, .1f, 4.5f);
+        while (true)
+        {
+            MFX.Flicker(light, .1f, 4.5f);
 
-        yield return new WaitForSeconds(UnityEngine.Random.Range(.01f, .3f));
-
-        StartCoroutine(FlickerFXLoop());
+            yield return new WaitForSeconds(UnityEngine.Random.Range(.01f, .3f));
+        }
     }
 
 }
