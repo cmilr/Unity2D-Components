@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
-using Matcha.Game.Tweens;
+using Matcha.Dreadful.FX;
 using Matcha.Lib;
 
 
@@ -50,13 +50,15 @@ public class ProjectileContainer : Weapon {
         Init(weapon);
 
         if (fadeIn)
-            MTween.Fade(spriteRenderer, 1f, 0f, .3f);
+            MFX.Fade(spriteRenderer, 1f, 0f, .3f);
         else
-            MTween.Fade(spriteRenderer, 1f, 0f, 0f);
+            MFX.Fade(spriteRenderer, 1f, 0f, 0f);
 
         // lob projectile like a cannon ball
         if (lob)
         {
+            // if fired by the player, use the custom gravity supplied by the weapon (lobGravity,)
+            // otherwise, for projectiles fired by an enemy, use the default gravity of .5f
             if (firedByPlayer)
                 rigidbody2D.gravityScale = lobGravity;
             else
@@ -77,13 +79,15 @@ public class ProjectileContainer : Weapon {
         Init(weapon);
 
         if (fadeIn)
-            MTween.Fade(spriteRenderer, 1f, 0f, .3f);
+            MFX.Fade(spriteRenderer, 1f, 0f, .3f);
         else
-            MTween.Fade(spriteRenderer, 1f, 0f, 0f);
+            MFX.Fade(spriteRenderer, 1f, 0f, 0f);
 
         // lob projectile like a cannon ball
         if (lob)
         {
+            // if fired by the player, use the custom gravity supplied by the weapon (lobGravity,)
+            // otherwise, for projectiles fired by an enemy, use the default gravity of .5f
             if (firedByPlayer)
                 rigidbody2D.gravityScale = lobGravity;
             else
@@ -97,6 +101,20 @@ public class ProjectileContainer : Weapon {
             rigidbody2D.gravityScale = 0;
             rigidbody2D.velocity = (target.position - transform.position).normalized * weapon.speed;
         }
+    }
+
+    // fade and deactivate on impact
+    void OnTriggerEnter2D(Collider2D coll)
+    {
+        // check for layer instead of name — it's much quicker
+        int layer = coll.gameObject.layer;
+
+        if (layer == ENEMY_COLLIDER)
+        {
+            MFX.Fade(spriteRenderer, 0, 0, .15f);
+            Invoke("DeactivateEntireObject", .16f);
+        }
+
     }
 
     void CheckDistanceTraveled()
@@ -127,7 +145,7 @@ public class ProjectileContainer : Weapon {
         animator.runtimeAnimatorController = null;
         spriteRenderer.sprite = null;
         CancelInvoke();
-        MTween.Fade(spriteRenderer, 0f, 0f, 0f);
+        MFX.Fade(spriteRenderer, 0f, 0f, 0f);
     }
 
     public void AllocateMemory()
@@ -148,7 +166,7 @@ public class ProjectileContainer : Weapon {
 // using UnityEngine;
 // using System;
 // using System.Collections;
-// using Matcha.Game.Tweens;
+// using Matcha.Dreadful.FX;
 // using Matcha.Lib;
 
 

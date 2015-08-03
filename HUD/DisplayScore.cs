@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using DG.Tweening;
-using Matcha.Game.Tweens;
+using Matcha.Dreadful.FX;
 
 
 public class DisplayScore : BaseBehaviour
@@ -25,8 +25,8 @@ public class DisplayScore : BaseBehaviour
 	void FadeInScore()
 	{
 		// fade to zero instantly, then fade up slowly
-		MTween.Fade(HUDScore, 0, 0, 0);
-		MTween.Fade(HUDScore, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
+		MFX.Fade(HUDScore, 0, 0, 0);
+		MFX.Fade(HUDScore, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
 	}
 	void OnChangeScore(int newScore)
 	{
@@ -34,17 +34,17 @@ public class DisplayScore : BaseBehaviour
 
 		if (topLayer)
 		{
-			MTween.DisplayScore(gameObject, HUDScore);
+			MFX.DisplayScore(gameObject, HUDScore);
 		}
 		else
 		{
-			MTween.DisplayScoreFX(gameObject, HUDScore);
+			MFX.DisplayScoreFX(gameObject, HUDScore);
 		}
 	}
 
 	void OnFadeHud(bool status)
 	{
-		MTween.Fade(HUDScore, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE);
+		MFX.Fade(HUDScore, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE);
 	}
 
 	void OnEnable()

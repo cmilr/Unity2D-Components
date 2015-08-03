@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
-using Matcha.Game.Tweens;
+using Matcha.Dreadful.FX;
 
 
 public class PickupEntity : Entity
@@ -27,20 +27,20 @@ public class PickupEntity : Entity
 			switch (entityType)
 			{
 				case EntityType.prize:
-					MTween.PickupPrize(gameObject);
-					MTween.ExtinguishLight(glow, 0, .1f);
+					MFX.PickupPrize(gameObject);
+					MFX.ExtinguishLight(glow, 0, .1f);
 					Messenger.Broadcast<int>("prize collected", worth);
 				break;
 
 				case EntityType.levelUp:
-					MTween.PickupPrize(gameObject);
-					MTween.ExtinguishLight(glow, 0, .1f);
+					MFX.PickupPrize(gameObject);
+					MFX.ExtinguishLight(glow, 0, .1f);
 					Messenger.Broadcast<int>("prize collected", worth);
 			    	Messenger.Broadcast<bool>("level completed", true);
 				break;
 
 				case EntityType.weapon:
-					MTween.PickupWeapon(gameObject);
+					MFX.PickupWeapon(gameObject);
 				break;
 
 				case EntityType.save:

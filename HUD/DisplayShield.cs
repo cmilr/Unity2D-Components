@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using DG.Tweening;
-using Matcha.Game.Tweens;
+using Matcha.Dreadful.FX;
 
 
 public class DisplayShield : CacheBehaviour
@@ -32,13 +32,13 @@ public class DisplayShield : CacheBehaviour
     void FadeInShield()
     {
         // fade weapon to zero instantly, then fade up slowly
-        MTween.Fade(HUDShield, 0, 0, 0);
-        MTween.Fade(HUDShield, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
+        MFX.Fade(HUDShield, 0, 0, 0);
+        MFX.Fade(HUDShield, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
     }
 
     void OnFadeHud(bool status)
     {
-        MTween.Fade(HUDShield, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE);
+        MFX.Fade(HUDShield, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE);
     }
 
     void OnScreenSizeChanged(float vExtent, float hExtent)

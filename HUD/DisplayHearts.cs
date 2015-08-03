@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using DG.Tweening;
-using Matcha.Game.Tweens;
+using Matcha.Dreadful.FX;
 
 
 public class DisplayHearts : CacheBehaviour
@@ -36,13 +36,13 @@ public class DisplayHearts : CacheBehaviour
     void FadeInShield()
     {
         // fade to zero instantly, then fade up slowly
-        MTween.Fade(HUDHearts, 0, 0, 0);
-        MTween.Fade(HUDHearts, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
+        MFX.Fade(HUDHearts, 0, 0, 0);
+        MFX.Fade(HUDHearts, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
     }
 
     void OnFadeHud(bool status)
     {
-        MTween.Fade(HUDHearts, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE);
+        MFX.Fade(HUDHearts, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE);
     }
 
     void OnScreenSizeChanged(float vExtent, float hExtent)

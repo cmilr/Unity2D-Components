@@ -2,7 +2,8 @@
 using System;
 using System.Collections;
 using Matcha.Lib;
-using Matcha.Game.Tweens;
+using Matcha.Dreadful.FX;
+using Matcha.Dreadful.Colors;
 using DG.Tweening;
 
 [RequireComponent(typeof(BoxCollider2D))]
@@ -47,9 +48,9 @@ public class CreatureEntity : Entity
 
 		hitFrom = MLib.HorizSideThatWasHit(gameObject, coll);
 
-		if (playerWeapon.weaponType == Weapon.WeaponType.MagicProjectile ||
-			playerWeapon.weaponType == Weapon.WeaponType.HurledProjectile ||
-			playerWeapon.weaponType == Weapon.WeaponType.Hammer)
+		if (playerWeapon.weaponType == Weapon.WeaponType.Hammer ||
+			playerWeapon.weaponType == Weapon.WeaponType.Dagger ||
+			playerWeapon.weaponType == Weapon.WeaponType.MagicProjectile)
 		{
 			TakesProjectileHit(playerWeapon, coll, hitFrom);
 		}
@@ -62,11 +63,11 @@ public class CreatureEntity : Entity
 		// bounceback from projectile
 		if (hitFrom == RIGHT && !blockedLeft)
 		{
-			transform.DOMove(new Vector3(transform.position.x - .30f, transform.position.y, transform.position.z), .2f, false);
+			MFX.RepulseToLeftRandomly(transform, .3f, .8f, .2f);
 		}
 		else if (hitFrom == LEFT && !blockedRight)
 		{
-			transform.DOMove(new Vector3(transform.position.x + .30f, transform.position.y, transform.position.z), .2f, false);
+			MFX.RepulseToRightRandomly(transform, .3f, .8f, .2f);
 		}
 		else
 		{
@@ -83,7 +84,8 @@ public class CreatureEntity : Entity
 		collider2D.enabled   = false;
 		attackAI.enabled     = false;
 		movementAI.enabled   = false;
-		MTween.Fade(spriteRenderer, 0f, 0f, 2f);
+		MFX.FadeToColor(spriteRenderer, MColor.black, 0f, 1f);
+		MFX.Fade(spriteRenderer, 0f, 0f, 2f);
 		Invoke("DeactivateObject", 2f);
 	}
 

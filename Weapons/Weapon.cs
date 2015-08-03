@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Matcha.Game.Colors;
+using Matcha.Dreadful.Colors;
 
 public class Weapon : AnimationBehaviour {
 
-    public enum WeaponType { Axe, Sword, Hammer, HurledProjectile, MagicProjectile };
+    public enum WeaponType { Axe, Sword, Hammer, Dagger, MagicProjectile };
     public WeaponType weaponType;
 
     [HideInInspector]
@@ -35,7 +35,7 @@ public class Weapon : AnimationBehaviour {
     public Sprite projectileSprite;
 
     [Range (8, 20)]
-    [Tooltip("How fast should projectiel travel?")]
+    [Tooltip("How fast should projectile travel?")]
     public float speed = 12f;
 
     [Tooltip("How far should projectile travel before fading out?")]
@@ -47,7 +47,7 @@ public class Weapon : AnimationBehaviour {
     [Tooltip("ONLY EFFECTS PLAYER: If 'Lob' is true, how much should gravity effect projectile?")]
     public float lobGravity;
 
-    [Tooltip("Should projectile fade in when thrown?")]
+    [Tooltip("Should projectile fade-in when thrown?")]
     public bool fadeIn;
 
     [Tooltip("If Animated, ProjectileContainer will attempt to load an animation.")]

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Matcha.Game.Tweens;
+using Matcha.Dreadful.FX;
 
 
 public class LevelManager : CacheBehaviour {
@@ -27,12 +27,12 @@ public class LevelManager : CacheBehaviour {
 
 	void FadeInNewLevel()
 	{
-		MTween.FadeInLevel(spriteRenderer, fadeOutAfter, timeToFade);
+		MFX.FadeInLevel(spriteRenderer, fadeOutAfter, timeToFade);
 	}
 
 	void FadeOutCurrentLevel()
 	{
-		MTween.FadeOutLevel(spriteRenderer, fadeInAfter, timeToFade);
+		MFX.FadeOutLevel(spriteRenderer, fadeInAfter, timeToFade);
 	}
 
 	void OnLoadLevel(int newLevel)

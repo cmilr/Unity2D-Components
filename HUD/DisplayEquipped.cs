@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using DG.Tweening;
-using Matcha.Game.Tweens;
+using Matcha.Dreadful.FX;
 
 
 public class DisplayEquipped : CacheBehaviour
@@ -44,8 +44,8 @@ public class DisplayEquipped : CacheBehaviour
         // upon receiving new weapon for the equipped slot, instantly relocate it back to its previous location,
         // while setting opacity to that of a stashed weapon, then tween the image to the right, into the final
         // equipped slot position, all while tweening the opacity back to 100%
-        MTween.Fade(HUDWeapon, HUD_STASHED_TRANSPARENCY, 0, 0);
-        MTween.Fade(HUDWeapon, 1f, 0f, .2f);
+        MFX.Fade(HUDWeapon, HUD_STASHED_TRANSPARENCY, 0, 0);
+        MFX.Fade(HUDWeapon, 1f, 0f, .2f);
 
         // shift weapon left, to roughly the position it was just in
         transform.localPosition = new Vector3(
@@ -69,13 +69,13 @@ public class DisplayEquipped : CacheBehaviour
     void FadeInWeapon()
     {
         // fade weapon to zero instantly, then fade up slowly
-        MTween.Fade(HUDWeapon, 0, 0, 0);
-        MTween.Fade(HUDWeapon, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
+        MFX.Fade(HUDWeapon, 0, 0, 0);
+        MFX.Fade(HUDWeapon, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
     }
 
     void OnFadeHud(bool status)
     {
-        MTween.Fade(HUDWeapon, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE);
+        MFX.Fade(HUDWeapon, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE);
     }
 
     void OnScreenSizeChanged(float vExtent, float hExtent)

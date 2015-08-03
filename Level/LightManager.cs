@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Matcha.Game.Tweens;
+using Matcha.Dreadful.FX;
 
 
 public class LightManager : CacheBehaviour {
@@ -43,21 +43,21 @@ public class LightManager : CacheBehaviour {
 	{
 		if (aboveGround)
 		{
-			MTween.FadeIntensity(playerLight, playerAboveGround, fadeAfter, timeToFade);
-			MTween.FadeIntensity(creatureLight, creatureAboveGround, fadeAfter, timeToFade);
-			MTween.FadeIntensity(tileLight, tileAboveGround, fadeAfter, timeToFade);
-			MTween.FadeIntensity(planeLight, planeAboveGround, fadeAfter, timeToFade);
-			MTween.FadeIntensity(pickupLight, pickupAboveGround, fadeAfter, timeToFade);
-			MTween.FadeIntensity(illuminatedPickupLight, illuminatedPickupAboveGround, fadeAfter, timeToFade);
+			MFX.FadeIntensity(playerLight, playerAboveGround, fadeAfter, timeToFade);
+			MFX.FadeIntensity(creatureLight, creatureAboveGround, fadeAfter, timeToFade);
+			MFX.FadeIntensity(tileLight, tileAboveGround, fadeAfter, timeToFade);
+			MFX.FadeIntensity(planeLight, planeAboveGround, fadeAfter, timeToFade);
+			MFX.FadeIntensity(pickupLight, pickupAboveGround, fadeAfter, timeToFade);
+			MFX.FadeIntensity(illuminatedPickupLight, illuminatedPickupAboveGround, fadeAfter, timeToFade);
 		}
 		else
 		{
-			MTween.FadeIntensity(playerLight, playerBelowGround, fadeAfter, timeToFade);
-			MTween.FadeIntensity(creatureLight, creatureBelowGround, fadeAfter, timeToFade);
-			MTween.FadeIntensity(tileLight, tileBelowGround, fadeAfter, timeToFade);
-			MTween.FadeIntensity(planeLight, planeBelowGround, fadeAfter, timeToFade);
-			MTween.FadeIntensity(pickupLight, pickupBelowGround, fadeAfter, timeToFade);
-			MTween.FadeIntensity(illuminatedPickupLight, illuminatedPickupBelowGround, fadeAfter, timeToFade);
+			MFX.FadeIntensity(playerLight, playerBelowGround, fadeAfter, timeToFade);
+			MFX.FadeIntensity(creatureLight, creatureBelowGround, fadeAfter, timeToFade);
+			MFX.FadeIntensity(tileLight, tileBelowGround, fadeAfter, timeToFade);
+			MFX.FadeIntensity(planeLight, planeBelowGround, fadeAfter, timeToFade);
+			MFX.FadeIntensity(pickupLight, pickupBelowGround, fadeAfter, timeToFade);
+			MFX.FadeIntensity(illuminatedPickupLight, illuminatedPickupBelowGround, fadeAfter, timeToFade);
 		}
 	}
 

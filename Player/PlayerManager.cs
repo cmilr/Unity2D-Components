@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Matcha.Game.Colors;
-using Matcha.Game.Tweens;
+using Matcha.Dreadful.Colors;
+using Matcha.Dreadful.FX;
 using DG.Tweening;
 
 
@@ -38,14 +38,15 @@ public class PlayerManager : CacheBehaviour
 
         // transform.DOJump(new Vector3(transform.position.x - 3f, transform.position.y, transform.position.z), 1f, 1, .5f, false);
 
-        if (playerData.HP > 0)
-        {
-            MTween.FadeToColorAndBack(spriteRenderer, MColor.bloodRed, 0f, .2f);
-        }
+        if (hitFrom == RIGHT)
+            MFX.RepulseToLeftRandomly(transform, .5f, 1.5f, .2f);
         else
-        {
+            MFX.RepulseToRightRandomly(transform, .5f, 1.5f, .2f);
+
+        if (playerData.HP > 0)
+            MFX.FadeToColorAndBack(spriteRenderer, MColor.bloodRed, 0f, .2f);
+        else
             Messenger.Broadcast<string, Collider2D, int>("player dead", "projectile", coll, hitFrom);
-        }
     }
 
     public void TouchesEnemy(string weaponType, CreatureEntity enemy, Collider2D coll, int hitFrom)
@@ -58,7 +59,7 @@ public class PlayerManager : CacheBehaviour
 
         if (playerData.HP > 0)
         {
-            MTween.FadeToColorAndBack(spriteRenderer, MColor.bloodRed, 0f, .2f);
+            MFX.FadeToColorAndBack(spriteRenderer, MColor.bloodRed, 0f, .2f);
         }
         else
         {

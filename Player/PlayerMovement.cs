@@ -145,7 +145,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		CheckForFreefall();
 
-		PlayAnimation();
+		AnimationDispatcher();
 
 		SaveCurrentPosition();
 
@@ -293,7 +293,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	// }
 
 	// // mix & match animations for various activity states
-	void PlayAnimation()
+	void AnimationDispatcher()
 	{
 		switch (animationAction)
 		{
@@ -301,7 +301,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			{
 				animator.speed = IDLE_SPEED;
 				animator.Play(Animator.StringToHash(idleAnimation));
-				weaponManager.PlayAnimation(IDLE);
+				weaponManager.AnimationDispatcher(IDLE);
 				break;
 			}
 
@@ -309,7 +309,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			{
 				animator.speed = RUN_SPEED;
 				animator.Play(Animator.StringToHash(runAnimation));
-				weaponManager.PlayAnimation(RUN);
+				weaponManager.AnimationDispatcher(RUN);
 				break;
 			}
 
@@ -317,7 +317,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			{
 				animator.speed = JUMP_SPEED;
 				animator.Play(Animator.StringToHash(jumpAnimation));
-				weaponManager.PlayAnimation(JUMP);
+				weaponManager.AnimationDispatcher(JUMP);
 				break;
 			}
 
@@ -325,7 +325,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			{
 				animator.speed = JUMP_SPEED;
 				animator.Play(Animator.StringToHash(jumpAnimation));
-				weaponManager.PlayAnimation(FALL);
+				weaponManager.AnimationDispatcher(FALL);
 				break;
 			}
 
@@ -333,7 +333,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			{
 				animator.speed = SWING_SPEED;
 				animator.Play(Animator.StringToHash(attackAnimation));
-				weaponManager.PlayAnimation(ATTACK);
+				weaponManager.AnimationDispatcher(ATTACK);
 				break;
 			}
 
@@ -341,7 +341,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			{
 				animator.speed = RUN_SPEED;
 				animator.Play(Animator.StringToHash(runAnimation));
-				weaponManager.PlayAnimation(RUN_ATTACK);
+				weaponManager.AnimationDispatcher(RUN_ATTACK);
 				break;
 			}
 
@@ -349,13 +349,13 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			{
 				animator.speed = JUMP_SPEED;
 				animator.Play(Animator.StringToHash(jumpAnimation));
-				weaponManager.PlayAnimation(JUMP_ATTACK);
+				weaponManager.AnimationDispatcher(JUMP_ATTACK);
 				break;
 			}
 
 			default:
 			{
-				Debug.Log("ERROR: No animationAction was set in PlayerMovement.cs >> PlayAnimation()");
+				Debug.Log("ERROR: No animationAction was set in PlayerMovement.cs >> AnimationDispatcher()");
 				break;
 			}
 		}

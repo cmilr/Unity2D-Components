@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using DG.Tweening;
-using Matcha.Game.Tweens;
+using Matcha.Dreadful.FX;
 
 
 public class DisplayHP : BaseBehaviour
@@ -13,8 +13,8 @@ public class DisplayHP : BaseBehaviour
     void FadeInText()
     {
         // fade to zero instantly, then fade up slowly
-        MTween.Fade(textComponent, 0, 0, 0);
-        MTween.Fade(textComponent, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
+        MFX.Fade(textComponent, 0, 0, 0);
+        MFX.Fade(textComponent, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
     }
 
     void OnInitHP(int initInt)
@@ -32,7 +32,7 @@ public class DisplayHP : BaseBehaviour
 
     void OnFadeHud(bool status)
     {
-        MTween.Fade(textComponent, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE);
+        MFX.Fade(textComponent, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE);
     }
 
     void OnEnable()

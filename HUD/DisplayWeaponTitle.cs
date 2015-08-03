@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using DG.Tweening;
-using Matcha.Game.Tweens;
+using Matcha.Dreadful.FX;
 
 
 public class DisplayWeaponTitle : BaseBehaviour
@@ -20,8 +20,8 @@ public class DisplayWeaponTitle : BaseBehaviour
     void FadeInInitialTitle()
     {
         // fade to zero instantly, then fade up slowly
-        MTween.Fade(textComponent, 0, 0, 0);
-        MTween.Fade(textComponent, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
+        MFX.Fade(textComponent, 0, 0, 0);
+        MFX.Fade(textComponent, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
     }
 
     void OnChangeEquippedWeapon(GameObject newWeapon)
@@ -34,13 +34,13 @@ public class DisplayWeaponTitle : BaseBehaviour
     void FadeInNewTitle()
     {
         // fade to zero instantly, then fade up slowly
-        MTween.Fade(textComponent, 0, 0, 0);
-        MTween.Fade(textComponent, 1, 0, HUD_WEAPON_CHANGE_FADE);
+        MFX.Fade(textComponent, 0, 0, 0);
+        MFX.Fade(textComponent, 1, 0, HUD_WEAPON_CHANGE_FADE);
     }
 
     void OnFadeHud(bool status)
     {
-        MTween.Fade(textComponent, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE);
+        MFX.Fade(textComponent, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE);
     }
 
     void OnEnable()
