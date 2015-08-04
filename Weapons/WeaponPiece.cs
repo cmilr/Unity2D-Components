@@ -18,7 +18,6 @@ public class WeaponPiece : CacheBehaviour {
 
     void Start ()
     {
-        MFX.Fade(spriteRenderer, 0f, 0f, 0f);
         SetAnimations();
     }
 

@@ -76,7 +76,7 @@ public class BaseBehaviour : MonoBehaviour {
     // hud specs
     protected const float HUD_WEAPON_TOP_MARGIN       = 125f;
     protected const float HUD_STASHED_WEAPON_OFFSET   = 85f;
-    protected const float HUD_STASHED_TRANSPARENCY    = .25f;
+    protected const float HUD_STASHED_TRANSPARENCY    = .35f;
     protected const float HUD_HEARTS_TOP_MARGIN       = 17f;
     protected const float HUD_Z                       = 10f;
     protected const float HUD_FADE_IN_AFTER           = .75f;
