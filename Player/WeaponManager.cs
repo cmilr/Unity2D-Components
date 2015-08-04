@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using DG.Tweening;
 using Matcha.Dreadful.FX;
 
 public class WeaponManager : CacheBehaviour {
@@ -90,14 +91,42 @@ public class WeaponManager : CacheBehaviour {
         rightWeapon.EnableAnimation(false);
 
         // fade in newly equipped weapon
-        MFX.Fade(equippedWeapon.transform.Find("Upper").GetComponent<SpriteRenderer>(), 1f, 0f, .5f);
-        MFX.Fade(equippedWeapon.transform.Find("Center").GetComponent<SpriteRenderer>(), 1f, 0f, .5f);
-        MFX.Fade(equippedWeapon.transform.Find("Lower").GetComponent<SpriteRenderer>(), 1f, 0f, .5f);
+        float fadeAfter = 0f;
+        float fadeTime  = .3f;
+
+        SpriteRenderer upperSprite  = equippedWeapon.transform.Find("Upper").GetComponent<SpriteRenderer>();
+        SpriteRenderer centerSprite = equippedWeapon.transform.Find("Center").GetComponent<SpriteRenderer>();
+        SpriteRenderer lowerSprite  = equippedWeapon.transform.Find("Lower").GetComponent<SpriteRenderer>();
+
+        upperSprite.DOKill();
+        centerSprite.DOKill();
+        lowerSprite.DOKill();
+
+        MFX.Fade(upperSprite, 1f, fadeAfter, fadeTime);
+        MFX.Fade(centerSprite, 1f, fadeAfter, fadeTime);
+        MFX.Fade(lowerSprite, 1f, fadeAfter, fadeTime);
 
         // fade out newly stashed weapons
-        MFX.Fade(equippedWeapon.transform.Find("Upper").GetComponent<SpriteRenderer>(), 1f, 0f, .5f);
-        MFX.Fade(equippedWeapon.transform.Find("Center").GetComponent<SpriteRenderer>(), 1f, 0f, .5f);
-        MFX.Fade(equippedWeapon.transform.Find("Lower").GetComponent<SpriteRenderer>(), 1f, 0f, .5f);
+        FadeOutStashedWeapons(leftWeapon);
+        FadeOutStashedWeapons(rightWeapon);
+    }
+
+    void FadeOutStashedWeapons(Weapon stashedWeapon)
+    {
+        float fadeAfter = 0f;
+        float fadeTime  = .3f;
+
+        SpriteRenderer upperSprite  = stashedWeapon.transform.Find("Upper").GetComponent<SpriteRenderer>();
+        SpriteRenderer centerSprite = stashedWeapon.transform.Find("Center").GetComponent<SpriteRenderer>();
+        SpriteRenderer lowerSprite  = stashedWeapon.transform.Find("Lower").GetComponent<SpriteRenderer>();
+
+        upperSprite.DOKill();
+        centerSprite.DOKill();
+        lowerSprite.DOKill();
+
+        MFX.Fade(upperSprite, 0f, fadeAfter, fadeTime);
+        MFX.Fade(centerSprite, 0f, fadeAfter, fadeTime);
+        MFX.Fade(lowerSprite, 0f, fadeAfter, fadeTime);
     }
 
     void PassInitialWeaponsToHUD()
