@@ -78,6 +78,8 @@ public class MovementAI : CacheBehaviour
 
 	void FollowTarget()
 	{
+		if (!this.enabled) return;
+
 		// get the proper direction for the enemy to move, then send him moving
 		walkingDirection = (target.position.x > transform.position.x) ? RIGHT : LEFT;
 

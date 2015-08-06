@@ -75,7 +75,10 @@ public class CreatureEntity : Entity
 		}
 
 		if (hp <= 0)
+		{
+			Messenger.Broadcast<int>("prize collected", worth);
 			KillSelf();
+		}
 	}
 
 	void KillSelf()
