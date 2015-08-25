@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Breakable : CacheBehaviour {
+public class BreakablePiece : CacheBehaviour {
 
     private float xRectPosition;
     private float yRectPosition;
