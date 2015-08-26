@@ -6,15 +6,20 @@ public class BreakablePiece : CacheBehaviour {
     private float xRectPosition;
     private float yRectPosition;
 
-	// Use this for initialization
-	void Start () {
+    void Start()
+    {
+        Invoke("SetPosition", 1f);
+    }
 
-        xRectPosition = spriteRenderer.sprite.rect.x;
-        Debug.Log(xRectPosition);
-	}
+    public void Init(Sprite breakableSprite)
+    {
+        // name = "Piece_" + index;
+        spriteRenderer.sprite = breakableSprite;
+        // xRectPosition = spriteRenderer.sprite.rect.x;
+    }
 
-	// Update is called once per frame
-	void Update () {
-
-	}
+    void SetPosition()
+    {
+        transform.position = new Vector3(0f, 0f, 0f);
+    }
 }
