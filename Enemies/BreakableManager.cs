@@ -19,8 +19,9 @@ public class BreakableManager : CacheBehaviour {
         for (int i = 0; i < slices.Length; i++)
         {
             GameObject newPiece = Object.Instantiate(prefab, transform.position, Quaternion.identity) as GameObject;
-            newPiece.transform.SetParent(gameObject.transform, false);
+            newPiece.transform.parent = gameObject.transform;
             newPiece.name = "Piece_" + i;
+
 
             BreakablePiece piece = newPiece.GetComponent<BreakablePiece>();
             piece.Init(slices[i]);
