@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Matcha.Dreadful.FX;
 
 public class BreakablePiece : CacheBehaviour {
 
@@ -28,5 +29,15 @@ public class BreakablePiece : CacheBehaviour {
 
         // set position, and randomize z to reduce z-fighting
         transform.localPosition = new Vector3(newX, newY, UnityEngine.Random.Range(-1f, 0f));
+    }
+
+    public void CountDown()
+    {
+        Invoke("FadeOut", UnityEngine.Random.Range(MIN_BEFORE_FADE, MAX_BEFORE_FADE));
+    }
+
+    void FadeOut()
+    {
+        MFX.Fade(spriteRenderer, 0f, 0f, 3f);
     }
 }

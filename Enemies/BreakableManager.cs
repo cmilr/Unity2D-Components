@@ -61,22 +61,28 @@ public class BreakableManager : CacheBehaviour {
         // cycle through pieces and send them flying
         foreach (Transform child in transform)
         {
-            Rigidbody2D piece = child.GetComponent<Rigidbody2D>();
-            piece.isKinematic = false;
+            // activate physics on this piece
+            Rigidbody2D rigidbody2D = child.GetComponent<Rigidbody2D>();
+            rigidbody2D.isKinematic = false;
 
+            // start countdown towards this piece fading out
+            BreakablePiece piece = child.GetComponent<BreakablePiece>();
+            piece.CountDown();
+
+            // apply explosions!
             switch (explosionType)
             {
                 case EXPLOSION:
-                    piece.AddExplosionForce(2000, transform.position, 20);
+                    rigidbody2D.AddExplosionForce(2000, transform.position, 20);
                 break;
 
                 case DIRECTIONAL_EXPLOSION:
                     int force = (hitFrom == RIGHT) ? -50 : 50;
-                    piece.AddForce(new Vector3(force, 50, 50), ForceMode2D.Impulse);
+                    rigidbody2D.AddForce(new Vector3(force, 50, 50), ForceMode2D.Impulse);
                 break;
 
                 default:
-                    piece.AddExplosionForce(2000, transform.position, 5);
+                    rigidbody2D.AddExplosionForce(2000, transform.position, 5);
                 break;
             }
         }

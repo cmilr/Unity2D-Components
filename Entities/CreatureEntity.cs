@@ -97,7 +97,8 @@ public class CreatureEntity : Entity
 		movementAI.enabled      = false;
 
 		MFX.Fade(spriteRenderer, 0f, 0f, 0f);
-		Invoke("DeactivateObject", 30f);
+
+		Invoke("DeactivateObject", MAX_BEFORE_FADE + 5f);
 	}
 
 	void DeactivateObject()
