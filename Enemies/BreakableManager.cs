@@ -35,13 +35,15 @@ public class BreakableManager : CacheBehaviour {
         gameObject.SetActive(false);
     }
 
-    public void MakeActive()
+    public void Explode()
     {
         gameObject.SetActive(true);
 
         foreach (Transform child in transform)
         {
-            child.GetComponent<Rigidbody2D>().isKinematic = false;
+            Rigidbody2D piece = child.GetComponent<Rigidbody2D>();
+            piece.isKinematic = false;
+            piece.AddForce(new Vector3(50f, 50f, 0f), ForceMode2D.Impulse);
         }
     }
 }

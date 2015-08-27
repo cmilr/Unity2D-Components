@@ -85,9 +85,9 @@ public class CreatureEntity : Entity
 
 	void KillSelf()
 	{
-		breakable.MakeActive();
+		breakable.Explode();
 
-		// rigidbody2D.velocity = Vector2.zero;
+		rigidbody2D.isKinematic = true;
 		collider2D.enabled   = false;
 		attackAI.enabled     = false;
 		movementAI.enabled   = false;
