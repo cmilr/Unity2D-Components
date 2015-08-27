@@ -43,35 +43,29 @@ public class MovementAI : CacheBehaviour
 
 	void LateUpdate()
 	{
-		if (!pause)
+		switch (movementStyle)
 		{
-			switch (movementStyle)
-			{
-			case MovementStyle.Scout:
-			case MovementStyle.HesitantScout:
-				StopCheck();
-				break;
-			}
+		case MovementStyle.Scout:
+		case MovementStyle.HesitantScout:
+			StopCheck();
+			break;
 		}
 	}
 
 	// MASTER CONTROLLER
 	void OnBecameVisible()
 	{
-		if (!pause)
+		switch (movementStyle)
 		{
-			switch (movementStyle)
-			{
-			case MovementStyle.Sentinel:
-				InvokeRepeating("LookAtTarget", 1f, lookInterval);
-				break;
+		case MovementStyle.Sentinel:
+			InvokeRepeating("LookAtTarget", 1f, lookInterval);
+			break;
 
-			case MovementStyle.Scout:
-			case MovementStyle.HesitantScout:
-				InvokeRepeating("LookAtTarget", 1f, lookInterval);
-				InvokeRepeating("FollowTarget", 1f, movementInterval);
-				break;
-			}
+		case MovementStyle.Scout:
+		case MovementStyle.HesitantScout:
+			InvokeRepeating("LookAtTarget", 1f, lookInterval);
+			InvokeRepeating("FollowTarget", 1f, movementInterval);
+			break;
 		}
 	}
 

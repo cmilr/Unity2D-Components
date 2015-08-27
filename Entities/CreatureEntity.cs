@@ -79,14 +79,16 @@ public class CreatureEntity : Entity
 		if (hp <= 0)
 		{
 			Messenger.Broadcast<int>("prize collected", worth);
-			KillSelf();
+			KillSelf(hitFrom);
 		}
 	}
 
-	void KillSelf()
+	void KillSelf(int hitFrom)
 	{
-		breakable.Explode();
+		// activate and explode breakable sprite
+		breakable.Explode(hitFrom);
 
+		// deactivate and fade solid sprite
 		rigidbody2D.isKinematic = true;
 		collider2D.enabled      = false;
 		attackAI.pause          = true;
