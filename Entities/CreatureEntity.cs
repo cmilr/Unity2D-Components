@@ -87,13 +87,12 @@ public class CreatureEntity : Entity
 	{
 		breakable.MakeActive();
 
-		rigidbody2D.velocity = Vector2.zero;
+		// rigidbody2D.velocity = Vector2.zero;
 		collider2D.enabled   = false;
 		attackAI.enabled     = false;
 		movementAI.enabled   = false;
-		MFX.FadeToColor(spriteRenderer, MLib.HexToColor("5c0c01"), 0f, .75f);
-		MFX.Fade(spriteRenderer, 0f, 0f, 1.5f);
-		Invoke("DeactivateObject", 10f);
+		MFX.Fade(spriteRenderer, 0f, 0f, 0f);
+		Invoke("DeactivateObject", 30f);
 	}
 
 	void DeactivateObject()
