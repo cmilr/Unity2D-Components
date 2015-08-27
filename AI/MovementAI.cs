@@ -12,6 +12,7 @@ public class MovementAI : CacheBehaviour
 	public float movementSpeed      = 2f;
 	public float walkAnimationSpeed = .5f;
 	public float chanceOfPause      = 1f;           // chance of pause during any given interval
+	public bool pause;
 
 	private string walkAnimation;
 	private float movementInterval;
@@ -24,8 +25,6 @@ public class MovementAI : CacheBehaviour
 	private Transform target;
 
 	// current state
-	[HideInInspector]
-	public bool paused;
 	[HideInInspector]
 	public int walkingDirection;
 
@@ -44,29 +43,35 @@ public class MovementAI : CacheBehaviour
 
 	void LateUpdate()
 	{
-		switch (movementStyle)
+		if (!pause)
 		{
-		case MovementStyle.Scout:
-		case MovementStyle.HesitantScout:
-			StopCheck();
-			break;
+			switch (movementStyle)
+			{
+			case MovementStyle.Scout:
+			case MovementStyle.HesitantScout:
+				StopCheck();
+				break;
+			}
 		}
 	}
 
 	// MASTER CONTROLLER
 	void OnBecameVisible()
 	{
-		switch (movementStyle)
+		if (!pause)
 		{
-		case MovementStyle.Sentinel:
-			InvokeRepeating("LookAtTarget", 1f, lookInterval);
-			break;
+			switch (movementStyle)
+			{
+			case MovementStyle.Sentinel:
+				InvokeRepeating("LookAtTarget", 1f, lookInterval);
+				break;
 
-		case MovementStyle.Scout:
-		case MovementStyle.HesitantScout:
-			InvokeRepeating("LookAtTarget", 1f, lookInterval);
-			InvokeRepeating("FollowTarget", 1f, movementInterval);
-			break;
+			case MovementStyle.Scout:
+			case MovementStyle.HesitantScout:
+				InvokeRepeating("LookAtTarget", 1f, lookInterval);
+				InvokeRepeating("FollowTarget", 1f, movementInterval);
+				break;
+			}
 		}
 	}
 
@@ -83,7 +88,7 @@ public class MovementAI : CacheBehaviour
 		// get the proper direction for the enemy to move, then send him moving
 		walkingDirection = (target.position.x > transform.position.x) ? RIGHT : LEFT;
 
-		if (!paused)
+		if (!pause)
 		{
 			rigidbody2D.velocity = transform.right * movementSpeed * walkingDirection;
 
@@ -114,17 +119,17 @@ public class MovementAI : CacheBehaviour
 		{
 			// transform.position = new Vector3(blockedAt, transform.position.y, transform.position.z);
 			rigidbody2D.velocity = Vector2.zero;
-			paused = true;
+			pause = true;
 		}
 		// if enemy and player are on roughly same x axis, pause enemy
 		else if (MLib.FloatEqual(transform.position.x, target.position.x, xAxisOffset))
 		{
 			rigidbody2D.velocity = Vector2.zero;
-			paused = true;
+			pause = true;
 		}
 		else
 		{
-			paused = false;
+			pause = false;
 		}
 	}
 
@@ -187,7 +192,7 @@ public class MovementAI : CacheBehaviour
 				gameObject.BroadcastMessage("SetBlockedLeftState", false);
 			}
 
-			paused = false;
+			pause = false;
 		}
 	}
 

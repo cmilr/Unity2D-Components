@@ -10,6 +10,7 @@ public class AttackAI : CacheBehaviour {
     // public float attackInterval    = 1f;
     public float chanceOfAttack    = 40f;
     public float attackWhenInRange = 20f;
+    public bool pause;
 
     private ProjectileManager projectile;
     private Weapon weapon;
@@ -27,16 +28,19 @@ public class AttackAI : CacheBehaviour {
     // MASTER CONTROLLER
     void OnBecameVisible()
     {
-        if (test) {
-            StartCoroutine(LobCompTest());
-        }
-        else
+        if (!pause)
         {
-            switch (attackStyle)
+            if (test) {
+                StartCoroutine(LobCompTest());
+            }
+            else
             {
-                case AttackStyle.RandomProjectile:
-                InvokeRepeating("AttackRandomly", 2f, attackInterval);
-                break;
+                switch (attackStyle)
+                {
+                    case AttackStyle.RandomProjectile:
+                    InvokeRepeating("AttackRandomly", 2f, attackInterval);
+                    break;
+                }
             }
         }
     }

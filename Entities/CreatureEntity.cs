@@ -88,9 +88,12 @@ public class CreatureEntity : Entity
 		breakable.Explode();
 
 		rigidbody2D.isKinematic = true;
-		collider2D.enabled   = false;
-		attackAI.enabled     = false;
-		movementAI.enabled   = false;
+		collider2D.enabled      = false;
+		attackAI.pause          = true;
+		movementAI.pause        = true;
+		attackAI.enabled        = false;
+		movementAI.enabled      = false;
+
 		MFX.Fade(spriteRenderer, 0f, 0f, 0f);
 		Invoke("DeactivateObject", 30f);
 	}
