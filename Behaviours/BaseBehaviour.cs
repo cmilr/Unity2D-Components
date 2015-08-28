@@ -89,8 +89,13 @@ public class BaseBehaviour : MonoBehaviour {
     // explosion types & breakable pieces
     protected const int EXPLOSION                     = 1;
     protected const int DIRECTIONAL_EXPLOSION         = 2;
+<<<<<<< HEAD
     protected const int MIN_BEFORE_FADE               = 5;
     protected const int MAX_BEFORE_FADE               = 10;
+=======
+    protected const int MIN_BEFORE_FADE               = 10;
+    protected const int MAX_BEFORE_FADE               = 20;
+>>>>>>> origin/master
 
 
     protected void Dbug()
