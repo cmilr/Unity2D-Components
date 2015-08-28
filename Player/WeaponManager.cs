@@ -92,7 +92,7 @@ public class WeaponManager : CacheBehaviour {
 
         // fade in newly equipped weapon
         float fadeAfter = 0f;
-        float fadeTime  = .3f;
+        float fadeTime  = .2f;
 
         SpriteRenderer upperSprite  = equippedWeapon.transform.Find("Upper").GetComponent<SpriteRenderer>();
         SpriteRenderer centerSprite = equippedWeapon.transform.Find("Center").GetComponent<SpriteRenderer>();
@@ -114,7 +114,7 @@ public class WeaponManager : CacheBehaviour {
     void FadeOutStashedWeapons(Weapon stashedWeapon)
     {
         float fadeAfter = 0f;
-        float fadeTime  = .3f;
+        float fadeTime  = .2f;
 
         SpriteRenderer upperSprite  = stashedWeapon.transform.Find("Upper").GetComponent<SpriteRenderer>();
         SpriteRenderer centerSprite = stashedWeapon.transform.Find("Center").GetComponent<SpriteRenderer>();

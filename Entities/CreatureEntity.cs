@@ -21,6 +21,7 @@ public class CreatureEntity : Entity
 	private Weapon playerWeapon;
 	private AttackAI attackAI;
 	private MovementAI movementAI;
+	private BreakableManager breakable;
 	private bool blockedRight;
 	private bool blockedLeft;
 
@@ -28,6 +29,7 @@ public class CreatureEntity : Entity
 	{
 		attackAI = gameObject.GetComponent<AttackAI>();
 		movementAI = gameObject.GetComponent<MovementAI>();
+		breakable = gameObject.GetComponentInChildren<BreakableManager>();
 
 		if (entityType == EntityType.Enemy) { AutoAlign(); }
 	}
@@ -77,19 +79,26 @@ public class CreatureEntity : Entity
 		if (hp <= 0)
 		{
 			Messenger.Broadcast<int>("prize collected", worth);
-			KillSelf();
+			KillSelf(hitFrom);
 		}
 	}
 
-	void KillSelf()
+	void KillSelf(int hitFrom)
 	{
-		rigidbody2D.velocity = Vector2.zero;
-		collider2D.enabled   = false;
-		attackAI.enabled     = false;
-		movementAI.enabled   = false;
-		MFX.FadeToColor(spriteRenderer, MLib.HexToColor("5c0c01"), 0f, .75f);
-		MFX.Fade(spriteRenderer, 0f, 0f, 1.5f);
-		Invoke("DeactivateObject", 2f);
+		// activate and explode breakable sprite
+		breakable.Explode(hitFrom);
+
+		// deactivate and fade solid sprite
+		rigidbody2D.isKinematic = true;
+		collider2D.enabled      = false;
+		attackAI.pause          = true;
+		movementAI.pause        = true;
+		attackAI.enabled        = false;
+		movementAI.enabled      = false;
+
+		MFX.Fade(spriteRenderer, 0f, 0f, 0f);
+
+		Invoke("DeactivateObject", MAX_BEFORE_FADE + 5f);
 	}
 
 	void DeactivateObject()

@@ -86,6 +86,12 @@ public class BaseBehaviour : MonoBehaviour {
     protected const float SPACE_BETWEEN_WEAPONS       = 1.3281f;
     protected const float INVENTORY_SHIFT_SPEED       = .15f;
 
+    // explosion types & breakable pieces
+    protected const int EXPLOSION                     = 1;
+    protected const int DIRECTIONAL_EXPLOSION         = 2;
+    protected const int MIN_BEFORE_FADE               = 5;
+    protected const int MAX_BEFORE_FADE               = 10;
+
 
     protected void Dbug()
     {

@@ -10,6 +10,7 @@ public class AttackAI : CacheBehaviour {
     // public float attackInterval    = 1f;
     public float chanceOfAttack    = 40f;
     public float attackWhenInRange = 20f;
+    public bool pause;
 
     private ProjectileManager projectile;
     private Weapon weapon;
@@ -27,33 +28,39 @@ public class AttackAI : CacheBehaviour {
     // MASTER CONTROLLER
     void OnBecameVisible()
     {
-        if (test) {
-            StartCoroutine(LobCompTest());
-        }
-        else
+        if (!pause)
         {
-            switch (attackStyle)
+            if (test) {
+                StartCoroutine(LobCompTest());
+            }
+            else
             {
-                case AttackStyle.RandomProjectile:
-                InvokeRepeating("AttackRandomly", 2f, attackInterval);
-                break;
+                switch (attackStyle)
+                {
+                    case AttackStyle.RandomProjectile:
+                    InvokeRepeating("AttackRandomly", 2f, attackInterval);
+                    break;
+                }
             }
         }
     }
 
     void AttackRandomly()
     {
-        float distance = Vector3.Distance(target.position, transform.position);
-
-        if (distance <= attackWhenInRange && !attackDisabled)
+        if (!pause)
         {
-            if (UnityEngine.Random.Range(1, 101) <= chanceOfAttack)
+            float distance = Vector3.Distance(target.position, transform.position);
+
+            if (distance <= attackWhenInRange && !attackDisabled)
             {
-                // only attack if creature is facing the same direction as target
-                if ((target.position.x > transform.position.x && transform.localScale.x == 1f) ||
-                    (target.position.x < transform.position.x && transform.localScale.x == -1f))
+                if (UnityEngine.Random.Range(1, 101) <= chanceOfAttack)
                 {
-                    projectile.FireAtTarget(weapon, target);
+                    // only attack if creature is facing the same direction as target
+                    if ((target.position.x > transform.position.x && transform.localScale.x == 1f) ||
+                        (target.position.x < transform.position.x && transform.localScale.x == -1f))
+                    {
+                        projectile.FireAtTarget(weapon, target);
+                    }
                 }
             }
         }
@@ -61,9 +68,12 @@ public class AttackAI : CacheBehaviour {
 
     void RotateTowardsTarget()
     {
-        Vector3 vel = GetForceFrom(transform.position,target.position);
-        float angle = Mathf.Atan2(vel.y, vel.x)* Mathf.Rad2Deg;
-        transform.eulerAngles = new Vector3(0, 0, angle);
+        if (!pause)
+        {
+            Vector3 vel = GetForceFrom(transform.position,target.position);
+            float angle = Mathf.Atan2(vel.y, vel.x)* Mathf.Rad2Deg;
+            transform.eulerAngles = new Vector3(0, 0, angle);
+        }
     }
 
     Vector2 GetForceFrom(Vector3 fromPos, Vector3 toPos)
