@@ -11,6 +11,7 @@ public class LevelManager : CacheBehaviour {
 	private float timeToFade            = 2f;
 	private float fadeInAfter           = 2f;
 	private float fadeOutAfter          = 0f;
+	private float timeToPause		 	= 1.5f;
 	private float timeBeforeLevelReload = 3f;
 
 	// tile map specs
@@ -21,6 +22,7 @@ public class LevelManager : CacheBehaviour {
 		player = GameObject.Find(PLAYER).GetComponent<IPlayerStateReadOnly>();
 		spriteRenderer.enabled = true;
 
+		_levelLoading = true;
 		FadeInNewLevel();
 		GetPlayerPosition();
 	}
@@ -28,6 +30,13 @@ public class LevelManager : CacheBehaviour {
 	void FadeInNewLevel()
 	{
 		MFX.FadeInLevel(spriteRenderer, fadeOutAfter, timeToFade);
+
+		// pause attacks and other activities while level loads
+		_levelLoading = true;
+		StartCoroutine(Timer.Start(timeToPause, true, () =>
+		{
+			_levelLoading = false;
+		}));
 	}
 
 	void FadeOutCurrentLevel()

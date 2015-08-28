@@ -36,25 +36,39 @@ public class BreakableManager : CacheBehaviour {
         gameObject.SetActive(false);
     }
 
+    // types of explosions for the Explode() function
+    enum Type { Explosion, Directional_Explosion, Slump, Directional_Slump, Geyser };
+    Type explosion;
+
     public void Explode(int hitFrom)
     {
         gameObject.SetActive(true);
 
         // randomly choose an explosion type
-        int explosionType;
-
-        switch (UnityEngine.Random.Range(0, 2))
+        switch (UnityEngine.Random.Range(0, 5))
         {
             case 0:
-                explosionType = EXPLOSION;
+                explosion = Type.Explosion;
             break;
 
             case 1:
-                explosionType = DIRECTIONAL_EXPLOSION;
+                explosion = Type.Directional_Explosion;
+            break;
+
+            case 2:
+                explosion = Type.Slump;
+            break;
+
+            case 3:
+                explosion = Type.Directional_Slump;
+            break;
+
+            case 4:
+                explosion = Type.Geyser;
             break;
 
             default:
-                explosionType = EXPLOSION;
+                explosion = Type.Slump;
             break;
         }
 
@@ -70,15 +84,30 @@ public class BreakableManager : CacheBehaviour {
             piece.CountDown();
 
             // apply explosions!
-            switch (explosionType)
+            switch (explosion)
             {
-                case EXPLOSION:
+                case Type.Explosion:
                     rigidbody2D.AddExplosionForce(2000, transform.position, 20);
                 break;
 
-                case DIRECTIONAL_EXPLOSION:
+                case Type.Directional_Explosion:
                     int force = (hitFrom == RIGHT) ? -50 : 50;
                     rigidbody2D.AddForce(new Vector3(force, 50, 50), ForceMode2D.Impulse);
+                break;
+
+                case Type.Slump:
+                    rigidbody2D.AddExplosionForce(250, transform.position, 3);
+                break;
+
+                case Type.Directional_Slump:
+                    int direction = (hitFrom == RIGHT) ? 1 : -1;
+                    rigidbody2D.AddForce(new Vector3(0, -100, 0));
+                    rigidbody2D.AddExplosionForce(800,
+                        new Vector3(transform.position.x + direction, transform.position.y + .5f, transform.position.z), 2);
+                break;
+
+                case Type.Geyser:
+                    rigidbody2D.AddForce(new Vector3(0, -75, 0), ForceMode2D.Impulse);
                 break;
 
                 default:

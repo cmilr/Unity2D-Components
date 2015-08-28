@@ -10,7 +10,7 @@ public class AttackAI : CacheBehaviour {
     // public float attackInterval    = 1f;
     public float chanceOfAttack    = 40f;
     public float attackWhenInRange = 20f;
-    public bool pause;
+    public bool attackPaused;
 
     private ProjectileManager projectile;
     private Weapon weapon;
@@ -28,7 +28,7 @@ public class AttackAI : CacheBehaviour {
     // MASTER CONTROLLER
     void OnBecameVisible()
     {
-        if (!pause)
+        if (!attackPaused)
         {
             if (test) {
                 StartCoroutine(LobCompTest());
@@ -47,11 +47,11 @@ public class AttackAI : CacheBehaviour {
 
     void AttackRandomly()
     {
-        if (!pause)
+        if (!attackPaused && !_levelLoading)
         {
             float distance = Vector3.Distance(target.position, transform.position);
 
-            if (distance <= attackWhenInRange && !attackDisabled)
+            if (distance <= attackWhenInRange && !_attackDisabled)
             {
                 if (UnityEngine.Random.Range(1, 101) <= chanceOfAttack)
                 {
@@ -68,7 +68,7 @@ public class AttackAI : CacheBehaviour {
 
     void RotateTowardsTarget()
     {
-        if (!pause)
+        if (!attackPaused)
         {
             Vector3 vel = GetForceFrom(transform.position,target.position);
             float angle = Mathf.Atan2(vel.y, vel.x)* Mathf.Rad2Deg;

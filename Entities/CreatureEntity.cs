@@ -89,12 +89,12 @@ public class CreatureEntity : Entity
 		breakable.Explode(hitFrom);
 
 		// deactivate and fade solid sprite
-		rigidbody2D.isKinematic = true;
-		collider2D.enabled      = false;
-		attackAI.pause          = true;
-		movementAI.pause        = true;
-		attackAI.enabled        = false;
-		movementAI.enabled      = false;
+		rigidbody2D.isKinematic   = true;
+		collider2D.enabled        = false;
+		attackAI.attackPaused     = true;
+		movementAI.movementPaused = true;
+		attackAI.enabled          = false;
+		movementAI.enabled        = false;
 
 		MFX.Fade(spriteRenderer, 0f, 0f, 0f);
 

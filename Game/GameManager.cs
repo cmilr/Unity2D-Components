@@ -9,7 +9,7 @@ public class GameManager : BaseBehaviour
 
 	void Awake()
 	{
-		attackDisabled = disableAttack;
+		_attackDisabled = disableAttack;
 	}
 
 	void Start()

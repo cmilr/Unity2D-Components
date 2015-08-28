@@ -39,35 +39,38 @@ public class WeaponManager : CacheBehaviour {
 
     void OnSwitchWeapon(int shiftDirection)
     {
-        switch (equipped)
+        if (!_levelLoading)
         {
-            case 0:
+            switch (equipped)
             {
-                left = 1;
-                equipped = 2;
-                right = 0;
-                break;
+                case 0:
+                {
+                    left = 1;
+                    equipped = 2;
+                    right = 0;
+                    break;
+                }
+
+                case 1:
+                {
+                    left = 2;
+                    equipped = 0;
+                    right = 1;
+                    break;
+                }
+
+                case 2:
+                {
+                    left = 0;
+                    equipped = 1;
+                    right = 2;
+                    break;
+                }
             }
 
-            case 1:
-            {
-                left = 2;
-                equipped = 0;
-                right = 1;
-                break;
-            }
-
-            case 2:
-            {
-                left = 0;
-                equipped = 1;
-                right = 2;
-                break;
-            }
+            CacheAndSetupWeapons();
+            PassNewWeaponsToHUD();
         }
-
-        CacheAndSetupWeapons();
-        PassNewWeaponsToHUD();
     }
 
     void CacheAndSetupWeapons()

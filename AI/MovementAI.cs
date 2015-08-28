@@ -12,7 +12,7 @@ public class MovementAI : CacheBehaviour
 	public float movementSpeed      = 2f;
 	public float walkAnimationSpeed = .5f;
 	public float chanceOfPause      = 1f;           // chance of pause during any given interval
-	public bool pause;
+	public bool movementPaused;
 
 	private string walkAnimation;
 	private float movementInterval;
@@ -82,14 +82,14 @@ public class MovementAI : CacheBehaviour
 		// get the proper direction for the enemy to move, then send him moving
 		walkingDirection = (target.position.x > transform.position.x) ? RIGHT : LEFT;
 
-		if (!pause)
+		if (!movementPaused)
 		{
 			rigidbody2D.velocity = transform.right * movementSpeed * walkingDirection;
 
 			// ensure that actor is always facing in the direction it is moving
 			transform.SetLocalScaleX((float)walkingDirection);
 
-			// add some random pauses
+			// add some random movementPauseds
 			if (hesitant && UnityEngine.Random.Range(0f, 100f) <= chanceOfPause)
 			{
 				rigidbody2D.velocity = Vector2.zero;
@@ -113,17 +113,17 @@ public class MovementAI : CacheBehaviour
 		{
 			// transform.position = new Vector3(blockedAt, transform.position.y, transform.position.z);
 			rigidbody2D.velocity = Vector2.zero;
-			pause = true;
+			movementPaused = true;
 		}
-		// if enemy and player are on roughly same x axis, pause enemy
+		// if enemy and player are on roughly same x axis, movementPaused enemy
 		else if (MLib.FloatEqual(transform.position.x, target.position.x, xAxisOffset))
 		{
 			rigidbody2D.velocity = Vector2.zero;
-			pause = true;
+			movementPaused = true;
 		}
 		else
 		{
-			pause = false;
+			movementPaused = false;
 		}
 	}
 
@@ -186,7 +186,7 @@ public class MovementAI : CacheBehaviour
 				gameObject.BroadcastMessage("SetBlockedLeftState", false);
 			}
 
-			pause = false;
+			movementPaused = false;
 		}
 	}
 

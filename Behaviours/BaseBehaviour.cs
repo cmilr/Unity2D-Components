@@ -11,7 +11,8 @@ using System.Collections;
 
 public class BaseBehaviour : MonoBehaviour {
 
-    protected static bool attackDisabled              = false;
+    protected static bool _levelLoading               = true;
+    protected static bool _attackDisabled             = false;
     protected static float DIFFICULTY_DAMAGE_MODIFIER = 1f;
 
     // global stuff
@@ -86,16 +87,9 @@ public class BaseBehaviour : MonoBehaviour {
     protected const float SPACE_BETWEEN_WEAPONS       = 1.3281f;
     protected const float INVENTORY_SHIFT_SPEED       = .15f;
 
-    // explosion types & breakable pieces
-    protected const int EXPLOSION                     = 1;
-    protected const int DIRECTIONAL_EXPLOSION         = 2;
-<<<<<<< HEAD
+    // breakable pieces
     protected const int MIN_BEFORE_FADE               = 5;
     protected const int MAX_BEFORE_FADE               = 10;
-=======
-    protected const int MIN_BEFORE_FADE               = 10;
-    protected const int MAX_BEFORE_FADE               = 20;
->>>>>>> origin/master
 
 
     protected void Dbug()
