@@ -400,6 +400,6 @@ public class WeaponManager : CacheBehaviour {
     {
         Messenger.RemoveListener<GameObject, GameObject, GameObject>( "init weapons", OnInitWeapons);
         Messenger.RemoveListener<int>( "switch weapon", OnSwitchWeapon);
-        Messenger.RemoveListener<bool>("load level", OnLevelLoading);
+        Messenger.RemoveListener<bool>("level loading", OnLevelLoading);
     }
 }
