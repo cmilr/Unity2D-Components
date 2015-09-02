@@ -28,7 +28,6 @@ public class LevelManager : CacheBehaviour {
 	void FadeInNewLevel()
 	{
 		MFX.FadeInLevel(spriteRenderer, fadeOutAfter, timeToFade);
-
 		Messenger.Broadcast<bool>("level loading", true);
 	}
 

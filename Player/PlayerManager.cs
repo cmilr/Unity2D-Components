@@ -36,17 +36,25 @@ public class PlayerManager : CacheBehaviour
         Messenger.Broadcast<float, float, int, float>("shake camera", .5f, .3f, 20, 5f);
         Messenger.Broadcast<int>("reduce hp", playerData.HP);
 
-        // transform.DOJump(new Vector3(transform.position.x - 3f, transform.position.y, transform.position.z), 1f, 1, .5f, false);
+        transform.DOJump(new Vector3(transform.position.x - 2f, transform.position.y, transform.position.z), .2f, 1, .5f, false);
 
         if (hitFrom == RIGHT)
+        {
             BroadcastMessage("RepulseToLeft", 5.0F);
+        }
         else
+        {
             BroadcastMessage("RepulseToRight", 5.0F);
+        }
 
         if (playerData.HP > 0)
+        {
             MFX.FadeToColorAndBack(spriteRenderer, MColor.bloodRed, 0f, .2f);
+        }
         else
+        {
             Messenger.Broadcast<string, Collider2D, int>("player dead", "projectile", coll, hitFrom);
+        }
     }
 
     public void TouchesEnemy(string weaponType, CreatureEntity enemy, Collider2D coll, int hitFrom)
@@ -58,9 +66,13 @@ public class PlayerManager : CacheBehaviour
         Messenger.Broadcast<int>("reduce hp", playerData.HP);
 
         if (playerData.HP > 0)
+        {
             MFX.FadeToColorAndBack(spriteRenderer, MColor.bloodRed, 0f, .2f);
+        }
         else
+        {
             Messenger.Broadcast<string, Collider2D, int>("player dead", "struckdown", coll, hitFrom);
+        }
     }
 
     void OnPlayerHit(string weaponType, Collider2D coll, int hitFrom)

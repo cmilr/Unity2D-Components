@@ -138,8 +138,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			PlayerGrounded();
 		}
 
-
-
 		// jump state
 		if (jump)
 		{
@@ -396,10 +394,12 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		if (repulseLeft)
 		{
 			velocity.x = -repulseVelocity;
+			velocity.y = 0f;
 		}
 		else if (repulseRight)
 		{
 			velocity.x = repulseVelocity;
+			velocity.y = 0f;
 		}
 	}
 

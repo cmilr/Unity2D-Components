@@ -380,7 +380,7 @@ public class WeaponManager : CacheBehaviour {
 
     void OnLevelLoading(bool status)
     {
-        // pause weapon chages while level loading
+        // pause weapon changes while level loading
         levelLoading = true;
 
         StartCoroutine(Timer.Start(WEAPON_PAUSE_ON_LEVEL_LOAD, true, () =>
@@ -391,15 +391,15 @@ public class WeaponManager : CacheBehaviour {
 
     void OnEnable()
     {
-        Messenger.AddListener<GameObject, GameObject, GameObject>( "init weapons", OnInitWeapons);
-        Messenger.AddListener<int>( "switch weapon", OnSwitchWeapon);
+        Messenger.AddListener<GameObject, GameObject, GameObject>("init weapons", OnInitWeapons);
+        Messenger.AddListener<int>("switch weapon", OnSwitchWeapon);
         Messenger.AddListener<bool>("level loading", OnLevelLoading);
     }
 
     void OnDestroy()
     {
-        Messenger.RemoveListener<GameObject, GameObject, GameObject>( "init weapons", OnInitWeapons);
-        Messenger.RemoveListener<int>( "switch weapon", OnSwitchWeapon);
+        Messenger.RemoveListener<GameObject, GameObject, GameObject>("init weapons", OnInitWeapons);
+        Messenger.RemoveListener<int>("switch weapon", OnSwitchWeapon);
         Messenger.RemoveListener<bool>("level loading", OnLevelLoading);
     }
 }
