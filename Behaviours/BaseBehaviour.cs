@@ -11,9 +11,8 @@ using System.Collections;
 
 public class BaseBehaviour : MonoBehaviour {
 
-    protected static bool _levelLoading               = true;
-    protected static bool _attackDisabled             = false;
-    protected static float DIFFICULTY_DAMAGE_MODIFIER = 1f;
+    protected static bool _attackDisabled                = false;
+    protected static float DIFFICULTY_DAMAGE_MODIFIER    = 1f;
 
     // global stuff
     protected const int RIGHT                         = 1;
@@ -23,6 +22,10 @@ public class BaseBehaviour : MonoBehaviour {
     protected const int UP                            = 4;
     protected const int DOWN                          = 5;
     protected const int ERROR                         = 0;
+
+    // global pauses
+    protected const float WEAPON_PAUSE_ON_LEVEL_LOAD  = 1.5f;
+    protected const float ENEMY_PAUSE_ON_LEVEL_LOAD   = 3f;
 
     // global measurements
     protected const float ONE_PIXEL                   = .03125f;
@@ -66,7 +69,6 @@ public class BaseBehaviour : MonoBehaviour {
     protected const int RUN_ATTACK                    = 5;
     protected const int JUMP_ATTACK                   = 6;
 
-
     // player/death animation speeds
     protected const float STRUCKDOWN_SPEED            = 1f;
     protected const float DROWNED_SPEED               = 8f;
@@ -90,7 +92,6 @@ public class BaseBehaviour : MonoBehaviour {
     // breakable pieces
     protected const int MIN_BEFORE_FADE               = 5;
     protected const int MAX_BEFORE_FADE               = 10;
-
 
     protected void Dbug()
     {

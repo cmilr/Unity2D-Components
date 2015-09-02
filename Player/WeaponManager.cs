@@ -14,6 +14,7 @@ public class WeaponManager : CacheBehaviour {
     private int equipped = 1;
     private int right = 2;
     private GameObject[] weaponBelt;
+    private bool levelLoading;
 
     private ProjectileManager projectile;
 
@@ -39,7 +40,7 @@ public class WeaponManager : CacheBehaviour {
 
     void OnSwitchWeapon(int shiftDirection)
     {
-        if (!_levelLoading)
+        if (!levelLoading)
         {
             switch (equipped)
             {
@@ -377,15 +378,28 @@ public class WeaponManager : CacheBehaviour {
         }
     }
 
+    void OnLevelLoading(bool status)
+    {
+        // pause weapon chages while level loading
+        levelLoading = true;
+
+        StartCoroutine(Timer.Start(WEAPON_PAUSE_ON_LEVEL_LOAD, true, () =>
+        {
+            levelLoading = false;
+        }));
+    }
+
     void OnEnable()
     {
         Messenger.AddListener<GameObject, GameObject, GameObject>( "init weapons", OnInitWeapons);
         Messenger.AddListener<int>( "switch weapon", OnSwitchWeapon);
+        Messenger.AddListener<bool>("level loading", OnLevelLoading);
     }
 
     void OnDestroy()
     {
         Messenger.RemoveListener<GameObject, GameObject, GameObject>( "init weapons", OnInitWeapons);
         Messenger.RemoveListener<int>( "switch weapon", OnSwitchWeapon);
+        Messenger.RemoveListener<bool>("load level", OnLevelLoading);
     }
 }

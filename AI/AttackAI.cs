@@ -16,6 +16,7 @@ public class AttackAI : CacheBehaviour {
     private Weapon weapon;
     private float attackInterval;
     private Transform target;
+    private bool levelLoading;
 
 	void Start()
     {
@@ -47,7 +48,7 @@ public class AttackAI : CacheBehaviour {
 
     void AttackRandomly()
     {
-        if (!attackPaused && !_levelLoading)
+        if (!attackPaused && !levelLoading)
         {
             float distance = Vector3.Distance(target.position, transform.position);
 
@@ -97,6 +98,26 @@ public class AttackAI : CacheBehaviour {
         StopCoroutine(LobCompTest());
     }
 
+    void OnLevelLoading(bool status)
+    {
+        // pause attacks and other activities while level loads
+        levelLoading = true;
+
+        StartCoroutine(Timer.Start(ENEMY_PAUSE_ON_LEVEL_LOAD, true, () =>
+        {
+            levelLoading = false;
+        }));
+    }
+
+    void OnEnable()
+    {
+        Messenger.AddListener<bool>("level loading", OnLevelLoading);
+    }
+
+    void OnDestroy()
+    {
+        Messenger.RemoveListener<bool>("level loading", OnLevelLoading);
+    }
 
 
 
