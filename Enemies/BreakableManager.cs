@@ -45,7 +45,7 @@ public class BreakableManager : CacheBehaviour {
         gameObject.SetActive(true);
 
         // randomly choose an explosion type
-        switch (UnityEngine.Random.Range(0, 5))
+        switch (UnityEngine.Random.Range(1, 2))
         {
             case 0:
                 explosion = Type.Explosion;
@@ -93,6 +93,8 @@ public class BreakableManager : CacheBehaviour {
                 case Type.Directional_Explosion:
                     int force = (hitFrom == RIGHT) ? -50 : 50;
                     rigidbody2D.AddForce(new Vector3(force, 50, 50), ForceMode2D.Impulse);
+                    // params for ShakeCamera = duration, strength, vibrato, randomness
+                    Messenger.Broadcast<float, float, int, float>("shake camera", .7f, .4f, 20, 3f);
                 break;
 
                 case Type.Slump:

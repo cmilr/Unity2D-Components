@@ -8,6 +8,7 @@ public class BreakablePiece : CacheBehaviour {
     private float originY;
     private float newX;
     private float newY;
+    private bool alreadyCollided;
 
     void Start()
     {
@@ -36,8 +37,32 @@ public class BreakablePiece : CacheBehaviour {
         Invoke("FadeOut", UnityEngine.Random.Range(MIN_BEFORE_FADE, MAX_BEFORE_FADE));
     }
 
+    // used when fading naturally
     void FadeOut()
     {
         MFX.Fade(spriteRenderer, 0f, 0f, 3f);
+    }
+
+    // use when picked up by player
+    void FadeOutFast()
+    {
+        MFX.Fade(spriteRenderer, 0f, 0f, .15f);
+    }
+
+    void OnTriggerEnter2D(Collider2D coll)
+    {
+        if (!alreadyCollided)
+        {
+            int layer = coll.gameObject.layer;
+
+            if (layer == BODY_COLLIDER)
+            {
+                alreadyCollided = true;
+
+                Messenger.Broadcast<int>("prize collected", 5);
+
+                FadeOutFast();
+            }
+        }
     }
 }

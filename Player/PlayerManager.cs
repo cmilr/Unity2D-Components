@@ -36,7 +36,8 @@ public class PlayerManager : CacheBehaviour
         Messenger.Broadcast<float, float, int, float>("shake camera", .5f, .3f, 20, 5f);
         Messenger.Broadcast<int>("reduce hp", playerData.HP);
 
-        transform.DOJump(new Vector3(transform.position.x - 2f, transform.position.y, transform.position.z), .2f, 1, .5f, false);
+        // float xDistance = hitFrom == LEFT ? 2f : -2f;
+        // transform.DOJump(new Vector3(transform.position.x + xDistance, transform.position.y, transform.position.z), .2f, 1, .5f, false);
 
         if (hitFrom == RIGHT)
         {
