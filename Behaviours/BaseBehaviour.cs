@@ -11,10 +11,10 @@ using System.Collections;
 
 public class BaseBehaviour : MonoBehaviour {
 
-    protected static bool _attackDisabled                = false;
-    protected static float DIFFICULTY_DAMAGE_MODIFIER    = 1f;
+    protected static bool _attackDisabled             = false;
+    protected static float DIFFICULTY_DAMAGE_MODIFIER = 1f;
 
-    // global stuff
+    // global direction
     protected const int RIGHT                         = 1;
     protected const int LEFT                          = -1;
     protected const int TOP                           = 2;
@@ -22,6 +22,12 @@ public class BaseBehaviour : MonoBehaviour {
     protected const int UP                            = 4;
     protected const int DOWN                          = 5;
     protected const int ERROR                         = 0;
+
+    // global sizes
+    protected const int SMALL                         = 1;
+    protected const int MEDIUM                        = 2;
+    protected const int LARGE                         = 3;
+    protected const int XLARGE                        = 4;
 
     // global pauses
     protected const float WEAPON_PAUSE_ON_LEVEL_LOAD  = 1.5f;

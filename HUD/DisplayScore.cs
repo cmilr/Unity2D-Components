@@ -8,7 +8,9 @@ using Matcha.Dreadful.FX;
 public class DisplayScore : BaseBehaviour
 {
 	public bool topLayer;
+	public bool inProgress;
 	private Text HUDScore;
+	private static int previousScore;
 
 	void Start()
 	{
@@ -28,18 +30,26 @@ public class DisplayScore : BaseBehaviour
 		MFX.Fade(HUDScore, 0, 0, 0);
 		MFX.Fade(HUDScore, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
 	}
+
 	void OnChangeScore(int newScore)
 	{
 		HUDScore.text = newScore.ToString();
 
-		if (topLayer)
+		int scoreChange = (newScore - previousScore);
+
+		if (scoreChange > 5)
 		{
-			MFX.DisplayScore(gameObject, HUDScore);
+			if (topLayer)
+			{
+				MFX.DisplayScore(gameObject, HUDScore);
+			}
+			else
+			{
+				MFX.DisplayScoreFX(gameObject, HUDScore);
+			}
 		}
-		else
-		{
-			MFX.DisplayScoreFX(gameObject, HUDScore);
-		}
+
+		previousScore = newScore;
 	}
 
 	void OnFadeHud(bool status)

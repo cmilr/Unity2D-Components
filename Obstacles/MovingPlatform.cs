@@ -69,7 +69,6 @@ public class MovingPlatform : CacheBehaviour
 
 		if (layer == PLAYER_COLLIDER && coll.transform.position.y - .3f > gameObject.transform.position.y)
 		{
-			Dbug();
 			coll.transform.parent = gameObject.transform;
 		}
 		else if (layer != PLAYER_COLLIDER)
