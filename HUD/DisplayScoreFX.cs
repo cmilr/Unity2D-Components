@@ -5,7 +5,7 @@ using DG.Tweening;
 using Matcha.Dreadful.FX;
 
 
-public class DisplayScore : BaseBehaviour
+public class DisplayScoreFX : BaseBehaviour
 {
 	private Text HUDScore;
 	private static int previousScore;
@@ -37,7 +37,7 @@ public class DisplayScore : BaseBehaviour
 
 		if (scoreChange > 5)
 		{
-			MFX.DisplayScore(gameObject, HUDScore);
+			MFX.DisplayScoreFX(gameObject, HUDScore);
 		}
 
 		previousScore = newScore;
