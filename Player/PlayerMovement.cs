@@ -37,8 +37,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
     private string runAnimation;
     private string jumpAnimation;
     private string attackAnimation;
-	private enum AnimationAction { Idle, Run, Jump, Fall, Attack, Defend, RunAttack, JumpAttack };
-	private AnimationAction animationAction;
+	private enum Action { Idle, Run, Jump, Fall, Attack, Defend, RunAttack, JumpAttack };
+	private Action action;
 
 
 	void Start()
@@ -146,7 +146,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		CheckForFreefall();
 
-		AnimationDispatcher();
+		ActionDispatcher();
 
 		SaveCurrentPosition();
 
@@ -174,7 +174,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		// falling state
 		else
 		{
-			animationAction = AnimationAction.Fall;
+			action = Action.Fall;
 			state.Grounded = false;
 		}
 	}
@@ -194,7 +194,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		if (controller.isGrounded)
 		{
-			animationAction = AnimationAction.Run;
+			action = Action.Run;
 		}
 
 		moveRight = false;
@@ -217,7 +217,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		if (controller.isGrounded)
 		{
-			animationAction = AnimationAction.Run;
+			action = Action.Run;
 		}
 
 		moveLeft = false;
@@ -229,7 +229,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		if (controller.isGrounded)
 		{
-			animationAction = AnimationAction.Attack;
+			action = Action.Attack;
 			normalizedHorizontalSpeed = 0;
 		}
 
@@ -240,7 +240,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		if (controller.isGrounded)
 		{
-			animationAction = AnimationAction.RunAttack;
+			action = Action.RunAttack;
 		}
 
 		attack = false;
@@ -252,7 +252,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		if (controller.isGrounded)
 		{
-			animationAction = AnimationAction.Idle;
+			action = Action.Idle;
 		}
 
 		state.Grounded = true;
@@ -263,7 +263,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
 
-		animationAction = AnimationAction.Jump;
+		action = Action.Jump;
 
 		jump = false;
 
@@ -277,7 +277,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 	void AttackWhileJumping()
 	{
-		animationAction = AnimationAction.JumpAttack;
+		action = Action.JumpAttack;
 
 		jump = false;
 
@@ -288,77 +288,78 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	// {
 	// 	velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
 
-	// 	animationAction = AnimationAction.JumpAttack;
+	// 	action = Action.JumpAttack;
 
 	// 	jump = false;
 
 	// 	attack = false;
 	// }
 
-	// // mix & match animations for various activity states
-	void AnimationDispatcher()
+	// mix & match animations for various activity states,
+	// and pass instructions on to WeaponManager
+	void ActionDispatcher()
 	{
-		switch (animationAction)
+		switch (action)
 		{
-			case AnimationAction.Idle:
+			case Action.Idle:
 			{
 				animator.speed = IDLE_SPEED;
 				animator.Play(Animator.StringToHash(idleAnimation));
-				weaponManager.AnimationDispatcher(IDLE);
+				weaponManager.ActionDispatcher(IDLE);
 				break;
 			}
 
-			case AnimationAction.Run:
+			case Action.Run:
 			{
 				animator.speed = RUN_SPEED;
 				animator.Play(Animator.StringToHash(runAnimation));
-				weaponManager.AnimationDispatcher(RUN);
+				weaponManager.ActionDispatcher(RUN);
 				break;
 			}
 
-			case AnimationAction.Jump:
+			case Action.Jump:
 			{
 				animator.speed = JUMP_SPEED;
 				animator.Play(Animator.StringToHash(jumpAnimation));
-				weaponManager.AnimationDispatcher(JUMP);
+				weaponManager.ActionDispatcher(JUMP);
 				break;
 			}
 
-			case AnimationAction.Fall:
+			case Action.Fall:
 			{
 				animator.speed = JUMP_SPEED;
 				animator.Play(Animator.StringToHash(jumpAnimation));
-				weaponManager.AnimationDispatcher(FALL);
+				weaponManager.ActionDispatcher(FALL);
 				break;
 			}
 
-			case AnimationAction.Attack:
+			case Action.Attack:
 			{
 				animator.speed = SWING_SPEED;
 				animator.Play(Animator.StringToHash(attackAnimation));
-				weaponManager.AnimationDispatcher(ATTACK);
+				weaponManager.ActionDispatcher(ATTACK);
 				break;
 			}
 
-			case AnimationAction.RunAttack:
+			case Action.RunAttack:
 			{
 				animator.speed = RUN_SPEED;
 				animator.Play(Animator.StringToHash(runAnimation));
-				weaponManager.AnimationDispatcher(RUN_ATTACK);
+				weaponManager.ActionDispatcher(RUN_ATTACK);
 				break;
 			}
 
-			case AnimationAction.JumpAttack:
+			case Action.JumpAttack:
 			{
 				animator.speed = JUMP_SPEED;
 				animator.Play(Animator.StringToHash(jumpAnimation));
-				weaponManager.AnimationDispatcher(JUMP_ATTACK);
+				weaponManager.ActionDispatcher(JUMP_ATTACK);
 				break;
 			}
 
 			default:
 			{
-				Debug.Log("ERROR: No animationAction was set in PlayerMovement.cs >> AnimationDispatcher()");
+				Debug.Log("ERROR: No action was set in PlayerMovement.cs >> ActionDispatcher()");
 				break;
 			}
 		}
@@ -432,16 +433,19 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		// compute x and y movements
 		var smoothedMovementFactor = controller.isGrounded ? groundDamping : inAirDamping;
-		velocity.x = Mathf.Lerp(
-			velocity.x, normalizedHorizontalSpeed * runSpeed, Time.deltaTime * smoothedMovementFactor);
+		velocity.x = Mathf.Lerp(velocity.x, normalizedHorizontalSpeed * runSpeed, Time.deltaTime * smoothedMovementFactor);
 	}
 
 	void SavePreviousPosition()
 	{
 		if (previousX != transform.position.x)
+		{
 			state.MovingHorizontally = true;
+		}
 		else
+		{
 			state.MovingHorizontally = false;
+		}
 
 		previousX = transform.position.x;
 		previousY = transform.position.y;

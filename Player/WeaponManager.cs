@@ -147,8 +147,8 @@ public class WeaponManager : CacheBehaviour {
         Messenger.Broadcast<GameObject, int>("change stashed weapon", weaponBelt[right], RIGHT);
     }
 
-    // ANIMATION DISPATCHER
-    public void AnimationDispatcher(int animationAction)
+    // ACTION DISPATCHER
+    public void ActionDispatcher(int action)
     {
         switch (equippedWeapon.weaponType)
         {
@@ -156,7 +156,7 @@ public class WeaponManager : CacheBehaviour {
             case Weapon.WeaponType.Axe:
             case Weapon.WeaponType.Sword:
             {
-                PlaySwordAnimation(animationAction);
+                SwingWeapon(action);
                 break;
             }
 
@@ -164,30 +164,30 @@ public class WeaponManager : CacheBehaviour {
             case Weapon.WeaponType.Hammer:
             case Weapon.WeaponType.Dagger:
             {
-                PlayHurledProjectileAnimation(animationAction);
+                HurlProjectile(action);
                 break;
             }
 
             // magic projectile weapons
             case Weapon.WeaponType.MagicProjectile:
             {
-                PlayMagicProjectileAnimation(animationAction);
+                CastMagicProjectile(action);
                 break;
             }
 
             default:
             {
-                Debug.Log("ERROR: No animationAction was set in WeaponManager.cs >> AnimationDispatcher()");
+                Debug.Log("ERROR: No action was set in WeaponManager.cs >> ActionDispatcher()");
                 break;
             }
         }
     }
 
     // SWINGING WEAPONS — swords, axes, etc
-    // mix & match animations for various activity states
-    public void PlaySwordAnimation(int animationAction)
+    // mix & match animations and attacks for various activity states
+    public void SwingWeapon(int action)
     {
-        switch (animationAction)
+        switch (action)
         {
             case IDLE:
             {
@@ -240,17 +240,17 @@ public class WeaponManager : CacheBehaviour {
 
             default:
             {
-                Debug.Log("ERROR: No animationAction was set in WeaponManager.cs >> PlayWeaponAnimation()");
+                Debug.Log("ERROR: No action was set in WeaponManager.cs >> PlayWeaponAnimation()");
                 break;
             }
         }
     }
 
     // HURLED WEAPONS — hammers, daggers, etc
-    // mix & match animations for various activity states
-    public void PlayHurledProjectileAnimation(int animationAction)
+    // mix & match animations and attacks for various activity states
+    public void HurlProjectile(int action)
     {
-        switch (animationAction)
+        switch (action)
         {
             case IDLE:
             {
@@ -306,17 +306,17 @@ public class WeaponManager : CacheBehaviour {
 
             default:
             {
-                Debug.Log("ERROR: No animationAction was set in WeaponManager.cs >> PlayProjectileAnimation()");
+                Debug.Log("ERROR: No action was set in WeaponManager.cs >> PlayProjectileAnimation()");
                 break;
             }
         }
     }
 
     // MAGIC PROJECTILE WEAPONS — fireballs, flaming skulls, etc
-    // mix & match animations for various activity states
-    public void PlayMagicProjectileAnimation(int animationAction)
+    // mix & match animations and attacks for various activity states
+    public void CastMagicProjectile(int action)
     {
-        switch (animationAction)
+        switch (action)
         {
             case IDLE:
             {
@@ -372,7 +372,7 @@ public class WeaponManager : CacheBehaviour {
 
             default:
             {
-                Debug.Log("ERROR: No animationAction was set in WeaponManager.cs >> PlayProjectileAnimation()");
+                Debug.Log("ERROR: No action was set in WeaponManager.cs >> PlayProjectileAnimation()");
                 break;
             }
         }
