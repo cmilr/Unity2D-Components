@@ -76,6 +76,10 @@ public class BaseBehaviour : MonoBehaviour {
     protected const int RUN_ATTACK                    = 5;
     protected const int JUMP_ATTACK                   = 6;
 
+    // weapon types
+    protected const int MELEE                         = 0;
+    protected const int PROJECTILE                    = 1;
+
     // player/death animation speeds
     protected const float STRUCKDOWN_SPEED            = 1f;
     protected const float DROWNED_SPEED               = 8f;

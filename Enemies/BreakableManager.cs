@@ -6,6 +6,10 @@ public class BreakableManager : CacheBehaviour {
 
     private Sprite[] slices;
 
+    // types of disintegrations for the Explode() function
+    enum Type { Explosion, Directional_Explosion, Slump, Directional_Slump, Geyser };
+    Type disintegration;
+
     void Start()
     {
         InstantiateBreakablePieces();
@@ -36,45 +40,32 @@ public class BreakableManager : CacheBehaviour {
         gameObject.SetActive(false);
     }
 
-    // types of explosions for the Explode() function
-    enum Type { Explosion, Directional_Explosion, Slump, Directional_Slump, Geyser };
-    Type explosion;
-
-    public void Explode(int hitFrom)
+    public void DirectionalSlump(int hitFrom)
     {
         gameObject.SetActive(true);
 
-        // randomly choose an explosion type
-        switch (UnityEngine.Random.Range(1, 2))
+        // randomly choose an disintegration type
+        switch (UnityEngine.Random.Range(1, 3))
         {
             case 0:
-                explosion = Type.Explosion;
+                disintegration = Type.Slump;
             break;
 
             case 1:
-                explosion = Type.Directional_Explosion;
-            break;
-
             case 2:
-                explosion = Type.Slump;
-            break;
-
-            case 3:
-                explosion = Type.Directional_Slump;
-            break;
-
-            case 4:
-                explosion = Type.Geyser;
+                disintegration = Type.Directional_Slump;
             break;
 
             default:
-                explosion = Type.Slump;
+                disintegration = Type.Directional_Slump;
             break;
         }
 
         // cycle through pieces and send them flying
         foreach (Transform child in transform)
         {
+            int direction;
+
             // activate physics on this piece
             Rigidbody2D rigidbody2D = child.GetComponent<Rigidbody2D>();
             rigidbody2D.isKinematic = false;
@@ -83,8 +74,77 @@ public class BreakableManager : CacheBehaviour {
             BreakablePiece piece = child.GetComponent<BreakablePiece>();
             piece.CountDown();
 
-            // apply explosions!
-            switch (explosion)
+            // apply disintegrations!
+            switch (disintegration)
+            {
+                case Type.Slump:
+                    rigidbody2D.AddExplosionForce(250, transform.position, 3);
+                break;
+
+                case Type.Directional_Slump:
+                    direction = (hitFrom == RIGHT) ? 1 : -1;
+                    rigidbody2D.AddForce(new Vector3(0, -100, 0));
+                    rigidbody2D.AddExplosionForce(800,
+                        new Vector3(transform.position.x + direction, transform.position.y + .5f, transform.position.z), 2);
+                break;
+
+                default:
+                    direction = (hitFrom == RIGHT) ? 1 : -1;
+                    rigidbody2D.AddForce(new Vector3(0, -100, 0));
+                    rigidbody2D.AddExplosionForce(800,
+                        new Vector3(transform.position.x + direction, transform.position.y + .5f, transform.position.z), 2);
+                break;
+            }
+        }
+    }
+
+    public void Explode(int hitFrom)
+    {
+        gameObject.SetActive(true);
+
+        // randomly choose an disintegration type
+        switch (UnityEngine.Random.Range(1, 2))
+        {
+            case 0:
+                disintegration = Type.Explosion;
+            break;
+
+            case 1:
+                disintegration = Type.Directional_Explosion;
+            break;
+
+            case 2:
+                disintegration = Type.Slump;
+            break;
+
+            case 3:
+                disintegration = Type.Directional_Slump;
+            break;
+
+            case 4:
+                disintegration = Type.Geyser;
+            break;
+
+            default:
+                disintegration = Type.Slump;
+            break;
+        }
+
+        // cycle through pieces and send them flying
+        foreach (Transform child in transform)
+        {
+            int direction;
+
+            // activate physics on this piece
+            Rigidbody2D rigidbody2D = child.GetComponent<Rigidbody2D>();
+            rigidbody2D.isKinematic = false;
+
+            // start countdown towards this piece fading out
+            BreakablePiece piece = child.GetComponent<BreakablePiece>();
+            piece.CountDown();
+
+            // apply disintegrations!
+            switch (disintegration)
             {
                 case Type.Explosion:
                     rigidbody2D.AddExplosionForce(2000, transform.position, 20);
@@ -102,7 +162,7 @@ public class BreakableManager : CacheBehaviour {
                 break;
 
                 case Type.Directional_Slump:
-                    int direction = (hitFrom == RIGHT) ? 1 : -1;
+                    direction = (hitFrom == RIGHT) ? 1 : -1;
                     rigidbody2D.AddForce(new Vector3(0, -100, 0));
                     rigidbody2D.AddExplosionForce(800,
                         new Vector3(transform.position.x + direction, transform.position.y + .5f, transform.position.z), 2);

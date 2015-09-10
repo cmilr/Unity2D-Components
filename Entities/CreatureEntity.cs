@@ -55,11 +55,38 @@ public class CreatureEntity : Entity
 			playerWeapon.weaponType == Weapon.WeaponType.MagicProjectile)
 		{
 			TakesProjectileHit(playerWeapon, coll, hitFrom);
+			Debug.Log("PROJECTILE Called");
 		}
 		else if (playerWeapon.weaponType == Weapon.WeaponType.Axe ||
 			playerWeapon.weaponType == Weapon.WeaponType.Sword)
 		{
-			TakesProjectileHit(playerWeapon, coll, hitFrom);
+			TakesMeleeHit(playerWeapon, coll, hitFrom);
+			Debug.Log("MELEE Called");
+		}
+	}
+
+	void TakesMeleeHit(Weapon playerWeapon, Collider2D coll, int hitFrom)
+	{
+		hp -= (int)(playerWeapon.damage * DIFFICULTY_DAMAGE_MODIFIER);
+
+		// bounceback from projectile
+		if (coll.transform.position.x > transform.position.x)
+		{
+			MFX.RepulseToLeftRandomly(transform, .3f, .8f, .2f);
+		}
+		else if (coll.transform.position.x < transform.position.x)
+		{
+			MFX.RepulseToRightRandomly(transform, .3f, .8f, .2f);
+		}
+		else
+		{
+			rigidbody2D.velocity = Vector2.zero;
+		}
+
+		if (hp <= 0)
+		{
+			Messenger.Broadcast<int>("prize collected", worth);
+			KillSelf(hitFrom, MELEE);
 		}
 	}
 
@@ -84,14 +111,21 @@ public class CreatureEntity : Entity
 		if (hp <= 0)
 		{
 			Messenger.Broadcast<int>("prize collected", worth);
-			KillSelf(hitFrom);
+			KillSelf(hitFrom, PROJECTILE);
 		}
 	}
 
-	void KillSelf(int hitFrom)
+	void KillSelf(int hitFrom, int weaponType)
 	{
-		// activate and explode breakable sprite
-		breakable.Explode(hitFrom);
+		// activate and kill breakable sprite
+		if (weaponType == MELEE)
+		{
+			breakable.DirectionalSlump(hitFrom);
+		}
+		else if (weaponType == PROJECTILE)
+		{
+			breakable.Explode(hitFrom);
+		}
 
 		// deactivate and fade solid sprite
 		rigidbody2D.isKinematic   = true;

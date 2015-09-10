@@ -3,14 +3,19 @@ using System.Collections;
 
 public class MeleeManager : CacheBehaviour {
 
-    private WeaponCollider weaponCollider;
+    private float rateOfAttack = .3f;
     private BoxCollider2D boxCollider;
     private static bool inProgress;
 
-	void Start()
+    void OnInitEquippedWeapon(GameObject weapon)
     {
-        boxCollider = transform.Find("WeaponCollider").GetComponent<BoxCollider2D>();
-	}
+        boxCollider = weapon.GetComponent<BoxCollider2D>();
+    }
+
+    void OnChangeEquippedWeapon(GameObject weapon)
+    {
+        boxCollider = weapon.GetComponent<BoxCollider2D>();
+    }
 
     public void Attack()
     {
@@ -19,11 +24,23 @@ public class MeleeManager : CacheBehaviour {
             inProgress = true;
             boxCollider.enabled = true;
 
-            StartCoroutine(Timer.Start(.3f, false, () =>
+            StartCoroutine(Timer.Start(rateOfAttack, false, () =>
             {
                 boxCollider.enabled = false;
                 inProgress = false;
             }));
         }
+    }
+
+    void OnEnable()
+    {
+        Messenger.AddListener<GameObject>("init equipped weapon", OnInitEquippedWeapon);
+        Messenger.AddListener<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
+    }
+
+    void OnDestroy()
+    {
+        Messenger.RemoveListener<GameObject>("init equipped weapon", OnInitEquippedWeapon);
+        Messenger.RemoveListener<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
     }
 }
