@@ -41,7 +41,7 @@ public class LevelManager : CacheBehaviour {
 		FadeOutCurrentLevel();
 
 		// load next level and trigger garbage collection
-		StartCoroutine(Timer.Start(timeBeforeLevelReload, true, () =>
+		StartCoroutine(Timer.Start(timeBeforeLevelReload, false, () =>
 		{
 			Application.LoadLevel("Level" + newLevel);
 			System.GC.Collect();

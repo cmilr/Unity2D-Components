@@ -17,11 +17,13 @@ public class WeaponManager : CacheBehaviour {
     private bool levelLoading;
 
     private ProjectileManager projectile;
+    private MeleeManager melee;
 
     void Start()
     {
         arm = GetComponentInChildren<ArmAnimation>();
         projectile = transform.parent.GetComponent<ProjectileManager>();
+        melee = transform.parent.GetComponent<MeleeManager>();
     }
 
     void OnInitWeapons(GameObject eWeapon, GameObject lWeapon, GameObject rWeapon)
@@ -221,6 +223,7 @@ public class WeaponManager : CacheBehaviour {
             {
                 equippedWeapon.PlayAttackAnimation(0, 0);
                 arm.PlayAttackAnimation(0, 0);
+                melee.Attack();
                 break;
             }
 
@@ -228,6 +231,7 @@ public class WeaponManager : CacheBehaviour {
             {
                 equippedWeapon.PlayAttackAnimation(0, ONE_PIXEL);
                 arm.PlayAttackAnimation(0, ONE_PIXEL);
+                melee.Attack();
                 break;
             }
 
@@ -235,6 +239,7 @@ public class WeaponManager : CacheBehaviour {
             {
                 equippedWeapon.PlayAttackAnimation(0, ONE_PIXEL * 2);
                 arm.PlayAttackAnimation(0, ONE_PIXEL * 2);
+                melee.Attack();
                 break;
             }
 
@@ -383,7 +388,7 @@ public class WeaponManager : CacheBehaviour {
         // pause weapon changes while level loading
         levelLoading = true;
 
-        StartCoroutine(Timer.Start(WEAPON_PAUSE_ON_LEVEL_LOAD, true, () =>
+        StartCoroutine(Timer.Start(WEAPON_PAUSE_ON_LEVEL_LOAD, false, () =>
         {
             levelLoading = false;
         }));
