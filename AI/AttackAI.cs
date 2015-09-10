@@ -103,7 +103,7 @@ public class AttackAI : CacheBehaviour {
         // pause attacks and other activities while level loads
         levelLoading = true;
 
-        StartCoroutine(Timer.Start(ENEMY_PAUSE_ON_LEVEL_LOAD, true, () =>
+        StartCoroutine(Timer.Start(ENEMY_PAUSE_ON_LEVEL_LOAD, false, () =>
         {
             levelLoading = false;
         }));

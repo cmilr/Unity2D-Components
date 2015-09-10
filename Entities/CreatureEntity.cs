@@ -56,6 +56,11 @@ public class CreatureEntity : Entity
 		{
 			TakesProjectileHit(playerWeapon, coll, hitFrom);
 		}
+		else if (playerWeapon.weaponType == Weapon.WeaponType.Axe ||
+			playerWeapon.weaponType == Weapon.WeaponType.Sword)
+		{
+			TakesProjectileHit(playerWeapon, coll, hitFrom);
+		}
 	}
 
 	void TakesProjectileHit(Weapon playerWeapon, Collider2D coll, int hitFrom)
