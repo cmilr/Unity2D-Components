@@ -7,6 +7,7 @@ public class MeleeManager : CacheBehaviour {
     private BoxCollider2D boxCollider;
     private static bool inProgress;
 
+    // when it changes, grab a reference to the currently equipped weapon's collider
     void OnInitEquippedWeapon(GameObject weapon)
     {
         boxCollider = weapon.GetComponent<BoxCollider2D>();
@@ -21,6 +22,9 @@ public class MeleeManager : CacheBehaviour {
     {
         if (!inProgress)
         {
+
+            Debug.Log("xxx DEBUG xxx");
+
             inProgress = true;
             boxCollider.enabled = true;
 

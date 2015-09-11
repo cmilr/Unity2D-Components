@@ -84,14 +84,14 @@ public class BreakableManager : CacheBehaviour {
                 case Type.Directional_Slump:
                     direction = (hitFrom == RIGHT) ? 1 : -1;
                     rigidbody2D.AddForce(new Vector3(0, -100, 0));
-                    rigidbody2D.AddExplosionForce(800,
+                    rigidbody2D.AddExplosionForce(2000,
                         new Vector3(transform.position.x + direction, transform.position.y + .5f, transform.position.z), 2);
                 break;
 
                 default:
                     direction = (hitFrom == RIGHT) ? 1 : -1;
                     rigidbody2D.AddForce(new Vector3(0, -100, 0));
-                    rigidbody2D.AddExplosionForce(800,
+                    rigidbody2D.AddExplosionForce(2000,
                         new Vector3(transform.position.x + direction, transform.position.y + .5f, transform.position.z), 2);
                 break;
             }

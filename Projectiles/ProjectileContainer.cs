@@ -11,6 +11,12 @@ public class ProjectileContainer : Weapon {
     private Vector3 origin;
     private RuntimeAnimatorController anim;
 
+    void Start()
+    {
+        // player weapon colliders should only be enabled during attacks
+        collider2D.enabled = false;
+    }
+
     // note: ProjectileContainers contain simple dummy values, which are
     // then replaced by data that's passed-in via projectile objects
     void Init(Weapon weapon)
