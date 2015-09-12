@@ -27,8 +27,8 @@ public class _PlayerData : BaseBehaviour {
 		// initialize settings
 		Character      = "LAURA";
 		HP             = 25;
-		AC             = 4;
-		XP             = 875;
+		AC             = 10;
+		XP             = 0;
 		LVL            = 1;
 		equippedWeapon = GameObject.Find("Player/Inventory/DefaultSword");
 		leftWeapon     = GameObject.Find("Player/Inventory/DefaultDagger");

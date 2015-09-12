@@ -72,10 +72,11 @@ public abstract class Entity : CacheBehaviour {
 			collidedWithBody = true;
 		}
 
-		if (layer == WEAPON_COLLIDER && !collidedWithWeapon)
+		if (layer == WEAPON_COLLIDER)
 		{
+			// doesn't check for previous collision because player weapon colliders
+			// are automatically turned offer after each successful hit
 			OnWeaponCollisionEnter(coll);
-			collidedWithWeapon = true;
 		}
 	}
 

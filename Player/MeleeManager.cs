@@ -3,27 +3,48 @@ using System.Collections;
 
 public class MeleeManager : CacheBehaviour {
 
-    private WeaponCollider weaponCollider;
+    private float rateOfAttack = .3f;
+    private BoxCollider2D boxCollider;
     private static bool inProgress;
 
-	void Start()
+    // when it changes, grab a reference to the currently equipped weapon's collider
+    void OnInitEquippedWeapon(GameObject weapon)
     {
-        weaponCollider = GetComponentInChildren<WeaponCollider>();
-	}
+        boxCollider = weapon.GetComponent<BoxCollider2D>();
+    }
+
+    void OnChangeEquippedWeapon(GameObject weapon)
+    {
+        boxCollider = weapon.GetComponent<BoxCollider2D>();
+    }
 
     public void Attack()
     {
         if (!inProgress)
         {
-            inProgress = true;
-            weaponCollider.enabled = true;
 
-            StartCoroutine(Timer.Start(.3f, false, () =>
+            Debug.Log("xxx DEBUG xxx");
+
+            inProgress = true;
+            boxCollider.enabled = true;
+
+            StartCoroutine(Timer.Start(rateOfAttack, false, () =>
             {
-                Debug.Log("Attack Called");
-                weaponCollider.enabled = false;
+                boxCollider.enabled = false;
                 inProgress = false;
             }));
         }
+    }
+
+    void OnEnable()
+    {
+        Messenger.AddListener<GameObject>("init equipped weapon", OnInitEquippedWeapon);
+        Messenger.AddListener<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
+    }
+
+    void OnDestroy()
+    {
+        Messenger.RemoveListener<GameObject>("init equipped weapon", OnInitEquippedWeapon);
+        Messenger.RemoveListener<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
     }
 }

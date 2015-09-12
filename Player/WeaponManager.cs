@@ -86,7 +86,7 @@ public class WeaponManager : CacheBehaviour {
         equippedWeapon   = weaponBelt[equipped].GetComponent<Weapon>();
         rightWeapon      = weaponBelt[right].GetComponent<Weapon>();
 
-        // set weapons to player's Weapon Collider layer
+        // set weapons to player's WeaponCollider layer
         weaponBelt[left].layer = 9;
         weaponBelt[equipped].layer = 9;
         weaponBelt[right].layer = 9;
@@ -95,6 +95,11 @@ public class WeaponManager : CacheBehaviour {
         leftWeapon.EnableAnimation(false);
         equippedWeapon.EnableAnimation(true);
         rightWeapon.EnableAnimation(false);
+
+        // disable colliders for all weapons - they are only enabled during attacks
+        leftWeapon.GetComponent<BoxCollider2D>().enabled = false;
+        equippedWeapon.GetComponent<BoxCollider2D>().enabled = false;
+        rightWeapon.GetComponent<BoxCollider2D>().enabled = false;
 
         // fade in newly equipped weapon
         float fadeAfter = 0f;
