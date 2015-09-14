@@ -14,7 +14,7 @@ public class ProjectileContainer : Weapon {
     void Start()
     {
         // player weapon colliders should only be enabled during attacks
-        collider2D.enabled = false;
+        // collider2D.enabled = false;
     }
 
     // note: ProjectileContainers contain simple dummy values, which are

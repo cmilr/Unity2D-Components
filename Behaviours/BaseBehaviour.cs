@@ -22,6 +22,7 @@ public class BaseBehaviour : MonoBehaviour {
     protected const int UP                            = 4;
     protected const int DOWN                          = 5;
     protected const int ERROR                         = 0;
+    protected const int NONE                          = 0;
 
     // global sizes
     protected const int SMALL                         = 1;

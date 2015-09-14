@@ -60,22 +60,6 @@ public class BodyCollider : CacheBehaviour
                 }
             }
         }
-        else if (layer == ENEMY_COLLIDER)
-        {
-            enemy = coll.GetComponent<CreatureEntity>();
-
-            if (!enemy.alreadyCollided && !game.LevelLoading && !state.Dead)
-            {
-                hitFrom = MLib.HorizSideThatWasHit(gameObject, coll);
-
-                if (enemy.entityType == CreatureEntity.EntityType.Enemy)
-                {
-                    enemy.alreadyCollided = true;
-
-                    player.TouchesEnemy("touch", enemy, coll, hitFrom);
-                }
-            }
-        }
     }
 
     void OnTriggerExit2D(Collider2D coll)

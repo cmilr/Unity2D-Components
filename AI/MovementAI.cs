@@ -18,6 +18,7 @@ public class MovementAI : CacheBehaviour
 	private float movementInterval;
 	private float lookInterval      = .3f;
 	private float xAxisOffset       = .3f;
+	private float playerOffset      = 1.65f;		// offset target so enemy doesn't end up exactly where player is
 	private int sideHit;
 	private bool blockedLeft;
 	private bool blockedRight;
@@ -80,7 +81,19 @@ public class MovementAI : CacheBehaviour
 		if (!this.enabled) return;
 
 		// get the proper direction for the enemy to move, then send him moving
-		walkingDirection = (target.position.x > transform.position.x) ? RIGHT : LEFT;
+		if (target.position.x > transform.position.x + playerOffset)
+		{
+			walkingDirection = RIGHT;
+		}
+		else if (target.position.x < transform.position.x - playerOffset)
+		{
+			walkingDirection = LEFT;
+		}
+		else
+		{
+			rigidbody2D.velocity = Vector2.zero;
+			movementPaused = true;
+		}
 
 		if (!movementPaused)
 		{
