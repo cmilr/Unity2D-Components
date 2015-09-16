@@ -22,9 +22,6 @@ public class MeleeManager : CacheBehaviour {
     {
         if (!inProgress)
         {
-
-            Debug.Log("xxx DEBUG xxx");
-
             inProgress = true;
             boxCollider.enabled = true;
 

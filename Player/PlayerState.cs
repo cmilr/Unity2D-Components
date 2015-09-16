@@ -23,7 +23,7 @@ public class PlayerState : BaseBehaviour, IPlayerStateReadOnly, IPlayerStateFull
 
     void OnEnable()
     {
-        Character = "LAURA";
+        Character = "MAC";
         FacingRight = true;
         Messenger.AddListener<bool>("touching wall", OnTouchingWall);
         Messenger.AddListener<bool>("riding fast platform", OnRidingFastPlatform);

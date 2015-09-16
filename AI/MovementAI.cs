@@ -18,7 +18,7 @@ public class MovementAI : CacheBehaviour
 	private float movementInterval;
 	private float lookInterval      = .3f;
 	private float xAxisOffset       = .3f;
-	private float playerOffset      = 1.65f;		// offset target so enemy doesn't end up exactly where player is
+	private float playerOffset      = 1.50f;		// offset target so enemy doesn't end up exactly where player is
 	private int sideHit;
 	private bool blockedLeft;
 	private bool blockedRight;

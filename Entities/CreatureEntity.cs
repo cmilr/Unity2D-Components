@@ -55,13 +55,11 @@ public class CreatureEntity : Entity
 			playerWeapon.weaponType == Weapon.WeaponType.MagicProjectile)
 		{
 			TakesProjectileHit(playerWeapon, coll, hitFrom);
-			Debug.Log("PROJECTILE Called");
 		}
 		else if (playerWeapon.weaponType == Weapon.WeaponType.Axe ||
 			playerWeapon.weaponType == Weapon.WeaponType.Sword)
 		{
 			TakesMeleeHit(playerWeapon, coll, hitFrom);
-			Debug.Log("MELEE Called");
 		}
 	}
 
