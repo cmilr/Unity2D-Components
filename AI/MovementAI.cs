@@ -102,7 +102,7 @@ public class MovementAI : CacheBehaviour
 			// ensure that actor is always facing in the direction it is moving
 			transform.SetLocalScaleX((float)walkingDirection);
 
-			// add some random movementPauseds
+			// add some random pauses
 			if (hesitant && UnityEngine.Random.Range(0f, 100f) <= chanceOfPause)
 			{
 				rigidbody2D.velocity = Vector2.zero;
