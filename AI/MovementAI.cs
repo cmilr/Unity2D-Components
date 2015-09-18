@@ -153,55 +153,55 @@ public class MovementAI : CacheBehaviour
 		return (new Vector2(toPos.x, toPos.y) - new Vector2(fromPos.x, fromPos.y))*power;
 	}
 
-	// // check for edge blockers
-	// void OnTriggerEnter2D(Collider2D coll)
-	// {
-	// 	// check for layer instead of name — it's much quicker
-	// 	int layer = coll.gameObject.layer;
+	// check for edge blockers
+	void OnTriggerEnter2D(Collider2D coll)
+	{
+		// check for layer instead of name — it's much quicker
+		int layer = coll.gameObject.layer;
 
-	// 	if (layer == EDGE_BLOCKER)
-	// 	{
-	// 		sideHit = MLib.HorizSideThatWasHit(gameObject, coll);
+		if (layer == EDGE_BLOCKER)
+		{
+			sideHit = MLib.HorizSideThatWasHit(gameObject, coll);
 
-	// 		if (sideHit == RIGHT)
-	// 		{
-	// 			blockedRight = true;
-	// 			gameObject.BroadcastMessage("SetBlockedRightState", true);
-	// 		}
-	// 		else if (sideHit == LEFT)
-	// 		{
-	// 			blockedLeft = true;
-	// 			gameObject.BroadcastMessage("SetBlockedLeftState", true);
-	// 		}
+			if (sideHit == RIGHT)
+			{
+				blockedRight = true;
+				gameObject.BroadcastMessage("SetBlockedRightState", true);
+			}
+			else if (sideHit == LEFT)
+			{
+				blockedLeft = true;
+				gameObject.BroadcastMessage("SetBlockedLeftState", true);
+			}
 
-	// 		rigidbody2D.velocity = Vector2.zero;
-	// 	}
-	// }
+			rigidbody2D.velocity = Vector2.zero;
+		}
+	}
 
-	// // check if cleared edge blocker
-	// void OnTriggerExit2D(Collider2D coll)
-	// {
-	// 	// check for layer instead of name — it's much quicker
-	// 	int layer = coll.gameObject.layer;
+	// check if cleared edge blocker
+	void OnTriggerExit2D(Collider2D coll)
+	{
+		// check for layer instead of name — it's much quicker
+		int layer = coll.gameObject.layer;
 
-	// 	if (layer == EDGE_BLOCKER)
-	// 	{
-	// 		// int sideHit = MLib.HorizSideThatWasHit(gameObject, coll);
+		if (layer == EDGE_BLOCKER)
+		{
+			// int sideHit = MLib.HorizSideThatWasHit(gameObject, coll);
 
-	// 		if (sideHit == RIGHT)
-	// 		{
-	// 			blockedRight = false;
-	// 			gameObject.BroadcastMessage("SetBlockedRightState", false);
-	// 		}
-	// 		else if (sideHit == LEFT)
-	// 		{
-	// 			blockedLeft = false;
-	// 			gameObject.BroadcastMessage("SetBlockedLeftState", false);
-	// 		}
+			if (sideHit == RIGHT)
+			{
+				blockedRight = false;
+				gameObject.BroadcastMessage("SetBlockedRightState", false);
+			}
+			else if (sideHit == LEFT)
+			{
+				blockedLeft = false;
+				gameObject.BroadcastMessage("SetBlockedLeftState", false);
+			}
 
-	// 		movementPaused = false;
-	// 	}
-	// }
+			movementPaused = false;
+		}
+	}
 
 	void OnPlayerDead(string causeOfDeath, Collider2D coll, int directionHit)
 	{
