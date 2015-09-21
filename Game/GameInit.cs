@@ -20,5 +20,9 @@ public class GameInit : BaseBehaviour
         MLib.IgnoreLayerCollision2D("BodyCollider", "One-Way Platform", true);
         MLib.IgnoreLayerCollision2D("WeaponCollider", "Platform", true);
         MLib.IgnoreLayerCollision2D("WeaponCollider", "One-Way Platform", true);
+
+
+        for (int i = 0; i < 20; i++)
+            Debug.Log(MLib.NextGaussian(25f, 5f, 1f, 50f));
     }
 }
