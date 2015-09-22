@@ -39,6 +39,11 @@ public class PlayerState : BaseBehaviour, IPlayerStateReadOnly, IPlayerStateFull
         Messenger.RemoveListener<string, Collider2D, int>("player dead", OnPlayerDead);
     }
 
+    void OnFacingRight(bool status)
+    {
+        FacingRight = status;
+    }
+
     void OnTouchingWall(bool status)
     {
         TouchingWall = status;

@@ -126,12 +126,12 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		else if (moveRight)
 		{
 			MovePlayerRight();
-			gameObject.BroadcastMessage("OnFacingRight", true);
+			BroadcastMessage("OnFacingRight", true);
 		}
 		else if (moveLeft)
 		{
 			MovePlayerLeft();
-			gameObject.BroadcastMessage("OnFacingRight", false);
+			BroadcastMessage("OnFacingRight", false);
 		}
 
 		// idle state
