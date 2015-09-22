@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Rotorz.Tile;
-using Matcha.Lib;
+using Matcha.Library;
 
 public class LevelGenerator : CacheBehaviour {
 
     public Brush brush;
-    public Brush erase;
 
     private TileSystem tileSystem;
     private float columns;
@@ -18,7 +17,6 @@ public class LevelGenerator : CacheBehaviour {
         columns = tileSystem.ColumnCount;
         rows = tileSystem.RowCount;
         PaintBaseTiles();
-        CarveRandomRooms();
 	}
 
     void PaintBaseTiles() {
@@ -40,36 +38,16 @@ public class LevelGenerator : CacheBehaviour {
     void CarveRandomRooms()
     {
         int numberOfRooms = 5;
-        ProceduralRoom roomToDraw = new ProceduralRoom();
 
         for (int i = 0; i < numberOfRooms; i++)
         {
-            GetRoom(roomToDraw);
-            // Debug.Log("w = " + roomToDraw.width + ". H = " + roomToDraw.height);
-            PaintRoom(roomToDraw);
+            Vector2 roomToDraw = GetRoom();
         }
     }
 
-    void GetRoom(ProceduralRoom room)
+    Vector2 GetRoom()
     {
-        room.width  = (int) MLib.NextGaussian(10f, 5f, 1f, 50f);
-        room.height = (int) MLib.NextGaussian(10f, 5f, 1f, 50f);
-    }
-
-    void PaintRoom(ProceduralRoom room)
-    {
-        // int x = (int) MLib.NextGaussian(columns / 2, 30f, 1f, columns);
-        // int y = (int) MLib.NextGaussian(rows / 2, 30f, 1f, rows);
-
-        for (int r = 0; r < room.width; r++)
-        {
-            for (int c = 0; c < room.height; c++)
-            {
-                tileSystem.EraseTile(r, c);
-                // brush.Paint(tileSystem, r, c);
-                tileSystem.RefreshSurroundingTiles(r, c);
-            }
-        }
+        MLib.NextGaussian(25f, 5f, 1f, 50f));
     }
 
 
