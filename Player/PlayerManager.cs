@@ -24,6 +24,7 @@ public class PlayerManager : CacheBehaviour
         Messenger.Broadcast<int>("init xp", playerData.XP);
         Messenger.Broadcast<GameObject, GameObject, GameObject>
             ("init weapons", playerData.equippedWeapon, playerData.leftWeapon, playerData.rightWeapon);
+        Messenger.Broadcast<Transform>("player placed", transform);
     }
 
     public void TakesHit(string weaponType, Weapon weapon, Collider2D coll, int hitFrom)

@@ -12,11 +12,11 @@ public class Tile : BaseBehaviour
     void Start() {
 
         // change the default tile specs given by Rotorz
-        shader1                           = Shader.Find("Sprites/Diffuse");
-        meshRenderer                      = transform.parent.GetComponent<MeshRenderer>();
-        meshRenderer.material.shader      = shader1;
-        meshRenderer.shadowCastingMode    = UnityEngine.Rendering.ShadowCastingMode.Off;
-        meshRenderer.receiveShadows       = false;
-        meshRenderer.useLightProbes       = false;
+        shader1                            = Shader.Find("Sprites/Diffuse");
+        meshRenderer                       = transform.parent.GetComponent<MeshRenderer>();
+        meshRenderer.sharedMaterial.shader = shader1;
+        meshRenderer.shadowCastingMode     = UnityEngine.Rendering.ShadowCastingMode.Off;
+        meshRenderer.receiveShadows        = false;
+        meshRenderer.useLightProbes        = false;
     }
 }

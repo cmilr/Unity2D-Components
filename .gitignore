@@ -8,8 +8,6 @@
 Add-Ons/
 [Aa]dd-Ons/
 [Ee]xtensions/
-[Ll]ibraries/
-[Tt]weens/
 [Uu]tilities/
 [Xx]_Add-Ons/
 [Xx]_Archive/
@@ -18,8 +16,6 @@ Add-Ons/
 Add-Ons.meta
 [Aa]dd-Ons.meta
 [Ee]xtensions.meta
-[Ll]ibraries.meta
-[Tt]weens.meta
 [Uu]tilities.meta
 [Xx]_Add-Ons.meta
 [Xx]_Archive.meta
@@ -74,3 +70,5 @@ DeathHandler.cs.meta
 SortingLayerExposed.cs
 SortingLayerExposed.cs.meta
 
+Procedural/
+ProceduralRoom.cs
