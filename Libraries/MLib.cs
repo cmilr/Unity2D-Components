@@ -205,5 +205,47 @@ public class MLib : CacheBehaviour
         } while (x < min || x > max);
         return x;
     }
+
+    // return various room coordinates for procedural generation
+    public static int TopLeftX(ProcRoom room)
+    {
+        return room.originX;
+    }
+
+    public static int TopLeftY(ProcRoom room)
+    {
+        return room.originY;
+    }
+
+    public static int TopRightX(ProcRoom room)
+    {
+        return room.originX + room.width - 1;
+    }
+
+    public static int TopRightY(ProcRoom room)
+    {
+        return room.originY;
+    }
+
+    public static int BottomLeftX(ProcRoom room)
+    {
+        return room.originX;
+    }
+
+    public static int BottomLeftY(ProcRoom room)
+    {
+        return room.originY + room.height - 1;
+    }
+
+    public static int BottomRightX(ProcRoom room)
+    {
+        return room.originX + room.width - 1;
+    }
+
+    public static int BottomRightY(ProcRoom room)
+    {
+        return room.originY + room.height - 1;
+    }
+
 }
 }
