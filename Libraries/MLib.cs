@@ -247,5 +247,15 @@ public class MLib : CacheBehaviour
         return room.originY + room.height - 1;
     }
 
+    public static int RoundToDivFour(int num)
+    {
+        while (num % 4 != 0)
+        {
+            num++;
+        }
+
+        return num;
+    }
+
 }
 }
