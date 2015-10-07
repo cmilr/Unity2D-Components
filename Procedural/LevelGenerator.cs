@@ -30,8 +30,8 @@ public class LevelGenerator : CacheBehaviour {
         mapRows    = map.RowCount;
         rooms      = new List<ProcRoom>();
 
-        GenerateOrderedDungeons();
-        // GenerateRandomDungeons();
+        // GenerateOrderedDungeons();
+        GenerateRandomDungeons();
 	}
 
     void GenerateOrderedDungeons()
@@ -41,13 +41,13 @@ public class LevelGenerator : CacheBehaviour {
         // CarveHalls();
     }
 
-    // void GenerateRandomDungeons()
-    // {
-    //     PaintBaseTiles();
-    //     CarveRandomRooms();
-    //     CarveHalls();
-    //     // PlaceRandomSteps();
-    // }
+    void GenerateRandomDungeons()
+    {
+        PaintBaseTiles();
+        CarveRandomRooms();
+        CarveHalls();
+        // PlaceRandomSteps();
+    }
 
     void PaintBaseTiles() {
 
@@ -152,13 +152,12 @@ public class LevelGenerator : CacheBehaviour {
         while (!successful && attempts < 5)
         {
             // get random coordinates to attempt to place new room
-            // int originX = (int) MLib.NextGaussian(mapColumns / 2, mapColumns / 2, mapMarginX, mapColumns);
-            // int originY = (int) MLib.NextGaussian(mapRows / 2, mapRows / 2, mapMarginY, mapRows);
+            int randX = (int) MLib.NextGaussian(mapColumns / 2, mapColumns / 2, mapMarginX, mapColumns);
+            int randY = (int) MLib.NextGaussian(mapRows / 2, mapRows / 2, mapMarginY, mapRows);
 
-            Random rand = new Random();
-
-            int originX = rand.DivFour(mapMarginX, mapColumns - mapMarginX);
-            int originY = rand.DivFour(mapMarginY, mapRows - mapMarginY);
+            // convert coordinates to divisors of 4; elements from being too close to each other
+            int originX = MLib.RoundToDivFour(randX);
+            int originY = MLib.RoundToDivFour(randY);
 
             // check that room will fit within map bounds
             if (RoomInBounds(originX, originY, room) &&
@@ -259,7 +258,7 @@ public class LevelGenerator : CacheBehaviour {
 
                 y = 0;
 
-                int size = Random.Range(0, 4);
+                int size = Random.Range(0, 10);
                 int i = (size == 0 ? 2 : 4);
 
                 while (map.GetTile(originY, originX + x) != null &&
