@@ -3,7 +3,6 @@
 [Oo]bj/
 [Bb]uild/
 [Ii]OSBuild/
-[Pp]rocedural/
 
 Add-Ons/
 [Aa]dd-Ons/
@@ -59,13 +58,9 @@ Thumbs.db
 
 # Open Source
 # ~~~~~~~~~~~
-RunAndJump.cs
-RunAndJump.cs.meta
 CameraFollow.cs
 CameraFollow.cs.meta
 CharacterController2D.cs
 CharacterController2D.cs.meta
-DeathHandler.cs
-DeathHandler.cs.meta
 SortingLayerExposed.cs
 SortingLayerExposed.cs.meta
