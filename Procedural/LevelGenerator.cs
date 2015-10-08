@@ -19,8 +19,10 @@ public class LevelGenerator : CacheBehaviour {
     private int mapMarginY = 10;
     private int roomMarginX = 4;
     private int roomMarginY = 4;
-    private int numberOfRooms = 60;
+    private int numberOfRooms = 1;
+    private int direction = RIGHT;
     List<ProcRoom> rooms;
+    List<ProcHall> halls;
 
 
 	void Awake()
@@ -29,23 +31,17 @@ public class LevelGenerator : CacheBehaviour {
         mapColumns = map.ColumnCount;
         mapRows    = map.RowCount;
         rooms      = new List<ProcRoom>();
+        halls      = new List<ProcHall>();
 
-        // GenerateOrderedDungeons();
         GenerateRandomDungeons();
 	}
-
-    void GenerateOrderedDungeons()
-    {
-        PaintBaseTiles();
-        CarveOrderedRooms();
-        // CarveHalls();
-    }
 
     void GenerateRandomDungeons()
     {
         PaintBaseTiles();
         CarveRandomRooms();
         CarveHalls();
+        AssessForStairs();
         // PlaceRandomSteps();
     }
 
@@ -63,17 +59,6 @@ public class LevelGenerator : CacheBehaviour {
             }
 
         map.EndBulkEdit();
-    }
-
-    void CarveOrderedRooms()
-    {
-        // for (int i = 0; i < numberOfRooms; i++)
-        // {
-            ProcRoom roomToDraw = new ProcRoom();
-
-            GetRoom(roomToDraw);
-            PaintRoomOrdered(roomToDraw);
-        // }
     }
 
     void CarveRandomRooms()
@@ -95,51 +80,6 @@ public class LevelGenerator : CacheBehaviour {
         // round up to nearest even number
         room.width = MLib.RoundToDivFour(room.width);
         room.height = MLib.RoundToDivFour(room.height);
-    }
-
-    void PaintRoomOrdered(ProcRoom room)
-    {
-        bool successful = false;
-        int attempts = 0;
-
-        map.BeginBulkEdit();
-
-        while (!successful && attempts < 5)
-        {
-            // get random coordinates to attempt to place new room
-            int randX = (int) MLib.NextGaussian(mapColumns / 2, mapColumns / 2, mapMarginX, mapColumns);
-            int randY = (int) MLib.NextGaussian(mapRows / 2, mapRows / 2, mapMarginY, mapRows);
-
-            // convert coordinates to divisors of 4; elements from being too close to each other
-            int originX = MLib.RoundToDivFour(randX);
-            int originY = MLib.RoundToDivFour(randY);
-
-            // check that room will fit within map bounds
-            if (RoomInBounds(originX, originY, room) &&
-               !TouchingRooms(originX, originY, room))
-            {
-                // paint room
-                for (int x = 0; x < room.width; x++)
-                {
-                    for (int y = 0; y < room.height; y++)
-                    {
-                        map.EraseTile(originY + y, originX + x);
-                        map.RefreshSurroundingTiles(originY + y, originX + x);
-                    }
-                }
-
-                // with room succesfully placed, set origin then add to List
-                room.originX = originX;
-                room.originY = originY;
-                rooms.Add(room);
-
-                successful = true;
-            }
-
-            attempts++;
-        }
-
-        map.EndBulkEdit();
     }
 
     void PaintRoomRandomly(ProcRoom room)
@@ -240,26 +180,29 @@ public class LevelGenerator : CacheBehaviour {
 
             foreach (ProcRoom room in rooms)
             {
+                ProcHall hall = new ProcHall();
+
                 int rand = Random.Range(0, 2);
-                int direction = (rand == 0 ? RIGHT : LEFT);
+                // direction = (rand == 0 ? RIGHT : LEFT);
+                direction = RIGHT;
 
                 if (direction == RIGHT)
                 {
-                    originX = MPG.BottomRightX(room);
-                    originY = MPG.BottomRightY(room);
+                    originX = room.BottomRightX();
+                    originY = room.BottomRightY();
                     x = 1;
                 }
                 else
                 {
-                    originX = MPG.BottomLeftX(room);
-                    originY = MPG.BottomLeftY(room);
+                    originX = room.BottomLeftX();
+                    originY = room.BottomLeftY();
                     x = -1;
                 }
 
                 y = 0;
 
-                int size = Random.Range(0, 10);
-                int i = (size == 0 ? 2 : 4);
+                int rand2 = Random.Range(0, 10);
+                int i = (rand2 == 0 ? 2 : 4);
 
                 while (map.GetTile(originY, originX + x) != null &&
                        TileInBounds(originX + x, originY))
@@ -287,25 +230,28 @@ public class LevelGenerator : CacheBehaviour {
                     x = (direction == RIGHT ? x + 1 : x - 1);
                 }
 
-
-                BuildStairs(direction, originX + x, originY);
-
-
+                // with hall succesfully placed, set origin, width, and height, then add to List
+                hall.originX = originX;
+                hall.originY = originY - (i - 1);
+                hall.width   = x;
+                hall.height  = i;
+                Debug.Log(i);
+                halls.Add(hall);
             }
 
         map.EndBulkEdit();
     }
 
-    int DistanceToGround(int originX, int originY)
+    void AssessForStairs()
     {
-        int y = 0;
-        while (map.GetTile(originY + y, originX) == null &&
-              TileInBounds(originY + y, originX))
+        foreach (ProcHall hall in halls)
         {
-            y++;
+            testBrush.Paint(map, hall.BottomRightY(), hall.BottomRightX());
+            testBrush.Paint(map, hall.TopRightY(), hall.TopRightX());
+            testBrush.Paint(map, hall.BottomLeftY(), hall.BottomLeftX());
+            testBrush.Paint(map, hall.TopLeftY(), hall.BottomLeftX());
+            // BuildStairs(RIGHT, hall.BottomRightX(), hall.BottomRightY());
         }
-
-        return y;
     }
 
     void BuildStairs(int direction, int originX, int originY)
@@ -337,6 +283,18 @@ public class LevelGenerator : CacheBehaviour {
             }
 
         }
+    }
+
+    int DistanceToGround(int originX, int originY)
+    {
+        int y = 0;
+        while (map.GetTile(originY + y, originX) == null &&
+              TileInBounds(originY + y, originX))
+        {
+            y++;
+        }
+
+        return y;
     }
 
     bool TileInBounds(int originX, int originY)

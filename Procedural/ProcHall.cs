@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ProcRoom : ProcBase {
+public class ProcHall : ProcBase {
 
 }
