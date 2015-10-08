@@ -6,7 +6,7 @@ using Matcha.Lib;
 using Matcha.ProcGen;
 using Matcha.Extensions;
 
-public class LevelGenerator : CacheBehaviour {
+public class LevelGenerator2 : CacheBehaviour {
 
     public Brush brush;
     public Brush testBrush;
@@ -30,18 +30,10 @@ public class LevelGenerator : CacheBehaviour {
         mapRows    = map.RowCount;
         rooms      = new List<ProcRoom>();
 
-        // GenerateOrderedDungeons();
-        GenerateRandomDungeons();
+        GenerateDungeon();
 	}
 
-    void GenerateOrderedDungeons()
-    {
-        PaintBaseTiles();
-        CarveOrderedRooms();
-        // CarveHalls();
-    }
-
-    void GenerateRandomDungeons()
+    void GenerateDungeon()
     {
         PaintBaseTiles();
         CarveRandomRooms();
@@ -65,17 +57,6 @@ public class LevelGenerator : CacheBehaviour {
         map.EndBulkEdit();
     }
 
-    void CarveOrderedRooms()
-    {
-        // for (int i = 0; i < numberOfRooms; i++)
-        // {
-            ProcRoom roomToDraw = new ProcRoom();
-
-            GetRoom(roomToDraw);
-            PaintRoomOrdered(roomToDraw);
-        // }
-    }
-
     void CarveRandomRooms()
     {
         for (int i = 0; i < numberOfRooms; i++)
@@ -83,7 +64,7 @@ public class LevelGenerator : CacheBehaviour {
             ProcRoom roomToDraw = new ProcRoom();
 
             GetRoom(roomToDraw);
-            PaintRoomRandomly(roomToDraw);
+            PaintRoom(roomToDraw);
         }
     }
 
@@ -97,7 +78,7 @@ public class LevelGenerator : CacheBehaviour {
         room.height = MLib.RoundToDivFour(room.height);
     }
 
-    void PaintRoomOrdered(ProcRoom room)
+    void PaintRoom(ProcRoom room)
     {
         bool successful = false;
         int attempts = 0;
@@ -107,57 +88,13 @@ public class LevelGenerator : CacheBehaviour {
         while (!successful && attempts < 5)
         {
             // get random coordinates to attempt to place new room
-            int randX = (int) MLib.NextGaussian(mapColumns / 2, mapColumns / 2, mapMarginX, mapColumns);
-            int randY = (int) MLib.NextGaussian(mapRows / 2, mapRows / 2, mapMarginY, mapRows);
+            // int originX = (int) MLib.NextGaussian(mapColumns / 2, mapColumns / 2, mapMarginX, mapColumns);
+            // int originY = (int) MLib.NextGaussian(mapRows / 2, mapRows / 2, mapMarginY, mapRows);
 
-            // convert coordinates to divisors of 4; elements from being too close to each other
-            int originX = MLib.RoundToDivFour(randX);
-            int originY = MLib.RoundToDivFour(randY);
+            Random rand = new Random();
 
-            // check that room will fit within map bounds
-            if (RoomInBounds(originX, originY, room) &&
-               !TouchingRooms(originX, originY, room))
-            {
-                // paint room
-                for (int x = 0; x < room.width; x++)
-                {
-                    for (int y = 0; y < room.height; y++)
-                    {
-                        map.EraseTile(originY + y, originX + x);
-                        map.RefreshSurroundingTiles(originY + y, originX + x);
-                    }
-                }
-
-                // with room succesfully placed, set origin then add to List
-                room.originX = originX;
-                room.originY = originY;
-                rooms.Add(room);
-
-                successful = true;
-            }
-
-            attempts++;
-        }
-
-        map.EndBulkEdit();
-    }
-
-    void PaintRoomRandomly(ProcRoom room)
-    {
-        bool successful = false;
-        int attempts = 0;
-
-        map.BeginBulkEdit();
-
-        while (!successful && attempts < 5)
-        {
-            // get random coordinates to attempt to place new room
-            int randX = (int) MLib.NextGaussian(mapColumns / 2, mapColumns / 2, mapMarginX, mapColumns);
-            int randY = (int) MLib.NextGaussian(mapRows / 2, mapRows / 2, mapMarginY, mapRows);
-
-            // convert coordinates to divisors of 4; elements from being too close to each other
-            int originX = MLib.RoundToDivFour(randX);
-            int originY = MLib.RoundToDivFour(randY);
+            int originX = rand.DivFour(mapMarginX, mapColumns - mapMarginX);
+            int originY = rand.DivFour(mapMarginY, mapRows - mapMarginY);
 
             // check that room will fit within map bounds
             if (RoomInBounds(originX, originY, room) &&
@@ -258,7 +195,7 @@ public class LevelGenerator : CacheBehaviour {
 
                 y = 0;
 
-                int size = Random.Range(0, 10);
+                int size = Random.Range(0, 4);
                 int i = (size == 0 ? 2 : 4);
 
                 while (map.GetTile(originY, originX + x) != null &&
