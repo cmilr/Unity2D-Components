@@ -22,7 +22,7 @@ public class LevelGenerator : CacheBehaviour {
     private int mapMarginY = 10;
     private int roomMarginX = 4;
     private int roomMarginY = 4;
-    private int numberOfRooms = 30;
+    private int numberOfRooms = 40;
     private int direction = RIGHT;
     List<ProcRoom> rooms;
     List<ProcHall> halls;
@@ -77,8 +77,8 @@ public class LevelGenerator : CacheBehaviour {
 
     void GetRoom(ProcRoom room)
     {
-        room.width  = (int) MLib.NextGaussian(8f, 4f, 2f, 50f);
-        room.height = (int) MLib.NextGaussian(4f, 4f, 4f, 50f);
+        room.width  = (int) MLib.NextGaussian(8f, 8f, 2f, 50f);
+        room.height = (int) MLib.NextGaussian(4f, 8f, 8f, 20f);
 
         // round up to nearest even number
         room.width = MLib.RoundToDivFour(room.width);
@@ -95,10 +95,12 @@ public class LevelGenerator : CacheBehaviour {
         while (!successful && attempts < 5)
         {
             // get random coordinates to attempt to place new room
-            int randX = (int) MLib.NextGaussian(mapColumns / 2, mapColumns / 2, mapMarginX, mapColumns);
-            int randY = (int) MLib.NextGaussian(mapRows / 2, mapRows / 2, mapMarginY, mapRows);
+            // int randX = (int) MLib.NextGaussian(mapColumns / 2, mapColumns / 2, mapMarginX, mapColumns);
+            // int randY = (int) MLib.NextGaussian(mapRows / 2, mapRows / 2, mapMarginY, mapRows);
+            int randX = (int) UnityEngine.Random.Range(mapMarginX, mapColumns - mapMarginX);
+            int randY = (int) UnityEngine.Random.Range(mapMarginY, mapRows - mapMarginY);
 
-            // convert coordinates to divisors of 4; elements from being too close to each other
+            // convert coordinates to divisors of 4; keeps elements from being too close to each other
             int originX = MLib.RoundToDivFour(randX);
             int originY = MLib.RoundToDivFour(randY);
 
@@ -186,8 +188,8 @@ public class LevelGenerator : CacheBehaviour {
                 ProcHall hall = new ProcHall();
 
                 int rand = UnityEngine.Random.Range(0, 2);
-                direction = (rand == 0 ? RIGHT : LEFT);
-                // direction = RIGHT;
+                // direction = (rand == 0 ? RIGHT : LEFT);
+                direction = RIGHT;
 
                 if (direction == RIGHT)
                 {
@@ -249,28 +251,40 @@ public class LevelGenerator : CacheBehaviour {
     {
         foreach (ProcHall hall in halls)
         {
-            testBrush.Paint(map, hall.BottomRightY(), hall.BottomRightX());
-            testBrush.Paint(map, hall.TopRightY(), hall.TopRightX());
-            testBrush.Paint(map, hall.BottomLeftY(), hall.BottomLeftX());
-            testBrush.Paint(map, hall.TopLeftY(), hall.TopLeftX());
-            hallOriginBrush.Paint(map, hall.originY, hall.originX);
-            // BuildStairs(RIGHT, hall.BottomRightX(), hall.BottomRightY());
+            int rand = UnityEngine.Random.Range(0, 2);
+
+            if (rand == 0)
+            {
+                // hallOriginBrush.Paint(map, hall.BottomRightY() + 1, hall.BottomRightX() + 1);
+
+                if (map.GetTile(hall.BottomRightY() + 1, hall.BottomRightX() + 1) == null &&
+                    TileInBounds(hall.BottomRightX() + 1, hall.BottomRightY() + 1))
+                {
+                    Debug.Log("Test");
+                    BuildStairs(RIGHT, hall.BottomRightX() + 1, hall.BottomRightY() + 1);
+                }
+
+                hallOriginBrush.Paint(map, hall.BottomRightY() + 1, hall.BottomRightX() + 1);
+            }
         }
     }
 
     void BuildStairs(int direction, int originX, int originY)
     {
-        int y = 1;
+        int y = 0;
 
         while (map.GetTile(originY + y, originX) == null &&
-              TileInBounds(originY + y, originX))
+               TileInBounds(originX, originY + y))
         {
             if (direction == RIGHT)
             {
                for (int x = 0; x < y; x++)
                {
-                   brush.Paint(map, originY + y, originX + x);
-                   map.RefreshSurroundingTiles(originY + y, originX + x);
+                    if (TileInBounds(originX, originY + y))
+                    {
+                        brush.Paint(map, originY + y, originX + x);
+                        map.RefreshSurroundingTiles(originY + y, originX + x);
+                    }
                }
 
                y++;
@@ -279,8 +293,11 @@ public class LevelGenerator : CacheBehaviour {
             {
                 for (int x = 0; x < y; x++)
                 {
-                    brush.Paint(map, originY + y, originX - x);
-                    map.RefreshSurroundingTiles(originY + y, originX - x);
+                    if (TileInBounds(originX - x, originY + y))
+                    {
+                        brush.Paint(map, originY + y, originX - x);
+                        map.RefreshSurroundingTiles(originY + y, originX - x);
+                    }
                 }
 
                 y++;
@@ -293,7 +310,7 @@ public class LevelGenerator : CacheBehaviour {
     {
         int y = 0;
         while (map.GetTile(originY + y, originX) == null &&
-              TileInBounds(originY + y, originX))
+              TileInBounds(originX, originY + y))
         {
             y++;
         }
@@ -356,6 +373,18 @@ public class LevelGenerator : CacheBehaviour {
         else
         {
             return false;
+        }
+    }
+
+    void ShowBounds(List<ProcBase> list)
+    {
+        foreach (ProcBase element in list)
+        {
+            testBrush.Paint(map, element.BottomRightY(), element.BottomRightX());
+            testBrush.Paint(map, element.TopRightY(), element.TopRightX());
+            testBrush.Paint(map, element.BottomLeftY(), element.BottomLeftX());
+            testBrush.Paint(map, element.TopLeftY(), element.TopLeftX());
+            hallOriginBrush.Paint(map, element.originY, element.originX);
         }
     }
 }
