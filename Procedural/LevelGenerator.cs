@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Rotorz.Tile;
@@ -11,6 +12,8 @@ public class LevelGenerator : CacheBehaviour {
     public Brush brush;
     public Brush testBrush;
     public Brush stepBrush;
+    public Brush hallOriginBrush;
+    public Brush roomOriginBrush;
 
     private TileSystem map;
     private int mapColumns;
@@ -19,7 +22,7 @@ public class LevelGenerator : CacheBehaviour {
     private int mapMarginY = 10;
     private int roomMarginX = 4;
     private int roomMarginY = 4;
-    private int numberOfRooms = 1;
+    private int numberOfRooms = 30;
     private int direction = RIGHT;
     List<ProcRoom> rooms;
     List<ProcHall> halls;
@@ -182,9 +185,9 @@ public class LevelGenerator : CacheBehaviour {
             {
                 ProcHall hall = new ProcHall();
 
-                int rand = Random.Range(0, 2);
-                // direction = (rand == 0 ? RIGHT : LEFT);
-                direction = RIGHT;
+                int rand = UnityEngine.Random.Range(0, 2);
+                direction = (rand == 0 ? RIGHT : LEFT);
+                // direction = RIGHT;
 
                 if (direction == RIGHT)
                 {
@@ -201,7 +204,7 @@ public class LevelGenerator : CacheBehaviour {
 
                 y = 0;
 
-                int rand2 = Random.Range(0, 10);
+                int rand2 = UnityEngine.Random.Range(0, 10);
                 int i = (rand2 == 0 ? 2 : 4);
 
                 while (map.GetTile(originY, originX + x) != null &&
@@ -230,12 +233,12 @@ public class LevelGenerator : CacheBehaviour {
                     x = (direction == RIGHT ? x + 1 : x - 1);
                 }
 
-                // with hall succesfully placed, set origin, width, and height, then add to List
-                hall.originX = originX;
-                hall.originY = originY - (i - 1);
-                hall.width   = x;
+                // with hall succesfully placed, set its origin, width, and height, then add to List
+                hall.width   = Math.Abs(x) - 1;
                 hall.height  = i;
-                Debug.Log(i);
+                hall.originY = originY - (i - 1);
+                hall.originX = (direction == RIGHT ? originX + 1 : originX - hall.width);
+
                 halls.Add(hall);
             }
 
@@ -249,7 +252,8 @@ public class LevelGenerator : CacheBehaviour {
             testBrush.Paint(map, hall.BottomRightY(), hall.BottomRightX());
             testBrush.Paint(map, hall.TopRightY(), hall.TopRightX());
             testBrush.Paint(map, hall.BottomLeftY(), hall.BottomLeftX());
-            testBrush.Paint(map, hall.TopLeftY(), hall.BottomLeftX());
+            testBrush.Paint(map, hall.TopLeftY(), hall.TopLeftX());
+            hallOriginBrush.Paint(map, hall.originY, hall.originX);
             // BuildStairs(RIGHT, hall.BottomRightX(), hall.BottomRightY());
         }
     }
