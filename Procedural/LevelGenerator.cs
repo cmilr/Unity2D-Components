@@ -187,10 +187,12 @@ public class LevelGenerator : CacheBehaviour {
             {
                 ProcHall hall = new ProcHall();
 
+                // get random direction
                 int rand = UnityEngine.Random.Range(0, 2);
                 // direction = (rand == 0 ? RIGHT : LEFT);
                 direction = RIGHT;
 
+                // set origin point
                 if (direction == RIGHT)
                 {
                     originX = room.BottomRightX();
@@ -206,13 +208,13 @@ public class LevelGenerator : CacheBehaviour {
 
                 y = 0;
 
+                // get random height to make halls either two or four tiles tall
                 int rand2 = UnityEngine.Random.Range(0, 10);
                 int i = (rand2 == 0 ? 2 : 4);
 
                 while (map.GetTile(originY, originX + x) != null &&
                        TileInBounds(originX + x, originY))
                 {
-                    // randomly make halls either two or four tiles tall
                     if (i == 2)
                     {
                         map.EraseTile(originY, originX + x);
@@ -258,7 +260,8 @@ public class LevelGenerator : CacheBehaviour {
                 // hallOriginBrush.Paint(map, hall.BottomRightY() + 1, hall.BottomRightX() + 1);
 
                 if (map.GetTile(hall.BottomRightY() + 1, hall.BottomRightX() + 1) == null &&
-                    TileInBounds(hall.BottomRightX() + 1, hall.BottomRightY() + 1))
+                    TileInBounds(hall.BottomRightX() + 1, hall.BottomRightY() + 1) &&
+                    map.GetTile(hall.BottomRightY() + 1, hall.BottomRightX()) != null)
                 {
                     Debug.Log("Test");
                     BuildStairs(RIGHT, hall.BottomRightX() + 1, hall.BottomRightY() + 1);
@@ -284,6 +287,14 @@ public class LevelGenerator : CacheBehaviour {
                     {
                         brush.Paint(map, originY + y, originX + x);
                         map.RefreshSurroundingTiles(originY + y, originX + x);
+                        map.EraseTile(originY + y, originX + x + 1);
+                        map.RefreshSurroundingTiles(originY + y, originX + x + 1);
+                        map.EraseTile(originY + y, originX + x + 2);
+                        map.RefreshSurroundingTiles(originY + y, originX + x + 2);
+                        map.EraseTile(originY + y, originX + x + 3);
+                        map.RefreshSurroundingTiles(originY + y, originX + x + 3);
+                        map.EraseTile(originY + y, originX + x + 4);
+                        map.RefreshSurroundingTiles(originY + y, originX + x + 4);
                     }
                }
 
