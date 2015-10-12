@@ -17,10 +17,10 @@ public class DeathHandler : CacheBehaviour
 	public float jumpHeight             = 2.6f;                // player's jump height
 	public float maxFallingSpeed        = 100f;                // max falling speed, for throttling falls, etc
 	public float maxRisingSpeed         = 2f;                  // max rising speed, for throttling player on moving platforms, etc
-	private bool physicsEnabled         = true;
-	private bool alreadyDead            = false;
 	protected float previousX           = 0f;
 	protected float previousY           = 0f;
+	private bool physicsEnabled         = true;
+	private bool alreadyDead;
 
 	private string deathAnimation;
 	private float normalizedHorizontalSpeed;
