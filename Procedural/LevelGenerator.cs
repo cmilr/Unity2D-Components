@@ -1,11 +1,8 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Rotorz.Tile;
 using Matcha.Lib;
-using Matcha.ProcGen;
-using Matcha.Extensions;
 
 public class LevelGenerator : CacheBehaviour {
 
@@ -97,8 +94,8 @@ public class LevelGenerator : CacheBehaviour {
             // get random coordinates to attempt to place new room
             // int randX = (int) MLib.NextGaussian(mapColumns / 2, mapColumns / 2, mapMarginX, mapColumns);
             // int randY = (int) MLib.NextGaussian(mapRows / 2, mapRows / 2, mapMarginY, mapRows);
-            int randX = (int) UnityEngine.Random.Range(mapMarginX, mapColumns - mapMarginX);
-            int randY = (int) UnityEngine.Random.Range(mapMarginY, mapRows - mapMarginY);
+            int randX = UnityEngine.Random.Range(mapMarginX, mapColumns - mapMarginX);
+            int randY = UnityEngine.Random.Range(mapMarginY, mapRows - mapMarginY);
 
             // convert coordinates to divisors of 4; keeps elements from being too close to each other
             int originX = MLib.RoundToDivFour(randX);
@@ -272,21 +269,23 @@ public class LevelGenerator : CacheBehaviour {
         }
     }
 
-    void BuildStairs(int direction, int originX, int originY)
+    void BuildStairs(int buildDirection, int originX, int originY)
     {
         int y = 0;
 
         while (map.GetTile(originY + y, originX) == null &&
                TileInBounds(originX, originY + y))
         {
-            if (direction == RIGHT)
+            if (buildDirection == RIGHT)
             {
                for (int x = 0; x < y; x++)
                {
                     if (TileInBounds(originX, originY + y))
                     {
+                        // build stairs
                         brush.Paint(map, originY + y, originX + x);
                         map.RefreshSurroundingTiles(originY + y, originX + x);
+                        // erase walls to the right of stairs
                         map.EraseTile(originY + y, originX + x + 1);
                         map.RefreshSurroundingTiles(originY + y, originX + x + 1);
                         map.EraseTile(originY + y, originX + x + 2);
@@ -360,8 +359,10 @@ public class LevelGenerator : CacheBehaviour {
 
                     for (int i = 0; i < steps; i++)
                     {
-                        x = (int) MLib.NextGaussian(room.originX, room.originX / 2, room.originX + 1, room.originX + room.width -1);
-                        y = (int) MLib.NextGaussian(room.originY, room.originY, room.originY + 1, room.originY + room.height - 1);
+                        x = (int) MLib.NextGaussian
+                                    (room.originX, room.originX / 2, room.originX + 1, room.originX + room.width -1);
+                        y = (int) MLib.NextGaussian
+                                    (room.originY, room.originY, room.originY + 1, room.originY + room.height - 1);
 
                         // if (WithinRoomBounds(room, room.originX + x, room.originY - y))
                         // {

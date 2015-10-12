@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System;
-using System.Collections;
 using Matcha.Dreadful.FX;
 using Matcha.Lib;
 
@@ -10,12 +8,6 @@ public class ProjectileContainer : Weapon {
     private Weapon weapon;
     private Vector3 origin;
     private RuntimeAnimatorController anim;
-
-    void Start()
-    {
-        // player weapon colliders should only be enabled during attacks
-        // collider2D.enabled = false;
-    }
 
     // note: ProjectileContainers contain simple dummy values, which are
     // then replaced by data that's passed-in via projectile objects
