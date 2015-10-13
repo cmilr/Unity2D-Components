@@ -6,7 +6,6 @@
 //         I  N  D  U  S  T  R  I  E  S             www.matcha.industries
 
 using UnityEngine;
-using System.Collections;
 using System;
 
 namespace Matcha.Lib
