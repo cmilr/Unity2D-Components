@@ -42,6 +42,7 @@ public class LevelGenerator : CacheBehaviour {
         CarveRandomRooms();
         CarveHalls();
         AssessForStairs();
+        ShowBounds(halls);
         // PlaceRandomSteps();
     }
 
@@ -136,10 +137,8 @@ public class LevelGenerator : CacheBehaviour {
         {
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
     bool TouchingRooms(int originX, int originY, ProcRoom room)
@@ -254,13 +253,10 @@ public class LevelGenerator : CacheBehaviour {
 
             if (rand == 0)
             {
-                // hallOriginBrush.Paint(map, hall.BottomRightY() + 1, hall.BottomRightX() + 1);
-
                 if (map.GetTile(hall.BottomRightY() + 1, hall.BottomRightX() + 1) == null &&
                     TileInBounds(hall.BottomRightX() + 1, hall.BottomRightY() + 1) &&
                     map.GetTile(hall.BottomRightY() + 1, hall.BottomRightX()) != null)
                 {
-                    Debug.Log("Test");
                     BuildStairs(RIGHT, hall.BottomRightX() + 1, hall.BottomRightY() + 1);
                 }
 
@@ -337,10 +333,8 @@ public class LevelGenerator : CacheBehaviour {
         {
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
     void PlaceRandomSteps()
@@ -382,13 +376,11 @@ public class LevelGenerator : CacheBehaviour {
         {
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
-    void ShowBounds(List<ProcBase> list)
+    void ShowBounds<T>(List<T> list)
     {
         foreach (ProcBase element in list)
         {
@@ -399,6 +391,18 @@ public class LevelGenerator : CacheBehaviour {
             hallOriginBrush.Paint(map, element.originY, element.originX);
         }
     }
+
+    // void ShowBounds(List<ProcRoom> list)
+    // {
+    //     foreach (ProcBase element in list)
+    //     {
+    //         testBrush.Paint(map, element.BottomRightY(), element.BottomRightX());
+    //         testBrush.Paint(map, element.TopRightY(), element.TopRightX());
+    //         testBrush.Paint(map, element.BottomLeftY(), element.BottomLeftX());
+    //         testBrush.Paint(map, element.TopLeftY(), element.TopLeftX());
+    //         hallOriginBrush.Paint(map, element.originY, element.originX);
+    //     }
+    // }
 }
 
 
