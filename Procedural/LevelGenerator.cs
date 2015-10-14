@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Rotorz.Tile;
 using Matcha.Lib;
+using Matcha.Rotorz;
 
 public class LevelGenerator : CacheBehaviour {
 
@@ -48,7 +49,7 @@ public class LevelGenerator : CacheBehaviour {
 
     void PaintBaseTiles() {
 
-        map.BeginBulkEdit();
+        map.BeginBulkEdit_M();
 
             for (int r = 0; r < mapRows; r++)
             {
@@ -58,7 +59,7 @@ public class LevelGenerator : CacheBehaviour {
                 }
             }
 
-        map.EndBulkEdit();
+        map.EndBulkEdit_M();
     }
 
     void CarveRandomRooms()
@@ -87,7 +88,7 @@ public class LevelGenerator : CacheBehaviour {
         bool successful = false;
         int attempts = 0;
 
-        map.BeginBulkEdit();
+        map.BeginBulkEdit_M();
 
         while (!successful && attempts < 5)
         {
@@ -110,7 +111,7 @@ public class LevelGenerator : CacheBehaviour {
                 {
                     for (int y = 0; y < room.height; y++)
                     {
-                        map.EraseTile(originY + y, originX + x);
+                        map.EraseTile_M(originX + x, originY + y);
                     }
                 }
 
@@ -125,7 +126,7 @@ public class LevelGenerator : CacheBehaviour {
             attempts++;
         }
 
-        map.EndBulkEdit();
+        map.EndBulkEdit_M();
     }
 
     bool RoomInBounds(int originX, int originY, ProcRoom room)
@@ -170,7 +171,7 @@ public class LevelGenerator : CacheBehaviour {
 
     void CarveHalls()
     {
-        map.BeginBulkEdit();
+        map.BeginBulkEdit_M();
 
             int originX;
             int originY;
@@ -234,7 +235,7 @@ public class LevelGenerator : CacheBehaviour {
                 halls.Add(hall);
             }
 
-        map.EndBulkEdit();
+        map.EndBulkEdit_M();
     }
 
     void AssessForStairs()
@@ -332,7 +333,7 @@ public class LevelGenerator : CacheBehaviour {
         int x              = 0;
         int y              = 0;
 
-        map.BeginBulkEdit();
+        map.BeginBulkEdit_M();
 
             foreach (ProcRoom room in rooms)
             {
@@ -355,7 +356,7 @@ public class LevelGenerator : CacheBehaviour {
                 }
             }
 
-        map.EndBulkEdit();
+        map.EndBulkEdit_M();
     }
 
     bool WithinRoomBounds(ProcRoom room, int x, int y)
@@ -395,7 +396,7 @@ public class LevelGenerator : CacheBehaviour {
 
     void RefreshAllTiles()
     {
-        map.BeginBulkEdit();
+        map.BeginBulkEdit_M();
 
             for (int r = 0; r < mapRows; r++)
             {
@@ -405,7 +406,7 @@ public class LevelGenerator : CacheBehaviour {
                 }
             }
 
-        map.EndBulkEdit();
+        map.EndBulkEdit_M();
     }
 }
 
