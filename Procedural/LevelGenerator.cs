@@ -42,8 +42,8 @@ public class LevelGenerator : CacheBehaviour {
         CarveRandomRooms();
         CarveHalls();
         AssessForStairs();
-        ShowBounds(halls);
-        // PlaceRandomSteps();
+        ShowBounds(rooms);
+        RefreshAllTiles();
     }
 
     void PaintBaseTiles() {
@@ -55,7 +55,6 @@ public class LevelGenerator : CacheBehaviour {
                 for (int c = 0; c < mapColumns; c++)
                 {
                     brush.Paint(map, r, c);
-                    map.RefreshSurroundingTiles(r, c);
                 }
             }
 
@@ -112,7 +111,6 @@ public class LevelGenerator : CacheBehaviour {
                     for (int y = 0; y < room.height; y++)
                     {
                         map.EraseTile(originY + y, originX + x);
-                        map.RefreshSurroundingTiles(originY + y, originX + x);
                     }
                 }
 
@@ -214,20 +212,14 @@ public class LevelGenerator : CacheBehaviour {
                     if (i == 2)
                     {
                         map.EraseTile(originY, originX + x);
-                        map.RefreshSurroundingTiles(originY, originX);
                         map.EraseTile(originY - 1, originX + x);
-                        map.RefreshSurroundingTiles(originY - 1, originX);
                     }
                     else
                     {
                         map.EraseTile(originY, originX + x);
-                        map.RefreshSurroundingTiles(originY, originX);
                         map.EraseTile(originY - 1, originX + x);
-                        map.RefreshSurroundingTiles(originY - 1, originX);
                         map.EraseTile(originY - 2, originX + x);
-                        map.RefreshSurroundingTiles(originY - 2, originX);
                         map.EraseTile(originY - 3, originX + x);
-                        map.RefreshSurroundingTiles(originY - 3, originX);
                     }
 
                     x = (direction == RIGHT ? x + 1 : x - 1);
@@ -276,21 +268,19 @@ public class LevelGenerator : CacheBehaviour {
             {
                for (int x = 0; x < y; x++)
                {
-                    if (TileInBounds(originX, originY + y))
+                    if (TileInBounds(originX + x, originY + y))
                     {
                         // build stairs
                         brush.Paint(map, originY + y, originX + x);
-                        map.RefreshSurroundingTiles(originY + y, originX + x);
                         // erase walls to the right of stairs
                         map.EraseTile(originY + y, originX + x + 1);
-                        map.RefreshSurroundingTiles(originY + y, originX + x + 1);
                         map.EraseTile(originY + y, originX + x + 2);
-                        map.RefreshSurroundingTiles(originY + y, originX + x + 2);
                         map.EraseTile(originY + y, originX + x + 3);
-                        map.RefreshSurroundingTiles(originY + y, originX + x + 3);
                         map.EraseTile(originY + y, originX + x + 4);
-                        map.RefreshSurroundingTiles(originY + y, originX + x + 4);
                     }
+
+                    // backfill stairs by one tile
+                    brush.Paint(map, originY + y, originX -1);
                }
 
                y++;
@@ -302,7 +292,6 @@ public class LevelGenerator : CacheBehaviour {
                     if (TileInBounds(originX - x, originY + y))
                     {
                         brush.Paint(map, originY + y, originX - x);
-                        map.RefreshSurroundingTiles(originY + y, originX - x);
                     }
                 }
 
@@ -380,9 +369,9 @@ public class LevelGenerator : CacheBehaviour {
         return false;
     }
 
-    void ShowBounds<T>(List<T> list)
+    void ShowBounds(List<ProcRoom> list)
     {
-        foreach (ProcBase element in list)
+        foreach (ProcRoom element in list)
         {
             testBrush.Paint(map, element.BottomRightY(), element.BottomRightX());
             testBrush.Paint(map, element.TopRightY(), element.TopRightX());
@@ -392,17 +381,32 @@ public class LevelGenerator : CacheBehaviour {
         }
     }
 
-    // void ShowBounds(List<ProcRoom> list)
-    // {
-    //     foreach (ProcBase element in list)
-    //     {
-    //         testBrush.Paint(map, element.BottomRightY(), element.BottomRightX());
-    //         testBrush.Paint(map, element.TopRightY(), element.TopRightX());
-    //         testBrush.Paint(map, element.BottomLeftY(), element.BottomLeftX());
-    //         testBrush.Paint(map, element.TopLeftY(), element.TopLeftX());
-    //         hallOriginBrush.Paint(map, element.originY, element.originX);
-    //     }
-    // }
+    void ShowBounds(List<ProcHall> list)
+    {
+        foreach (ProcHall element in list)
+        {
+            testBrush.Paint(map, element.BottomRightY(), element.BottomRightX());
+            testBrush.Paint(map, element.TopRightY(), element.TopRightX());
+            testBrush.Paint(map, element.BottomLeftY(), element.BottomLeftX());
+            testBrush.Paint(map, element.TopLeftY(), element.TopLeftX());
+            hallOriginBrush.Paint(map, element.originY, element.originX);
+        }
+    }
+
+    void RefreshAllTiles()
+    {
+        map.BeginBulkEdit();
+
+            for (int r = 0; r < mapRows; r++)
+            {
+                for (int c = 0; c < mapColumns; c++)
+                {
+                    map.RefreshSurroundingTiles(r, c);
+                }
+            }
+
+        map.EndBulkEdit();
+    }
 }
 
 
