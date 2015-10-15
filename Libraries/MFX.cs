@@ -11,7 +11,6 @@ using System.Collections;
 using DG.Tweening;
 using Matcha.Dreadful.Colors;
 
-
 namespace Matcha.Dreadful.FX {
 
 	public class MFX : CacheBehaviour
