@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Rotorz.Tile;
 using Matcha.Lib;
-using Matcha.Rotorz;
+using Matcha.Tiles;
 
 public class LevelGenerator : CacheBehaviour {
 
@@ -51,13 +51,13 @@ public class LevelGenerator : CacheBehaviour {
 
         map.BeginBulkEdit_M();
 
-            for (int r = 0; r < mapRows; r++)
+        for (int x = 0; x < mapColumns; x++)
+        {
+            for (int y = 0; y < mapRows; y++)
             {
-                for (int c = 0; c < mapColumns; c++)
-                {
-                    brush.Paint(map, r, c);
-                }
+                brush.Paint_M(map, x, y);
             }
+        }
 
         map.EndBulkEdit_M();
     }
@@ -148,7 +148,7 @@ public class LevelGenerator : CacheBehaviour {
             for (int y = originY - roomMarginY; y < room.height + originY + roomMarginY; y++)
             {
                 // if a room has already been carved out here, return true
-                if (map.GetTile(y, x) == null)
+                if (map.GetTile_M(x, y) == null)
                 {
                     return true;
                 }
@@ -207,20 +207,20 @@ public class LevelGenerator : CacheBehaviour {
                 int rand2 = UnityEngine.Random.Range(0, 10);
                 int i = (rand2 == 0 ? 2 : 4);
 
-                while (map.GetTile(originY, originX + x) != null &&
+                while (map.GetTile_M(originX + x, originY) != null &&
                        TileInBounds(originX + x, originY))
                 {
                     if (i == 2)
                     {
-                        map.EraseTile(originY, originX + x);
-                        map.EraseTile(originY - 1, originX + x);
+                        map.EraseTile_M(originX + x, originY);
+                        map.EraseTile_M(originX + x, originY - 1);
                     }
                     else
                     {
-                        map.EraseTile(originY, originX + x);
-                        map.EraseTile(originY - 1, originX + x);
-                        map.EraseTile(originY - 2, originX + x);
-                        map.EraseTile(originY - 3, originX + x);
+                        map.EraseTile_M(originX + x, originY);
+                        map.EraseTile_M(originX + x, originY - 1);
+                        map.EraseTile_M(originX + x, originY - 2);
+                        map.EraseTile_M(originX + x, originY - 3);
                     }
 
                     x = (direction == RIGHT ? x + 1 : x - 1);
@@ -246,20 +246,22 @@ public class LevelGenerator : CacheBehaviour {
 
             if (rand == 0)
             {
-                if (map.GetTile(hall.BottomRightY() + 1, hall.BottomRightX() + 1) == null &&
+                if (map.GetTile_M(hall.BottomRightX() + 1, hall.BottomRightY() + 1) == null &&
                     TileInBounds(hall.BottomRightX() + 1, hall.BottomRightY() + 1) &&
-                    map.GetTile(hall.BottomRightY() + 1, hall.BottomRightX()) != null)
+                    map.GetTile_M(hall.BottomRightX(), hall.BottomRightY() + 1) != null)
                 {
                     BuildStairs(RIGHT, hall.BottomRightX() + 1, hall.BottomRightY() + 1);
                 }
 
-                hallOriginBrush.Paint(map, hall.BottomRightY() + 1, hall.BottomRightX() + 1);
+                hallOriginBrush.Paint_M(map, hall.BottomRightX() + 1, hall.BottomRightY() + 1);
             }
         }
     }
 
     void BuildStairs(int buildDirection, int originX, int originY)
     {
+        map.BeginBulkEdit_M();
+
         int y = 0;
 
         while (map.GetTile(originY + y, originX) == null &&
@@ -272,16 +274,16 @@ public class LevelGenerator : CacheBehaviour {
                     if (TileInBounds(originX + x, originY + y))
                     {
                         // build stairs
-                        brush.Paint(map, originY + y, originX + x);
+                        brush.Paint_M(map, originX + x, originY + y);
                         // erase walls to the right of stairs
-                        map.EraseTile(originY + y, originX + x + 1);
-                        map.EraseTile(originY + y, originX + x + 2);
-                        map.EraseTile(originY + y, originX + x + 3);
-                        map.EraseTile(originY + y, originX + x + 4);
+                        map.EraseTile_M(originX + x + 1, originY + y);
+                        map.EraseTile_M(originX + x + 2, originY + y);
+                        map.EraseTile_M(originX + x + 3, originY + y);
+                        map.EraseTile_M(originX + x + 4, originY + y);
                     }
 
                     // backfill stairs by one tile
-                    brush.Paint(map, originY + y, originX -1);
+                    brush.Paint_M(map, originX -1, originY + y);
                }
 
                y++;
@@ -292,7 +294,7 @@ public class LevelGenerator : CacheBehaviour {
                 {
                     if (TileInBounds(originX - x, originY + y))
                     {
-                        brush.Paint(map, originY + y, originX - x);
+                        brush.Paint_M(map, originX - x, originY + y);
                     }
                 }
 
@@ -300,12 +302,14 @@ public class LevelGenerator : CacheBehaviour {
             }
 
         }
+
+        map.EndBulkEdit_M();
     }
 
     int DistanceToGround(int originX, int originY)
     {
         int y = 0;
-        while (map.GetTile(originY + y, originX) == null &&
+        while (map.GetTile_M(originX, originY + y) == null &&
               TileInBounds(originX, originY + y))
         {
             y++;
@@ -350,7 +354,7 @@ public class LevelGenerator : CacheBehaviour {
 
                         // if (WithinRoomBounds(room, room.originX + x, room.originY - y))
                         // {
-                            stepBrush.Paint(map, y, x);
+                            stepBrush.Paint_M(map, x, y);
                         // }
                     }
                 }
@@ -374,11 +378,11 @@ public class LevelGenerator : CacheBehaviour {
     {
         foreach (ProcRoom element in list)
         {
-            testBrush.Paint(map, element.BottomRightY(), element.BottomRightX());
-            testBrush.Paint(map, element.TopRightY(), element.TopRightX());
-            testBrush.Paint(map, element.BottomLeftY(), element.BottomLeftX());
-            testBrush.Paint(map, element.TopLeftY(), element.TopLeftX());
-            hallOriginBrush.Paint(map, element.originY, element.originX);
+            testBrush.Paint_M(map, element.BottomRightX(), element.BottomRightY());
+            testBrush.Paint_M(map, element.TopRightX(), element.TopRightY());
+            testBrush.Paint_M(map, element.BottomLeftX(), element.BottomLeftY());
+            testBrush.Paint_M(map, element.TopLeftX(), element.TopLeftY());
+            hallOriginBrush.Paint_M(map, element.originX, element.originY);
         }
     }
 
@@ -386,51 +390,16 @@ public class LevelGenerator : CacheBehaviour {
     {
         foreach (ProcHall element in list)
         {
-            testBrush.Paint(map, element.BottomRightY(), element.BottomRightX());
-            testBrush.Paint(map, element.TopRightY(), element.TopRightX());
-            testBrush.Paint(map, element.BottomLeftY(), element.BottomLeftX());
-            testBrush.Paint(map, element.TopLeftY(), element.TopLeftX());
-            hallOriginBrush.Paint(map, element.originY, element.originX);
+            testBrush.Paint_M(map, element.BottomRightX(), element.BottomRightY());
+            testBrush.Paint_M(map, element.TopRightX(), element.TopRightY());
+            testBrush.Paint_M(map, element.BottomLeftX(), element.BottomLeftY());
+            testBrush.Paint_M(map, element.TopLeftX(), element.TopLeftY());
+            hallOriginBrush.Paint_M(map, element.originX, element.originY);
         }
     }
 
     void RefreshAllTiles()
     {
-        map.BeginBulkEdit_M();
-
-            for (int r = 0; r < mapRows; r++)
-            {
-                for (int c = 0; c < mapColumns; c++)
-                {
-                    map.RefreshSurroundingTiles(r, c);
-                }
-            }
-
-        map.EndBulkEdit_M();
+        map.RefreshAllTiles_M();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// void CalculateTileSystemSize()
-// {
-//     mapSize = new Vector3(
-//         map.ColumnCount * map.CellSize.x,
-//         map.RowCount * map.CellSize.y,
-//         map.CellSize.z
-//     );
-// }
