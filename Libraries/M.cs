@@ -11,7 +11,7 @@ using System;
 namespace Matcha.Lib
 {
 
-public class MLib : CacheBehaviour
+public class M : CacheBehaviour
 {
 	// ignore layer collisions *by name* instead of by layer ID
 	public static void IgnoreLayerCollision2D(string layer1, string layer2, bool status)
@@ -113,17 +113,53 @@ public class MLib : CacheBehaviour
 		}
 	}
 
-	// returns Vector2 coordinates for lobbing a projectile
-	public static Vector2 LobProjectile(Weapon weapon, Transform origin, Transform target)
-	{
-	    float distance;
-	    float yDifference;
-	    float angleToPoint;
-	    float distanceFactor;
-	    float distanceCompensation;
-	    float speedCompensation;
-	    float angleCorrection;
-	    float speed;
+    public static float NextGaussian() {
+        float v1, v2, s;
+        do {
+            v1 = 2.0f * UnityEngine.Random.Range(0f,1f) - 1.0f;
+            v2 = 2.0f * UnityEngine.Random.Range(0f,1f) - 1.0f;
+            s = v1 * v1 + v2 * v2;
+        } while (s >= 1.0f || s == 0f);
+
+        s = Mathf.Sqrt((-2.0f * Mathf.Log(s)) / s);
+
+        return v1 * s;
+    }
+
+    public static float NextGaussian(float mean, float standard_deviation)
+    {
+        return mean + NextGaussian() * standard_deviation;
+    }
+
+    public static float NextGaussian (float mean, float standard_deviation, float min, float max) {
+        float x;
+        do {
+            x = NextGaussian(mean, standard_deviation);
+        } while (x < min || x > max);
+        return x;
+    }
+
+    public static int RoundToDivFour(int num)
+    {
+        while (num % 4 != 0)
+        {
+            num++;
+        }
+
+        return num;
+    }
+
+    // returns Vector2 coordinates for lobbing a projectile
+    public static Vector2 LobProjectile(Weapon weapon, Transform origin, Transform target)
+    {
+        float distance;
+        float yDifference;
+        float angleToPoint;
+        float distanceFactor;
+        float distanceCompensation;
+        float speedCompensation;
+        float angleCorrection;
+        float speed;
 
         // the below formula is accurate given the following settings: gravity of .5,
         // angular drag of .05, mass of 1, and projectile speeds between 8 and 20
@@ -177,42 +213,6 @@ public class MLib : CacheBehaviour
 
         return new Vector2((float)Math.Cos(angleToPoint+angleCorrection) * speed,
                            (float)Math.Sin(angleToPoint+angleCorrection) * speed);
-    }
-
-    public static float NextGaussian() {
-        float v1, v2, s;
-        do {
-            v1 = 2.0f * UnityEngine.Random.Range(0f,1f) - 1.0f;
-            v2 = 2.0f * UnityEngine.Random.Range(0f,1f) - 1.0f;
-            s = v1 * v1 + v2 * v2;
-        } while (s >= 1.0f || s == 0f);
-
-        s = Mathf.Sqrt((-2.0f * Mathf.Log(s)) / s);
-
-        return v1 * s;
-    }
-
-    public static float NextGaussian(float mean, float standard_deviation)
-    {
-        return mean + NextGaussian() * standard_deviation;
-    }
-
-    public static float NextGaussian (float mean, float standard_deviation, float min, float max) {
-        float x;
-        do {
-            x = NextGaussian(mean, standard_deviation);
-        } while (x < min || x > max);
-        return x;
-    }
-
-    public static int RoundToDivFour(int num)
-    {
-        while (num % 4 != 0)
-        {
-            num++;
-        }
-
-        return num;
     }
 }
 }

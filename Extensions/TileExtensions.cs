@@ -5,16 +5,18 @@
 //        \/_/  \/_/   \/_/\/_/     \/_/   \/_____/   \/_/\/_/   \/_/\/_/
 //         I  N  D  U  S  T  R  I  E  S             www.matcha.industries
 
+// This set of methods extends the most excellent Rotorz api. I built this set because,
+// while I love Rotorz, I find their method paramaters frustrating to use. Specifically,
+// I tend to send x coordinates first in my params, followed by y coordinates; while
+// Rotorz transposes this. It has lead to many crazy-making bugs in my code.
+//
+// These extensions also act as an interface to guarantee against future api changes, etc.
+
+using UnityEngine;
+using System;
 using Rotorz.Tile;
 
 namespace Matcha.Tiles {
-
-    // This set of methods extends the most excellent Rotorz api. I built this set because,
-    // while I love Rotorz, I find their method paramaters frustrating to use. Specifically,
-    // I tend to send x coordinates first in my params, followed by y coordinates; while
-    // Rotorz transposes this. It has lead to many crazy-making bugs in my code.
-    //
-    // These extensions also act as an interface to guarantee against future api changes, etc.
 
     public static class TileExtensions
     {
@@ -51,6 +53,41 @@ namespace Matcha.Tiles {
         public static TileData PaintTile(this Brush brush, TileSystem map, int x, int y)
         {
             return brush.Paint(map, y, x);
+        }
+
+        // transform extensions for checking nearby tile data
+        public static GameObject GetTileInfo(this Transform transform, TileSystem tileSystem, int xDirection, int yDirection)
+        {
+            // grabs tile info at a given transform:
+            // x = 0, y = 0 will get you the tile the transform occupies
+            // plus or minus x or y will get you tiles backwards, forwards, up or down
+
+            int convertedX = (int) Math.Floor(transform.position.x);
+            int convertedY = (int) Math.Ceiling(Math.Abs(transform.position.y));
+
+            TileData tile = tileSystem.GetTile(convertedY + yDirection, convertedX + xDirection);
+
+            if (tile != null)
+            {
+                return tile.gameObject;
+            }
+
+            return null;
+        }
+
+        public static GameObject GetTileBelow(this Transform transform, TileSystem tileSystem, int direction)
+        {
+            int convertedX = (int) Math.Floor(transform.position.x);
+            int convertedY = (int) Math.Floor(Math.Abs(transform.position.y));
+
+            TileData tile = tileSystem.GetTile(convertedY, convertedX + direction);
+
+            if (tile != null)
+            {
+                return tile.gameObject;
+            }
+
+            return null;
         }
     }
 }

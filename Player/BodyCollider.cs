@@ -32,7 +32,7 @@ public class BodyCollider : CacheBehaviour
 
             if (!enemyWeapon.alreadyCollided && !game.LevelLoading && !state.Dead)
             {
-                hitFrom = MLib.HorizSideThatWasHit(gameObject, coll);
+                hitFrom = M.HorizSideThatWasHit(gameObject, coll);
 
                 if (enemyWeapon.weaponType == Weapon.WeaponType.Hammer ||
                     enemyWeapon.weaponType == Weapon.WeaponType.Dagger ||
@@ -50,7 +50,7 @@ public class BodyCollider : CacheBehaviour
 
             if (!enemy.alreadyCollided && !game.LevelLoading && !state.Dead)
             {
-                hitFrom = MLib.HorizSideThatWasHit(gameObject, coll);
+                hitFrom = M.HorizSideThatWasHit(gameObject, coll);
 
                 if (enemy.entityType == CreatureEntity.EntityType.Enemy)
                 {

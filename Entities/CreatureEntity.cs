@@ -48,7 +48,7 @@ public class CreatureEntity : Entity
 	{
 		playerWeapon = coll.GetComponent<Weapon>();
 
-		hitFrom = MLib.HorizSideThatWasHit(gameObject, coll);
+		hitFrom = M.HorizSideThatWasHit(gameObject, coll);
 
 		if (playerWeapon.weaponType == Weapon.WeaponType.Hammer ||
 			playerWeapon.weaponType == Weapon.WeaponType.Dagger ||

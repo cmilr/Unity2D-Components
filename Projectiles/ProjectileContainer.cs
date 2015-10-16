@@ -91,7 +91,7 @@ public class ProjectileContainer : Weapon {
             else
                 rigidbody2D.gravityScale = .5f;
 
-            rigidbody2D.velocity = MLib.LobProjectile(weapon, transform, target);
+            rigidbody2D.velocity = M.LobProjectile(weapon, transform, target);
         }
         // otherwise, fire projectile linearally
         else
@@ -220,7 +220,7 @@ public class ProjectileContainer : Weapon {
 
 //         // if (lob)
 //         // {   // otherwise, lob projectile like a cannon ball
-//         //     rigidbody2D.velocity = MLib.LobProjectile(weapon, transform, target);
+//         //     rigidbody2D.velocity = M.LobProjectile(weapon, transform, target);
 //         // }
 //         // else
 //         // {   // if weapon has no mass, fire projectile linearally

@@ -129,7 +129,8 @@ public class MovementAI : CacheBehaviour
 			movementPaused = true;
 		}
 		// if enemy and player are on roughly same x axis, movementPaused enemy
-		else if (MLib.FloatEqual(transform.position.x, target.position.x, xAxisOffset))
+		// else if (M.FloatEqual(transform.position.x, target.position.x, xAxisOffset))
+		else if (transform.position.x.FEquals(target.position.x, xAxisOffset))
 		{
 			rigidbody2D.velocity = Vector2.zero;
 			movementPaused = true;
@@ -161,7 +162,7 @@ public class MovementAI : CacheBehaviour
 
 		if (layer == EDGE_BLOCKER)
 		{
-			sideHit = MLib.HorizSideThatWasHit(gameObject, coll);
+			sideHit = M.HorizSideThatWasHit(gameObject, coll);
 
 			if (sideHit == RIGHT)
 			{
@@ -186,7 +187,7 @@ public class MovementAI : CacheBehaviour
 
 		if (layer == EDGE_BLOCKER)
 		{
-			// int sideHit = MLib.HorizSideThatWasHit(gameObject, coll);
+			// int sideHit = M.HorizSideThatWasHit(gameObject, coll);
 
 			if (sideHit == RIGHT)
 			{

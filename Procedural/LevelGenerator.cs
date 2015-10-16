@@ -77,12 +77,12 @@ public class LevelGenerator : CacheBehaviour
 
 	void GetRoom(ProcRoom room)
 	{
-		room.width  = (int) MLib.NextGaussian(8f, 8f, 2f, 50f);
-		room.height = (int) MLib.NextGaussian(4f, 8f, 8f, 20f);
+		room.width  = (int) M.NextGaussian(8f, 8f, 2f, 50f);
+		room.height = (int) M.NextGaussian(4f, 8f, 8f, 20f);
 
 		// round up to nearest even number
-		room.width = MLib.RoundToDivFour(room.width);
-		room.height = MLib.RoundToDivFour(room.height);
+		room.width = M.RoundToDivFour(room.width);
+		room.height = M.RoundToDivFour(room.height);
 	}
 
 	void PaintRoomRandomly(ProcRoom room)
@@ -95,14 +95,14 @@ public class LevelGenerator : CacheBehaviour
 		while (!successful && attempts < 5)
 		{
 			// get random coordinates to attempt to place new room
-			// int randX = (int) MLib.NextGaussian(mapColumns / 2, mapColumns / 2, mapMarginX, mapColumns);
-			// int randY = (int) MLib.NextGaussian(mapRows / 2, mapRows / 2, mapMarginY, mapRows);
+			// int randX = (int) M.NextGaussian(mapColumns / 2, mapColumns / 2, mapMarginX, mapColumns);
+			// int randY = (int) M.NextGaussian(mapRows / 2, mapRows / 2, mapMarginY, mapRows);
 			int randX = UnityEngine.Random.Range(mapMarginX, mapColumns - mapMarginX);
 			int randY = UnityEngine.Random.Range(mapMarginY, mapRows - mapMarginY);
 
 			// convert coordinates to divisors of 4; keeps elements from being too close to each other
-			int originX = MLib.RoundToDivFour(randX);
-			int originY = MLib.RoundToDivFour(randY);
+			int originX = M.RoundToDivFour(randX);
+			int originY = M.RoundToDivFour(randY);
 
 			// check that room will fit within map bounds
 			if (RoomInBounds(originX, originY, room) &&
@@ -342,13 +342,13 @@ public class LevelGenerator : CacheBehaviour
 		{
 			if (room.height > 4)
 			{
-				steps = (int) MLib.NextGaussian(5f, 3f);
+				steps = (int) M.NextGaussian(5f, 3f);
 
 				for (int i = 0; i < steps; i++)
 				{
-					x = (int) MLib.NextGaussian
+					x = (int) M.NextGaussian
 						(room.originX, room.originX / 2, room.originX + 1, room.originX + room.width - 1);
-					y = (int) MLib.NextGaussian
+					y = (int) M.NextGaussian
 						(room.originY, room.originY, room.originY + 1, room.originY + room.height - 1);
 
 					// if (WithinRoomBounds(room, room.originX + x, room.originY - y))

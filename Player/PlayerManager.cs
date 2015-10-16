@@ -51,7 +51,7 @@ public class PlayerManager : CacheBehaviour
 
         if (playerData.HP > 0)
         {
-            MFX.FadeToColorAndBack(spriteRenderer, MColor.bloodRed, 0f, .2f);
+            MFX.FadeToColorAndBack(spriteRenderer, MCLR.bloodRed, 0f, .2f);
         }
         else
         {
@@ -69,7 +69,7 @@ public class PlayerManager : CacheBehaviour
 
         if (playerData.HP > 0)
         {
-            MFX.FadeToColorAndBack(spriteRenderer, MColor.bloodRed, 0f, .2f);
+            MFX.FadeToColorAndBack(spriteRenderer, MCLR.bloodRed, 0f, .2f);
         }
         else
         {

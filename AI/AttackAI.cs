@@ -57,8 +57,8 @@ public class AttackAI : CacheBehaviour {
                 if (Random.Range(1, 101) <= chanceOfAttack)
                 {
                     // only attack if creature is facing the same direction as target
-                    if ((target.position.x > transform.position.x && MLib.FloatEqual(transform.localScale.x, 1f)) ||
-                        (target.position.x < transform.position.x && MLib.FloatEqual(transform.localScale.x, -1f)))
+                    if ((target.position.x > transform.position.x && M.FloatEqual(transform.localScale.x, 1f)) ||
+                        (target.position.x < transform.position.x && M.FloatEqual(transform.localScale.x, -1f)))
                     {
                         projectile.FireAtTarget(weapon, target);
                     }
@@ -141,8 +141,8 @@ public class AttackAI : CacheBehaviour {
             if (j < 0)
                 j = 10;
 
-            targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.orange);
-            targets[j].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.white);
+            targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MCLR.orange);
+            targets[j].GetComponent<SpriteRenderer>().material.SetColor("_Color", MCLR.white);
             projectile.FireAtTarget(weapon, targets[i].transform);
             i++;
             j++;

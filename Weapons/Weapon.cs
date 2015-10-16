@@ -85,9 +85,9 @@ public class Weapon : AnimationBehaviour {
                 lower  = transform.FindChild("Lower").gameObject.GetComponent<WeaponPiece>();
 
                 // set weapon colors here
-               upper.spriteRenderer.material.SetColor("_Color", MLib.HexToColor(upperColor));
-               center.spriteRenderer.material.SetColor("_Color", MLib.HexToColor(centerColor));
-               lower.spriteRenderer.material.SetColor("_Color", MLib.HexToColor(lowerColor));
+               upper.spriteRenderer.material.SetColor("_Color", M.HexToColor(upperColor));
+               center.spriteRenderer.material.SetColor("_Color", M.HexToColor(centerColor));
+               lower.spriteRenderer.material.SetColor("_Color", M.HexToColor(lowerColor));
             }
         }
     }
