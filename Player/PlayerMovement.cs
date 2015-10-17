@@ -189,7 +189,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			transform.SetLocalScaleX(-transform.localScale.x);
 
 			// offset so player isn't pushed too far forward when sprite flips
-			transform.SetX(transform.position.x - ABOUTFACE_OFFSET);
+			transform.SetXPosition(transform.position.x - ABOUTFACE_OFFSET);
 		}
 
 		if (controller.isGrounded)
@@ -212,7 +212,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			transform.SetLocalScaleX(-transform.localScale.x);
 
 			// offset so player isn't pushed too far forward when sprite flips
-			transform.SetX(transform.position.x + ABOUTFACE_OFFSET);
+			transform.SetXPosition(transform.position.x + ABOUTFACE_OFFSET);
 		}
 
 		if (controller.isGrounded)
@@ -433,7 +433,12 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		// compute x and y movements
 		var smoothedMovementFactor = controller.isGrounded ? groundDamping : inAirDamping;
-		velocity.x = Mathf.Lerp(velocity.x, normalizedHorizontalSpeed * runSpeed, Time.deltaTime * smoothedMovementFactor);
+
+		velocity.x = Mathf.Lerp(
+			velocity.x,
+			normalizedHorizontalSpeed * runSpeed,
+			Time.deltaTime * smoothedMovementFactor
+		);
 	}
 
 	void SavePreviousPosition()
