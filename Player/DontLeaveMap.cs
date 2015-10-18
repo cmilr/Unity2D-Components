@@ -21,11 +21,15 @@ public class DontLeaveMap : CacheBehaviour
 	private float leftBound;
 	private float upperBound;
 	private float lowerBound;
+	private float spriteWidth;
+	private float spriteHeight;
 	private TileSystem tileSystem;
 
 	void Start()
 	{
-		tileSystem = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
+		spriteWidth  = GetComponent<Renderer>().bounds.size.x;
+		spriteHeight = GetComponent<Renderer>().bounds.size.y;
+		tileSystem   = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
 
 		Vector3 tileSystemSize = new Vector3(
 		    tileSystem.ColumnCount * tileSystem.CellSize.x,
@@ -42,16 +46,16 @@ public class DontLeaveMap : CacheBehaviour
 	void LateUpdate ()
 	{
 		// check left bound.
-		if (transform.position.x - (GetComponent<Renderer>().bounds.size.x / 2 - leftOffset) < leftBound)
-			transform.SetXPosition(leftBound + (GetComponent<Renderer>().bounds.size.x / 2  - leftOffset));
+		if (transform.position.x - (spriteWidth / 2 - leftOffset) < leftBound)
+			transform.SetXPosition(leftBound + (spriteWidth / 2  - leftOffset));
 
 		// check right bound.
-		if (transform.position.x + (GetComponent<Renderer>().bounds.size.x / 2 - rightOffset) > rightBound)
-			transform.SetXPosition(rightBound - (GetComponent<Renderer>().bounds.size.x / 2 - rightOffset));
+		if (transform.position.x + (spriteWidth / 2 - rightOffset) > rightBound)
+			transform.SetXPosition(rightBound - (spriteWidth / 2 - rightOffset));
 
 		// check upper bound.
-		if (transform.position.y + (GetComponent<Renderer>().bounds.size.y - upperOffset) > upperBound)
-			transform.SetYPosition(upperBound - (GetComponent<Renderer>().bounds.size.y - upperOffset));
+		if (transform.position.y + (spriteHeight - upperOffset) > upperBound)
+			transform.SetYPosition(upperBound - (spriteHeight - upperOffset));
 
 		// check lower bound.
 		if (transform.position.y - lowerOffset < lowerBound)

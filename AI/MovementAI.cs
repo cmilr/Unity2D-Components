@@ -124,12 +124,11 @@ public class MovementAI : CacheBehaviour
 
 		if ((blockedRight && walkingDirection == RIGHT) || (blockedLeft && walkingDirection == LEFT))
 		{
-			// transform.position = new Vector3(blockedAt, transform.position.y, transform.position.z);
+			// transform.position.SetXPosition(blockedAt);
 			rigidbody2D.velocity = Vector2.zero;
 			movementPaused = true;
 		}
-		// if enemy and player are on roughly same x axis, movementPaused enemy
-		// else if (M.FloatEqual(transform.position.x, target.position.x, xAxisOffset))
+		// if enemy and player are on roughly same x axis, movementPaused
 		else if (transform.position.x.FEquals(target.position.x, xAxisOffset))
 		{
 			rigidbody2D.velocity = Vector2.zero;
