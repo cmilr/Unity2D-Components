@@ -14,8 +14,8 @@ public class BreakablePiece : CacheBehaviour
 	void Start()
 	{
 		Rigidbody2D rigidbody = gameObject.GetComponent<Rigidbody2D>();
-		rigidbody.mass = UnityEngine.Random.Range(.5f, 20f);
-		rigidbody.drag = UnityEngine.Random.Range(0f, .5f);
+		rigidbody.mass        = UnityEngine.Random.Range(.5f, 20f);
+		rigidbody.drag        = UnityEngine.Random.Range(0f, .5f);
 	}
 
 	public void Init(int index, Sprite breakableSprite)

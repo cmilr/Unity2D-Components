@@ -2,7 +2,6 @@
 using System.Collections;
 using Rewired;
 
-
 public class RewiredInputAdapter : BaseBehaviour {
 
     private Player playerControls;

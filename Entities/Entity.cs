@@ -3,13 +3,12 @@ using System;
 using System.Collections;
 using Matcha.Extensions;
 
-
 public abstract class Entity : CacheBehaviour {
 
-	public int worth;
-	public bool autoAlign = true;
 	[HideInInspector]
 	public bool alreadyCollided;
+	public int worth;
+	public bool autoAlign = true;
 
 	protected int layer;
 	protected int hitFrom;
@@ -29,7 +28,7 @@ public abstract class Entity : CacheBehaviour {
 
 	void OnEnable()
 	{
-		game = GameObject.Find(GAME_STATE).GetComponent<IGameStateReadOnly>();
+		game   = GameObject.Find(GAME_STATE).GetComponent<IGameStateReadOnly>();
 		player = GameObject.Find(PLAYER).GetComponent<IPlayerStateReadOnly>();
 	}
 
@@ -63,7 +62,6 @@ public abstract class Entity : CacheBehaviour {
 
 	void OnTriggerEnter2D(Collider2D coll)
 	{
-		// check for layer instead of name — it's much quicker
 		layer = coll.gameObject.layer;
 
 		if (layer == BODY_COLLIDER && !collidedWithBody)
@@ -79,17 +77,6 @@ public abstract class Entity : CacheBehaviour {
 			OnWeaponCollisionEnter(coll);
 		}
 	}
-
-	// void OnTriggerStay2D(Collider2D coll)
-	// {
-	// 	layer = coll.gameObject.layer;
-
-	// 	if (layer == BODY_COLLIDER)
-	// 		OnBodyCollisionStay();
-
-	// 	if (layer == WEAPON_COLLIDER)
-	// 		OnWeaponCollisionStay();
-	// }
 
 	void OnTriggerExit2D(Collider2D coll)
 	{

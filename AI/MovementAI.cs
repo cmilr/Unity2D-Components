@@ -6,6 +6,8 @@ using Matcha.Lib;
 
 public class MovementAI : CacheBehaviour
 {
+	[HideInInspector]  								// current state
+	public int walkingDirection;
 
 	public enum MovementStyle { Sentinel, Scout, HesitantScout, Wanderer };
 	public MovementStyle movementStyle;
@@ -24,10 +26,6 @@ public class MovementAI : CacheBehaviour
 	private bool blockedRight;
 	private bool hesitant;
 	private Transform target;
-
-	// current state
-	[HideInInspector]
-	public int walkingDirection;
 
 	void Start()
 	{
@@ -124,12 +122,12 @@ public class MovementAI : CacheBehaviour
 
 		if ((blockedRight && walkingDirection == RIGHT) || (blockedLeft && walkingDirection == LEFT))
 		{
-			// transform.position.SetXPosition(blockedAt);
+			// transform.SetXPosition(blockedAt);
 			rigidbody2D.velocity = Vector2.zero;
 			movementPaused = true;
 		}
 		// if enemy and player are on roughly same x axis, movementPaused
-		else if (transform.position.x.FEquals(target.position.x, xAxisOffset))
+		else if (transform.position.x.FloatEquals(target.position.x, xAxisOffset))
 		{
 			rigidbody2D.velocity = Vector2.zero;
 			movementPaused = true;
@@ -156,7 +154,6 @@ public class MovementAI : CacheBehaviour
 	// check for edge blockers
 	void OnTriggerEnter2D(Collider2D coll)
 	{
-		// check for layer instead of name — it's much quicker
 		int layer = coll.gameObject.layer;
 
 		if (layer == EDGE_BLOCKER)
@@ -181,12 +178,11 @@ public class MovementAI : CacheBehaviour
 	// check if cleared edge blocker
 	void OnTriggerExit2D(Collider2D coll)
 	{
-		// check for layer instead of name — it's much quicker
 		int layer = coll.gameObject.layer;
 
 		if (layer == EDGE_BLOCKER)
 		{
-			// int sideHit = M.HorizSideThatWasHit(gameObject, coll);
+			int sideHit = M.HorizSideThatWasHit(gameObject, coll);
 
 			if (sideHit == RIGHT)
 			{

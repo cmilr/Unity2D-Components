@@ -29,8 +29,6 @@ public class DisplayLvl : BaseBehaviour
     void OnChangeInteger(int newInt)
     {
         textComponent.text = legend + newInt.ToString();
-
-        // MFX.DisplayScore(gameObject, textComponent);
     }
 
     void OnFadeHud(bool status)

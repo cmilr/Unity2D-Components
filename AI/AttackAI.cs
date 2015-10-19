@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using Matcha.Lib;
+using Matcha.Extensions;
 
 public class AttackAI : CacheBehaviour {
 
@@ -57,8 +58,8 @@ public class AttackAI : CacheBehaviour {
                 if (Random.Range(1, 101) <= chanceOfAttack)
                 {
                     // only attack if creature is facing the same direction as target
-                    if ((target.position.x > transform.position.x && M.FloatEqual(transform.localScale.x, 1f)) ||
-                        (target.position.x < transform.position.x && M.FloatEqual(transform.localScale.x, -1f)))
+                    if ((target.position.x > transform.position.x && transform.localScale.x.FloatEquals(1f)) ||
+                        (target.position.x < transform.position.x && transform.localScale.x.FloatEquals(-1f)))
                     {
                         projectile.FireAtTarget(weapon, target);
                     }
@@ -103,8 +104,7 @@ public class AttackAI : CacheBehaviour {
         // pause attacks and other activities while level loads
         levelLoading = true;
 
-        StartCoroutine(Timer.Start(ENEMY_PAUSE_ON_LEVEL_LOAD, false, () =>
-        {
+        StartCoroutine(Timer.Start(ENEMY_PAUSE_ON_LEVEL_LOAD, false, () =>{
             levelLoading = false;
         }));
     }

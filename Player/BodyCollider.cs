@@ -23,7 +23,6 @@ public class BodyCollider : CacheBehaviour
 
     void OnTriggerEnter2D(Collider2D coll)
     {
-        // check for layer instead of name — it's much quicker
         layer = coll.gameObject.layer;
 
         if (layer == ENEMY_WEAPON)
@@ -64,7 +63,6 @@ public class BodyCollider : CacheBehaviour
 
     void OnTriggerExit2D(Collider2D coll)
     {
-        // check for layer instead of name — it's much quicker
         layer = coll.gameObject.layer;
 
         if (layer == ENEMY_WEAPON)

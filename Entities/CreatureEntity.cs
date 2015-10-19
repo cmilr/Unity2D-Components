@@ -24,12 +24,15 @@ public class CreatureEntity : Entity
 	private BreakableManager breakable;
 	private bool blockedRight;
 	private bool blockedLeft;
+	private float repulseMin  = .3f;
+	private float repulseMax  = .8f;
+	private float repulseTime = .2f;
 
 	void Start()
 	{
-		attackAI = gameObject.GetComponent<AttackAI>();
+		attackAI   = gameObject.GetComponent<AttackAI>();
 		movementAI = gameObject.GetComponent<MovementAI>();
-		breakable = gameObject.GetComponentInChildren<BreakableManager>();
+		breakable  = gameObject.GetComponentInChildren<BreakableManager>();
 
 		if (entityType == EntityType.Enemy) { AutoAlign(); }
 	}
@@ -57,7 +60,7 @@ public class CreatureEntity : Entity
 			TakesProjectileHit(playerWeapon, coll, hitFrom);
 		}
 		else if (playerWeapon.weaponType == Weapon.WeaponType.Axe ||
-			playerWeapon.weaponType == Weapon.WeaponType.Sword)
+				 playerWeapon.weaponType == Weapon.WeaponType.Sword)
 		{
 			TakesMeleeHit(playerWeapon, coll, hitFrom);
 		}
@@ -70,11 +73,11 @@ public class CreatureEntity : Entity
 		// bounceback from projectile
 		if (coll.transform.position.x > transform.position.x)
 		{
-			MFX.RepulseToLeftRandomly(transform, .3f, .8f, .2f);
+			MFX.RepulseToLeftRandomly(transform, repulseMin, repulseMax, repulseTime);
 		}
 		else if (coll.transform.position.x < transform.position.x)
 		{
-			MFX.RepulseToRightRandomly(transform, .3f, .8f, .2f);
+			MFX.RepulseToRightRandomly(transform, repulseMin, repulseMax, repulseTime);
 		}
 		else
 		{

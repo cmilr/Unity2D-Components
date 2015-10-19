@@ -40,12 +40,12 @@ namespace Matcha.Extensions {
         }
 
         // allows comparison of two floats within a given margin of error
-        public static bool FEquals(this float num1, float num2, float threshold = .0001f)
+        public static bool FloatEquals(this float num1, float num2, float threshold = .0001f)
         {
             return Math.Abs(num1 - num2) < threshold;
         }
 
-        public static bool DEquals(this double num1, double num2, double threshold = .0001f)
+        public static bool DoubleEquals(this double num1, double num2, double threshold = .0001f)
         {
             return Math.Abs(num1 - num2) < threshold;
         }

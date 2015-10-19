@@ -25,40 +25,6 @@ public class M : CacheBehaviour
 		Physics2D.IgnoreLayerCollision(gameObject.layer, LayerMask.NameToLayer(layer2), status);
 	}
 
-	// allows comparison of two floats within a given margin of error
-	public static bool FloatEqual(float num1, float num2, float threshold = .0001f)
-	{
-	    return Math.Abs(num1 - num2) < threshold;
-	}
-
-	// allows comparison of two doubles within a given margin of error
-	public static bool DoubleEqual(double num1, double num2, double threshold = .0001f)
-	{
-	    return Math.Abs(num1 - num2) < threshold;
-	}
-
-    // allows comparison of two floats within a given range
-    public static bool FloatWithinRange(float num1, float num2, float range = .02f)
-    {
-        return Math.Abs(num1 - num2) < range;
-    }
-
-    // allows comparison of two doubles within a given range
-    public static bool DoubleWithinRange(double num1, double num2, double range = .02f)
-    {
-        return Math.Abs(num1 - num2) < range;
-    }
-
-	// HexToColor was written by Danny Lawrence, and appears here unmodified.
-	// It is reproduced under a Creative Common license — http://creativecommons.org/licenses/by-sa/3.0/
-	public static Color HexToColor(string hex)
-	{
-		byte r = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
-		byte g = byte.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
-		byte b = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
-		return new Color32(r, g, b, 255);
-	}
-
 	// returns an int constant describing which side the GameObject has been hit on
 	public static int HorizSideThatWasHit(GameObject currentGo, Collider2D coll)
 	{
@@ -147,6 +113,16 @@ public class M : CacheBehaviour
         }
 
         return num;
+    }
+
+    // HexToColor was written by Danny Lawrence, and appears here unmodified.
+    // It is reproduced under a Creative Common license — http://creativecommons.org/licenses/by-sa/3.0/
+    public static Color HexToColor(string hex)
+    {
+        byte r = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
+        byte g = byte.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
+        byte b = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+        return new Color32(r, g, b, 255);
     }
 
     // returns Vector2 coordinates for lobbing a projectile

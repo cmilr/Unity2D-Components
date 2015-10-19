@@ -11,7 +11,7 @@ public class DisplayWeaponTitle : BaseBehaviour
 
     void OnInitEquippedWeapon(GameObject weapon)
     {
-        textComponent = gameObject.GetComponent<Text>();
+        textComponent      = gameObject.GetComponent<Text>();
         textComponent.text = weapon.GetComponent<Weapon>().title;
         textComponent.DOKill();
         FadeInInitialTitle();

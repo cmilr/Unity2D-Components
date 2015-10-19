@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-
 // a clearinghouse for temporary player state
 public class PlayerState : BaseBehaviour, IPlayerStateReadOnly, IPlayerStateFullAccess
 {

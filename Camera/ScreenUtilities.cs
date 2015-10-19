@@ -18,11 +18,11 @@ public class ScreenUtilities : CacheBehaviour
 		objectToTrack = GameObject.Find(PLAYER);
 		trackedObject = objectToTrack.transform;
 
-		vertExtent = Camera.main.GetComponent<Camera>().orthographicSize;
+		vertExtent  = Camera.main.GetComponent<Camera>().orthographicSize;
 		horizExtent = vertExtent * Screen.width / Screen.height;
 
-		currentScreenWidth = Screen.width;
-    	currentScreenHeight = Screen.height;
+		currentScreenWidth  = Screen.width;
+		currentScreenHeight = Screen.height;
 
     	InvokeRepeating("CheckScreenSize", 0f, 0.1F);
 	}

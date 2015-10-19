@@ -26,9 +26,9 @@ public class ArmAnimation : AnimationBehaviour, IPlayerAnimation {
             jumpAnimation  = "LAURA_ARM_Jump";
             swingAnimation = "LAURA_ARM_Swing";
             hurlAnimation  = "LAURA_ARM_Hurl";
-            }
-            else
-            {
+        }
+        else
+        {
             idleAnimation  = "MAC_ARM_Idle";
             runAnimation   = "MAC_ARM_Run";
             jumpAnimation  = "MAC_ARM_Jump";

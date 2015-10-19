@@ -393,8 +393,7 @@ public class WeaponManager : CacheBehaviour {
         // pause weapon changes while level loading
         levelLoading = true;
 
-        StartCoroutine(Timer.Start(WEAPON_PAUSE_ON_LEVEL_LOAD, false, () =>
-        {
+        StartCoroutine(Timer.Start(WEAPON_PAUSE_ON_LEVEL_LOAD, false, () =>{
             levelLoading = false;
         }));
     }

@@ -4,7 +4,7 @@ using System.Collections;
 
 public class PixelArtCamera : BaseBehaviour
 {
-    private float s_baseOrthographicSize;
+    private float baseOrthographicSize;
 
     void Start ()
     {
@@ -14,8 +14,8 @@ public class PixelArtCamera : BaseBehaviour
     void SetOrthographicSize()
     {
         // Experiment with: 32, 48, 64, 96.
-        s_baseOrthographicSize = Screen.height / 64.0f / 2.0f;
-        Camera.main.orthographicSize = s_baseOrthographicSize;
+        baseOrthographicSize = Screen.height / 64.0f / 2.0f;
+        Camera.main.orthographicSize = baseOrthographicSize;
     }
 
     void OnScreenSizeChanged(float vExtent, float hExtent)

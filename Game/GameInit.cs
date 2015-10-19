@@ -13,16 +13,5 @@ public class GameInit : BaseBehaviour
 
         // seed Random with current seconds;
         Random.seed = (int)System.DateTime.Now.Ticks;
-
-        // DOTween.SetTweensCapacity(2000, 300);
-
-        M.IgnoreLayerCollision2D("BodyCollider", "Platform", true);
-        M.IgnoreLayerCollision2D("BodyCollider", "One-Way Platform", true);
-        M.IgnoreLayerCollision2D("WeaponCollider", "Platform", true);
-        M.IgnoreLayerCollision2D("WeaponCollider", "One-Way Platform", true);
-
-
-        // for (int i = 0; i < 20; i++)
-        //     Debug.Log(M.NextGaussian(25f, 5f, 1f, 50f));
     }
 }
