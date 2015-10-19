@@ -19,6 +19,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	private float previousX;
 	private float previousY;
 	private float repulseVelocity;
+	private bool facingRight;
 	private bool moveRight;
 	private bool moveLeft;
 	private bool jump;
@@ -124,12 +125,10 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		else if (moveRight)
 		{
 			MovePlayerRight();
-			BroadcastMessage("OnFacingRight", true);
 		}
 		else if (moveLeft)
 		{
 			MovePlayerLeft();
-			BroadcastMessage("OnFacingRight", false);
 		}
 
 		// idle state
@@ -197,9 +196,15 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			action = Action.Run;
 		}
 
-		moveRight = false;
+		// only broadcast message once, each time player turns
+		if (!facingRight)
+		{
+			facingRight = true;
+			state.FacingRight = true;
+			BroadcastMessage("OnFacingRight", true);
+		}
 
-		state.FacingRight = true;
+		moveRight = false;
 	}
 
 	void MovePlayerLeft()
@@ -220,9 +225,15 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			action = Action.Run;
 		}
 
-		moveLeft = false;
+		// only broadcast message once, each time player turns
+		if (facingRight)
+		{
+			facingRight = false;
+			state.FacingRight = false;
+			BroadcastMessage("OnFacingRight", false);
+		}
 
-		state.FacingRight = false;
+		moveLeft = false;
 	}
 
 	void AttackWhileIdle()

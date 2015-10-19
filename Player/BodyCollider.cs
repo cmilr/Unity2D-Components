@@ -55,7 +55,7 @@ public class BodyCollider : CacheBehaviour
                 {
                     enemy.alreadyCollided = true;
 
-                    player.TouchesEnemy("touch", enemy, coll, hitFrom);
+                    // player.TouchesEnemy("touch", enemy, coll, hitFrom);
                 }
             }
         }

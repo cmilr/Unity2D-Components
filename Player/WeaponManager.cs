@@ -21,9 +21,9 @@ public class WeaponManager : CacheBehaviour {
 
     void Start()
     {
-        arm = GetComponentInChildren<ArmAnimation>();
+        arm        = GetComponentInChildren<ArmAnimation>();
         projectile = transform.parent.GetComponent<ProjectileManager>();
-        melee = transform.parent.GetComponent<MeleeManager>();
+        melee      = transform.parent.GetComponent<MeleeManager>();
     }
 
     void OnInitWeapons(GameObject eWeapon, GameObject lWeapon, GameObject rWeapon)
@@ -228,7 +228,7 @@ public class WeaponManager : CacheBehaviour {
             {
                 equippedWeapon.PlayAttackAnimation(0, 0);
                 arm.PlayAttackAnimation(0, 0);
-                melee.Attack();
+                melee.Attack(equippedWeapon);
                 break;
             }
 
@@ -236,7 +236,7 @@ public class WeaponManager : CacheBehaviour {
             {
                 equippedWeapon.PlayAttackAnimation(0, ONE_PIXEL);
                 arm.PlayAttackAnimation(0, ONE_PIXEL);
-                melee.Attack();
+                melee.Attack(equippedWeapon);
                 break;
             }
 
@@ -244,7 +244,7 @@ public class WeaponManager : CacheBehaviour {
             {
                 equippedWeapon.PlayAttackAnimation(0, ONE_PIXEL * 2);
                 arm.PlayAttackAnimation(0, ONE_PIXEL * 2);
-                melee.Attack();
+                melee.Attack(equippedWeapon);
                 break;
             }
 
