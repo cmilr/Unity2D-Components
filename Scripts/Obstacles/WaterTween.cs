@@ -15,6 +15,7 @@ public class WaterTween : CacheBehaviour
         DOTween.Sequence().SetLoops(-1, LoopType.Restart)
         	.Append(transform.DOMoveX(distance, time)
         	.SetRelative()
-        	.SetEase(Ease.Linear));
+        	.SetEase(Ease.Linear)
+        );
     }
 }

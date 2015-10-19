@@ -3,9 +3,8 @@ using System.Collections;
 
 public class MeleeManager : CacheBehaviour {
 
-    private float rateOfAttack = .3f;
+    private float nextAttack;
     private BoxCollider2D boxCollider;
-    private static bool inProgress;
 
     // when it changes, grab a reference to the currently equipped weapon's collider
     void OnInitEquippedWeapon(GameObject weapon)
@@ -18,18 +17,14 @@ public class MeleeManager : CacheBehaviour {
         boxCollider = weapon.GetComponent<BoxCollider2D>();
     }
 
-    public void Attack()
+    public void Attack(Weapon equippedWeapon)
     {
-        if (!inProgress)
-        {
-            inProgress = true;
-            boxCollider.enabled = true;
+        boxCollider.enabled = false;
 
-            StartCoroutine(Timer.Start(rateOfAttack, false, () =>
-            {
-                boxCollider.enabled = false;
-                inProgress = false;
-            }));
+        if (Time.time > nextAttack)
+        {
+            boxCollider.enabled = true;
+            nextAttack = Time.time + equippedWeapon.rateOfAttack;
         }
     }
 

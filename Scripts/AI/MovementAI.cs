@@ -6,6 +6,8 @@ using Matcha.Lib;
 
 public class MovementAI : CacheBehaviour
 {
+	[HideInInspector]  								// current state
+	public int walkingDirection;
 
 	public enum MovementStyle { Sentinel, Scout, HesitantScout, Wanderer };
 	public MovementStyle movementStyle;
@@ -25,10 +27,6 @@ public class MovementAI : CacheBehaviour
 	private bool hesitant;
 	private Transform target;
 
-	// current state
-	[HideInInspector]
-	public int walkingDirection;
-
 	void Start()
 	{
 		target         = GameObject.Find(PLAYER).transform;
@@ -36,7 +34,7 @@ public class MovementAI : CacheBehaviour
 		animator.speed = walkAnimationSpeed;
 		animator.Play(Animator.StringToHash(walkAnimation));
 
-		movementInterval = UnityEngine.Random.Range(.15f, 1f);
+		movementInterval = Random.Range(.15f, 1f);
 
 		if (movementStyle == MovementStyle.HesitantScout)
 			hesitant = true;
@@ -103,7 +101,7 @@ public class MovementAI : CacheBehaviour
 			transform.SetLocalScaleX((float)walkingDirection);
 
 			// add some random pauses
-			if (hesitant && UnityEngine.Random.Range(0f, 100f) <= chanceOfPause)
+			if (hesitant && Random.Range(0f, 100f) <= chanceOfPause)
 			{
 				rigidbody2D.velocity = Vector2.zero;
 				StartCoroutine(PauseFollowTarget());
@@ -114,7 +112,7 @@ public class MovementAI : CacheBehaviour
 	IEnumerator PauseFollowTarget()
 	{
 		CancelInvoke("FollowTarget");
-		yield return new WaitForSeconds(UnityEngine.Random.Range(2, 5));
+		yield return new WaitForSeconds(Random.Range(2, 5));
 		InvokeRepeating("FollowTarget", 1f, movementInterval);
 	}
 
@@ -124,12 +122,12 @@ public class MovementAI : CacheBehaviour
 
 		if ((blockedRight && walkingDirection == RIGHT) || (blockedLeft && walkingDirection == LEFT))
 		{
-			// transform.position = new Vector3(blockedAt, transform.position.y, transform.position.z);
+			// transform.SetXPosition(blockedAt);
 			rigidbody2D.velocity = Vector2.zero;
 			movementPaused = true;
 		}
-		// if enemy and player are on roughly same x axis, movementPaused enemy
-		else if (MLib.FloatEqual(transform.position.x, target.position.x, xAxisOffset))
+		// if enemy and player are on roughly same x axis, movementPaused
+		else if (transform.position.x.FloatEquals(target.position.x, xAxisOffset))
 		{
 			rigidbody2D.velocity = Vector2.zero;
 			movementPaused = true;
@@ -156,12 +154,11 @@ public class MovementAI : CacheBehaviour
 	// check for edge blockers
 	void OnTriggerEnter2D(Collider2D coll)
 	{
-		// check for layer instead of name — it's much quicker
 		int layer = coll.gameObject.layer;
 
 		if (layer == EDGE_BLOCKER)
 		{
-			sideHit = MLib.HorizSideThatWasHit(gameObject, coll);
+			sideHit = M.HorizSideThatWasHit(gameObject, coll);
 
 			if (sideHit == RIGHT)
 			{
@@ -181,12 +178,11 @@ public class MovementAI : CacheBehaviour
 	// check if cleared edge blocker
 	void OnTriggerExit2D(Collider2D coll)
 	{
-		// check for layer instead of name — it's much quicker
 		int layer = coll.gameObject.layer;
 
 		if (layer == EDGE_BLOCKER)
 		{
-			// int sideHit = MLib.HorizSideThatWasHit(gameObject, coll);
+			int sideHit = M.HorizSideThatWasHit(gameObject, coll);
 
 			if (sideHit == RIGHT)
 			{

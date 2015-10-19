@@ -6,13 +6,12 @@
 //         I  N  D  U  S  T  R  I  E  S             www.matcha.industries
 
 using UnityEngine;
-using System.Collections;
 using System;
 
 namespace Matcha.Lib
 {
 
-public class MLib : CacheBehaviour
+public class M : CacheBehaviour
 {
 	// ignore layer collisions *by name* instead of by layer ID
 	public static void IgnoreLayerCollision2D(string layer1, string layer2, bool status)
@@ -24,40 +23,6 @@ public class MLib : CacheBehaviour
 	public static void IgnoreLayerCollision2DWith(GameObject gameObject, string layer2, bool status)
 	{
 		Physics2D.IgnoreLayerCollision(gameObject.layer, LayerMask.NameToLayer(layer2), status);
-	}
-
-	// allows comparison of two floats within a given margin of error
-	public static bool FloatEqual(float num1, float num2, float threshold = .0001f)
-	{
-	    return Math.Abs(num1 - num2) < threshold;
-	}
-
-	// allows comparison of two doubles within a given margin of error
-	public static bool DoubleEqual(double num1, double num2, double threshold = .0001f)
-	{
-	    return Math.Abs(num1 - num2) < threshold;
-	}
-
-    // allows comparison of two floats within a given range
-    public static bool FloatWithinRange(float num1, float num2, float range = .02f)
-    {
-        return Math.Abs(num1 - num2) < range;
-    }
-
-    // allows comparison of two doubles within a given range
-    public static bool DoubleWithinRange(double num1, double num2, double range = .02f)
-    {
-        return Math.Abs(num1 - num2) < range;
-    }
-
-	// HexToColor was written by Danny Lawrence, and appears here unmodified.
-	// It is reproduced under a Creative Common license — http://creativecommons.org/licenses/by-sa/3.0/
-	public static Color HexToColor(string hex)
-	{
-		byte r = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
-		byte g = byte.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
-		byte b = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
-		return new Color32(r, g, b, 255);
 	}
 
 	// returns an int constant describing which side the GameObject has been hit on
@@ -114,17 +79,63 @@ public class MLib : CacheBehaviour
 		}
 	}
 
-	// returns Vector2 coordinates for lobbing a projectile
-	public static Vector2 LobProjectile(Weapon weapon, Transform origin, Transform target)
-	{
-	    float distance;
-	    float yDifference;
-	    float angleToPoint;
-	    float distanceFactor;
-	    float distanceCompensation;
-	    float speedCompensation;
-	    float angleCorrection;
-	    float speed;
+    public static float NextGaussian() {
+        float v1, v2, s;
+        do {
+            v1 = 2.0f * UnityEngine.Random.Range(0f,1f) - 1.0f;
+            v2 = 2.0f * UnityEngine.Random.Range(0f,1f) - 1.0f;
+            s = v1 * v1 + v2 * v2;
+        } while (s >= 1.0f || s == 0f);
+
+        s = Mathf.Sqrt((-2.0f * Mathf.Log(s)) / s);
+
+        return v1 * s;
+    }
+
+    public static float NextGaussian(float mean, float standard_deviation)
+    {
+        return mean + NextGaussian() * standard_deviation;
+    }
+
+    public static float NextGaussian (float mean, float standard_deviation, float min, float max) {
+        float x;
+        do {
+            x = NextGaussian(mean, standard_deviation);
+        } while (x < min || x > max);
+        return x;
+    }
+
+    public static int RoundToDivFour(int num)
+    {
+        while (num % 4 != 0)
+        {
+            num++;
+        }
+
+        return num;
+    }
+
+    // HexToColor was written by Danny Lawrence, and appears here unmodified.
+    // It is reproduced under a Creative Common license — http://creativecommons.org/licenses/by-sa/3.0/
+    public static Color HexToColor(string hex)
+    {
+        byte r = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
+        byte g = byte.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
+        byte b = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+        return new Color32(r, g, b, 255);
+    }
+
+    // returns Vector2 coordinates for lobbing a projectile
+    public static Vector2 LobProjectile(Weapon weapon, Transform origin, Transform target)
+    {
+        float distance;
+        float yDifference;
+        float angleToPoint;
+        float distanceFactor;
+        float distanceCompensation;
+        float speedCompensation;
+        float angleCorrection;
+        float speed;
 
         // the below formula is accurate given the following settings: gravity of .5,
         // angular drag of .05, mass of 1, and projectile speeds between 8 and 20
@@ -178,83 +189,6 @@ public class MLib : CacheBehaviour
 
         return new Vector2((float)Math.Cos(angleToPoint+angleCorrection) * speed,
                            (float)Math.Sin(angleToPoint+angleCorrection) * speed);
-    }
-
-    public static float NextGaussian() {
-        float v1, v2, s;
-        do {
-            v1 = 2.0f * UnityEngine.Random.Range(0f,1f) - 1.0f;
-            v2 = 2.0f * UnityEngine.Random.Range(0f,1f) - 1.0f;
-            s = v1 * v1 + v2 * v2;
-        } while (s >= 1.0f || s == 0f);
-
-        s = Mathf.Sqrt((-2.0f * Mathf.Log(s)) / s);
-
-        return v1 * s;
-    }
-
-    public static float NextGaussian(float mean, float standard_deviation)
-    {
-        return mean + NextGaussian() * standard_deviation;
-    }
-
-    public static float NextGaussian (float mean, float standard_deviation, float min, float max) {
-        float x;
-        do {
-            x = NextGaussian(mean, standard_deviation);
-        } while (x < min || x > max);
-        return x;
-    }
-
-    // return various room coordinates for procedural generation
-    public static int TopLeftX(ProcRoom room)
-    {
-        return room.originX;
-    }
-
-    public static int TopLeftY(ProcRoom room)
-    {
-        return room.originY;
-    }
-
-    public static int TopRightX(ProcRoom room)
-    {
-        return room.originX + room.width - 1;
-    }
-
-    public static int TopRightY(ProcRoom room)
-    {
-        return room.originY;
-    }
-
-    public static int BottomLeftX(ProcRoom room)
-    {
-        return room.originX;
-    }
-
-    public static int BottomLeftY(ProcRoom room)
-    {
-        return room.originY + room.height - 1;
-    }
-
-    public static int BottomRightX(ProcRoom room)
-    {
-        return room.originX + room.width - 1;
-    }
-
-    public static int BottomRightY(ProcRoom room)
-    {
-        return room.originY + room.height - 1;
-    }
-
-    public static int RoundToDivFour(int num)
-    {
-        while (num % 4 != 0)
-        {
-            num++;
-        }
-
-        return num;
     }
 }
 }

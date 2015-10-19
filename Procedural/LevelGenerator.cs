@@ -5,7 +5,7 @@ using Rotorz.Tile;
 using Matcha.Lib;
 using Matcha.Tiles;
 
-public class DungeonGenerator : CacheBehaviour
+public class LevelGenerator : CacheBehaviour
 {
 
 	public Brush brush;
@@ -46,7 +46,6 @@ public class DungeonGenerator : CacheBehaviour
 		AssessForStairs();
 		ShowBounds(rooms);
 		RefreshAllTiles();
-		System.GC.Collect();
 	}
 
 	void PaintBaseTiles()

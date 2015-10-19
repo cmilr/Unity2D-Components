@@ -51,13 +51,15 @@ public class DisplayEquipped : CacheBehaviour
         transform.localPosition = new Vector3(
             transform.localPosition.x -SPACE_BETWEEN_WEAPONS,
             transform.localPosition.y,
-            transform.localPosition.z);
+            transform.localPosition.z)
+        ;
 
         // tween weapon to new position
         transform.DOLocalMove(new Vector3(
             transform.localPosition.x + SPACE_BETWEEN_WEAPONS,
             transform.localPosition.y,
-            transform.localPosition.z), INVENTORY_SHIFT_SPEED, false).OnComplete(()=>SetFinalPosition());
+            transform.localPosition.z), INVENTORY_SHIFT_SPEED, false).OnComplete(()=>SetFinalPosition()
+        );
     }
 
     void SetFinalPosition()

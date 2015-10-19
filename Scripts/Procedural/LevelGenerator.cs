@@ -1,424 +1,404 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using Rotorz.Tile;
 using Matcha.Lib;
-using Matcha.ProcGen;
-using Matcha.Extensions;
+using Matcha.Tiles;
 
-public class LevelGenerator : CacheBehaviour {
+public class LevelGenerator : CacheBehaviour
+{
 
-    public Brush brush;
-    public Brush testBrush;
-    public Brush stepBrush;
+	public Brush brush;
+	public Brush testBrush;
+	public Brush stepBrush;
+	public Brush hallOriginBrush;
+	public Brush roomOriginBrush;
 
-    private TileSystem map;
-    private int mapColumns;
-    private int mapRows;
-    private int mapMarginX = 10;
-    private int mapMarginY = 10;
-    private int roomMarginX = 4;
-    private int roomMarginY = 4;
-    private int numberOfRooms = 60;
-    List<ProcRoom> rooms;
+	private TileSystem map;
+	private int mapColumns;
+	private int mapRows;
+	private int mapMarginX = 10;
+	private int mapMarginY = 10;
+	private int roomMarginX = 4;
+	private int roomMarginY = 4;
+	private int numberOfRooms = 40;
+	private int direction = RIGHT;
+	List<ProcRoom> rooms;
+	List<ProcHall> halls;
 
 
 	void Awake()
-    {
-        map        = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
-        mapColumns = map.ColumnCount;
-        mapRows    = map.RowCount;
-        rooms      = new List<ProcRoom>();
+	{
+		map        = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
+		mapColumns = map.ColumnCount;
+		mapRows    = map.RowCount;
+		rooms      = new List<ProcRoom>();
+		halls      = new List<ProcHall>();
 
-        // GenerateOrderedDungeons();
-        GenerateRandomDungeons();
+		GenerateRandomDungeons();
 	}
 
-    void GenerateOrderedDungeons()
-    {
-        PaintBaseTiles();
-        CarveOrderedRooms();
-        // CarveHalls();
-    }
+	void GenerateRandomDungeons()
+	{
+		PaintBaseTiles();
+		CarveRandomRooms();
+		CarveHalls();
+		AssessForStairs();
+		ShowBounds(rooms);
+		RefreshAllTiles();
+	}
 
-    void GenerateRandomDungeons()
-    {
-        PaintBaseTiles();
-        CarveRandomRooms();
-        CarveHalls();
-        // PlaceRandomSteps();
-    }
+	void PaintBaseTiles()
+	{
 
-    void PaintBaseTiles() {
+		map.BulkEditBegin();
 
-        map.BeginBulkEdit();
+		for (int x = 0; x < mapColumns; x++)
+		{
+			for (int y = 0; y < mapRows; y++)
+			{
+				brush.PaintTile(map, x, y);
+			}
+		}
 
-            for (int r = 0; r < mapRows; r++)
-            {
-                for (int c = 0; c < mapColumns; c++)
-                {
-                    brush.Paint(map, r, c);
-                    map.RefreshSurroundingTiles(r, c);
-                }
-            }
+		map.BulkEditEnd();
+	}
 
-        map.EndBulkEdit();
-    }
+	void CarveRandomRooms()
+	{
+		for (int i = 0; i < numberOfRooms; i++)
+		{
+			ProcRoom roomToDraw = new ProcRoom();
 
-    void CarveOrderedRooms()
-    {
-        // for (int i = 0; i < numberOfRooms; i++)
-        // {
-            ProcRoom roomToDraw = new ProcRoom();
+			GetRoom(roomToDraw);
+			PaintRoomRandomly(roomToDraw);
+		}
+	}
 
-            GetRoom(roomToDraw);
-            PaintRoomOrdered(roomToDraw);
-        // }
-    }
+	void GetRoom(ProcRoom room)
+	{
+		room.width  = (int) M.NextGaussian(8f, 8f, 2f, 50f);
+		room.height = (int) M.NextGaussian(4f, 8f, 8f, 20f);
 
-    void CarveRandomRooms()
-    {
-        for (int i = 0; i < numberOfRooms; i++)
-        {
-            ProcRoom roomToDraw = new ProcRoom();
+		// round up to nearest even number
+		room.width = M.RoundToDivFour(room.width);
+		room.height = M.RoundToDivFour(room.height);
+	}
 
-            GetRoom(roomToDraw);
-            PaintRoomRandomly(roomToDraw);
-        }
-    }
+	void PaintRoomRandomly(ProcRoom room)
+	{
+		bool successful = false;
+		int attempts = 0;
 
-    void GetRoom(ProcRoom room)
-    {
-        room.width  = (int) MLib.NextGaussian(8f, 4f, 2f, 50f);
-        room.height = (int) MLib.NextGaussian(4f, 4f, 4f, 50f);
+		map.BulkEditBegin();
 
-        // round up to nearest even number
-        room.width = MLib.RoundToDivFour(room.width);
-        room.height = MLib.RoundToDivFour(room.height);
-    }
+		while (!successful && attempts < 5)
+		{
+			// get random coordinates to attempt to place new room
+			// int randX = (int) M.NextGaussian(mapColumns / 2, mapColumns / 2, mapMarginX, mapColumns);
+			// int randY = (int) M.NextGaussian(mapRows / 2, mapRows / 2, mapMarginY, mapRows);
+			int randX = UnityEngine.Random.Range(mapMarginX, mapColumns - mapMarginX);
+			int randY = UnityEngine.Random.Range(mapMarginY, mapRows - mapMarginY);
 
-    void PaintRoomOrdered(ProcRoom room)
-    {
-        bool successful = false;
-        int attempts = 0;
+			// convert coordinates to divisors of 4; keeps elements from being too close to each other
+			int originX = M.RoundToDivFour(randX);
+			int originY = M.RoundToDivFour(randY);
 
-        map.BeginBulkEdit();
+			// check that room will fit within map bounds
+			if (RoomInBounds(originX, originY, room) &&
+					!TouchingRooms(originX, originY, room))
+			{
+				// paint room
+				for (int x = 0; x < room.width; x++)
+				{
+					for (int y = 0; y < room.height; y++)
+					{
+						map.ClearTile(originX + x, originY + y);
+					}
+				}
 
-        while (!successful && attempts < 5)
-        {
-            // get random coordinates to attempt to place new room
-            int randX = (int) MLib.NextGaussian(mapColumns / 2, mapColumns / 2, mapMarginX, mapColumns);
-            int randY = (int) MLib.NextGaussian(mapRows / 2, mapRows / 2, mapMarginY, mapRows);
+				// with room succesfully placed, set origin then add to List
+				room.originX = originX;
+				room.originY = originY;
+				rooms.Add(room);
 
-            // convert coordinates to divisors of 4; elements from being too close to each other
-            int originX = MLib.RoundToDivFour(randX);
-            int originY = MLib.RoundToDivFour(randY);
+				successful = true;
+			}
 
-            // check that room will fit within map bounds
-            if (RoomInBounds(originX, originY, room) &&
-               !TouchingRooms(originX, originY, room))
-            {
-                // paint room
-                for (int x = 0; x < room.width; x++)
-                {
-                    for (int y = 0; y < room.height; y++)
-                    {
-                        map.EraseTile(originY + y, originX + x);
-                        map.RefreshSurroundingTiles(originY + y, originX + x);
-                    }
-                }
+			attempts++;
+		}
 
-                // with room succesfully placed, set origin then add to List
-                room.originX = originX;
-                room.originY = originY;
-                rooms.Add(room);
+		map.BulkEditEnd();
+	}
 
-                successful = true;
-            }
+	bool RoomInBounds(int originX, int originY, ProcRoom room)
+	{
+		if (originX + room.width < (mapColumns - mapMarginX) &&
+				originY + room.height < (mapRows - mapMarginY))
+		{
+			return true;
+		}
 
-            attempts++;
-        }
+		return false;
+	}
 
-        map.EndBulkEdit();
-    }
+	bool TouchingRooms(int originX, int originY, ProcRoom room)
+	{
+		// iterate through each potential tile placement
+		for (int x = originX - roomMarginX; x < room.width + originX + roomMarginX; x++)
+		{
+			for (int y = originY - roomMarginY; y < room.height + originY + roomMarginY; y++)
+			{
+				// if a room has already been carved out here, return true
+				if (map.GetTileInfo(x, y) == null)
+				{
+					return true;
+				}
+			}
+		}
 
-    void PaintRoomRandomly(ProcRoom room)
-    {
-        bool successful = false;
-        int attempts = 0;
+		return false;
+	}
 
-        map.BeginBulkEdit();
+	void LogRooms()
+	{
+		int i = 0;
 
-        while (!successful && attempts < 5)
-        {
-            // get random coordinates to attempt to place new room
-            int randX = (int) MLib.NextGaussian(mapColumns / 2, mapColumns / 2, mapMarginX, mapColumns);
-            int randY = (int) MLib.NextGaussian(mapRows / 2, mapRows / 2, mapMarginY, mapRows);
+		foreach (ProcRoom room in rooms)
+		{
+			Debug.Log("Room " + i + ": x." + room.originX + ", y." + room.originY);
+			i++;
+		}
+	}
 
-            // convert coordinates to divisors of 4; elements from being too close to each other
-            int originX = MLib.RoundToDivFour(randX);
-            int originY = MLib.RoundToDivFour(randY);
+	void CarveHalls()
+	{
+		map.BulkEditBegin();
 
-            // check that room will fit within map bounds
-            if (RoomInBounds(originX, originY, room) &&
-               !TouchingRooms(originX, originY, room))
-            {
-                // paint room
-                for (int x = 0; x < room.width; x++)
-                {
-                    for (int y = 0; y < room.height; y++)
-                    {
-                        map.EraseTile(originY + y, originX + x);
-                        map.RefreshSurroundingTiles(originY + y, originX + x);
-                    }
-                }
+		int originX;
+		int originY;
+		int x;
 
-                // with room succesfully placed, set origin then add to List
-                room.originX = originX;
-                room.originY = originY;
-                rooms.Add(room);
+		foreach (ProcRoom room in rooms)
+		{
+			ProcHall hall = new ProcHall();
 
-                successful = true;
-            }
+			// get random direction
+			// int rand = UnityEngine.Random.Range(0, 2);
+			// direction = (rand == 0 ? RIGHT : LEFT);
+			direction = RIGHT;
 
-            attempts++;
-        }
+			// set origin point
+			if (direction == RIGHT)
+			{
+				originX = room.BottomRightX();
+				originY = room.BottomRightY();
+				x = 1;
+			}
+			else
+			{
+				originX = room.BottomLeftX();
+				originY = room.BottomLeftY();
+				x = -1;
+			}
 
-        map.EndBulkEdit();
-    }
+			// get random height to make halls either two or four tiles tall
+			int rand2 = UnityEngine.Random.Range(0, 10);
+			int i = (rand2 == 0 ? 2 : 4);
 
-    bool RoomInBounds(int originX, int originY, ProcRoom room)
-    {
-        if (originX + room.width < (mapColumns - mapMarginX) &&
-            originY + room.height < (mapRows - mapMarginY))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+			while (map.GetTileInfo(originX + x, originY) != null &&
+					TileInBounds(originX + x, originY))
+			{
+				if (i == 2)
+				{
+					map.ClearTile(originX + x, originY);
+					map.ClearTile(originX + x, originY - 1);
+				}
+				else
+				{
+					map.ClearTile(originX + x, originY);
+					map.ClearTile(originX + x, originY - 1);
+					map.ClearTile(originX + x, originY - 2);
+					map.ClearTile(originX + x, originY - 3);
+				}
 
-    bool TouchingRooms(int originX, int originY, ProcRoom room)
-    {
-        // iterate through each potential tile placement
-        for (int x = originX - roomMarginX; x < room.width + originX + roomMarginX; x++)
-        {
-            for (int y = originY - roomMarginY; y < room.height + originY + roomMarginY; y++)
-            {
-                // if a room has already been carved out here, return true
-                if (map.GetTile(y, x) == null)
-                {
-                    return true;
-                }
-            }
-        }
+				x = (direction == RIGHT ? x + 1 : x - 1);
+			}
 
-        return false;
-    }
+			// with hall succesfully placed, set its origin, width, and height, then add to List
+			hall.width   = Math.Abs(x) - 1;
+			hall.height  = i;
+			hall.originY = originY - (i - 1);
+			hall.originX = (direction == RIGHT ? originX + 1 : originX - hall.width);
 
-    void LogRooms()
-    {
-        int i = 0;
+			halls.Add(hall);
+		}
 
-        foreach (ProcRoom room in rooms)
-        {
-            Debug.Log("Room " + i +": x." + room.originX +", y." + room.originY);
-            i++;
-        }
-    }
+		map.BulkEditEnd();
+	}
 
-    void CarveHalls()
-    {
-        map.BeginBulkEdit();
+	void AssessForStairs()
+	{
+		foreach (ProcHall hall in halls)
+		{
+			int rand = UnityEngine.Random.Range(0, 2);
 
-            int originX;
-            int originY;
-            int x;
-            int y;
+			if (rand == 0)
+			{
+				if (map.GetTileInfo(hall.BottomRightX() + 1, hall.BottomRightY() + 1) == null &&
+						TileInBounds(hall.BottomRightX() + 1, hall.BottomRightY() + 1) &&
+						map.GetTileInfo(hall.BottomRightX(), hall.BottomRightY() + 1) != null)
+				{
+					BuildStairs(RIGHT, hall.BottomRightX() + 1, hall.BottomRightY() + 1);
+				}
 
-            foreach (ProcRoom room in rooms)
-            {
-                int rand = Random.Range(0, 2);
-                int direction = (rand == 0 ? RIGHT : LEFT);
+				hallOriginBrush.PaintTile(map, hall.BottomRightX() + 1, hall.BottomRightY() + 1);
+			}
+		}
+	}
 
-                if (direction == RIGHT)
-                {
-                    originX = MPG.BottomRightX(room);
-                    originY = MPG.BottomRightY(room);
-                    x = 1;
-                }
-                else
-                {
-                    originX = MPG.BottomLeftX(room);
-                    originY = MPG.BottomLeftY(room);
-                    x = -1;
-                }
+	void BuildStairs(int buildDirection, int originX, int originY)
+	{
+		map.BulkEditBegin();
 
-                y = 0;
+		int y = 0;
 
-                int size = Random.Range(0, 10);
-                int i = (size == 0 ? 2 : 4);
+		while (map.GetTile(originY + y, originX) == null &&
+				TileInBounds(originX, originY + y))
+		{
+			if (buildDirection == RIGHT)
+			{
+				for (int x = 0; x < y; x++)
+				{
+					if (TileInBounds(originX + x, originY + y))
+					{
+						// build stairs
+						brush.PaintTile(map, originX + x, originY + y);
+						// erase walls to the right of stairs
+						map.ClearTile(originX + x + 1, originY + y);
+						map.ClearTile(originX + x + 2, originY + y);
+						map.ClearTile(originX + x + 3, originY + y);
+						map.ClearTile(originX + x + 4, originY + y);
+					}
 
-                while (map.GetTile(originY, originX + x) != null &&
-                       TileInBounds(originX + x, originY))
-                {
-                    // randomly make halls either two or four tiles tall
-                    if (i == 2)
-                    {
-                        map.EraseTile(originY, originX + x);
-                        map.RefreshSurroundingTiles(originY, originX);
-                        map.EraseTile(originY - 1, originX + x);
-                        map.RefreshSurroundingTiles(originY - 1, originX);
-                    }
-                    else
-                    {
-                        map.EraseTile(originY, originX + x);
-                        map.RefreshSurroundingTiles(originY, originX);
-                        map.EraseTile(originY - 1, originX + x);
-                        map.RefreshSurroundingTiles(originY - 1, originX);
-                        map.EraseTile(originY - 2, originX + x);
-                        map.RefreshSurroundingTiles(originY - 2, originX);
-                        map.EraseTile(originY - 3, originX + x);
-                        map.RefreshSurroundingTiles(originY - 3, originX);
-                    }
+					// backfill stairs by one tile
+					brush.PaintTile(map, originX - 1, originY + y);
+				}
 
-                    x = (direction == RIGHT ? x + 1 : x - 1);
-                }
+				y++;
+			}
+			else
+			{
+				for (int x = 0; x < y; x++)
+				{
+					if (TileInBounds(originX - x, originY + y))
+					{
+						brush.PaintTile(map, originX - x, originY + y);
+					}
+				}
 
+				y++;
+			}
 
-                BuildStairs(direction, originX + x, originY);
+		}
 
+		map.BulkEditEnd();
+	}
 
-            }
+	int DistanceToGround(int originX, int originY)
+	{
+		int y = 0;
+		while (map.GetTileInfo(originX, originY + y) == null &&
+				TileInBounds(originX, originY + y))
+		{
+			y++;
+		}
 
-        map.EndBulkEdit();
-    }
+		return y;
+	}
 
-    int DistanceToGround(int originX, int originY)
-    {
-        int y = 0;
-        while (map.GetTile(originY + y, originX) == null &&
-              TileInBounds(originY + y, originX))
-        {
-            y++;
-        }
+	bool TileInBounds(int originX, int originY)
+	{
+		if (originX < (mapColumns - mapMarginX) &&
+				originX > (mapMarginX) &&
+				originY < (mapRows - mapMarginY) &&
+				originY > (mapMarginY))
+		{
+			return true;
+		}
 
-        return y;
-    }
+		return false;
+	}
 
-    void BuildStairs(int direction, int originX, int originY)
-    {
-        int y = 1;
+	void PlaceRandomSteps()
+	{
+		int steps          = 0;
+		int x              = 0;
+		int y              = 0;
 
-        while (map.GetTile(originY + y, originX) == null &&
-              TileInBounds(originY + y, originX))
-        {
-            if (direction == RIGHT)
-            {
-               for (int x = 0; x < y; x++)
-               {
-                   brush.Paint(map, originY + y, originX + x);
-                   map.RefreshSurroundingTiles(originY + y, originX + x);
-               }
+		map.BulkEditBegin();
 
-               y++;
-            }
-            else
-            {
-                for (int x = 0; x < y; x++)
-                {
-                    brush.Paint(map, originY + y, originX - x);
-                    map.RefreshSurroundingTiles(originY + y, originX - x);
-                }
+		foreach (ProcRoom room in rooms)
+		{
+			if (room.height > 4)
+			{
+				steps = (int) M.NextGaussian(5f, 3f);
 
-                y++;
-            }
+				for (int i = 0; i < steps; i++)
+				{
+					x = (int) M.NextGaussian
+						(room.originX, room.originX / 2, room.originX + 1, room.originX + room.width - 1);
+					y = (int) M.NextGaussian
+						(room.originY, room.originY, room.originY + 1, room.originY + room.height - 1);
 
-        }
-    }
+					// if (WithinRoomBounds(room, room.originX + x, room.originY - y))
+					// {
+					stepBrush.PaintTile(map, x, y);
+					// }
+				}
+			}
+		}
 
-    bool TileInBounds(int originX, int originY)
-    {
-        if (originX < (mapColumns - mapMarginX) &&
-            originX > (mapMarginX) &&
-            originY < (mapRows - mapMarginY) &&
-            originY > (mapMarginY))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+		map.BulkEditEnd();
+	}
 
-    void PlaceRandomSteps()
-    {
-        int steps          = 0;
-        int x              = 0;
-        int y              = 0;
+	bool WithinRoomBounds(ProcRoom room, int x, int y)
+	{
+		if ((x >= room.originX && x <= room.width) &&
+				(y >= room.originY && y <= room.height))
+		{
+			return true;
+		}
 
-        map.BeginBulkEdit();
+		return false;
+	}
 
-            foreach (ProcRoom room in rooms)
-            {
-                if (room.height > 4)
-                {
-                    steps = (int) MLib.NextGaussian(5f, 3f);
+	void ShowBounds(List<ProcRoom> list)
+	{
+		foreach (ProcRoom element in list)
+		{
+			testBrush.PaintTile(map, element.BottomRightX(), element.BottomRightY());
+			testBrush.PaintTile(map, element.TopRightX(), element.TopRightY());
+			testBrush.PaintTile(map, element.BottomLeftX(), element.BottomLeftY());
+			testBrush.PaintTile(map, element.TopLeftX(), element.TopLeftY());
+			hallOriginBrush.PaintTile(map, element.originX, element.originY);
+		}
+	}
 
-                    for (int i = 0; i < steps; i++)
-                    {
-                        x = (int) MLib.NextGaussian(room.originX, room.originX / 2, room.originX + 1, room.originX + room.width -1);
-                        y = (int) MLib.NextGaussian(room.originY, room.originY, room.originY + 1, room.originY + room.height - 1);
+	void ShowBounds(List<ProcHall> list)
+	{
+		foreach (ProcHall element in list)
+		{
+			testBrush.PaintTile(map, element.BottomRightX(), element.BottomRightY());
+			testBrush.PaintTile(map, element.TopRightX(), element.TopRightY());
+			testBrush.PaintTile(map, element.BottomLeftX(), element.BottomLeftY());
+			testBrush.PaintTile(map, element.TopLeftX(), element.TopLeftY());
+			hallOriginBrush.PaintTile(map, element.originX, element.originY);
+		}
+	}
 
-                        // if (WithinRoomBounds(room, room.originX + x, room.originY - y))
-                        // {
-                            stepBrush.Paint(map, y, x);
-                        // }
-                    }
-                }
-            }
-
-        map.EndBulkEdit();
-    }
-
-    bool WithinRoomBounds(ProcRoom room, int x, int y)
-    {
-        if ((x >= room.originX && x <= room.width) &&
-            (y >= room.originY && y <= room.height))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+	void RefreshAllTiles()
+	{
+		map.RefreshTiles();
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// void CalculateTileSystemSize()
-// {
-//     mapSize = new Vector3(
-//         map.ColumnCount * map.CellSize.x,
-//         map.RowCount * map.CellSize.y,
-//         map.CellSize.z
-//     );
-// }

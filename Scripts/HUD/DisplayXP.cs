@@ -20,7 +20,7 @@ public class DisplayXP : BaseBehaviour
 
     void OnInitInteger(int initInt)
     {
-        textComponent = gameObject.GetComponent<Text>();
+        textComponent      = gameObject.GetComponent<Text>();
         textComponent.text = legend + initInt.ToString();
         textComponent.DOKill();
         FadeInText();

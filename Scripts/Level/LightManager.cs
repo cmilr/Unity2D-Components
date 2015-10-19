@@ -31,11 +31,11 @@ public class LightManager : CacheBehaviour {
 
 	void Start ()
 	{
-		playerLight = GameObject.Find("PlayerLight").GetComponent<Light>();
-		creatureLight = GameObject.Find("CreatureLight").GetComponent<Light>();
-		tileLight = GameObject.Find("TileLight").GetComponent<Light>();
-		planeLight = GameObject.Find("PlaneLight").GetComponent<Light>();
-		pickupLight = GameObject.Find("PickupLight").GetComponent<Light>();
+		playerLight            = GameObject.Find("PlayerLight").GetComponent<Light>();
+		creatureLight          = GameObject.Find("CreatureLight").GetComponent<Light>();
+		tileLight              = GameObject.Find("TileLight").GetComponent<Light>();
+		planeLight             = GameObject.Find("PlaneLight").GetComponent<Light>();
+		pickupLight            = GameObject.Find("PickupLight").GetComponent<Light>();
 		illuminatedPickupLight = GameObject.Find("IlluminatedPickupLight").GetComponent<Light>();
 	}
 

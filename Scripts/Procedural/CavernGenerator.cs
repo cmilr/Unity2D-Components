@@ -52,8 +52,8 @@ public class CavernGenerator : CacheBehaviour {
 
     void GetRoom(ProcRoom room)
     {
-        room.width  = (int) MLib.NextGaussian(20f, 5f, 2f, 50f);
-        room.height = (int) MLib.NextGaussian(5f, 5f, 2f, 50f);
+        room.width  = (int) M.NextGaussian(20f, 5f, 2f, 50f);
+        room.height = (int) M.NextGaussian(5f, 5f, 2f, 50f);
     }
 
     void PaintRoom(ProcRoom room)
@@ -61,8 +61,8 @@ public class CavernGenerator : CacheBehaviour {
         tileSystem.BeginBulkEdit();
 
             // get random coordinates to attempt to place new room
-            int originX = (int) MLib.NextGaussian(mapColumns / 2, mapColumns / 2, 2f, mapColumns);
-            int originY = (int) MLib.NextGaussian(mapRows / 2, mapRows / 2, 2f, mapRows);
+            int originX = (int) M.NextGaussian(mapColumns / 2, mapColumns / 2, 2f, mapColumns);
+            int originY = (int) M.NextGaussian(mapRows / 2, mapRows / 2, 2f, mapRows);
 
             // check that room will fit within map bounds
             if (InBounds(originX, originY, room))

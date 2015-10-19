@@ -11,7 +11,6 @@ using System.Collections;
 using DG.Tweening;
 using Matcha.Dreadful.Colors;
 
-
 namespace Matcha.Dreadful.FX {
 
 	public class MFX : CacheBehaviour
@@ -38,7 +37,7 @@ namespace Matcha.Dreadful.FX {
 		    DOTween.Sequence()
 		        .Append(text.DOColor(Color.yellow, .15f))
 		        .Append(text.DOColor(Color.white, .15f))
-		        .Append(text.DOColor(MColor.orange, .3f));;
+		        .Append(text.DOColor(MCLR.orange, .3f));;
 		}
 
 		public static void DisplayScoreFX(GameObject gameObject, Text text)
@@ -55,13 +54,13 @@ namespace Matcha.Dreadful.FX {
 		{
 			DOTween.Sequence()
 	            .Append(text.DOColor(Color.yellow, .05f))
-	            .Append(text.DOColor(MColor.orange, .05f))
+	            .Append(text.DOColor(MCLR.orange, .05f))
 	            .Append(text.DOColor(Color.yellow, .05f))
-	            .Append(text.DOColor(MColor.orange, .05f))
+	            .Append(text.DOColor(MCLR.orange, .05f))
 	            .Append(text.DOColor(Color.yellow, .05f))
-	            .Append(text.DOColor(MColor.orange, .05f))
+	            .Append(text.DOColor(MCLR.orange, .05f))
 	            .Append(text.DOColor(Color.yellow, .05f))
-	            .Append(text.DOColor(MColor.orange, .3f));;
+	            .Append(text.DOColor(MCLR.orange, .3f));;
 		}
 
 		public static void TextPulse(Text text)
@@ -69,7 +68,7 @@ namespace Matcha.Dreadful.FX {
 			DOTween.Sequence().SetLoops(-1, LoopType.Yoyo)
 			    .Append(text.DOColor(Color.white, .6f).SetEase(Ease.InQuad))
 			    .AppendInterval(.2f)
-			    .Append(text.DOColor(MColor.orange, .6f).SetEase(Ease.OutQuad))
+			    .Append(text.DOColor(MCLR.orange, .6f).SetEase(Ease.OutQuad))
 			    .AppendInterval(.2f);;
 		}
 
@@ -161,11 +160,11 @@ namespace Matcha.Dreadful.FX {
 			DOTween.Sequence()
 				.AppendInterval(fadeAfter)
 				.Append(spriteRenderer.DOColor(newColor, timeToFade))
-				.Append(spriteRenderer.DOColor(MColor.white, timeToFade))
-				.Append(spriteRenderer.DOColor(MColor.bloodPink, timeToFade))
-				.Append(spriteRenderer.DOColor(MColor.white, timeToFade))
-				.Append(spriteRenderer.DOColor(MColor.bloodPink, timeToFade))
-				.Append(spriteRenderer.DOColor(MColor.white, timeToFade));
+				.Append(spriteRenderer.DOColor(MCLR.white, timeToFade))
+				.Append(spriteRenderer.DOColor(MCLR.bloodPink, timeToFade))
+				.Append(spriteRenderer.DOColor(MCLR.white, timeToFade))
+				.Append(spriteRenderer.DOColor(MCLR.bloodPink, timeToFade))
+				.Append(spriteRenderer.DOColor(MCLR.white, timeToFade));
 		}
 
 		public static void RepulseToLeft(Transform transform, float xDistance, float overTime)

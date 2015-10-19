@@ -27,44 +27,43 @@ public class MovingPlatform : CacheBehaviour
 		{
 		case Direction.right:
 			DOTween.Sequence().SetLoops(-1, LoopType.Yoyo)
-			.AppendInterval(pauseTime)
-			.Append(transform.DOMoveX(distance, time).SetRelative().SetEase(Ease.InOutQuad))
-			.AppendInterval(pauseTime);
+				.AppendInterval(pauseTime)
+				.Append(transform.DOMoveX(distance, time).SetRelative().SetEase(Ease.InOutQuad))
+				.AppendInterval(pauseTime);
 			break;
 
 		case Direction.left:
 			DOTween.Sequence().SetLoops(-1, LoopType.Yoyo)
-			.AppendInterval(pauseTime)
-			.Append(transform.DOMoveX(-distance, time).SetRelative().SetEase(Ease.InOutQuad))
-			.AppendInterval(pauseTime);
+				.AppendInterval(pauseTime)
+				.Append(transform.DOMoveX(-distance, time).SetRelative().SetEase(Ease.InOutQuad))
+				.AppendInterval(pauseTime);
 			break;
 
 		case Direction.up:
 			DOTween.Sequence().SetLoops(-1, LoopType.Yoyo)
-			.AppendInterval(pauseTime)
-			.Append(transform.DOMoveY(distance, time).SetRelative().SetEase(Ease.InOutQuad))
-			.AppendInterval(pauseTime);
+				.AppendInterval(pauseTime)
+				.Append(transform.DOMoveY(distance, time).SetRelative().SetEase(Ease.InOutQuad))
+				.AppendInterval(pauseTime);
 			break;
 
 		case Direction.down:
 			DOTween.Sequence().SetLoops(-1, LoopType.Yoyo)
-			.AppendInterval(pauseTime)
-			.Append(transform.DOMoveY(-distance, time).SetRelative().SetEase(Ease.InOutQuad))
-			.AppendInterval(pauseTime);
+				.AppendInterval(pauseTime)
+				.Append(transform.DOMoveY(-distance, time).SetRelative().SetEase(Ease.InOutQuad))
+				.AppendInterval(pauseTime);
 			break;
 
 		default:
 			DOTween.Sequence().SetLoops(-1, LoopType.Yoyo)
-			.AppendInterval(pauseTime)
-			.Append(transform.DOMoveX(distance, time).SetRelative().SetEase(Ease.InOutQuad))
-			.AppendInterval(pauseTime);
+				.AppendInterval(pauseTime)
+				.Append(transform.DOMoveX(distance, time).SetRelative().SetEase(Ease.InOutQuad))
+				.AppendInterval(pauseTime);
 			break;
 		}
 	}
 
 	void OnTriggerEnter2D (Collider2D coll)
 	{
-		// check for layer instead of name — it's much quicker
 		layer = coll.gameObject.layer;
 
 		if (layer == PLAYER_COLLIDER && coll.transform.position.y - .3f > gameObject.transform.position.y)

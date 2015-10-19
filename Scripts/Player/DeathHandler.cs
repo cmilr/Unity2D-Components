@@ -15,12 +15,12 @@ public class DeathHandler : CacheBehaviour
 	public float groundDamping          = 20f;                 // how fast do we change direction? higher means faster
 	public float inAirDamping           = 5f;                  // how fast do we change direction mid-air?
 	public float jumpHeight             = 2.6f;                // player's jump height
-	public float maxFallingSpeed        = 100f;                // max falling speed, for throttling falls, etc
-	public float maxRisingSpeed         = 2f;                  // max rising speed, for throttling player on moving platforms, etc
-	private bool physicsEnabled         = true;
-	private bool alreadyDead            = false;
+	public float maxFallingSpeed        = 100f;                // for throttling falls, etc
+	public float maxRisingSpeed         = 2f;                  // for throttling player on moving platforms, etc
 	protected float previousX           = 0f;
 	protected float previousY           = 0f;
+	private bool physicsEnabled         = true;
+	private bool alreadyDead;
 
 	private string deathAnimation;
 	private float normalizedHorizontalSpeed;
@@ -38,11 +38,11 @@ public class DeathHandler : CacheBehaviour
 	void Start()
 	{
 		// component takes over player physics, so we don't enable until player dies
-		this.enabled = false;
-		state = GetComponent<IPlayerStateFullAccess>();
-		controller = GetComponent<CharacterController2D>();
-		boxCollider = GetComponent<BoxCollider2D>();
-		AddListeners();
+        this.enabled = false;
+        state        = GetComponent<IPlayerStateFullAccess>();
+        controller   = GetComponent<CharacterController2D>();
+        boxCollider  = GetComponent<BoxCollider2D>();
+        AddListeners();
 
 		SetCharacterAnimations(state.Character);
 	}
@@ -111,7 +111,7 @@ public class DeathHandler : CacheBehaviour
 				break;
 			}
 		}
-	}
+    }
 
 	void LateUpdate()
 	{
@@ -119,7 +119,13 @@ public class DeathHandler : CacheBehaviour
 		{
 			velocity = controller.velocity;
 			var smoothedMovementFactor = controller.isGrounded ? groundDamping : inAirDamping;
-			velocity.x = Mathf.Lerp(velocity.x, normalizedHorizontalSpeed * runSpeed, Time.deltaTime * smoothedMovementFactor);
+
+			velocity.x = Mathf.Lerp(
+                velocity.x,
+                normalizedHorizontalSpeed * runSpeed,
+                Time.deltaTime * smoothedMovementFactor
+            );
+
 			velocity.y += gravity * Time.deltaTime;
 			velocity.y = Mathf.Clamp(velocity.y, -maxFallingSpeed, maxFallingSpeed);
 			controller.move(velocity * Time.deltaTime);
@@ -162,25 +168,20 @@ public class DeathHandler : CacheBehaviour
         BoxCollider2D coll = incomingColl.transform.GetComponent<BoxCollider2D>();
 
         Vector2 size = coll.size;
-        Vector3 centerPoint = new Vector3( coll.offset.x, coll.offset.y, 0f);
-        Vector3 worldPos = incomingColl.transform.TransformPoint ( centerPoint );
+        Vector3 centerPoint = new Vector3(coll.offset.x, coll.offset.y, 0f);
+        Vector3 worldPos = incomingColl.transform.TransformPoint(centerPoint);
 
-        // float top = worldPos.y + (size.y / 2f);
-        // float btm = worldPos.y - (size.y / 2f);
         float left = worldPos.x - (size.x / 2f);
         float right = worldPos.x + (size.x /2f);
-
-        // Vector3 topLeft = new Vector3( left, top, worldPos.z);
-        // Vector3 topRight = new Vector3( right, top, worldPos.z);
-        // Vector3 btmLeft = new Vector3( left, btm, worldPos.z);
-        // Vector3 btmRight = new Vector3( right, btm, worldPos.z);
 
 		float playerPositionX = transform.position.x;
 		float playerCenterOffset = (GetComponent<Renderer>().bounds.size.x / 2);
 
-		playerPositionX = Mathf.Clamp(playerPositionX,
-							left + playerCenterOffset,
-							right - playerCenterOffset);
+		playerPositionX = Mathf.Clamp(
+            playerPositionX,
+			left + playerCenterOffset,
+			right - playerCenterOffset
+        );
 
 		transform.SetXYPosition(playerPositionX, transform.position.y - .2f);
 	}

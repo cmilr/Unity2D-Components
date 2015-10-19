@@ -1,7 +1,8 @@
 ﻿using Matcha.Dreadful.Colors;   // testing only
 using UnityEngine;
-using System;
 using System.Collections;
+using Matcha.Lib;
+using Matcha.Extensions;
 
 public class AttackAI : CacheBehaviour {
 
@@ -23,7 +24,7 @@ public class AttackAI : CacheBehaviour {
         projectile     = GetComponent<ProjectileManager>();
         weapon         = GetComponentInChildren<Weapon>();
         target         = GameObject.Find(PLAYER).transform;
-        attackInterval = UnityEngine.Random.Range(1.5f, 2.5f);
+        attackInterval = Random.Range(1.5f, 2.5f);
 	}
 
     // MASTER CONTROLLER
@@ -54,11 +55,11 @@ public class AttackAI : CacheBehaviour {
 
             if (distance <= attackWhenInRange && !_attackDisabled)
             {
-                if (UnityEngine.Random.Range(1, 101) <= chanceOfAttack)
+                if (Random.Range(1, 101) <= chanceOfAttack)
                 {
                     // only attack if creature is facing the same direction as target
-                    if ((target.position.x > transform.position.x && transform.localScale.x == 1f) ||
-                        (target.position.x < transform.position.x && transform.localScale.x == -1f))
+                    if ((target.position.x > transform.position.x && transform.localScale.x.FloatEquals(1f)) ||
+                        (target.position.x < transform.position.x && transform.localScale.x.FloatEquals(-1f)))
                     {
                         projectile.FireAtTarget(weapon, target);
                     }
@@ -103,8 +104,7 @@ public class AttackAI : CacheBehaviour {
         // pause attacks and other activities while level loads
         levelLoading = true;
 
-        StartCoroutine(Timer.Start(ENEMY_PAUSE_ON_LEVEL_LOAD, false, () =>
-        {
+        StartCoroutine(Timer.Start(ENEMY_PAUSE_ON_LEVEL_LOAD, false, () =>{
             levelLoading = false;
         }));
     }
@@ -141,8 +141,8 @@ public class AttackAI : CacheBehaviour {
             if (j < 0)
                 j = 10;
 
-            targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.orange);
-            targets[j].GetComponent<SpriteRenderer>().material.SetColor("_Color", MColor.white);
+            targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MCLR.orange);
+            targets[j].GetComponent<SpriteRenderer>().material.SetColor("_Color", MCLR.white);
             projectile.FireAtTarget(weapon, targets[i].transform);
             i++;
             j++;

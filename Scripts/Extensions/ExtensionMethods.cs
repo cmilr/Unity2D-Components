@@ -1,7 +1,13 @@
-﻿using UnityEngine;
+﻿//       __    __     ______     ______   ______     __  __     ______
+//      /\ "-./  \   /\  __ \   /\__  _\ /\  ___\   /\ \_\ \   /\  __ \
+//      \ \ \-./\ \  \ \  __ \  \/_/\ \/ \ \ \____  \ \  __ \  \ \  __ \
+//       \ \_\ \ \_\  \ \_\ \_\    \ \_\  \ \_____\  \ \_\ \_\  \ \_\ \_\
+//        \/_/  \/_/   \/_/\/_/     \/_/   \/_____/   \/_/\/_/   \/_/\/_/
+//         I  N  D  U  S  T  R  I  E  S             www.matcha.industries
+
+using UnityEngine;
 using System.Collections;
 using System;
-using Rotorz.Tile;
 
 namespace Matcha.Extensions {
 
@@ -33,36 +39,18 @@ namespace Matcha.Extensions {
             transform.localScale = new Vector3(x, transform.localScale.y, transform.localScale.z);
         }
 
-        public static GameObject GetTile(this Transform transform, TileSystem tileSystem, int xDirection, int yDirection)
+        // allows comparison of two floats within a given margin of error
+        public static bool FloatEquals(this float num1, float num2, float threshold = .0001f)
         {
-            int convertedX = (int) Math.Floor(transform.position.x);
-            int convertedY = (int) Math.Ceiling(Math.Abs(transform.position.y));
-
-            TileData tile = tileSystem.GetTile(convertedY + yDirection, convertedX + xDirection);
-
-            if (tile != null)
-            {
-                return tile.gameObject;
-            }
-
-            return null;
+            return Math.Abs(num1 - num2) < threshold;
         }
 
-        public static GameObject GetTileBelow(this Transform transform, TileSystem tileSystem, int direction)
+        public static bool DoubleEquals(this double num1, double num2, double threshold = .0001f)
         {
-            int convertedX = (int) Math.Floor(transform.position.x);
-            int convertedY = (int) Math.Floor(Math.Abs(transform.position.y));
-
-            TileData tile = tileSystem.GetTile(convertedY, convertedX + direction);
-
-            if (tile != null)
-            {
-                return tile.gameObject;
-            }
-
-            return null;
+            return Math.Abs(num1 - num2) < threshold;
         }
 
+        // rigidbody2D extensions
         public static void AddExplosionForce(this Rigidbody2D body, float explosionForce, Vector3 explosionPosition, float explosionRadius)
         {
             var dir = (body.transform.position - explosionPosition);
@@ -80,18 +68,6 @@ namespace Matcha.Extensions {
             float upliftWearoff = 1 - upliftModifier / explosionRadius;
             Vector3 upliftForce = Vector2.up * explosionForce * upliftWearoff;
             body.AddForce(upliftForce);
-        }
-
-        public static int DivFour(this UnityEngine.Random rnd, int min, int max)
-        {
-            int num = UnityEngine.Random.Range(min, max + 1);
-
-            while (num % 4 != 0)
-            {
-                num++;
-            }
-
-            return num;
         }
     }
 }

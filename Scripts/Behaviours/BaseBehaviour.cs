@@ -8,7 +8,6 @@
 using UnityEngine;
 using System.Collections;
 
-
 public class BaseBehaviour : MonoBehaviour {
 
     protected static bool _attackDisabled             = false;
@@ -104,9 +103,4 @@ public class BaseBehaviour : MonoBehaviour {
     // breakable pieces
     protected const int MIN_BEFORE_FADE               = 5;
     protected const int MAX_BEFORE_FADE               = 10;
-
-    protected void Dbug()
-    {
-        Debug.Log(">>>>>>>> DEBUG METHOD CALLED <<<<<<<<");
-    }
 }

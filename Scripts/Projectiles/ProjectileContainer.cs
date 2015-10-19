@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System;
-using System.Collections;
 using Matcha.Dreadful.FX;
 using Matcha.Lib;
 
@@ -10,12 +8,6 @@ public class ProjectileContainer : Weapon {
     private Weapon weapon;
     private Vector3 origin;
     private RuntimeAnimatorController anim;
-
-    void Start()
-    {
-        // player weapon colliders should only be enabled during attacks
-        // collider2D.enabled = false;
-    }
 
     // note: ProjectileContainers contain simple dummy values, which are
     // then replaced by data that's passed-in via projectile objects
@@ -99,7 +91,7 @@ public class ProjectileContainer : Weapon {
             else
                 rigidbody2D.gravityScale = .5f;
 
-            rigidbody2D.velocity = MLib.LobProjectile(weapon, transform, target);
+            rigidbody2D.velocity = M.LobProjectile(weapon, transform, target);
         }
         // otherwise, fire projectile linearally
         else
@@ -112,7 +104,6 @@ public class ProjectileContainer : Weapon {
     // fade and deactivate on impact
     void OnTriggerEnter2D(Collider2D coll)
     {
-        // check for layer instead of name — it's much quicker
         int layer = coll.gameObject.layer;
 
         if (layer == ENEMY_COLLIDER)
@@ -228,7 +219,7 @@ public class ProjectileContainer : Weapon {
 
 //         // if (lob)
 //         // {   // otherwise, lob projectile like a cannon ball
-//         //     rigidbody2D.velocity = MLib.LobProjectile(weapon, transform, target);
+//         //     rigidbody2D.velocity = M.LobProjectile(weapon, transform, target);
 //         // }
 //         // else
 //         // {   // if weapon has no mass, fire projectile linearally

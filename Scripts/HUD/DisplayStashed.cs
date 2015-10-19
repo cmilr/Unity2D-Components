@@ -33,7 +33,8 @@ public class DisplayStashed : CacheBehaviour
         transform.position = mainCamera.ScreenToWorldPoint(new Vector3(
             Screen.width / 2 + offset,
             Screen.height - HUD_WEAPON_TOP_MARGIN,
-            HUD_Z));
+            HUD_Z)
+        );
 
         hudPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z);
     }
@@ -64,13 +65,15 @@ public class DisplayStashed : CacheBehaviour
             transform.localPosition = new Vector3(
                 transform.localPosition.x -1.3281f,
                 transform.localPosition.y,
-                transform.localPosition.z);
+                transform.localPosition.z
+            );
 
             // tween weapon to new position
             transform.DOLocalMove(new Vector3(
                 transform.localPosition.x + SPACE_BETWEEN_WEAPONS,
                 transform.localPosition.y,
-                transform.localPosition.z), INVENTORY_SHIFT_SPEED, false).OnComplete(()=>SetFinalPosition());
+                transform.localPosition.z), INVENTORY_SHIFT_SPEED, false).OnComplete(()=>SetFinalPosition()
+            );
         }
         else
         {

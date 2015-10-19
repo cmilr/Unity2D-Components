@@ -1,13 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 public class ProjectileManager : CacheBehaviour {
 
-	private GameObject projectilePrefab;
     private GameObject pooledProjectile;
     private Transform projectileSpawnPoint;
-    private ProjectileContainer projectile;
     private float fireRate;
     private float nextFire;
     private bool firedByPlayer;

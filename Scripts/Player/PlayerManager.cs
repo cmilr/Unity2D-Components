@@ -4,38 +4,37 @@ using Matcha.Dreadful.Colors;
 using Matcha.Dreadful.FX;
 using DG.Tweening;
 
-
 public class PlayerManager : CacheBehaviour
 {
-    private _PlayerData playerData;
+    private _PlayerData player;
 
     void Start()
     {
-        playerData = GameObject.Find(_PLAYER_DATA).GetComponent<_PlayerData>();
+        player = GameObject.Find(_PLAYER_DATA).GetComponent<_PlayerData>();
 
         Init();
     }
 
     void Init()
     {
-        Messenger.Broadcast<int>("init lvl", playerData.LVL);
-        Messenger.Broadcast<int>("init hp", playerData.HP);
-        Messenger.Broadcast<int>("init ac", playerData.AC);
-        Messenger.Broadcast<int>("init xp", playerData.XP);
+        Messenger.Broadcast<int>("init lvl", player.LVL);
+        Messenger.Broadcast<int>("init hp", player.HP);
+        Messenger.Broadcast<int>("init ac", player.AC);
+        Messenger.Broadcast<int>("init xp", player.XP);
         Messenger.Broadcast<GameObject, GameObject, GameObject>
-            ("init weapons", playerData.equippedWeapon, playerData.leftWeapon, playerData.rightWeapon);
+            ("init weapons", player.equippedWeapon, player.leftWeapon, player.rightWeapon);
         Messenger.Broadcast<Transform>("player placed", transform);
     }
 
     public void TakesHit(string weaponType, Weapon weapon, Collider2D coll, int hitFrom)
     {
         // calculate damage
-        playerData.HP -= (int)(weapon.damage * DIFFICULTY_DAMAGE_MODIFIER);
+        player.HP -= (int)(weapon.damage * DIFFICULTY_DAMAGE_MODIFIER);
 
         // produce effects
         // params for ShakeCamera = duration, strength, vibrato, randomness
         Messenger.Broadcast<float, float, int, float>("shake camera", .5f, .3f, 20, 5f);
-        Messenger.Broadcast<int>("reduce hp", playerData.HP);
+        Messenger.Broadcast<int>("reduce hp", player.HP);
 
         // float xDistance = hitFrom == LEFT ? 2f : -2f;
         // transform.DOJump(new Vector3(transform.position.x + xDistance, transform.position.y, transform.position.z), .2f, 1, .5f, false);
@@ -49,9 +48,9 @@ public class PlayerManager : CacheBehaviour
             BroadcastMessage("RepulseToRight", 5.0F);
         }
 
-        if (playerData.HP > 0)
+        if (player.HP > 0)
         {
-            MFX.FadeToColorAndBack(spriteRenderer, MColor.bloodRed, 0f, .2f);
+            MFX.FadeToColorAndBack(spriteRenderer, MCLR.bloodRed, 0f, .2f);
         }
         else
         {
@@ -62,14 +61,14 @@ public class PlayerManager : CacheBehaviour
     public void TouchesEnemy(string weaponType, CreatureEntity enemy, Collider2D coll, int hitFrom)
     {
         // calculate damage
-        playerData.HP -= (int)(enemy.touchDamage * DIFFICULTY_DAMAGE_MODIFIER);
+        player.HP -= (int)(enemy.touchDamage * DIFFICULTY_DAMAGE_MODIFIER);
 
         // produce effects
-        Messenger.Broadcast<int>("reduce hp", playerData.HP);
+        Messenger.Broadcast<int>("reduce hp", player.HP);
 
-        if (playerData.HP > 0)
+        if (player.HP > 0)
         {
-            MFX.FadeToColorAndBack(spriteRenderer, MColor.bloodRed, 0f, .2f);
+            MFX.FadeToColorAndBack(spriteRenderer, MCLR.bloodRed, 0f, .2f);
         }
         else
         {

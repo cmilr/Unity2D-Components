@@ -16,8 +16,8 @@ public class Breathe : CacheBehaviour {
     }
 
     protected void Update() {
-        float theta = Time.timeSinceLevelLoad / period;
-        float distance = amplitude * Mathf.Sin(theta);
+        float theta        = Time.timeSinceLevelLoad / period;
+        float distance     = amplitude * Mathf.Sin(theta);
         transform.position = startPos + Vector3.up * distance;
     }
 }

@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Matcha.Lib;
 using Matcha.Extensions;
 
 [RequireComponent(typeof(CharacterController2D))]
@@ -8,19 +7,19 @@ using Matcha.Extensions;
 
 public class PlayerMovement : CacheBehaviour, ICreatureController
 {
-	public float gravity         = -35f;         // set gravity for player
-	public float runSpeed        = 8f;           // set player's run speed
-	public float groundDamping   = 20f;          // how fast do we change direction? higher means faster
-	public float inAirDamping    = 5f;           // how fast do we change direction mid-air?
-	public float jumpHeight      = 2.6f;         // player's jump height
-	public float maxFallingSpeed = 100f;         // max falling speed, for throttling falls, etc
-	public float maxRisingSpeed  = 2f;           // max rising speed, for throttling player on moving platforms, etc
-	private float speedCheck     = .1f;          // compare against to see if we need to throttle rising speed
-
+	private float gravity         = -35f;         // set gravity for player
+	private float runSpeed        = 7f;           // set player's run speed
+	private float groundDamping   = 20f;          // how fast do we change direction? higher means faster
+	private float inAirDamping    = 5f;           // how fast do we change direction mid-air?
+	private float jumpHeight      = 3.50f;         // player's jump height
+	private float maxFallingSpeed = 100f;         // max falling speed, for throttling falls, etc
+	private float maxRisingSpeed  = 2f;           // max rising speed, for throttling player on moving platforms, etc
+	private float speedCheck      = .1f;          // compare against to see if we need to throttle rising speed
 	private float normalizedHorizontalSpeed;
 	private float previousX;
 	private float previousY;
 	private float repulseVelocity;
+	private bool facingRight;
 	private bool moveRight;
 	private bool moveLeft;
 	private bool jump;
@@ -126,12 +125,10 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		else if (moveRight)
 		{
 			MovePlayerRight();
-			BroadcastMessage("OnFacingRight", true);
 		}
 		else if (moveLeft)
 		{
 			MovePlayerLeft();
-			BroadcastMessage("OnFacingRight", false);
 		}
 
 		// idle state
@@ -199,9 +196,15 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			action = Action.Run;
 		}
 
-		moveRight = false;
+		// only broadcast message once, each time player turns
+		if (!facingRight)
+		{
+			facingRight = true;
+			state.FacingRight = true;
+			BroadcastMessage("OnFacingRight", true);
+		}
 
-		state.FacingRight = true;
+		moveRight = false;
 	}
 
 	void MovePlayerLeft()
@@ -222,9 +225,15 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			action = Action.Run;
 		}
 
-		moveLeft = false;
+		// only broadcast message once, each time player turns
+		if (facingRight)
+		{
+			facingRight = false;
+			state.FacingRight = false;
+			BroadcastMessage("OnFacingRight", false);
+		}
 
-		state.FacingRight = false;
+		moveLeft = false;
 	}
 
 	void AttackWhileIdle()
@@ -435,7 +444,12 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		// compute x and y movements
 		var smoothedMovementFactor = controller.isGrounded ? groundDamping : inAirDamping;
-		velocity.x = Mathf.Lerp(velocity.x, normalizedHorizontalSpeed * runSpeed, Time.deltaTime * smoothedMovementFactor);
+
+		velocity.x = Mathf.Lerp(
+			velocity.x,
+			normalizedHorizontalSpeed * runSpeed,
+			Time.deltaTime * smoothedMovementFactor
+		);
 	}
 
 	void SavePreviousPosition()
