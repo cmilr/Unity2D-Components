@@ -11,30 +11,30 @@ public class ProjectileContainer : Weapon {
 
     // note: ProjectileContainers contain simple dummy values, which are
     // then replaced by data that's passed-in via projectile objects
-    void Init(Weapon weapon)
+    void Init(Weapon incoming)
     {
-        this.weapon           = weapon;
-        weaponType            = weapon.weaponType;
+        weapon                = incoming;
+        weaponType            = incoming.weaponType;
         alreadyCollided       = false;
-        iconSprite            = weapon.iconSprite;
-        title                 = weapon.title;
-        damage                = weapon.damage;
-        hp                    = weapon.hp;
-        rateOfAttack          = weapon.rateOfAttack;
-        spriteRenderer.sprite = weapon.projectileSprite;
-        speed                 = weapon.speed;
-        maxDistance           = weapon.maxDistance;
-        lob                   = weapon.lob;
-        lobGravity            = weapon.lobGravity;
-        fadeIn                = weapon.fadeIn;
+        iconSprite            = incoming.iconSprite;
+        title                 = incoming.title;
+        damage                = incoming.damage;
+        hp                    = incoming.hp;
+        rateOfAttack          = incoming.rateOfAttack;
+        spriteRenderer.sprite = incoming.projectileSprite;
+        speed                 = incoming.speed;
+        maxDistance           = incoming.maxDistance;
+        lob                   = incoming.lob;
+        lobGravity            = incoming.lobGravity;
+        fadeIn                = incoming.fadeIn;
         collider2D.enabled    = true;
         origin                = new Vector3(transform.position.x, transform.position.y, transform.position.z);
 
         // initialize animation controller if projectile is animated
-        if (weapon.GetComponent<Weapon>().animatedProjectile)
+        if (incoming.GetComponent<Weapon>().animatedProjectile)
         {
             anim = (RuntimeAnimatorController)RuntimeAnimatorController.Instantiate
-                (Resources.Load(("AnimControllers/Projectiles/" + weapon.name + "_0"), typeof(RuntimeAnimatorController )));
+                (Resources.Load(("AnimControllers/Projectiles/" + incoming.name + "_0"), typeof(RuntimeAnimatorController )));
             animator.runtimeAnimatorController = anim;
             animator.speed = .5f;
         }

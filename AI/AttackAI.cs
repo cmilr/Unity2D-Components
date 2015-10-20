@@ -6,7 +6,7 @@ using Matcha.Extensions;
 
 public class AttackAI : CacheBehaviour {
 
-    public enum AttackStyle { RandomProjectile, Scout, HesitantScout, Wanderer };
+    public enum AttackStyle { RandomProjectile };
     public AttackStyle attackStyle;
     // public float attackInterval    = 1f;
     public float chanceOfAttack    = 40f;

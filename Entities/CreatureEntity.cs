@@ -71,11 +71,11 @@ public class CreatureEntity : Entity
 		hp -= (int)(playerWeapon.damage * DIFFICULTY_DAMAGE_MODIFIER);
 
 		// bounceback from projectile
-		if (coll.transform.position.x > transform.position.x)
+		if (hitFrom == RIGHT && !blockedLeft)
 		{
 			MFX.RepulseToLeftRandomly(transform, repulseMin, repulseMax, repulseTime);
 		}
-		else if (coll.transform.position.x < transform.position.x)
+		else if (hitFrom == LEFT && !blockedRight)
 		{
 			MFX.RepulseToRightRandomly(transform, repulseMin, repulseMax, repulseTime);
 		}
@@ -98,13 +98,13 @@ public class CreatureEntity : Entity
 		// bounceback from projectile
 		if (hitFrom == RIGHT && !blockedLeft)
 		{
-			rigidbody2D.AddForce(new Vector3(-100, 0, 0));
-			// MFX.RepulseToLeftRandomly(transform, .3f, .8f, .2f);
+			// rigidbody2D.AddForce(new Vector3(-100, 0, 0));
+			MFX.RepulseToLeftRandomly(transform, .3f, .8f, .2f);
 		}
 		else if (hitFrom == LEFT && !blockedRight)
 		{
-			rigidbody2D.AddForce(new Vector3(100, 0, 0));
-			// MFX.RepulseToRightRandomly(transform, .3f, .8f, .2f);
+			// rigidbody2D.AddForce(new Vector3(100, 0, 0));
+			MFX.RepulseToRightRandomly(transform, .3f, .8f, .2f);
 		}
 		else
 		{

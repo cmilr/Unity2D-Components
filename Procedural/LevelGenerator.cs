@@ -320,9 +320,9 @@ public class LevelGenerator : CacheBehaviour
 	bool TileInBounds(int originX, int originY)
 	{
 		if (originX < (mapColumns - mapMarginX) &&
-				originX > (mapMarginX) &&
-				originY < (mapRows - mapMarginY) &&
-				originY > (mapMarginY))
+			originX > (mapMarginX) &&
+			originY < (mapRows - mapMarginY) &&
+			originY > (mapMarginY))
 		{
 			return true;
 		}
