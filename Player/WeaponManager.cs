@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 using System.Collections;
 
 public class WeaponManager : CacheBehaviour {
@@ -45,7 +46,7 @@ public class WeaponManager : CacheBehaviour {
 
             default:
             {
-                Debug.Log("ERROR: No action was set in WeaponManager.cs >> ActionDispatcher()");
+                Assert.IsTrue(false, "** Default Case Reached **");
                 break;
             }
         }
@@ -111,7 +112,7 @@ public class WeaponManager : CacheBehaviour {
 
             default:
             {
-                Debug.Log("ERROR: No action was set in WeaponManager.cs >> PlayWeaponAnimation()");
+                Assert.IsTrue(false, "** Default Case Reached **");
                 break;
             }
         }
@@ -177,7 +178,7 @@ public class WeaponManager : CacheBehaviour {
 
             default:
             {
-                Debug.Log("ERROR: No action was set in WeaponManager.cs >> PlayProjectileAnimation()");
+                Assert.IsTrue(false, "** Default Case Reached **");
                 break;
             }
         }
@@ -243,7 +244,7 @@ public class WeaponManager : CacheBehaviour {
 
             default:
             {
-                Debug.Log("ERROR: No action was set in WeaponManager.cs >> PlayProjectileAnimation()");
+                Assert.IsTrue(false, "** Default Case Reached **");
                 break;
             }
         }

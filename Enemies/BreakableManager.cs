@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 using System.Collections;
 using Matcha.Extensions;
 
@@ -57,7 +58,7 @@ public class BreakableManager : CacheBehaviour {
             break;
 
             default:
-                disintegration = Type.Directional_Slump;
+                Assert.IsTrue(false, "** Default Case Reached **");
             break;
         }
 
@@ -92,13 +93,7 @@ public class BreakableManager : CacheBehaviour {
                 break;
 
                 default:
-                    direction = (hitFrom == RIGHT) ? 1 : -1;
-                    rigidbody2D.AddForce(new Vector3(0, -100, 0));
-                    rigidbody2D.AddExplosionForce(2000, new Vector3(
-                            transform.position.x + direction,
-                            transform.position.y + .5f,
-                            transform.position.z), 2
-                        );
+                    Assert.IsTrue(false, "** Default Case Reached **");
                 break;
             }
         }
@@ -132,7 +127,7 @@ public class BreakableManager : CacheBehaviour {
             break;
 
             default:
-                disintegration = Type.Slump;
+                Assert.IsTrue(false, "** Default Case Reached **");
             break;
         }
 
@@ -182,7 +177,7 @@ public class BreakableManager : CacheBehaviour {
                 break;
 
                 default:
-                    rigidbody2D.AddExplosionForce(2000, transform.position, 5);
+                    Assert.IsTrue(false, "** Default Case Reached **");
                 break;
             }
         }

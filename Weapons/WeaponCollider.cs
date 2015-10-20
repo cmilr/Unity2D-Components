@@ -4,7 +4,6 @@ using Matcha.Lib;
 
 [RequireComponent(typeof(BoxCollider2D))]
 
-
 public class WeaponCollider : CacheBehaviour
 {
     void Start()

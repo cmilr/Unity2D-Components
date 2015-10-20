@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 using System;
 using System.Collections;
 using Rewired;
@@ -107,7 +108,7 @@ public class DeathHandler : CacheBehaviour
 
 			default:
 			{
-				Debug.Log("ERROR: No methodOfDeath was set in DeathHandler.cs >> PlayAnimation()");
+				Assert.IsTrue(false, "** Default Case Reached **");
 				break;
 			}
 		}

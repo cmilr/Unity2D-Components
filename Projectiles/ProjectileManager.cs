@@ -2,11 +2,11 @@
 
 public class ProjectileManager : CacheBehaviour {
 
+    private bool firedByPlayer;
     private GameObject pooledProjectile;
     private Transform projectileSpawnPoint;
     private float fireRate;
     private float nextFire;
-    private bool firedByPlayer;
 
     void Start()
     {

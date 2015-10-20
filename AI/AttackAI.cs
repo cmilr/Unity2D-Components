@@ -8,7 +8,6 @@ public class AttackAI : CacheBehaviour {
 
     public enum AttackStyle { RandomProjectile };
     public AttackStyle attackStyle;
-    // public float attackInterval    = 1f;
     public float chanceOfAttack    = 40f;
     public float attackWhenInRange = 20f;
     public bool attackPaused;

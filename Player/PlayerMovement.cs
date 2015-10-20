@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 using System.Collections;
 using Matcha.Extensions;
 
@@ -370,7 +371,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 			default:
 			{
-				Debug.Log("ERROR: No action was set in PlayerMovement.cs >> ActionDispatcher()");
+				Assert.IsTrue(false, "** Default Case Reached **");
 				break;
 			}
 		}

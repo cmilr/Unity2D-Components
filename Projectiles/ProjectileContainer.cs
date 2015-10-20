@@ -48,9 +48,13 @@ public class ProjectileContainer : Weapon {
         Init(weapon);
 
         if (fadeIn)
+        {
             MFX.Fade(spriteRenderer, 1f, 0f, .3f);
+        }
         else
+        {
             MFX.Fade(spriteRenderer, 1f, 0f, 0f);
+        }
 
         // lob projectile like a cannon ball
         if (lob)
@@ -58,9 +62,13 @@ public class ProjectileContainer : Weapon {
             // if fired by the player, use the custom gravity supplied by the weapon (lobGravity,)
             // otherwise, for projectiles fired by an enemy, use the default gravity of .5f
             if (firedByPlayer)
+            {
                 rigidbody2D.gravityScale = lobGravity;
+            }
             else
+            {
                 rigidbody2D.gravityScale = .5f;
+            }
         }
         // otherwise, fire projectile linearally
         else
@@ -77,9 +85,13 @@ public class ProjectileContainer : Weapon {
         Init(weapon);
 
         if (fadeIn)
+        {
             MFX.Fade(spriteRenderer, 1f, 0f, .3f);
+        }
         else
+        {
             MFX.Fade(spriteRenderer, 1f, 0f, 0f);
+        }
 
         // lob projectile like a cannon ball
         if (lob)
@@ -87,9 +99,13 @@ public class ProjectileContainer : Weapon {
             // if fired by the player, use the custom gravity supplied by the weapon (lobGravity,)
             // otherwise, for projectiles fired by an enemy, use the default gravity of .5f
             if (firedByPlayer)
+            {
                 rigidbody2D.gravityScale = lobGravity;
+            }
             else
+            {
                 rigidbody2D.gravityScale = .5f;
+            }
 
             rigidbody2D.velocity = M.LobProjectile(weapon, transform, target);
         }

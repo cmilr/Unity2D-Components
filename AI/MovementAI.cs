@@ -6,21 +6,20 @@ using Matcha.Lib;
 
 public class MovementAI : CacheBehaviour
 {
-	[HideInInspector]  								// current state
+	[HideInInspector]
 	public int walkingDirection;
-
 	public enum MovementStyle { Sentinel, Scout, HesitantScout, Wanderer };
 	public MovementStyle movementStyle;
 	public float movementSpeed      = 2f;
 	public float walkAnimationSpeed = .5f;
-	public float chanceOfPause      = 1f;           // chance of pause during any given interval
+	public float chanceOfPause      = 1f;		// chance of pause during any given interval
 	public bool movementPaused;
 
 	private string walkAnimation;
 	private float movementInterval;
 	private float lookInterval      = .3f;
 	private float xAxisOffset       = .3f;
-	private float playerOffset      = 2f;		// offset target so enemy doesn't end up exactly where player is
+	private float playerOffset      = 3f;		// offset target so enemy doesn't end up exactly where player is
 	private int sideHit;
 	private bool blockedLeft;
 	private bool blockedRight;

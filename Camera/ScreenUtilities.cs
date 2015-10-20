@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 using System.Collections;
 using DG.Tweening;
 using UnityStandardAssets.ImageEffects;
@@ -56,8 +57,8 @@ public class ScreenUtilities : CacheBehaviour
 			return Mathf.Abs(transform.position.x + horizExtent - trackedObject.position.x);
 
 		default:
-			Debug.Log("ERROR: Which edge would you like to check? top, bottom, left, or right.");
-			return 0f;
+			Assert.IsTrue(false, "** Default Case Reached **");
+			return ERROR;
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 using System;
 using System.Collections;
 using Matcha.Dreadful.FX;
@@ -49,6 +50,10 @@ public class PickupEntity : Entity
 
 				case EntityType.load:
 					Messenger.Broadcast<bool>("load player data", true);
+				break;
+
+				default:
+					Assert.IsTrue(false, "** Default Case Reached **");
 				break;
 			}
 		}

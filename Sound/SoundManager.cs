@@ -3,7 +3,6 @@ using System.Collections;
 
 [RequireComponent(typeof(AudioSource))]
 
-
 public class SoundManager : CacheBehaviour
 {
 	public AudioClip collectPrize;
@@ -15,7 +14,10 @@ public class SoundManager : CacheBehaviour
 
 	void OnPrizeCollected(int worth)
 	{
-		GetComponent<AudioSource>().PlayOneShot(collectPrize, 0F);
+		if (worth > 5)
+		{
+			audio.PlayOneShot(collectPrize, 0F);
+		}
 	}
 
 	void OnEnable()

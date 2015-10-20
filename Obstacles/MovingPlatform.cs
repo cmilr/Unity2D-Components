@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 using System.Collections;
 using DG.Tweening;
 
@@ -30,35 +31,32 @@ public class MovingPlatform : CacheBehaviour
 				.AppendInterval(pauseTime)
 				.Append(transform.DOMoveX(distance, time).SetRelative().SetEase(Ease.InOutQuad))
 				.AppendInterval(pauseTime);
-			break;
+		break;
 
 		case Direction.left:
 			DOTween.Sequence().SetLoops(-1, LoopType.Yoyo)
 				.AppendInterval(pauseTime)
 				.Append(transform.DOMoveX(-distance, time).SetRelative().SetEase(Ease.InOutQuad))
 				.AppendInterval(pauseTime);
-			break;
+		break;
 
 		case Direction.up:
 			DOTween.Sequence().SetLoops(-1, LoopType.Yoyo)
 				.AppendInterval(pauseTime)
 				.Append(transform.DOMoveY(distance, time).SetRelative().SetEase(Ease.InOutQuad))
 				.AppendInterval(pauseTime);
-			break;
+		break;
 
 		case Direction.down:
 			DOTween.Sequence().SetLoops(-1, LoopType.Yoyo)
 				.AppendInterval(pauseTime)
 				.Append(transform.DOMoveY(-distance, time).SetRelative().SetEase(Ease.InOutQuad))
 				.AppendInterval(pauseTime);
-			break;
+		break;
 
 		default:
-			DOTween.Sequence().SetLoops(-1, LoopType.Yoyo)
-				.AppendInterval(pauseTime)
-				.Append(transform.DOMoveX(distance, time).SetRelative().SetEase(Ease.InOutQuad))
-				.AppendInterval(pauseTime);
-			break;
+			Assert.IsTrue(false, "** Default Case Reached **");
+		break;
 		}
 	}
 
