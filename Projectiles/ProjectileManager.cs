@@ -28,7 +28,6 @@ public class ProjectileManager : CacheBehaviour {
             InitPooledProjectile();
             pooledProjectile.GetComponent<ProjectileContainer>().Fire(firedByPlayer, equippedWeapon, transform.localScale.x);
         }
-
     }
 
     // fire specifically at target

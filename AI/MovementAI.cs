@@ -20,7 +20,7 @@ public class MovementAI : CacheBehaviour
 	private float movementInterval;
 	private float lookInterval      = .3f;
 	private float xAxisOffset       = .3f;
-	private float playerOffset      = 1.50f;		// offset target so enemy doesn't end up exactly where player is
+	private float playerOffset      = 2f;		// offset target so enemy doesn't end up exactly where player is
 	private int sideHit;
 	private bool blockedLeft;
 	private bool blockedRight;
@@ -124,12 +124,14 @@ public class MovementAI : CacheBehaviour
 		{
 			// transform.SetXPosition(blockedAt);
 			rigidbody2D.velocity = Vector2.zero;
+			rigidbody2D.angularVelocity = 0f;
 			movementPaused = true;
 		}
 		// if enemy and player are on roughly same x axis, movementPaused
 		else if (transform.position.x.FloatEquals(target.position.x, xAxisOffset))
 		{
 			rigidbody2D.velocity = Vector2.zero;
+			rigidbody2D.angularVelocity = 0f;
 			movementPaused = true;
 		}
 		else
