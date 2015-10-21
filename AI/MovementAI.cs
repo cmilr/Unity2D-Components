@@ -21,9 +21,11 @@ public class MovementAI : CacheBehaviour
 	private float xAxisOffset       = .3f;
 	private float playerOffset      = 3f;		// offset target so enemy doesn't end up exactly where player is
 	private int sideHit;
+	private bool hesitant;
 	private bool blockedLeft;
 	private bool blockedRight;
-	private bool hesitant;
+	private float blockedRightAt;
+	private float blockedLeftAt;
 	private Transform target;
 
 	void Start()
@@ -119,12 +121,27 @@ public class MovementAI : CacheBehaviour
 	{
 		walkingDirection = (target.position.x > transform.position.x) ? RIGHT : LEFT;
 
-		if ((blockedRight && walkingDirection == RIGHT) || (blockedLeft && walkingDirection == LEFT))
+		if (blockedRight && walkingDirection == RIGHT)
 		{
-			// transform.SetXPosition(blockedAt);
+			movementPaused = true;
 			rigidbody2D.velocity = Vector2.zero;
 			rigidbody2D.angularVelocity = 0f;
+
+			if (transform.position.x > blockedRightAt)
+			{
+				transform.SetXPosition(blockedRightAt);
+			}
+		}
+		else if (blockedLeft && walkingDirection == LEFT)
+		{
 			movementPaused = true;
+			rigidbody2D.velocity = Vector2.zero;
+			rigidbody2D.angularVelocity = 0f;
+
+			if (transform.position.x < blockedLeftAt)
+			{
+				transform.SetXPosition(blockedLeftAt);
+			}
 		}
 		// if enemy and player are on roughly same x axis, movementPaused
 		else if (transform.position.x.FloatEquals(target.position.x, xAxisOffset))
@@ -164,11 +181,13 @@ public class MovementAI : CacheBehaviour
 			if (sideHit == RIGHT)
 			{
 				blockedRight = true;
+				blockedRightAt = transform.position.x;
 				gameObject.BroadcastMessage("SetBlockedRightState", true);
 			}
 			else if (sideHit == LEFT)
 			{
 				blockedLeft = true;
+				blockedLeftAt = transform.position.x;
 				gameObject.BroadcastMessage("SetBlockedLeftState", true);
 			}
 
