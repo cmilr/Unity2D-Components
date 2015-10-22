@@ -44,7 +44,6 @@ public class LevelGenerator : CacheBehaviour
 		CarveRandomRooms();
 		CarveHalls();
 		AssessForStairs();
-		ShowBounds(rooms);
 		RefreshAllTiles();
 	}
 
@@ -117,7 +116,7 @@ public class LevelGenerator : CacheBehaviour
 					}
 				}
 
-				// with room succesfully placed, set origin then add to List
+				// with room succesfully placed, set origin then add room to List
 				room.originX = originX;
 				room.originY = originY;
 				rooms.Add(room);
@@ -129,46 +128,6 @@ public class LevelGenerator : CacheBehaviour
 		}
 
 		map.BulkEditEnd();
-	}
-
-	bool RoomInBounds(int originX, int originY, ProcRoom room)
-	{
-		if (originX + room.width < (mapColumns - mapMarginX) &&
-				originY + room.height < (mapRows - mapMarginY))
-		{
-			return true;
-		}
-
-		return false;
-	}
-
-	bool TouchingRooms(int originX, int originY, ProcRoom room)
-	{
-		// iterate through each potential tile placement
-		for (int x = originX - roomMarginX; x < room.width + originX + roomMarginX; x++)
-		{
-			for (int y = originY - roomMarginY; y < room.height + originY + roomMarginY; y++)
-			{
-				// if a room has already been carved out here, return true
-				if (map.GetTileInfo(x, y) == null)
-				{
-					return true;
-				}
-			}
-		}
-
-		return false;
-	}
-
-	void LogRooms()
-	{
-		int i = 0;
-
-		foreach (ProcRoom room in rooms)
-		{
-			Debug.Log("Room " + i + ": x." + room.originX + ", y." + room.originY);
-			i++;
-		}
 	}
 
 	void CarveHalls()
@@ -184,9 +143,8 @@ public class LevelGenerator : CacheBehaviour
 			ProcHall hall = new ProcHall();
 
 			// get random direction
-			// int rand = UnityEngine.Random.Range(0, 2);
-			// direction = (rand == 0 ? RIGHT : LEFT);
-			direction = RIGHT;
+			int rand = UnityEngine.Random.Range(0, 2);
+			direction = (rand == 0 ? RIGHT : LEFT);
 
 			// set origin point
 			if (direction == RIGHT)
@@ -241,7 +199,7 @@ public class LevelGenerator : CacheBehaviour
 	{
 		foreach (ProcHall hall in halls)
 		{
-			int rand = UnityEngine.Random.Range(0, 2);
+			int rand = UnityEngine.Random.Range(0, 3);
 
 			if (rand == 0)
 			{
@@ -251,8 +209,17 @@ public class LevelGenerator : CacheBehaviour
 				{
 					BuildStairs(RIGHT, hall.BottomRightX() + 1, hall.BottomRightY() + 1);
 				}
+			}
+			else if (rand == 1)
+			{
+				if (map.GetTileInfo(hall.BottomLeftX() - 1, hall.BottomLeftY() + 1) == null &&
+						TileInBounds(hall.BottomLeftX() - 1, hall.BottomLeftY() + 1) &&
+						map.GetTileInfo(hall.BottomLeftX(), hall.BottomLeftY() + 1) != null)
+				{
+					BuildStairs(LEFT, hall.BottomLeftX() - 1, hall.BottomLeftY() + 1);
+				}
 
-				hallOriginBrush.PaintTile(map, hall.BottomRightX() + 1, hall.BottomRightY() + 1);
+				hallOriginBrush.PaintTile(map, hall.BottomLeftX() - 1, hall.BottomRightY() + 1);
 			}
 		}
 	}
@@ -293,8 +260,17 @@ public class LevelGenerator : CacheBehaviour
 				{
 					if (TileInBounds(originX - x, originY + y))
 					{
+						// build stairs
 						brush.PaintTile(map, originX - x, originY + y);
+						// erase walls to the right of stairs
+						map.ClearTile(originX - x - 1, originY + y);
+						map.ClearTile(originX - x - 2, originY + y);
+						map.ClearTile(originX - x - 3, originY + y);
+						map.ClearTile(originX - x - 4, originY + y);
 					}
+
+					// backfill stairs by one tile
+					brush.PaintTile(map, originX + 1, originY + y);
 				}
 
 				y++;
@@ -328,6 +304,46 @@ public class LevelGenerator : CacheBehaviour
 		}
 
 		return false;
+	}
+
+	bool RoomInBounds(int originX, int originY, ProcRoom room)
+	{
+		if (originX + room.width < (mapColumns - mapMarginX) &&
+				originY + room.height < (mapRows - mapMarginY))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	bool TouchingRooms(int originX, int originY, ProcRoom room)
+	{
+		// iterate through each potential tile placement
+		for (int x = originX - roomMarginX; x < room.width + originX + roomMarginX; x++)
+		{
+			for (int y = originY - roomMarginY; y < room.height + originY + roomMarginY; y++)
+			{
+				// if a room has already been carved out here, return true
+				if (map.GetTileInfo(x, y) == null)
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	void LogRooms()
+	{
+		int i = 0;
+
+		foreach (ProcRoom room in rooms)
+		{
+			Debug.Log("Room " + i + ": x." + room.originX + ", y." + room.originY);
+			i++;
+		}
 	}
 
 	void PlaceRandomSteps()
