@@ -17,14 +17,15 @@ public class LevelGenerator : CacheBehaviour
 	private TileSystem map;
 	private int mapColumns;
 	private int mapRows;
-	private int mapMarginX = 10;
-	private int mapMarginY = 10;
-	private int roomMarginX = 4;
-	private int roomMarginY = 4;
-	private int numberOfRooms = 40;
-	private int direction = RIGHT;
+	private int mapMarginX    = 10;
+	private int mapMarginY    = 10;
+	private int roomMarginX   = 4;
+	private int roomMarginY   = 4;
+	private int numberOfRooms = 50;
+	private int direction     = RIGHT;
 	List<ProcRoom> rooms;
 	List<ProcHall> halls;
+	List<ProcHall> crawlways;
 
 
 	void Awake()
@@ -34,6 +35,7 @@ public class LevelGenerator : CacheBehaviour
 		mapRows    = map.RowCount;
 		rooms      = new List<ProcRoom>();
 		halls      = new List<ProcHall>();
+		crawlways  = new List<ProcHall>();
 
 		GenerateRandomDungeons();
 	}
@@ -43,6 +45,7 @@ public class LevelGenerator : CacheBehaviour
 		PaintBaseTiles();
 		CarveRandomRooms();
 		CarveHalls();
+		// CarveCrawlways();
 		AssessForStairs();
 		RefreshAllTiles();
 	}
@@ -195,11 +198,78 @@ public class LevelGenerator : CacheBehaviour
 		map.BulkEditEnd();
 	}
 
+	void CarveCrawlways()
+	{
+		map.BulkEditBegin();
+
+		int originX;
+		int originY;
+		int x;
+
+		foreach (ProcRoom room in rooms)
+		{
+			ProcHall crawlway = new ProcHall();
+
+			// get random direction
+			// int rand = UnityEngine.Random.Range(0, 2);
+			// direction = (rand == 0 ? RIGHT : LEFT);
+
+			direction = RIGHT;
+
+			// set origin point
+			// if (direction == RIGHT)
+			// {
+				originX = room.TopRightX();
+				originY = room.TopRightY() + 1;
+				x = 1;
+			// }
+			// else
+			// {
+			// 	originX = room.BottomLeftX();
+			// 	originY = room.BottomLeftY();
+			// 	x = -1;
+			// }
+
+			// get random height to make halls either two or four tiles tall
+			int rand2 = UnityEngine.Random.Range(0, 10);
+			int i = (rand2 == 0 ? 2 : 4);
+
+			while (map.GetTileInfo(originX + x, originY) != null &&
+					TileInBounds(originX + x, originY))
+			{
+				if (i == 2)
+				{
+					map.ClearTile(originX + x, originY);
+					map.ClearTile(originX + x, originY - 1);
+				}
+				else
+				{
+					map.ClearTile(originX + x, originY);
+					map.ClearTile(originX + x, originY - 1);
+					// map.ClearTile(originX + x, originY - 2);
+					// map.ClearTile(originX + x, originY - 3);
+				}
+
+				x = (direction == RIGHT ? x + 1 : x - 1);
+			}
+
+			// with hall succesfully placed, set its origin, width, and height, then add to List
+			crawlway.width   = Math.Abs(x) - 1;
+			crawlway.height  = i;
+			crawlway.originY = originY - (i - 1);
+			crawlway.originX = (direction == RIGHT ? originX + 1 : originX - crawlway.width);
+
+			crawlways.Add(crawlway);
+		}
+
+		map.BulkEditEnd();
+	}
+
 	void AssessForStairs()
 	{
 		foreach (ProcHall hall in halls)
 		{
-			int rand = UnityEngine.Random.Range(0, 3);
+			int rand = UnityEngine.Random.Range(0, 2);
 
 			if (rand == 0)
 			{
@@ -230,52 +300,55 @@ public class LevelGenerator : CacheBehaviour
 
 		int y = 0;
 
+		// while coordinates are blank, and within the map's bounds
 		while (map.GetTile(originY + y, originX) == null &&
 				TileInBounds(originX, originY + y))
 		{
-			if (buildDirection == RIGHT)
+			for (int x = 0; x < y; x++)
 			{
-				for (int x = 0; x < y; x++)
+				switch (buildDirection)
 				{
-					if (TileInBounds(originX + x, originY + y))
+					case RIGHT:
 					{
-						// build stairs
-						brush.PaintTile(map, originX + x, originY + y);
-						// erase walls to the right of stairs
-						map.ClearTile(originX + x + 1, originY + y);
-						map.ClearTile(originX + x + 2, originY + y);
-						map.ClearTile(originX + x + 3, originY + y);
-						map.ClearTile(originX + x + 4, originY + y);
+						if (TileInBounds(originX + x, originY + y))
+						{
+							// build stairs
+							brush.PaintTile(map, originX + x, originY + y);
+							// erase walls to the right of stairs
+							map.ClearTile(originX + x + 1, originY + y);
+							map.ClearTile(originX + x + 2, originY + y);
+							map.ClearTile(originX + x + 3, originY + y);
+							map.ClearTile(originX + x + 4, originY + y);
+						}
+
+						// backfill stairs by one tile
+						brush.PaintTile(map, originX - 1, originY + y);
+						brush.PaintTile(map, originX - 2, originY + y);
+						break;
 					}
 
-					// backfill stairs by one tile
-					brush.PaintTile(map, originX - 1, originY + y);
-				}
-
-				y++;
-			}
-			else
-			{
-				for (int x = 0; x < y; x++)
-				{
-					if (TileInBounds(originX - x, originY + y))
+					case LEFT:
 					{
-						// build stairs
-						brush.PaintTile(map, originX - x, originY + y);
-						// erase walls to the right of stairs
-						map.ClearTile(originX - x - 1, originY + y);
-						map.ClearTile(originX - x - 2, originY + y);
-						map.ClearTile(originX - x - 3, originY + y);
-						map.ClearTile(originX - x - 4, originY + y);
+						if (TileInBounds(originX - x, originY + y))
+						{
+							// build stairs
+							brush.PaintTile(map, originX - x, originY + y);
+							// erase walls to the left of stairs
+							map.ClearTile(originX - x - 1, originY + y);
+							map.ClearTile(originX - x - 2, originY + y);
+							map.ClearTile(originX - x - 3, originY + y);
+							map.ClearTile(originX - x - 4, originY + y);
+						}
+
+						// backfill stairs by one tile
+						brush.PaintTile(map, originX + 1, originY + y);
+						brush.PaintTile(map, originX + 2, originY + y);
+						break;
 					}
-
-					// backfill stairs by one tile
-					brush.PaintTile(map, originX + 1, originY + y);
 				}
-
-				y++;
 			}
 
+			y++;
 		}
 
 		map.BulkEditEnd();
