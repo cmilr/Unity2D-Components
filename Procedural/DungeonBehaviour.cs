@@ -22,7 +22,6 @@ public class DungeonBehaviour : CacheBehaviour
     protected int mapMarginY;
     protected int roomMarginX;
     protected int roomMarginY;
-    protected int numberOfRooms;
     protected int direction;
     protected List<ProcSpace> roomList;
     protected List<ProcSpace> hallList;
@@ -43,14 +42,22 @@ public class DungeonBehaviour : CacheBehaviour
         map.BulkEditEnd();
     }
 
-    protected void CarveRandomRooms()
+    protected void CarveRoom()
+    {
+        ProcSpace roomToDraw = new ProcSpace();
+
+        GetRoom(roomToDraw);
+        PaintRoomRandomly(roomToDraw, 100000);
+    }
+
+    protected void CarveRandomRooms(int numberOfRooms)
     {
         for (int i = 0; i < numberOfRooms; i++)
         {
             ProcSpace roomToDraw = new ProcSpace();
 
             GetRoom(roomToDraw);
-            PaintRoomRandomly(roomToDraw);
+            PaintRoomRandomly(roomToDraw, 5);
         }
     }
 
@@ -64,14 +71,14 @@ public class DungeonBehaviour : CacheBehaviour
         room.height = M.RoundToDivFour(room.height);
     }
 
-    protected void PaintRoomRandomly(ProcSpace room)
+    protected void PaintRoomRandomly(ProcSpace room, int maxAttempts)
     {
         bool successful = false;
         int attempts = 0;
 
         map.BulkEditBegin();
 
-        while (!successful && attempts < 5)
+        while (!successful && attempts < maxAttempts)
         {
             // get random coordinates to attempt to place new room
             // int randX = (int) M.NextGaussian(mapColumns / 2, mapColumns / 2, mapMarginX, mapColumns);

@@ -7,13 +7,14 @@ using Matcha.Tiles;
 
 public class DungeonGenerator : DungeonBehaviour
 {
+	int numberOfRooms = 50;
+
 	void Awake()
 	{
-		mapMarginX    = 10;
-		mapMarginY    = 10;
+		mapMarginX    = 12;
+		mapMarginY    = 12;
 		roomMarginX   = 4;
 		roomMarginY   = 4;
-		numberOfRooms = 50;
 
 		map            = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
 		mapColumns     = map.ColumnCount;
@@ -28,8 +29,8 @@ public class DungeonGenerator : DungeonBehaviour
 	void GenerateRandomDungeons()
 	{
 		PaintBaseTiles();
-
-		// CarveRandomRooms();
+		CarveRoom();
+		// CarveRandomRooms(numberOfRooms);
 		// CarveHalls();
 		// CarveCrawlspaces();
 		// AssessForStairs();
