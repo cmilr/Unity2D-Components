@@ -45,7 +45,7 @@ public class LevelGenerator : CacheBehaviour
 		PaintBaseTiles();
 		CarveRandomRooms();
 		CarveHalls();
-		// CarveCrawlways();
+		CarveCrawlways();
 		AssessForStairs();
 		RefreshAllTiles();
 	}
@@ -208,58 +208,50 @@ public class LevelGenerator : CacheBehaviour
 
 		foreach (ProcRoom room in rooms)
 		{
-			ProcHall crawlway = new ProcHall();
+			int rand2 = UnityEngine.Random.Range(0, 2);
 
-			// get random direction
-			// int rand = UnityEngine.Random.Range(0, 2);
-			// direction = (rand == 0 ? RIGHT : LEFT);
+			if (rand2 == 0)
+			{
+				ProcHall crawlway = new ProcHall();
 
-			direction = RIGHT;
+				direction = RIGHT;
 
-			// set origin point
-			// if (direction == RIGHT)
-			// {
 				originX = room.TopRightX();
 				originY = room.TopRightY() + 1;
 				x = 1;
-			// }
-			// else
-			// {
-			// 	originX = room.BottomLeftX();
-			// 	originY = room.BottomLeftY();
-			// 	x = -1;
-			// }
 
-			// get random height to make halls either two or four tiles tall
-			int rand2 = UnityEngine.Random.Range(0, 10);
-			int i = (rand2 == 0 ? 2 : 4);
 
-			while (map.GetTileInfo(originX + x, originY) != null &&
-					TileInBounds(originX + x, originY))
-			{
-				if (i == 2)
+				// get random height to make halls either two or four tiles tall
+				rand2 = UnityEngine.Random.Range(0, 10);
+				int i = (rand2 == 0 ? 2 : 4);
+
+				while (map.GetTileInfo(originX + x, originY) != null &&
+						TileInBounds(originX + x, originY))
 				{
-					map.ClearTile(originX + x, originY);
-					map.ClearTile(originX + x, originY - 1);
-				}
-				else
-				{
-					map.ClearTile(originX + x, originY);
-					map.ClearTile(originX + x, originY - 1);
-					// map.ClearTile(originX + x, originY - 2);
-					// map.ClearTile(originX + x, originY - 3);
+					if (i == 2)
+					{
+						map.ClearTile(originX + x, originY);
+						map.ClearTile(originX + x, originY - 1);
+					}
+					else
+					{
+						map.ClearTile(originX + x, originY);
+						map.ClearTile(originX + x, originY - 1);
+						// map.ClearTile(originX + x, originY - 2);
+						// map.ClearTile(originX + x, originY - 3);
+					}
+
+					x = (direction == RIGHT ? x + 1 : x - 1);
 				}
 
-				x = (direction == RIGHT ? x + 1 : x - 1);
+				// with hall succesfully placed, set its origin, width, and height, then add to List
+				crawlway.width   = Math.Abs(x) - 1;
+				crawlway.height  = i;
+				crawlway.originY = originY - (i - 1);
+				crawlway.originX = (direction == RIGHT ? originX + 1 : originX - crawlway.width);
+
+				crawlways.Add(crawlway);
 			}
-
-			// with hall succesfully placed, set its origin, width, and height, then add to List
-			crawlway.width   = Math.Abs(x) - 1;
-			crawlway.height  = i;
-			crawlway.originY = originY - (i - 1);
-			crawlway.originX = (direction == RIGHT ? originX + 1 : originX - crawlway.width);
-
-			crawlways.Add(crawlway);
 		}
 
 		map.BulkEditEnd();
