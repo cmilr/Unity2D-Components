@@ -11,10 +11,11 @@ public class DungeonGenerator : DungeonBehaviour
 
 	void Awake()
 	{
-		mapMarginX    = 12;
-		mapMarginY    = 12;
-		roomMarginX   = 4;
-		roomMarginY   = 4;
+		// fields inherited from DungeonBehaviour
+		mapMarginX     = 12;
+		mapMarginY     = 12;
+		roomMarginX    = 4;
+		roomMarginY    = 4;
 
 		map            = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
 		mapColumns     = map.ColumnCount;
@@ -30,6 +31,19 @@ public class DungeonGenerator : DungeonBehaviour
 	{
 		PaintBaseTiles();
 		CarveRoom();
+
+		// install hall or stairs
+		int structure = UnityEngine.Random.Range(0, 1);
+
+		if (structure == 0)
+		{
+			AssessForStairsNew();
+		}
+		else
+		{
+			AssessForStairsNew();
+		}
+
 		// CarveRandomRooms(numberOfRooms);
 		// CarveHalls();
 		// CarveCrawlspaces();

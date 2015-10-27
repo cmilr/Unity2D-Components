@@ -6,7 +6,7 @@ using Matcha.Lib;
 using Matcha.Tiles;
 
 // all map and tile operations below make use of the Matcha.Tiles extensions
-// which extend Rotorz.Tile, and act as a safeguard against api changes as well
+// which extend Rotorz.Tile and act as a safeguard against api changes, etc
 public class DungeonBehaviour : CacheBehaviour
 {
     public Brush brush;
@@ -26,6 +26,7 @@ public class DungeonBehaviour : CacheBehaviour
     protected List<ProcSpace> roomList;
     protected List<ProcSpace> hallList;
     protected List<ProcSpace> crawlspaceList;
+    protected ProcSpace currentRoom;
 
     protected void PaintBaseTiles()
     {
@@ -107,6 +108,7 @@ public class DungeonBehaviour : CacheBehaviour
                 room.originX = originX;
                 room.originY = originY;
                 roomList.Add(room);
+                currentRoom = room;
 
                 successful = true;
             }
@@ -268,6 +270,96 @@ public class DungeonBehaviour : CacheBehaviour
                 hallOriginBrush.PaintTile(map, hall.BottomLeftX() - 1, hall.BottomRightY() + 1);
             }
         }
+    }
+
+    protected void AssessForStairsNew()
+    {
+        int rand = UnityEngine.Random.Range(0, 2);
+
+        if (rand == 0)
+        {
+            if (TileInBounds(currentRoom.BottomRightX() - 2, currentRoom.BottomRightY() - 4))
+            {
+                BuildStairsNew(RIGHT, currentRoom.BottomRightX() - 2, currentRoom.BottomRightY() - 4);
+            }
+        }
+        else
+        {
+            if (TileInBounds(currentRoom.BottomLeftX() + 2, currentRoom.BottomLeftY() - 4))
+            {
+                BuildStairsNew(LEFT, currentRoom.BottomLeftX() + 2, currentRoom.BottomLeftY() - 4);
+            }
+        }
+    }
+
+    protected void BuildStairsNew(int buildDirection, int originX, int originY)
+    {
+        map.BulkEditBegin();
+
+        var depth = UnityEngine.Random.Range(12, 21);
+        var y = 0;
+
+        for (int i = 0; i < depth; i++)
+        {
+            // while coordinates are within the map's bounds
+            if (TileInBounds(originX, originY + y))
+            {
+                for (int x = 0; x < y; x++)
+                {
+                    switch (buildDirection)
+                    {
+                        case RIGHT:
+                        {
+                            if (TileInBounds(originX + x, originY + y))
+                            {
+                                // build stairs
+                                if (map.GetTileInfo(originX, originY + y) != null )
+                                {
+                                    brush.PaintTile(map, originX + x, originY + y);
+                                }
+                                // erase walls to the right of stairs
+                                map.ClearTile(originX + x + 1, originY + y);
+                                map.ClearTile(originX + x + 2, originY + y);
+                                map.ClearTile(originX + x + 3, originY + y);
+                                map.ClearTile(originX + x + 4, originY + y);
+                            }
+
+                            // // backfill stairs by one tile
+                            // brush.PaintTile(map, originX - 1, originY + y);
+                            // brush.PaintTile(map, originX - 2, originY + y);
+                            break;
+                        }
+
+                        case LEFT:
+                        {
+                            if (TileInBounds(originX - x, originY + y))
+                            {
+                                // build stairs
+                                if (map.GetTileInfo(originX, originY + y) != null )
+                                {
+                                    brush.PaintTile(map, originX - x, originY + y);
+                                }
+                                // brush.PaintTile(map, originX - x, originY + y);
+                                // erase walls to the left of stairs
+                                map.ClearTile(originX - x - 1, originY + y);
+                                map.ClearTile(originX - x - 2, originY + y);
+                                map.ClearTile(originX - x - 3, originY + y);
+                                map.ClearTile(originX - x - 4, originY + y);
+                            }
+
+                            // // backfill stairs by one tile
+                            // brush.PaintTile(map, originX + 1, originY + y);
+                            // brush.PaintTile(map, originX + 2, originY + y);
+                            break;
+                        }
+                    }
+                }
+
+                y++;
+            }
+        }
+
+        map.BulkEditEnd();
     }
 
     protected void BuildStairs(int buildDirection, int originX, int originY)
