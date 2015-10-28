@@ -1,7 +1,6 @@
 ﻿using Matcha.Dreadful.Colors;   // testing only
 using UnityEngine;
 using System.Collections;
-using Matcha.Lib;
 using Matcha.Extensions;
 
 public class AttackAI : CacheBehaviour {

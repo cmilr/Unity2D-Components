@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Rotorz.Tile;
 using Matcha.Extensions;
 using Matcha.Lib;
 
@@ -18,8 +17,8 @@ public class MovementAI : CacheBehaviour
 	private string walkAnimation;
 	private float movementInterval;
 	private float lookInterval      = .3f;
-	private float xAxisOffset       = .3f;
 	private float playerOffset      = 3f;		// offset target so enemy doesn't end up exactly where player is
+	private float xAxisOffset       = .3f;
 	private int sideHit;
 	private bool hesitant;
 	private bool blockedLeft;
@@ -77,7 +76,7 @@ public class MovementAI : CacheBehaviour
 
 	void FollowTarget()
 	{
-		if (!this.enabled) return;
+		if (!enabled) return;
 
 		// get the proper direction for the enemy to move, then send him moving
 		if (target.position.x > transform.position.x + playerOffset)
@@ -202,14 +201,14 @@ public class MovementAI : CacheBehaviour
 
 		if (layer == EDGE_BLOCKER)
 		{
-			int sideHit = M.HorizSideThatWasHit(gameObject, coll);
+			int sideThatWasHit = M.HorizSideThatWasHit(gameObject, coll);
 
-			if (sideHit == RIGHT)
+			if (sideThatWasHit == RIGHT)
 			{
 				blockedRight = false;
 				gameObject.BroadcastMessage("SetBlockedRightState", false);
 			}
-			else if (sideHit == LEFT)
+			else if (sideThatWasHit == LEFT)
 			{
 				blockedLeft = false;
 				gameObject.BroadcastMessage("SetBlockedLeftState", false);
