@@ -7,8 +7,8 @@ public class MovementAI : CacheBehaviour
 {
 	[HideInInspector]
 	public int walkingDirection;
-	public enum MovementStyle { Sentinel, Scout, HesitantScout, Wanderer };
-	public MovementStyle movementStyle;
+	public enum Style { Sentinel, Scout, HesitantScout, Wanderer };
+	public Style style;
 	public float movementSpeed      = 2f;
 	public float walkAnimationSpeed = .5f;
 	public float chanceOfPause      = 1f;		// chance of pause during any given interval
@@ -36,16 +36,17 @@ public class MovementAI : CacheBehaviour
 
 		movementInterval = Random.Range(.15f, 1f);
 
-		if (movementStyle == MovementStyle.HesitantScout)
+		if (style == Style.HesitantScout) {
 			hesitant = true;
+		}
 	}
 
 	void LateUpdate()
 	{
-		switch (movementStyle)
+		switch (style)
 		{
-		case MovementStyle.Scout:
-		case MovementStyle.HesitantScout:
+		case Style.Scout:
+		case Style.HesitantScout:
 			StopCheck();
 			break;
 		}
@@ -54,14 +55,14 @@ public class MovementAI : CacheBehaviour
 	// MASTER CONTROLLER
 	void OnBecameVisible()
 	{
-		switch (movementStyle)
+		switch (style)
 		{
-		case MovementStyle.Sentinel:
+		case Style.Sentinel:
 			InvokeRepeating("LookAtTarget", 1f, lookInterval);
 			break;
 
-		case MovementStyle.Scout:
-		case MovementStyle.HesitantScout:
+		case Style.Scout:
+		case Style.HesitantScout:
 			InvokeRepeating("LookAtTarget", 1f, lookInterval);
 			InvokeRepeating("FollowTarget", 1f, movementInterval);
 			break;
@@ -162,7 +163,7 @@ public class MovementAI : CacheBehaviour
 		transform.eulerAngles = new Vector3(0, 0, angle);
 	}
 
-	Vector2 GetForceFrom(Vector3 fromPos, Vector3 toPos)
+	static Vector2 GetForceFrom(Vector3 fromPos, Vector3 toPos)
 	{
 		float power = 1;
 		return (new Vector2(toPos.x, toPos.y) - new Vector2(fromPos.x, fromPos.y))*power;

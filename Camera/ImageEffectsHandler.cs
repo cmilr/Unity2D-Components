@@ -1,8 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using DG.Tweening;
+﻿using DG.Tweening;
 using UnityStandardAssets.ImageEffects;
-
 
 public class ImageEffectsHandler : CacheBehaviour
 {

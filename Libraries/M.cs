@@ -79,7 +79,8 @@ public class M : CacheBehaviour
 		}
 	}
 
-    public static float NextGaussian() {
+    public static float NextGaussian()
+    {
         float v1, v2, s;
         do {
             v1 = 2.0f * UnityEngine.Random.Range(0f,1f) - 1.0f;

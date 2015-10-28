@@ -7,8 +7,6 @@ using Matcha.Tiles;
 
 public class DungeonGenerator : DungeonBehaviour
 {
-	int numberOfRooms = 50;
-
 	void Awake()
 	{
 		// fields inherited from DungeonBehaviour
@@ -31,18 +29,9 @@ public class DungeonGenerator : DungeonBehaviour
 	{
 		PaintBaseTiles();
 		CarveRoom();
+        ChooseExitType();
 
-		// install hall or stairs
-		int structure = UnityEngine.Random.Range(0, 1);
 
-		if (structure == 0)
-		{
-			AssessForStairsNew();
-		}
-		else
-		{
-			AssessForStairsNew();
-		}
 
 		// CarveRandomRooms(numberOfRooms);
 		// CarveHalls();

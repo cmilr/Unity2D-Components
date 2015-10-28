@@ -51,6 +51,25 @@ public class DungeonBehaviour : CacheBehaviour
         PaintRoomRandomly(roomToDraw, 100000);
     }
 
+    protected void ChooseExitType()
+    {
+        // choose hall, stairs, pit, or crawlway
+        int structure = Rand.Range(0, 1);
+
+        if (structure == 0)
+        {
+            AssessForStairsOffRoom();
+        }
+        else
+        {
+            AssessForStairsOffRoom();
+        }
+    }
+
+
+
+
+    // previous iteration
     protected void CarveRandomRooms(int numberOfRooms)
     {
         for (int i = 0; i < numberOfRooms; i++)
@@ -272,27 +291,27 @@ public class DungeonBehaviour : CacheBehaviour
         }
     }
 
-    protected void AssessForStairsNew()
+    protected void AssessForStairsOffRoom()
     {
         int rand = UnityEngine.Random.Range(0, 2);
 
         if (rand == 0)
         {
-            if (TileInBounds(currentRoom.BottomRightX() - 2, currentRoom.BottomRightY() - 4))
+            if (TileInBounds(currentRoom.BottomRightX() - 3, currentRoom.BottomRightY() - 4))
             {
-                BuildStairsNew(RIGHT, currentRoom.BottomRightX() - 2, currentRoom.BottomRightY() - 4);
+                BuildStairsOffRoom(RIGHT, currentRoom.BottomRightX() - 3, currentRoom.BottomRightY() - 4);
             }
         }
         else
         {
-            if (TileInBounds(currentRoom.BottomLeftX() + 2, currentRoom.BottomLeftY() - 4))
+            if (TileInBounds(currentRoom.BottomLeftX() + 3, currentRoom.BottomLeftY() - 4))
             {
-                BuildStairsNew(LEFT, currentRoom.BottomLeftX() + 2, currentRoom.BottomLeftY() - 4);
+                BuildStairsOffRoom(LEFT, currentRoom.BottomLeftX() + 3, currentRoom.BottomLeftY() - 4);
             }
         }
     }
 
-    protected void BuildStairsNew(int buildDirection, int originX, int originY)
+    protected void BuildStairsOffRoom(int buildDirection, int originX, int originY)
     {
         map.BulkEditBegin();
 
