@@ -7,10 +7,9 @@
 
 using UnityEngine;
 using System.Collections;
-using Matcha.Lib;
+using Matcha.Unity;
 
-
-namespace Matcha.Dreadful.Colors {
+namespace Matcha.Dreadful {
 
 	public class MCLR : BaseBehaviour
 	{

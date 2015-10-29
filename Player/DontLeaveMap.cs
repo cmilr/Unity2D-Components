@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using Rotorz.Tile;
-using Matcha.Extensions;
+using Matcha.Unity;
 
 
 public class DontLeaveMap : CacheBehaviour

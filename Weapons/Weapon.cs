@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Matcha.Dreadful.Colors;
-using Matcha.Lib;
+using Matcha.Unity;
+using Matcha.Dreadful;
 
 public class Weapon : AnimationBehaviour {
 

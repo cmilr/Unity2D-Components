@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Matcha.Extensions;
-using Matcha.Lib;
+using Matcha.Unity;
 
 public class MovementAI : CacheBehaviour
 {

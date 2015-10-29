@@ -2,8 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Rotorz.Tile;
-using Matcha.Lib;
-using Matcha.Tiles;
+using Matcha.Unity;
 
 public class DungeonGenerator : DungeonBehaviour
 {

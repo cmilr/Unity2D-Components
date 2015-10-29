@@ -9,9 +9,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using DG.Tweening;
-using Matcha.Dreadful.Colors;
+using Matcha.Unity;
+using Matcha.Dreadful;
 
-namespace Matcha.Dreadful.FX {
+namespace Matcha.Dreadful {
 
 	public class MFX : CacheBehaviour
 	{
@@ -134,8 +135,8 @@ namespace Matcha.Dreadful.FX {
 			light.DOKill();
 			DOTween.Sequence()
 				.Append(light.DOIntensity(
-					UnityEngine.Random.Range(minIntensity, maxIntensity),
-					UnityEngine.Random.Range(.1f, .5f)));
+					Rand.Range(minIntensity, maxIntensity),
+					Rand.Range(.1f, .5f)));
 				// .AppendInterval(UnityEngine.Random.Range(.1f, 1f));
 		}
 
@@ -174,7 +175,7 @@ namespace Matcha.Dreadful.FX {
 
 		public static void RepulseToLeftRandomly(Transform transform, float minDistance, float maxDistance, float overTime)
 		{
-			float distance = UnityEngine.Random.Range(minDistance, maxDistance);
+			float distance = Rand.Range(minDistance, maxDistance);
 
 		    transform.DOMove(new Vector3(transform.position.x - distance, transform.position.y, transform.position.z), overTime, false);
 		}
@@ -186,7 +187,7 @@ namespace Matcha.Dreadful.FX {
 
 		public static void RepulseToRightRandomly(Transform transform, float minDistance, float maxDistance, float overTime)
 		{
-			float distance = UnityEngine.Random.Range(minDistance, maxDistance);
+			float distance = Rand.Range(minDistance, maxDistance);
 
 		    transform.DOMove(new Vector3(transform.position.x + distance, transform.position.y, transform.position.z), overTime, false);
 		}

@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using DG.Tweening;
-using Matcha.Dreadful.FX;
+using Matcha.Dreadful;
 
 
 public class DisplayLvl : BaseBehaviour

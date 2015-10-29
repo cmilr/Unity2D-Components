@@ -9,7 +9,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-namespace Matcha.ProcGen
+namespace Matcha.Dreadful
 {
 
 public class MPG : CacheBehaviour

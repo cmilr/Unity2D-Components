@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Matcha.Dreadful.FX;
+using Matcha.Unity;
+using Matcha.Dreadful;
 
 public class BreakablePiece : CacheBehaviour
 {
@@ -14,8 +15,8 @@ public class BreakablePiece : CacheBehaviour
 	void Start()
 	{
 		Rigidbody2D rigidbody = gameObject.GetComponent<Rigidbody2D>();
-		rigidbody.mass        = UnityEngine.Random.Range(.5f, 20f);
-		rigidbody.drag        = UnityEngine.Random.Range(0f, .5f);
+		rigidbody.mass        = Rand.Range(.5f, 20f);
+		rigidbody.drag        = Rand.Range(0f, .5f);
 	}
 
 	public void Init(int index, Sprite breakableSprite)
@@ -30,12 +31,12 @@ public class BreakablePiece : CacheBehaviour
 		newY = originY + (spriteRenderer.sprite.rect.y * .0625f);
 
 		// set position, and randomize z to reduce z-fighting
-		transform.localPosition = new Vector3(newX, newY, UnityEngine.Random.Range(-1f, 0f));
+		transform.localPosition = new Vector3(newX, newY, Rand.Range(-1f, 0f));
 	}
 
 	public void CountDown()
 	{
-		Invoke("FadeOut", UnityEngine.Random.Range(MIN_BEFORE_FADE, MAX_BEFORE_FADE));
+		Invoke("FadeOut", Rand.Range(MIN_BEFORE_FADE, MAX_BEFORE_FADE));
 	}
 
 	// used when fading naturally

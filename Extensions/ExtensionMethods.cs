@@ -9,7 +9,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-namespace Matcha.Extensions {
+namespace Matcha.Unity {
 
     public static class ExtensionMethods
     {

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
 using System.Collections;
-using Matcha.Extensions;
+using Matcha.Unity;
 
 public class BreakableManager : CacheBehaviour {
 
@@ -46,7 +46,7 @@ public class BreakableManager : CacheBehaviour {
         gameObject.SetActive(true);
 
         // randomly choose an disintegration type
-        switch (UnityEngine.Random.Range(1, 3))
+        switch (Rand.Range(1, 2))
         {
             case 0:
                 disintegration = Type.Slump;
@@ -104,7 +104,7 @@ public class BreakableManager : CacheBehaviour {
         gameObject.SetActive(true);
 
         // randomly choose an disintegration type
-        switch (UnityEngine.Random.Range(1, 2))
+        switch (Rand.Range(1, 1))
         {
             case 0:
                 disintegration = Type.Explosion;

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using Matcha.Dreadful.FX;
-using Matcha.Lib;
+using Matcha.Unity;
+using Matcha.Dreadful;
 
 
 public class ProjectileContainer : Weapon {
@@ -179,8 +179,8 @@ public class ProjectileContainer : Weapon {
 // using UnityEngine;
 // using System;
 // using System.Collections;
-// using Matcha.Dreadful.FX;
-// using Matcha.Lib;
+// using Matcha.Dreadful;
+// using Matcha.Unity;
 
 
 // public class ProjectileContainer : Weapon {

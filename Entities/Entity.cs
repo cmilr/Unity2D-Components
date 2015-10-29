@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
-using Matcha.Extensions;
+using Matcha.Unity;
 
 public abstract class Entity : CacheBehaviour {
 

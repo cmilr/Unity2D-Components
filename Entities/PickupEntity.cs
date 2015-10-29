@@ -2,7 +2,7 @@
 using UnityEngine.Assertions;
 using System;
 using System.Collections;
-using Matcha.Dreadful.FX;
+using Matcha.Dreadful;
 
 
 public class PickupEntity : Entity

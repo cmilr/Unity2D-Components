@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Matcha.Dreadful.Colors;
-using Matcha.Dreadful.FX;
+using Matcha.Dreadful;
 using DG.Tweening;
 
 public class PlayerManager : CacheBehaviour

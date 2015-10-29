@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Matcha.Lib;
+using Matcha.Unity;
 
 [RequireComponent(typeof(BoxCollider2D))]
 

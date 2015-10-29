@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Matcha.Dreadful.FX;
+using Matcha.Unity;
+using Matcha.Dreadful;
 
 public class FlickeringFire : CacheBehaviour {
 
@@ -17,7 +18,7 @@ public class FlickeringFire : CacheBehaviour {
         while (true)
         {
             MFX.Flicker(light, minIntensity, maxIntensity);
-            yield return new WaitForSeconds(UnityEngine.Random.Range(.01f, .3f));
+            yield return new WaitForSeconds(Rand.Range(.01f, .3f));
         }
     }
 }

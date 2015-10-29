@@ -3,8 +3,7 @@ using UnityEngine.Assertions;
 using System;
 using System.Collections;
 using Rewired;
-using Matcha.Lib;
-using Matcha.Extensions;
+using Matcha.Unity;
 
 [RequireComponent(typeof(CharacterController2D))]
 [RequireComponent(typeof(PlayerMovement))]

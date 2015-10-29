@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Matcha.Extensions;
+using Matcha.Unity;
 
 public class StreamFX : CacheBehaviour {
 

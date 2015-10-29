@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
 using System.Collections;
-using Matcha.Extensions;
+using Matcha.Unity;
 
 [RequireComponent(typeof(CharacterController2D))]
 
@@ -473,20 +473,20 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	void RepulseToLeft(float maxVelocity)
 	{
 		repulseLeft = true;
-		repulseVelocity = UnityEngine.Random.Range(2f, maxVelocity);
+		repulseVelocity = Rand.Range(2f, maxVelocity);
 		StartCoroutine(RepulseTimer());
 	}
 
 	void RepulseToRight(float maxVelocity)
 	{
 		repulseRight = true;
-		repulseVelocity = UnityEngine.Random.Range(2f, maxVelocity);
+		repulseVelocity = Rand.Range(2f, maxVelocity);
 		StartCoroutine(RepulseTimer());
 	}
 
     IEnumerator RepulseTimer()
     {
-    	yield return new WaitForSeconds(UnityEngine.Random.Range(.1f, .3f));
+    	yield return new WaitForSeconds(Rand.Range(.1f, .3f));
     	repulseLeft = false;
     	repulseRight = false;
     }

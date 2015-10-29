@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using DG.Tweening;
-using Matcha.Dreadful.FX;
+using Matcha.Dreadful;
 
 
 // this is a template for basic integer stats that need to be displayed

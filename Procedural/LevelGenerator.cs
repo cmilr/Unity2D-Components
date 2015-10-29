@@ -2,8 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Rotorz.Tile;
-using Matcha.Lib;
-using Matcha.Tiles;
+using Matcha.Unity;
 
 public class LevelGenerator : CacheBehaviour
 {
@@ -79,12 +78,12 @@ public class LevelGenerator : CacheBehaviour
 
 	void GetRoom(ProcRoom room)
 	{
-		room.width  = (int) M.NextGaussian(8f, 8f, 2f, 50f);
-		room.height = (int) M.NextGaussian(4f, 8f, 8f, 20f);
+		room.width  = (int) Rand.Gaussian(8f, 8f, 2f, 50f);
+		room.height = (int) Rand.Gaussian(4f, 8f, 8f, 20f);
 
 		// round up to nearest even number
-		room.width = M.RoundToDivFour(room.width);
-		room.height = M.RoundToDivFour(room.height);
+		room.width = Rand.RoundToDivFour(room.width);
+		room.height = Rand.RoundToDivFour(room.height);
 	}
 
 	void PaintRoomRandomly(ProcRoom room)
@@ -97,18 +96,17 @@ public class LevelGenerator : CacheBehaviour
 		while (!successful && attempts < 5)
 		{
 			// get random coordinates to attempt to place new room
-			// int randX = (int) M.NextGaussian(mapColumns / 2, mapColumns / 2, mapMarginX, mapColumns);
-			// int randY = (int) M.NextGaussian(mapRows / 2, mapRows / 2, mapMarginY, mapRows);
-			int randX = UnityEngine.Random.Range(mapMarginX, mapColumns - mapMarginX);
-			int randY = UnityEngine.Random.Range(mapMarginY, mapRows - mapMarginY);
+			// int randX = (int) Rand.Gaussian(mapColumns / 2, mapColumns / 2, mapMarginX, mapColumns);
+			// int randY = (int) Rand.Gaussian(mapRows / 2, mapRows / 2, mapMarginY, mapRows);
+			int randX = Rand.Range(mapMarginX, mapColumns - mapMarginX);
+			int randY = Rand.Range(mapMarginY, mapRows - mapMarginY);
 
 			// convert coordinates to divisors of 4; keeps elements from being too close to each other
-			int originX = M.RoundToDivFour(randX);
-			int originY = M.RoundToDivFour(randY);
+			int originX = Rand.RoundToDivFour(randX);
+			int originY = Rand.RoundToDivFour(randY);
 
 			// check that room will fit within map bounds
-			if (RoomInBounds(originX, originY, room) &&
-					!TouchingRooms(originX, originY, room))
+			if (RoomInBounds(originX, originY, room) && !TouchingRooms(originX, originY, room))
 			{
 				// paint room
 				for (int x = 0; x < room.width; x++)
@@ -146,7 +144,7 @@ public class LevelGenerator : CacheBehaviour
 			ProcHall hall = new ProcHall();
 
 			// get random direction
-			int rand = UnityEngine.Random.Range(0, 2);
+			int rand = Rand.Range(0, 1);
 			direction = (rand == 0 ? RIGHT : LEFT);
 
 			// set origin point
@@ -164,7 +162,7 @@ public class LevelGenerator : CacheBehaviour
 			}
 
 			// get random height to make halls either two or four tiles tall
-			int rand2 = UnityEngine.Random.Range(0, 10);
+			int rand2 = Rand.Range(0, 10);
 			int i = (rand2 == 0 ? 2 : 4);
 
 			while (map.GetTileInfo(originX + x, originY) != null &&
@@ -208,7 +206,7 @@ public class LevelGenerator : CacheBehaviour
 
 		foreach (ProcRoom room in rooms)
 		{
-			int rand2 = UnityEngine.Random.Range(0, 2);
+			int rand2 = Rand.Range(0, 1);
 
 			if (rand2 == 0)
 			{
@@ -222,7 +220,7 @@ public class LevelGenerator : CacheBehaviour
 
 
 				// get random height to make halls either two or four tiles tall
-				rand2 = UnityEngine.Random.Range(0, 10);
+				rand2 = Rand.Range(0, 10);
 				int i = (rand2 == 0 ? 2 : 4);
 
 				while (map.GetTileInfo(originX + x, originY) != null &&
@@ -261,7 +259,7 @@ public class LevelGenerator : CacheBehaviour
 	{
 		foreach (ProcHall hall in halls)
 		{
-			int rand = UnityEngine.Random.Range(0, 2);
+			int rand = Rand.Range(0, 1);
 
 			if (rand == 0)
 			{
@@ -423,13 +421,13 @@ public class LevelGenerator : CacheBehaviour
 		{
 			if (room.height > 4)
 			{
-				steps = (int) M.NextGaussian(5f, 3f);
+				steps = (int) Rand.Gaussian(5f, 3f);
 
 				for (int i = 0; i < steps; i++)
 				{
-					x = (int) M.NextGaussian
+					x = (int) Rand.Gaussian
 						(room.originX, room.originX / 2, room.originX + 1, room.originX + room.width - 1);
-					y = (int) M.NextGaussian
+					y = (int) Rand.Gaussian
 						(room.originY, room.originY, room.originY + 1, room.originY + room.height - 1);
 
 					// if (WithinRoomBounds(room, room.originX + x, room.originY - y))

@@ -16,7 +16,7 @@ using UnityEngine;
 using System;
 using Rotorz.Tile;
 
-namespace Matcha.Tiles {
+namespace Matcha.Unity {
 
     public static class TileExtensions
     {

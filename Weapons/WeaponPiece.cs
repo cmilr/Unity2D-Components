@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Matcha.Dreadful.FX;
+using Matcha.Dreadful;
 
 public class WeaponPiece : CacheBehaviour {
 

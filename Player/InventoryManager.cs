@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using DG.Tweening;
-using Matcha.Dreadful.FX;
+using Matcha.Dreadful;
 
 public class InventoryManager : CacheBehaviour {
 

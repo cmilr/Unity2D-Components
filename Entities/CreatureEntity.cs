@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
-using Matcha.Lib;
-using Matcha.Dreadful.FX;
-using Matcha.Dreadful.Colors;
+using Matcha.Unity;
+using Matcha.Dreadful;
 using DG.Tweening;
 
 [RequireComponent(typeof(BoxCollider2D))]
