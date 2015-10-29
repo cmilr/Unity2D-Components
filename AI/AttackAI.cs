@@ -23,7 +23,7 @@ public class AttackAI : CacheBehaviour
 		projectile = GetComponent<ProjectileManager>();
 		weapon = GetComponentInChildren<Weapon>();
 		target = GameObject.Find(PLAYER).transform;
-		attackInterval = Random.Range(1.5f, 2.5f);
+		attackInterval = Rand.Range(1.5f, 2.5f);
 	}
 
 	// MASTER CONTROLLER
@@ -55,7 +55,7 @@ public class AttackAI : CacheBehaviour
 
 			if (distance <= attackWhenInRange && !_attackDisabled)
 			{
-				if (Random.Range(1, 101) <= chanceOfAttack)
+				if (Rand.Range(1, 100) <= chanceOfAttack)
 				{
 					// only attack if creature is facing the same direction as target
 					if ((target.position.x > transform.position.x && transform.localScale.x.FloatEquals(1f)) ||

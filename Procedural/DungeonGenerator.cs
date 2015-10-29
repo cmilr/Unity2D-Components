@@ -28,7 +28,7 @@ public class DungeonGenerator : DungeonBehaviour
 	{
 		PaintBaseTiles();
 		CarveRoom();
-        ChooseExitType();
+		ChooseExitType();
 
 
 

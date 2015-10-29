@@ -33,7 +33,7 @@ public class MovementAI : CacheBehaviour
 		animator.speed = walkAnimationSpeed;
 		animator.Play(Animator.StringToHash(walkAnimation));
 
-		movementInterval = Random.Range(.15f, 1f);
+		movementInterval = Rand.Range(.15f, 1f);
 
 		if (style == Style.HesitantScout) {
 			hesitant = true;
@@ -101,7 +101,7 @@ public class MovementAI : CacheBehaviour
 			transform.SetLocalScaleX((float)walkingDirection);
 
 			// add some random pauses
-			if (hesitant && Random.Range(0f, 100f) <= chanceOfPause)
+			if (hesitant && Rand.Range(0f, 100f) <= chanceOfPause)
 			{
 				rigidbody2D.velocity = Vector2.zero;
 				StartCoroutine(PauseFollowTarget());
@@ -112,7 +112,7 @@ public class MovementAI : CacheBehaviour
 	IEnumerator PauseFollowTarget()
 	{
 		CancelInvoke("FollowTarget");
-		yield return new WaitForSeconds(Random.Range(2, 5));
+		yield return new WaitForSeconds(Rand.Range(2, 5));
 		InvokeRepeating("FollowTarget", 1f, movementInterval);
 	}
 

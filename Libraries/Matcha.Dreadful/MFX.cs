@@ -137,7 +137,6 @@ namespace Matcha.Dreadful {
 				.Append(light.DOIntensity(
 					Rand.Range(minIntensity, maxIntensity),
 					Rand.Range(.1f, .5f)));
-				// .AppendInterval(UnityEngine.Random.Range(.1f, 1f));
 		}
 
 		public static void ExtinguishLight(Light light, float extinguishAfter, float timeToExtinguish)

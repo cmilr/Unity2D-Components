@@ -78,12 +78,8 @@ public class LevelGenerator : CacheBehaviour
 
 	void GetRoom(ProcRoom room)
 	{
-		room.width  = (int) Rand.Gaussian(8f, 8f, 2f, 50f);
-		room.height = (int) Rand.Gaussian(4f, 8f, 8f, 20f);
-
-		// round up to nearest even number
-		room.width = Rand.RoundToDivFour(room.width);
-		room.height = Rand.RoundToDivFour(room.height);
+		room.width  = (int) Rand.GaussianDivFour(8, 8, 2, 50);
+		room.height = (int) Rand.GaussianDivFour(4, 8, 8, 20);
 	}
 
 	void PaintRoomRandomly(ProcRoom room)
@@ -95,15 +91,9 @@ public class LevelGenerator : CacheBehaviour
 
 		while (!successful && attempts < 5)
 		{
-			// get random coordinates to attempt to place new room
-			// int randX = (int) Rand.Gaussian(mapColumns / 2, mapColumns / 2, mapMarginX, mapColumns);
-			// int randY = (int) Rand.Gaussian(mapRows / 2, mapRows / 2, mapMarginY, mapRows);
-			int randX = Rand.Range(mapMarginX, mapColumns - mapMarginX);
-			int randY = Rand.Range(mapMarginY, mapRows - mapMarginY);
-
-			// convert coordinates to divisors of 4; keeps elements from being too close to each other
-			int originX = Rand.RoundToDivFour(randX);
-			int originY = Rand.RoundToDivFour(randY);
+			// random ints divisible by four 4 — keeps some distance between elements
+			int originX = Rand.RangeDivFour(mapMarginX, mapColumns - mapMarginX);
+			int originY = Rand.RangeDivFour(mapMarginY, mapRows - mapMarginY);
 
 			// check that room will fit within map bounds
 			if (RoomInBounds(originX, originY, room) && !TouchingRooms(originX, originY, room))

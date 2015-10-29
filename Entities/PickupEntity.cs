@@ -31,30 +31,30 @@ public class PickupEntity : Entity
 					MFX.PickupPrize(gameObject);
 					MFX.ExtinguishLight(glow, 0, .1f);
 					Messenger.Broadcast<int>("prize collected", worth);
-				break;
+					break;
 
 				case EntityType.levelUp:
 					MFX.PickupPrize(gameObject);
 					MFX.ExtinguishLight(glow, 0, .1f);
 					Messenger.Broadcast<int>("prize collected", worth);
 			    	Messenger.Broadcast<bool>("level completed", true);
-				break;
+					break;
 
 				case EntityType.weapon:
 					MFX.PickupWeapon(gameObject);
-				break;
+					break;
 
 				case EntityType.save:
 					Messenger.Broadcast<bool>("save player data", true);
-				break;
+					break;
 
 				case EntityType.load:
 					Messenger.Broadcast<bool>("load player data", true);
-				break;
+					break;
 
 				default:
 					Assert.IsTrue(false, "** Default Case Reached **");
-				break;
+					break;
 			}
 		}
 	}

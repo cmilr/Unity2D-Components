@@ -11,8 +11,8 @@ using Matcha.Unity;
 
 namespace Matcha.Dreadful {
 
-	public class MCLR : BaseBehaviour
-	{
+        public class MCLR : BaseBehaviour
+        {
         public static Color32 white             = M.HexToColor("ffffff");
         public static Color32 black             = M.HexToColor("000000");
         public static Color32 orange            = M.HexToColor("fa8419");
@@ -27,5 +27,5 @@ namespace Matcha.Dreadful {
         // default sword
         public static Color32 defaultGrayBlade  = M.HexToColor("ffffff");
         public static Color32 defaultGrayHandle = M.HexToColor("949292");
-	}
+        }
 }
