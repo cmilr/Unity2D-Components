@@ -33,44 +33,44 @@ namespace Matcha.Dreadful {
 
 		public static void DisplayScore(GameObject gameObject, Text text)
 		{
-		    gameObject.transform.DOScale(new Vector3(1, 1, 0), 0f);
-		    gameObject.transform.DOPunchScale(new Vector3(1f, 1f, 0f), .3f, 3, 1);
-		    DOTween.Sequence()
-		        .Append(text.DOColor(Color.yellow, .15f))
-		        .Append(text.DOColor(Color.white, .15f))
-		        .Append(text.DOColor(MCLR.orange, .3f));;
+			 gameObject.transform.DOScale(new Vector3(1, 1, 0), 0f);
+			 gameObject.transform.DOPunchScale(new Vector3(1f, 1f, 0f), .3f, 3, 1);
+			 DOTween.Sequence()
+				  .Append(text.DOColor(Color.yellow, .15f))
+				  .Append(text.DOColor(Color.white, .15f))
+				  .Append(text.DOColor(MCLR.orange, .3f));;
 		}
 
 		public static void DisplayScoreFX(GameObject gameObject, Text text)
 		{
-		    DOTween.Sequence()
-		        .Append(gameObject.transform.DOScale(new Vector3(1, 1, 1), 0f))
-		        .Append(gameObject.transform.DOScale(new Vector3(1.6f, 1.6f, 0), .10f)
-		        .SetEase(Ease.InBounce))
-		        .Append(gameObject.transform.DOScale(new Vector3(1, 1, 1), .1f)
-		        .SetEase(Ease.Linear));;
+			 DOTween.Sequence()
+				  .Append(gameObject.transform.DOScale(new Vector3(1, 1, 1), 0f))
+				  .Append(gameObject.transform.DOScale(new Vector3(1.6f, 1.6f, 0), .10f)
+				  .SetEase(Ease.InBounce))
+				  .Append(gameObject.transform.DOScale(new Vector3(1, 1, 1), .1f)
+				  .SetEase(Ease.Linear));;
 		}
 
 		public static void TextFlicker(Text text)
 		{
 			DOTween.Sequence()
-	            .Append(text.DOColor(Color.yellow, .05f))
-	            .Append(text.DOColor(MCLR.orange, .05f))
-	            .Append(text.DOColor(Color.yellow, .05f))
-	            .Append(text.DOColor(MCLR.orange, .05f))
-	            .Append(text.DOColor(Color.yellow, .05f))
-	            .Append(text.DOColor(MCLR.orange, .05f))
-	            .Append(text.DOColor(Color.yellow, .05f))
-	            .Append(text.DOColor(MCLR.orange, .3f));;
+				.Append(text.DOColor(Color.yellow, .05f))
+				.Append(text.DOColor(MCLR.orange, .05f))
+				.Append(text.DOColor(Color.yellow, .05f))
+				.Append(text.DOColor(MCLR.orange, .05f))
+				.Append(text.DOColor(Color.yellow, .05f))
+				.Append(text.DOColor(MCLR.orange, .05f))
+				.Append(text.DOColor(Color.yellow, .05f))
+				.Append(text.DOColor(MCLR.orange, .3f));;
 		}
 
 		public static void TextPulse(Text text)
 		{
 			DOTween.Sequence().SetLoops(-1, LoopType.Yoyo)
-			    .Append(text.DOColor(Color.white, .6f).SetEase(Ease.InQuad))
-			    .AppendInterval(.2f)
-			    .Append(text.DOColor(MCLR.orange, .6f).SetEase(Ease.OutQuad))
-			    .AppendInterval(.2f);;
+				 .Append(text.DOColor(Color.white, .6f).SetEase(Ease.InQuad))
+				 .AppendInterval(.2f)
+				 .Append(text.DOColor(MCLR.orange, .6f).SetEase(Ease.OutQuad))
+				 .AppendInterval(.2f);;
 		}
 
 		public static void Fade(SpriteRenderer element, float fadeTo, float fadeAfter, float timeToFade)
@@ -169,31 +169,31 @@ namespace Matcha.Dreadful {
 
 		public static void RepulseToLeft(Transform transform, float xDistance, float overTime)
 		{
-		    transform.DOMove(new Vector3(transform.position.x - xDistance, transform.position.y, transform.position.z), overTime, false);
+			 transform.DOMove(new Vector3(transform.position.x - xDistance, transform.position.y, transform.position.z), overTime, false);
 		}
 
 		public static void RepulseToLeftRandomly(Transform transform, float minDistance, float maxDistance, float overTime)
 		{
 			float distance = Rand.Range(minDistance, maxDistance);
 
-		    transform.DOMove(new Vector3(transform.position.x - distance, transform.position.y, transform.position.z), overTime, false);
+			 transform.DOMove(new Vector3(transform.position.x - distance, transform.position.y, transform.position.z), overTime, false);
 		}
 
 		public static void RepulseToRight(Transform transform, float xDistance, float overTime)
 		{
-		    transform.DOMove(new Vector3(transform.position.x + xDistance, transform.position.y, transform.position.z), overTime, false);
+			 transform.DOMove(new Vector3(transform.position.x + xDistance, transform.position.y, transform.position.z), overTime, false);
 		}
 
 		public static void RepulseToRightRandomly(Transform transform, float minDistance, float maxDistance, float overTime)
 		{
 			float distance = Rand.Range(minDistance, maxDistance);
 
-		    transform.DOMove(new Vector3(transform.position.x + distance, transform.position.y, transform.position.z), overTime, false);
+			 transform.DOMove(new Vector3(transform.position.x + distance, transform.position.y, transform.position.z), overTime, false);
 		}
 
 		public static void TweenCompleted(GameObject gameObject)
-	    {
-	        gameObject.GetComponent<Entity>().OnTweenCompleted();
-	    }
+		 {
+			  gameObject.GetComponent<Entity>().OnTweenCompleted();
+		 }
 	}
 }
