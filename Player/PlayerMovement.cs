@@ -1,10 +1,9 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.Assertions;
 using System.Collections;
 using Matcha.Unity;
 
 [RequireComponent(typeof(CharacterController2D))]
-
 
 public class PlayerMovement : CacheBehaviour, ICreatureController
 {
@@ -12,7 +11,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	private float runSpeed        = 7f;           // set player's run speed
 	private float groundDamping   = 20f;          // how fast do we change direction? higher means faster
 	private float inAirDamping    = 5f;           // how fast do we change direction mid-air?
-	private float jumpHeight      = 3.50f;         // player's jump height
+	private float jumpHeight      = 3.50f;        // player's jump height
 	private float maxFallingSpeed = 100f;         // max falling speed, for throttling falls, etc
 	private float maxRisingSpeed  = 2f;           // max rising speed, for throttling player on moving platforms, etc
 	private float speedCheck      = .1f;          // compare against to see if we need to throttle rising speed
@@ -33,13 +32,12 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	private IPlayerStateFullAccess state;
 	private WeaponManager weaponManager;
 
-    private string idleAnimation;
-    private string runAnimation;
-    private string jumpAnimation;
-    private string attackAnimation;
+   private string idleAnimation;
+   private string runAnimation;
+   private string jumpAnimation;
+   private string attackAnimation;
 	private enum Action { Idle, Run, Jump, Fall, Attack, Defend, RunAttack, JumpAttack };
 	private Action action;
-
 
 	void Start()
 	{
@@ -52,19 +50,20 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	// set animations depending on which character is chosen
 	void SetCharacterAnimations(string character)
 	{
+
 		// uses string literals over concatenation in order to reduce GC calls
 		if (character == "LAURA")
 		{
-		    idleAnimation = "LAURA_Idle";
-		    runAnimation = "LAURA_Run";
-		    jumpAnimation = "LAURA_Jump";
+		    idleAnimation   = "LAURA_Idle";
+		    runAnimation    = "LAURA_Run";
+		    jumpAnimation   = "LAURA_Jump";
 		    attackAnimation = "LAURA_Swing";
 		}
 		else
 		{
-		    idleAnimation = "MAC_Idle";
-		    runAnimation = "MAC_Run";
-		    jumpAnimation = "MAC_Jump";
+		    idleAnimation   = "MAC_Idle";
+		    runAnimation    = "MAC_Run";
+		    jumpAnimation   = "MAC_Jump";
 		    attackAnimation = "MAC_Swing";
 		}
 	}
@@ -75,21 +74,21 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		moveRight = true;
 	}
 
-    public void MoveLeft()
-    {
+   public void MoveLeft()
+   {
 		moveLeft = true;
-    }
+   }
 
-    public void Jump()
-    {
+   public void Jump()
+   {
 		if (controller.isGrounded)
 			jump = true;
-    }
+   }
 
-    public void Attack()
-    {
-    	attack = true;
-    }
+   public void Attack()
+   {
+   	attack = true;
+   }
 
     // main movement loop — keep in LateUpdate() to prevent player falling through edge colliders
 	void LateUpdate()

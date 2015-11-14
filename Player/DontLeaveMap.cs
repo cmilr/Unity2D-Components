@@ -3,7 +3,6 @@ using System.Collections;
 using Rotorz.Tile;
 using Matcha.Unity;
 
-
 public class DontLeaveMap : CacheBehaviour
 {
 	// this class assumes a sprite with a bottom/center pivot point.
@@ -47,7 +46,7 @@ public class DontLeaveMap : CacheBehaviour
 	{
 		// check left bound.
 		if (transform.position.x - (spriteWidth / 2 - leftOffset) < leftBound)
-			transform.SetXPosition(leftBound + (spriteWidth / 2  - leftOffset));
+			transform.SetXPosition(leftBound + (spriteWidth / 2 - leftOffset));
 
 		// check right bound.
 		if (transform.position.x + (spriteWidth / 2 - rightOffset) > rightBound)
