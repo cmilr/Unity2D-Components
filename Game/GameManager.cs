@@ -1,6 +1,5 @@
-using UnityEngine;
 using System.Collections;
-
+using UnityEngine;
 
 public class GameManager : BaseBehaviour
 {
@@ -42,15 +41,15 @@ public class GameManager : BaseBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<int>( "prize collected", OnPrizeCollected);
-		Messenger.AddListener<string, Collider2D, int>( "player dead", OnPlayerDead);
-		Messenger.AddListener<bool>( "level completed", OnLevelCompleted);
+		Messenger.AddListener<int>("prize collected", OnPrizeCollected);
+		Messenger.AddListener<string, Collider2D, int>("player dead", OnPlayerDead);
+		Messenger.AddListener<bool>("level completed", OnLevelCompleted);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<int>( "prize collected", OnPrizeCollected );
-		Messenger.RemoveListener<string, Collider2D, int>( "player dead", OnPlayerDead);
-		Messenger.RemoveListener<bool>( "level completed", OnLevelCompleted);
+		Messenger.RemoveListener<int>("prize collected", OnPrizeCollected);
+		Messenger.RemoveListener<string, Collider2D, int>("player dead", OnPlayerDead);
+		Messenger.RemoveListener<bool>("level completed", OnLevelCompleted);
 	}
 }
