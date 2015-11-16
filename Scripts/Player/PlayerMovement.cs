@@ -1,21 +1,21 @@
-using UnityEngine;
-using UnityEngine.Assertions;
-using System.Collections;
 using Matcha.Unity;
+using System.Collections;
+using UnityEngine.Assertions;
+using UnityEngine;
 
 [RequireComponent(typeof(CharacterController2D))]
 
 public class PlayerMovement : CacheBehaviour, ICreatureController
 {
-	private float gravity         = -35f;         // set gravity for player
-	private float runSpeed        = 7f;           // set player's run speed
-	private float groundDamping   = 20f;          // how fast do we change direction? higher means faster
-	private float inAirDamping    = 5f;           // how fast do we change direction mid-air?
-	private float jumpHeight      = 3.50f;        // player's jump height
-	private float maxFallingSpeed = 100f;         // max falling speed, for throttling falls, etc
-	private float maxRisingSpeed  = 2f;           // max rising speed, for throttling player on moving platforms, etc
-	private float speedCheck      = .1f;          // compare against to see if we need to throttle rising speed
-	private float normalizedHorizontalSpeed
+	private float gravity         = -35f;           // set gravity for player
+	private float runSpeed        = 7f;             // set player's run speed
+	private float groundDamping   = 20f;            // how fast do we change direction? higher means faster
+	private float inAirDamping    = 5f;             // how fast do we change direction mid-air?
+	private float jumpHeight      = 3.50f;          // player's jump height
+	private float maxFallingSpeed = 100f;           // max falling speed, for throttling falls, etc
+	private float maxRisingSpeed  = 2f;             // max rising speed, for throttling player on moving platforms, etc
+	private float speedCheck      = .1f;            // compare against to see if we need to throttle rising speed
+	private float normalizedHorizontalSpeed;
 	private float previousX;
 	private float previousY;
 	private float repulseVelocity;
@@ -26,16 +26,15 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	private bool attack;
 	private bool repulseRight;
 	private bool repulseLeft;
-	private RaycastHit2D lastControllerColliderHit;
+	private string idleAnimation;
+	private string runAnimation;
+	private string jumpAnimation;
+	private string attackAnimation;
 	private Vector3 velocity;
+	private RaycastHit2D lastControllerColliderHit;
 	private CharacterController2D controller;
 	private IPlayerStateFullAccess state;
 	private WeaponManager weaponManager;
-
-   private string idleAnimation;
-   private string runAnimation;
-   private string jumpAnimation;
-   private string attackAnimation;
 	private enum Action { Idle, Run, Jump, Fall, Attack, Defend, RunAttack, JumpAttack };
 	private Action action;
 
@@ -50,21 +49,20 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	// set animations depending on which character is chosen
 	void SetCharacterAnimations(string character)
 	{
-
 		// uses string literals over concatenation in order to reduce GC calls
 		if (character == "LAURA")
 		{
-		    idleAnimation   = "LAURA_Idle";
-		    runAnimation    = "LAURA_Run";
-		    jumpAnimation   = "LAURA_Jump";
-		    attackAnimation = "LAURA_Swing";
+			idleAnimation   = "LAURA_Idle";
+			runAnimation    = "LAURA_Run";
+			jumpAnimation   = "LAURA_Jump";
+			attackAnimation = "LAURA_Swing";
 		}
 		else
 		{
-		    idleAnimation   = "MAC_Idle";
-		    runAnimation    = "MAC_Run";
-		    jumpAnimation   = "MAC_Jump";
-		    attackAnimation = "MAC_Swing";
+			idleAnimation   = "MAC_Idle";
+			runAnimation    = "MAC_Run";
+			jumpAnimation   = "MAC_Jump";
+			attackAnimation = "MAC_Swing";
 		}
 	}
 
@@ -74,23 +72,24 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		moveRight = true;
 	}
 
-   public void MoveLeft()
-   {
+	public void MoveLeft()
+	{
 		moveLeft = true;
-   }
+	}
 
-   public void Jump()
-   {
-		if (controller.isGrounded)
+	public void Jump()
+	{
+		if (controller.isGrounded) {
 			jump = true;
-   }
+		}
+	}
 
-   public void Attack()
-   {
-   	attack = true;
-   }
+	public void Attack()
+	{
+		attack = true;
+	}
 
-    // main movement loop — keep in LateUpdate() to prevent player falling through edge colliders
+	// main movement loop — keep in LateUpdate() to prevent player falling through edge colliders
 	void LateUpdate()
 	{
 		InitializeVelocity();
@@ -297,13 +296,13 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 	// void AttackWhileJumpingBUG()
 	// {
-	// 	velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
+	//    velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
 
-	// 	action = Action.JumpAttack;
+	//    action = Action.JumpAttack;
 
-	// 	jump = false;
+	//    jump = false;
 
-	// 	attack = false;
+	//    attack = false;
 	// }
 
 	// mix & match animations for various activity states,
@@ -449,7 +448,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			velocity.x,
 			normalizedHorizontalSpeed * runSpeed,
 			Time.deltaTime * smoothedMovementFactor
-		);
+			);
 	}
 
 	void SavePreviousPosition()
@@ -483,12 +482,12 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		StartCoroutine(RepulseTimer());
 	}
 
-    IEnumerator RepulseTimer()
-    {
-    	yield return new WaitForSeconds(Rand.Range(.1f, .3f));
-    	repulseLeft = false;
-    	repulseRight = false;
-    }
+	IEnumerator RepulseTimer()
+	{
+		yield return new WaitForSeconds(Rand.Range(.1f, .3f));
+		repulseLeft = false;
+		repulseRight = false;
+	}
 
 	void OnPlayerDead(string methodOfDeath, Collider2D coll, int hitFrom)
 	{
@@ -497,11 +496,11 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 	void OnEnable()
 	{
-		Messenger.AddListener<string, Collider2D, int>( "player dead", OnPlayerDead);
+		Messenger.AddListener<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<string, Collider2D, int>( "player dead", OnPlayerDead);
+		Messenger.RemoveListener<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 }

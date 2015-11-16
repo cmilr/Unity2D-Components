@@ -1,10 +1,10 @@
-﻿using UnityEngine;
-using System;
-using System.Collections;
 using Matcha.Unity;
+using System.Collections;
+using System;
+using UnityEngine;
 
-public abstract class Entity : CacheBehaviour {
-
+public abstract class Entity : CacheBehaviour
+{
 	[HideInInspector]
 	public bool alreadyCollided;
 	public int worth;
@@ -50,14 +50,14 @@ public abstract class Entity : CacheBehaviour {
 
 	void OnBecameVisible()
 	{
-	    enabled = true;
-	    onScreen = true;
+		enabled = true;
+		onScreen = true;
 	}
 
 	void OnBecameInvisible()
 	{
-	    enabled = false;
-	    onScreen = false;
+		enabled = false;
+		onScreen = false;
 	}
 
 	void OnTriggerEnter2D(Collider2D coll)

@@ -1,12 +1,11 @@
-﻿using UnityEngine;
-using System;
-using System.Collections;
-using Matcha.Unity;
-using Matcha.Dreadful;
 using DG.Tweening;
+using Matcha.Dreadful;
+using Matcha.Unity;
+using System.Collections;
+using System;
+using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
-
 
 public class CreatureEntity : Entity
 {
@@ -38,12 +37,12 @@ public class CreatureEntity : Entity
 
 	private void SetBlockedRightState(bool status)
 	{
-	    blockedRight = status;
+		blockedRight = status;
 	}
 
 	private void SetBlockedLeftState(bool status)
 	{
-	    blockedLeft = status;
+		blockedLeft = status;
 	}
 
 	override public void OnWeaponCollisionEnter(Collider2D coll)
@@ -53,13 +52,13 @@ public class CreatureEntity : Entity
 		hitFrom = M.HorizSideThatWasHit(gameObject, coll);
 
 		if (playerWeapon.weaponType == Weapon.WeaponType.Hammer ||
-			playerWeapon.weaponType == Weapon.WeaponType.Dagger ||
-			playerWeapon.weaponType == Weapon.WeaponType.MagicProjectile)
+				playerWeapon.weaponType == Weapon.WeaponType.Dagger ||
+				playerWeapon.weaponType == Weapon.WeaponType.MagicProjectile)
 		{
 			TakesProjectileHit(playerWeapon, coll, hitFrom);
 		}
 		else if (playerWeapon.weaponType == Weapon.WeaponType.Axe ||
-				 playerWeapon.weaponType == Weapon.WeaponType.Sword)
+				playerWeapon.weaponType == Weapon.WeaponType.Sword)
 		{
 			TakesMeleeHit(playerWeapon, coll, hitFrom);
 		}

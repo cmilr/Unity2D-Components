@@ -1,23 +1,24 @@
-﻿using UnityEngine;
-using System.Collections;
 using Matcha.Unity;
+using System.Collections;
+using UnityEngine;
 
 public class MovementAI : CacheBehaviour
 {
 	[HideInInspector]
 	public int walkingDirection;
+
 	public enum Style { Sentinel, Scout, HesitantScout, Wanderer };
 	public Style style;
-	public float movementSpeed      = 2f;
-	public float walkAnimationSpeed = .5f;
-	public float chanceOfPause      = 1f;		// chance of pause during any given interval
 	public bool movementPaused;
+	public float movementSpeed      	 = 2f;
+	public float walkAnimationSpeed 	 = .5f;
+	public float chanceOfPause      	 = 1f;        // chance of pause during any given interval
 
-	private string walkAnimation;
+	private float lookInterval 		 = .3f;
+	private float playerOffset 		 = 3f;        // offset target so enemy doesn't end up exactly where player is
+	private float xAxisOffset  		 = .3f;
 	private float movementInterval;
-	private float lookInterval      = .3f;
-	private float playerOffset      = 3f;		// offset target so enemy doesn't end up exactly where player is
-	private float xAxisOffset       = .3f;
+	private string walkAnimation;
 	private int sideHit;
 	private bool hesitant;
 	private bool blockedLeft;
@@ -28,12 +29,11 @@ public class MovementAI : CacheBehaviour
 
 	void Start()
 	{
-		target         = GameObject.Find(PLAYER).transform;
-		walkAnimation  = name + "_WALK_";
-		animator.speed = walkAnimationSpeed;
-		animator.Play(Animator.StringToHash(walkAnimation));
-
 		movementInterval = Rand.Range(.15f, 1f);
+		target           = GameObject.Find(PLAYER).transform;
+		walkAnimation    = name + "_WALK_";
+		animator.speed   = walkAnimationSpeed;
+		animator.Play(Animator.StringToHash(walkAnimation));
 
 		if (style == Style.HesitantScout) {
 			hesitant = true;
@@ -44,10 +44,12 @@ public class MovementAI : CacheBehaviour
 	{
 		switch (style)
 		{
-		case Style.Scout:
-		case Style.HesitantScout:
-			StopCheck();
-			break;
+			case Style.Scout:
+			case Style.HesitantScout:
+			{
+				StopCheck();
+				break;
+			}
 		}
 	}
 
@@ -56,27 +58,32 @@ public class MovementAI : CacheBehaviour
 	{
 		switch (style)
 		{
-		case Style.Sentinel:
-			InvokeRepeating("LookAtTarget", 1f, lookInterval);
-			break;
+			case Style.Sentinel:
+			{
+				InvokeRepeating("LookAtTarget", 1f, lookInterval);
+				break;
+			}
 
-		case Style.Scout:
-		case Style.HesitantScout:
-			InvokeRepeating("LookAtTarget", 1f, lookInterval);
-			InvokeRepeating("FollowTarget", 1f, movementInterval);
-			break;
+			case Style.Scout:
+			case Style.HesitantScout:
+			{
+				InvokeRepeating("LookAtTarget", 1f, lookInterval);
+				InvokeRepeating("FollowTarget", 1f, movementInterval);
+				break;
+			}
 		}
 	}
 
 	void LookAtTarget()
 	{
 		int direction = (target.position.x > transform.position.x) ? RIGHT : LEFT;
+
 		transform.SetLocalScaleX((float)direction);
 	}
 
 	void FollowTarget()
 	{
-		if (!enabled) return;
+		if (!enabled) { return; }
 
 		// get the proper direction for the enemy to move, then send him moving
 		if (target.position.x > transform.position.x + playerOffset)
@@ -89,8 +96,8 @@ public class MovementAI : CacheBehaviour
 		}
 		else
 		{
-			rigidbody2D.velocity = Vector2.zero;
 			movementPaused = true;
+			rigidbody2D.velocity = Vector2.zero;
 		}
 
 		if (!movementPaused)
@@ -126,8 +133,7 @@ public class MovementAI : CacheBehaviour
 			rigidbody2D.velocity = Vector2.zero;
 			rigidbody2D.angularVelocity = 0f;
 
-			if (transform.position.x > blockedRightAt)
-			{
+			if (transform.position.x > blockedRightAt) {
 				transform.SetXPosition(blockedRightAt);
 			}
 		}
@@ -137,17 +143,16 @@ public class MovementAI : CacheBehaviour
 			rigidbody2D.velocity = Vector2.zero;
 			rigidbody2D.angularVelocity = 0f;
 
-			if (transform.position.x < blockedLeftAt)
-			{
+			if (transform.position.x < blockedLeftAt) {
 				transform.SetXPosition(blockedLeftAt);
 			}
 		}
 		// if enemy and player are on roughly same x axis, movementPaused
 		else if (transform.position.x.FloatEquals(target.position.x, xAxisOffset))
 		{
+			movementPaused = true;
 			rigidbody2D.velocity = Vector2.zero;
 			rigidbody2D.angularVelocity = 0f;
-			movementPaused = true;
 		}
 		else
 		{
@@ -159,13 +164,15 @@ public class MovementAI : CacheBehaviour
 	{
 		Vector3 vel = GetForceFrom(transform.position, target.position);
 		float angle = Mathf.Atan2(vel.y, vel.x) * Mathf.Rad2Deg;
+
 		transform.eulerAngles = new Vector3(0, 0, angle);
 	}
 
 	static Vector2 GetForceFrom(Vector3 fromPos, Vector3 toPos)
 	{
 		float power = 1;
-		return (new Vector2(toPos.x, toPos.y) - new Vector2(fromPos.x, fromPos.y))*power;
+
+		return (new Vector2(toPos.x, toPos.y) - new Vector2(fromPos.x, fromPos.y)) * power;
 	}
 
 	// check for edge blockers
@@ -179,13 +186,13 @@ public class MovementAI : CacheBehaviour
 
 			if (sideHit == RIGHT)
 			{
-				blockedRight = true;
+				blockedRight   = true;
 				blockedRightAt = transform.position.x;
 				gameObject.BroadcastMessage("SetBlockedRightState", true);
 			}
 			else if (sideHit == LEFT)
 			{
-				blockedLeft = true;
+				blockedLeft   = true;
 				blockedLeftAt = transform.position.x;
 				gameObject.BroadcastMessage("SetBlockedLeftState", true);
 			}
@@ -232,11 +239,11 @@ public class MovementAI : CacheBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<string, Collider2D, int>( "player dead", OnPlayerDead);
+		Messenger.AddListener<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<string, Collider2D, int>( "player dead", OnPlayerDead);
+		Messenger.RemoveListener<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 }

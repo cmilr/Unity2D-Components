@@ -1,32 +1,31 @@
-﻿using UnityEngine;
-using System.Collections;
-using Matcha.Unity;
 using Matcha.Dreadful;
+using Matcha.Unity;
+using System.Collections;
+using UnityEngine;
 
 public class AttackAI : CacheBehaviour
 {
-
 	public enum Style { RandomProjectile };
 	public Style style;
-	public float chanceOfAttack = 40f;
-	public float attackWhenInRange = 20f;
+	public float chanceOfAttack	 = 40f;     // test
+	public float attackWhenInRange = 20f;     // test 2
 	public bool attackPaused;
 
 	private ProjectileManager projectile;
 	private Weapon weapon;
-	private Transform target;
 	private float attackInterval;
 	private bool levelLoading;
+	private Transform target;
 
 	void Start()
 	{
-		projectile = GetComponent<ProjectileManager>();
-		weapon = GetComponentInChildren<Weapon>();
-		target = GameObject.Find(PLAYER).transform;
+		projectile		= GetComponent<ProjectileManager>();
+		weapon			= GetComponentInChildren<Weapon>();
+		target			= GameObject.Find(PLAYER).transform;
 		attackInterval = Rand.Range(1.5f, 2.5f);
 	}
 
-	// MASTER CONTROLLER
+	// master controller
 	void OnBecameVisible()
 	{
 		if (!attackPaused)
@@ -40,8 +39,10 @@ public class AttackAI : CacheBehaviour
 				switch (style)
 				{
 					case Style.RandomProjectile:
+					{
 						InvokeRepeating("AttackRandomly", 2f, attackInterval);
 						break;
+					}
 				}
 			}
 		}
@@ -59,7 +60,7 @@ public class AttackAI : CacheBehaviour
 				{
 					// only attack if creature is facing the same direction as target
 					if ((target.position.x > transform.position.x && transform.localScale.x.FloatEquals(1f)) ||
-					                   (target.position.x < transform.position.x && transform.localScale.x.FloatEquals(-1f)))
+							(target.position.x < transform.position.x && transform.localScale.x.FloatEquals(-1f)))
 					{
 						projectile.FireAtTarget(weapon, target);
 					}
@@ -81,6 +82,7 @@ public class AttackAI : CacheBehaviour
 	static Vector2 GetForceFrom(Vector3 fromPos, Vector3 toPos)
 	{
 		const float power = 1;
+
 		return (new Vector2(toPos.x, toPos.y) - new Vector2(fromPos.x, fromPos.y)) * power;
 	}
 
@@ -105,9 +107,9 @@ public class AttackAI : CacheBehaviour
 		levelLoading = true;
 
 		StartCoroutine(Timer.Start(ENEMY_PAUSE_ON_LEVEL_LOAD, false, () =>
-				{
-					levelLoading = false;
-				}));
+		{
+			levelLoading = false;
+		}));
 	}
 
 	void OnEnable()
@@ -136,12 +138,17 @@ public class AttackAI : CacheBehaviour
 
 		while (true)
 		{
-			if (i >= targets.Length)
+			if (i >= targets.Length) {
 				i = 0;
-			if (j >= targets.Length)
+			}
+
+			if (j >= targets.Length) {
 				j = 0;
-			if (j < 0)
+			}
+
+			if (j < 0) {
 				j = 10;
+			}
 
 			targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MCLR.orange);
 			targets[j].GetComponent<SpriteRenderer>().material.SetColor("_Color", MCLR.white);
@@ -151,5 +158,4 @@ public class AttackAI : CacheBehaviour
 			yield return new WaitForSeconds(2);
 		}
 	}
-
 }

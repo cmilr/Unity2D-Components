@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.Assertions;
 using System;
 using System.Collections;
@@ -31,18 +31,18 @@ public class DeathHandler : CacheBehaviour
 	private IPlayerStateFullAccess state;
 
 	private string struckdownAnimation;
-    private string struckdownAnimation_face_down;
+	private string struckdownAnimation_face_down;
 	private string drownedAnimation;
 	private int hitFrom;
-
+	
 	void Start()
 	{
 		// component takes over player physics, so we don't enable until player dies
-        this.enabled = false;
-        state        = GetComponent<IPlayerStateFullAccess>();
-        controller   = GetComponent<CharacterController2D>();
-        boxCollider  = GetComponent<BoxCollider2D>();
-        AddListeners();
+		this.enabled = false;
+		state        = GetComponent<IPlayerStateFullAccess>();
+		controller   = GetComponent<CharacterController2D>();
+		boxCollider  = GetComponent<BoxCollider2D>();
+		AddListeners();
 
 		SetCharacterAnimations(state.Character);
 	}
@@ -54,13 +54,13 @@ public class DeathHandler : CacheBehaviour
 		if (character == "LAURA")
 		{
 			struckdownAnimation = "LAURA_struckdown";
-            struckdownAnimation_face_down = "LAURA_struckdown_face_down";
+			struckdownAnimation_face_down = "LAURA_struckdown_face_down";
 			drownedAnimation = "LAURA_drowned";
 		}
 		else
 		{
 			struckdownAnimation = "MAC_struckdown";
-            struckdownAnimation_face_down = "MAC_struckdown_face_down";
+			struckdownAnimation_face_down = "MAC_struckdown_face_down";
 			drownedAnimation = "MAC_drowned";
 		}
 
@@ -70,7 +70,7 @@ public class DeathHandler : CacheBehaviour
 	{
 		this.enabled = true;
 		this.hitFrom = hitFrom;
-        rigidbody2D.velocity = Vector2.zero;
+		rigidbody2D.velocity = Vector2.zero;
 
 		switch (methodOfDeath)
 		{
@@ -98,12 +98,12 @@ public class DeathHandler : CacheBehaviour
 				break;
 			}
 
-            case "out of bounds":
-            {
-                animator.speed = STRUCKDOWN_SPEED;
-                animator.Play(Animator.StringToHash(struckdownAnimation));
-                break;
-            }
+			case "out of bounds":
+			{
+				animator.speed = STRUCKDOWN_SPEED;
+				animator.Play(Animator.StringToHash(struckdownAnimation));
+				break;
+			}
 
 			default:
 			{
@@ -111,7 +111,7 @@ public class DeathHandler : CacheBehaviour
 				break;
 			}
 		}
-    }
+	}
 
 	void LateUpdate()
 	{
@@ -121,10 +121,10 @@ public class DeathHandler : CacheBehaviour
 			var smoothedMovementFactor = controller.isGrounded ? groundDamping : inAirDamping;
 
 			velocity.x = Mathf.Lerp(
-                velocity.x,
-                normalizedHorizontalSpeed * runSpeed,
-                Time.deltaTime * smoothedMovementFactor
-            );
+			velocity.x,
+			normalizedHorizontalSpeed * runSpeed,
+			Time.deltaTime * smoothedMovementFactor
+			);
 
 			velocity.y += gravity * Time.deltaTime;
 			velocity.y = Mathf.Clamp(velocity.y, -maxFallingSpeed, maxFallingSpeed);
@@ -134,14 +134,14 @@ public class DeathHandler : CacheBehaviour
 
 	void PlayerStruckdown()
 	{
-        // Repulse(intensity, distance)
+		// Repulse(intensity, distance)
 		StartCoroutine(Repulse(1f, .15f));
 		alreadyDead = true;
 	}
 
 	void PlayerHitByProjectile()
 	{
-        // Repulse(intensity, distance)
+		// Repulse(intensity, distance)
 		StartCoroutine(Repulse(1.5f, .2f));
 		alreadyDead = true;
 	}
@@ -150,101 +150,101 @@ public class DeathHandler : CacheBehaviour
 	{
 		physicsEnabled = false;
 
-        if (!alreadyDead)
-        {
-            if (state.FacingRight)
-            {
-                transform.SetLocalScaleX(-1f);
-            }
-            else
-            {
-                transform.SetLocalScaleX(1f);
-            }
-        }
+		if (!alreadyDead)
+		{
+			if (state.FacingRight)
+			{
+				transform.SetLocalScaleX(-1f);
+			}
+			else
+			{
+				transform.SetLocalScaleX(1f);
+			}
+		}
 
 		// get size and position of the water collider, then clamp player's
 		// final resting position within those limits——
-        // first we need to convert the collider to a BoxCollider2D
-        BoxCollider2D coll = incomingColl.transform.GetComponent<BoxCollider2D>();
+		// first we need to convert the collider to a BoxCollider2D
+		BoxCollider2D coll = incomingColl.transform.GetComponent<BoxCollider2D>();
 
-        Vector2 size = coll.size;
-        Vector3 centerPoint = new Vector3(coll.offset.x, coll.offset.y, 0f);
-        Vector3 worldPos = incomingColl.transform.TransformPoint(centerPoint);
+		Vector2 size = coll.size;
+		Vector3 centerPoint = new Vector3(coll.offset.x, coll.offset.y, 0f);
+		Vector3 worldPos = incomingColl.transform.TransformPoint(centerPoint);
 
-        float left = worldPos.x - (size.x / 2f);
-        float right = worldPos.x + (size.x /2f);
+		float left = worldPos.x - (size.x / 2f);
+		float right = worldPos.x + (size.x /2f);
 
 		float playerPositionX = transform.position.x;
 		float playerCenterOffset = (GetComponent<Renderer>().bounds.size.x / 2);
 
 		playerPositionX = Mathf.Clamp(
-            playerPositionX,
-			left + playerCenterOffset,
-			right - playerCenterOffset
-        );
+		playerPositionX,
+		left + playerCenterOffset,
+		right - playerCenterOffset
+		);
 
 		transform.SetXYPosition(playerPositionX, transform.position.y - .2f);
 	}
 
 
-    IEnumerator Repulse(float intensity, float distance)
-    {
-        // intensity must be at least 1, otherwise things get graphically buggy
-        intensity = (intensity >= 1) ? intensity : 1f;
+	IEnumerator Repulse(float intensity, float distance)
+	{
+		// intensity must be at least 1, otherwise things get graphically buggy
+		intensity = (intensity >= 1) ? intensity : 1f;
 
-        // sink player into platform by one pixel for a more immersed visual effect
-        boxCollider.offset = new Vector2(0f, ONE_COLLIDER_PIXEL);
+		// sink player into platform by one pixel for a more immersed visual effect
+		boxCollider.offset = new Vector2(0f, ONE_COLLIDER_PIXEL);
 
-        // ANIMATION & INTENSITY
-        // ~~~~~~~~~~~~~~~~~~~~~
-        if (hitFrom == RIGHT)
-        {
-            // repulse to the left
-            normalizedHorizontalSpeed = -intensity;
+		// ANIMATION & INTENSITY
+		// ~~~~~~~~~~~~~~~~~~~~~
+		if (hitFrom == RIGHT)
+		{
+			// repulse to the left
+			normalizedHorizontalSpeed = -intensity;
 
-            // set sprite to facing up or down, depending on direction of hit, and direction player is facing
-            if (!state.FacingRight)
-            {
-                transform.SetLocalScaleX(-transform.localScale.x);
-                animator.Play(Animator.StringToHash(struckdownAnimation_face_down));
-            }
-        }
-        else
-        {
-            // repulse to the right
-            normalizedHorizontalSpeed = intensity;
+			// set sprite to facing up or down, depending on direction of hit, and direction player is facing
+			if (!state.FacingRight)
+			{
+				transform.SetLocalScaleX(-transform.localScale.x);
+				animator.Play(Animator.StringToHash(struckdownAnimation_face_down));
+			}
+		}
+		else
+		{
+			// repulse to the right
+			normalizedHorizontalSpeed = intensity;
 
-            // set sprite to facing up or down, depending on direction of hit, and direction player is facing
-            if (state.FacingRight)
-            {
-                transform.SetLocalScaleX(-transform.localScale.x);
-                animator.Play(Animator.StringToHash(struckdownAnimation_face_down));
-            }
-        }
+			// set sprite to facing up or down, depending on direction of hit, and direction player is facing
+			if (state.FacingRight)
+			{
+				transform.SetLocalScaleX(-transform.localScale.x);
+				animator.Play(Animator.StringToHash(struckdownAnimation_face_down));
+			}
+		}
 
-        // DISTANCE TO REPULSE
-        // ~~~~~~~~~~~~~~~~~~~
-        for (float f = 1f; f >= 0; f -= 0.1f)
-        {
-            if (f < 0) f = 0f;
+		// DISTANCE TO REPULSE
+		// ~~~~~~~~~~~~~~~~~~~
+		for (float f = 1f; f >= 0; f -= 0.1f)
+		{
+			if (f < 0) f = 0f;
 
-            if (hitFrom == RIGHT)
-            {
-                normalizedHorizontalSpeed += .1f;
-            }
-            else
-            {
-                normalizedHorizontalSpeed -= .1f;
-            }
-            // tweak this paramater for greater or shorter repulse distance
-            yield return new WaitForSeconds(distance);
-        }
-    }
+			if (hitFrom == RIGHT)
+			{
+				normalizedHorizontalSpeed += .1f;
+			}
+			else
+			{
+				normalizedHorizontalSpeed -= .1f;
+			}
+			// tweak this paramater for greater or shorter repulse distance
+			yield return new WaitForSeconds(distance);
+		}
+	}
 
-    void OnDisable()
-    {
-        StopCoroutine(Repulse(0, 0));
-    }
+	void OnDisable()
+	{
+		StopCoroutine(Repulse(0, 0));
+	}
 
 	void AddListeners()
 	{

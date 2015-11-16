@@ -1,8 +1,7 @@
-using UnityEngine;
-using System.Collections;
-using Rotorz.Tile;
 using Matcha.Unity;
-
+using Rotorz.Tile;
+using System.Collections;
+using UnityEngine;
 
 public class DontLeaveMap : CacheBehaviour
 {
@@ -32,30 +31,33 @@ public class DontLeaveMap : CacheBehaviour
 		tileSystem   = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
 
 		Vector3 tileSystemSize = new Vector3(
-		    tileSystem.ColumnCount * tileSystem.CellSize.x,
-		    tileSystem.RowCount * tileSystem.CellSize.y,
-		    tileSystem.CellSize.z
-		);
+			tileSystem.ColumnCount * tileSystem.CellSize.x,
+			tileSystem.RowCount * tileSystem.CellSize.y,
+			tileSystem.CellSize.z
+			);
 
-		leftBound = 0f;
+		leftBound  = 0f;
 		rightBound = tileSystemSize.x;
 		lowerBound = -(tileSystemSize.y);
 		upperBound = 0f;
 	}
 
-	void LateUpdate ()
+	void LateUpdate()
 	{
 		// check left bound.
-		if (transform.position.x - (spriteWidth / 2 - leftOffset) < leftBound)
-			transform.SetXPosition(leftBound + (spriteWidth / 2  - leftOffset));
+		if (transform.position.x - (spriteWidth / 2 - leftOffset) < leftBound) {
+			transform.SetXPosition(leftBound + (spriteWidth / 2 - leftOffset));
+		}
 
 		// check right bound.
-		if (transform.position.x + (spriteWidth / 2 - rightOffset) > rightBound)
+		if (transform.position.x + (spriteWidth / 2 - rightOffset) > rightBound) {
 			transform.SetXPosition(rightBound - (spriteWidth / 2 - rightOffset));
+		}
 
 		// check upper bound.
-		if (transform.position.y + (spriteHeight - upperOffset) > upperBound)
+		if (transform.position.y + (spriteHeight - upperOffset) > upperBound) {
 			transform.SetYPosition(upperBound - (spriteHeight - upperOffset));
+		}
 
 		// check lower bound.
 		if (transform.position.y - lowerOffset < lowerBound)

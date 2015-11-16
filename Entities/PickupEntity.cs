@@ -1,8 +1,8 @@
-﻿using UnityEngine;
-using UnityEngine.Assertions;
-using System;
-using System.Collections;
 using Matcha.Dreadful;
+using System.Collections;
+using System;
+using UnityEngine.Assertions;
+using UnityEngine;
 
 
 public class PickupEntity : Entity
@@ -15,8 +15,9 @@ public class PickupEntity : Entity
 	{
 		glow = gameObject.GetComponent<Light>() as Light;
 
-		if ((entityType == EntityType.prize || entityType == EntityType.levelUp) && autoAlign)
+		if ((entityType == EntityType.prize || entityType == EntityType.levelUp) && autoAlign) {
 			AutoAlign();
+		}
 	}
 
 	override public void OnBodyCollisionEnter(Collider2D coll)
@@ -28,33 +29,45 @@ public class PickupEntity : Entity
 			switch (entityType)
 			{
 				case EntityType.prize:
+				{
 					MFX.PickupPrize(gameObject);
 					MFX.ExtinguishLight(glow, 0, .1f);
 					Messenger.Broadcast<int>("prize collected", worth);
 					break;
+				}
 
 				case EntityType.levelUp:
+				{
 					MFX.PickupPrize(gameObject);
 					MFX.ExtinguishLight(glow, 0, .1f);
 					Messenger.Broadcast<int>("prize collected", worth);
-			    	Messenger.Broadcast<bool>("level completed", true);
+					Messenger.Broadcast<bool>("level completed", true);
 					break;
+				}
 
 				case EntityType.weapon:
+				{
 					MFX.PickupWeapon(gameObject);
 					break;
+				}
 
 				case EntityType.save:
+				{
 					Messenger.Broadcast<bool>("save player data", true);
 					break;
+				}
 
 				case EntityType.load:
+				{
 					Messenger.Broadcast<bool>("load player data", true);
 					break;
+				}
 
 				default:
+				{
 					Assert.IsTrue(false, "** Default Case Reached **");
 					break;
+				}
 			}
 		}
 	}

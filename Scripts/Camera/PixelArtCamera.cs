@@ -1,27 +1,27 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 
 public class PixelArtCamera : BaseBehaviour
 {
-    private float baseOrthographicSize;
+	private float baseOrthographicSize;
 
-    void Start ()
-    {
-    	SetOrthographicSize();
-    }
+	void Start ()
+	{
+		SetOrthographicSize();
+	}
 
-    void SetOrthographicSize()
-    {
-        // Experiment with: 32, 48, 64, 96.
-        baseOrthographicSize = Screen.height / 64.0f / 2.0f;
-        Camera.main.orthographicSize = baseOrthographicSize;
-    }
+	void SetOrthographicSize()
+	{
+		// Experiment with: 32, 48, 64, 96.
+		baseOrthographicSize = Screen.height / 64.0f / 2.0f;
+		Camera.main.orthographicSize = baseOrthographicSize;
+	}
 
-    void OnScreenSizeChanged(float vExtent, float hExtent)
-    {
-        SetOrthographicSize();
-    }
+	void OnScreenSizeChanged(float vExtent, float hExtent)
+	{
+		SetOrthographicSize();
+	}
 
 	void OnEnable()
 	{

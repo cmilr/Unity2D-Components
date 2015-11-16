@@ -1,22 +1,22 @@
-﻿using UnityEngine;
+﻿using Matcha.Unity;
 using System.Collections;
-using Matcha.Unity;
+using UnityEngine;
 
 public class MovementAI : CacheBehaviour
 {
-	[HideInInspector]
-	public int walkingDirection;
 	public enum Style { Sentinel, Scout, HesitantScout, Wanderer };
 	public Style style;
 	public float movementSpeed      = 2f;
 	public float walkAnimationSpeed = .5f;
-	public float chanceOfPause      = 1f;		// chance of pause during any given interval
+	public float chanceOfPause      = 1f;        // chance of pause during any given interval
 	public bool movementPaused;
+	[HideInInspector]
+	public int walkingDirection;
 
 	private string walkAnimation;
 	private float movementInterval;
 	private float lookInterval      = .3f;
-	private float playerOffset      = 3f;		// offset target so enemy doesn't end up exactly where player is
+	private float playerOffset      = 3f;        // offset target so enemy doesn't end up exactly where player is
 	private float xAxisOffset       = .3f;
 	private int sideHit;
 	private bool hesitant;
@@ -44,10 +44,12 @@ public class MovementAI : CacheBehaviour
 	{
 		switch (style)
 		{
-		case Style.Scout:
-		case Style.HesitantScout:
-			StopCheck();
-			break;
+			case Style.Scout:
+			case Style.HesitantScout:
+			{
+				StopCheck();
+				break;
+			}
 		}
 	}
 
@@ -56,27 +58,32 @@ public class MovementAI : CacheBehaviour
 	{
 		switch (style)
 		{
-		case Style.Sentinel:
-			InvokeRepeating("LookAtTarget", 1f, lookInterval);
-			break;
+			case Style.Sentinel:
+			{
+				InvokeRepeating("LookAtTarget", 1f, lookInterval);
+				break;
+			}
 
-		case Style.Scout:
-		case Style.HesitantScout:
-			InvokeRepeating("LookAtTarget", 1f, lookInterval);
-			InvokeRepeating("FollowTarget", 1f, movementInterval);
-			break;
+			case Style.Scout:
+			case Style.HesitantScout:
+			{
+				InvokeRepeating("LookAtTarget", 1f, lookInterval);
+				InvokeRepeating("FollowTarget", 1f, movementInterval);
+				break;
+			}
 		}
 	}
 
 	void LookAtTarget()
 	{
 		int direction = (target.position.x > transform.position.x) ? RIGHT : LEFT;
+
 		transform.SetLocalScaleX((float)direction);
 	}
 
 	void FollowTarget()
 	{
-		if (!enabled) return;
+		if (!enabled) { return; }
 
 		// get the proper direction for the enemy to move, then send him moving
 		if (target.position.x > transform.position.x + playerOffset)
@@ -159,13 +166,15 @@ public class MovementAI : CacheBehaviour
 	{
 		Vector3 vel = GetForceFrom(transform.position, target.position);
 		float angle = Mathf.Atan2(vel.y, vel.x) * Mathf.Rad2Deg;
+
 		transform.eulerAngles = new Vector3(0, 0, angle);
 	}
 
 	static Vector2 GetForceFrom(Vector3 fromPos, Vector3 toPos)
 	{
 		float power = 1;
-		return (new Vector2(toPos.x, toPos.y) - new Vector2(fromPos.x, fromPos.y))*power;
+
+		return (new Vector2(toPos.x, toPos.y) - new Vector2(fromPos.x, fromPos.y)) * power;
 	}
 
 	// check for edge blockers
@@ -232,11 +241,11 @@ public class MovementAI : CacheBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<string, Collider2D, int>( "player dead", OnPlayerDead);
+		Messenger.AddListener<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<string, Collider2D, int>( "player dead", OnPlayerDead);
+		Messenger.RemoveListener<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 }

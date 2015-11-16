@@ -1,5 +1,5 @@
-﻿using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
 public class WallEntity : Entity
 {

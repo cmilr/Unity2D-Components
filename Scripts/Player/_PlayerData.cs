@@ -4,7 +4,6 @@ using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
-
 // this is a pseudo-singleton — it enforces a single instance, but doesn't expose
 // a static variable, so you can't access it without a GetComponent() call
 public class _PlayerData : BaseBehaviour {
@@ -12,10 +11,10 @@ public class _PlayerData : BaseBehaviour {
 	public _PlayerData data;
 
 	public string Character 	{ get; set; }
-	public int HP 				{ get; set; }
-	public int AC 				{ get; set; }
-	public int XP				{ get; set; }
-	public int LVL				{ get; set; }
+	public int HP 					{ get; set; }
+	public int AC 					{ get; set; }
+	public int XP					{ get; set; }
+	public int LVL					{ get; set; }
 	public GameObject equippedWeapon;
 	public GameObject leftWeapon;
 	public GameObject rightWeapon;

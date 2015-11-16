@@ -1,11 +1,10 @@
-﻿using UnityEngine;
-using System.Collections;
-using Matcha.Unity;
 using Matcha.Dreadful;
+using Matcha.Unity;
+using System.Collections;
+using UnityEngine;
 
 public class BreakablePiece : CacheBehaviour
 {
-
 	private float originX;
 	private float originY;
 	private float newX;

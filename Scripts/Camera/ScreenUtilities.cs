@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.Assertions;
 using System.Collections;
 using DG.Tweening;
@@ -12,7 +12,7 @@ public class ScreenUtilities : CacheBehaviour
 	private float vertExtent;                   // half the height of the game screen.
 	private float horizExtent;                  // half the width of the game screen.
 	private int currentScreenWidth;
-    private int currentScreenHeight;
+	private int currentScreenHeight;
 
 	void Start()
 	{
@@ -25,18 +25,18 @@ public class ScreenUtilities : CacheBehaviour
 		currentScreenWidth  = Screen.width;
 		currentScreenHeight = Screen.height;
 
-    	InvokeRepeating("CheckScreenSize", 0f, 0.1F);
+		InvokeRepeating("CheckScreenSize", 0f, 0.1F);
 	}
 
 	void CheckScreenSize()
 	{
-    	if (Screen.width != currentScreenWidth || Screen.height != currentScreenHeight)
-    	{
-	        vertExtent = Camera.main.GetComponent<Camera>().orthographicSize;
+		if (Screen.width != currentScreenWidth || Screen.height != currentScreenHeight)
+		{
+			vertExtent = Camera.main.GetComponent<Camera>().orthographicSize;
 			horizExtent = vertExtent * Screen.width / Screen.height;
 
-	        Messenger.Broadcast<float, float>("screen size changed", vertExtent, horizExtent);
-    	}
+			Messenger.Broadcast<float, float>("screen size changed", vertExtent, horizExtent);
+		}
 	}
 
 	// returns the distance from a gameObject to the edge of the screen on 2D orthographic cameras.
@@ -44,19 +44,19 @@ public class ScreenUtilities : CacheBehaviour
 	{
 		switch (screenEdge)
 		{
-		case TOP:
+			case TOP:
 			return Mathf.Abs(transform.position.y + vertExtent - trackedObject.position.y);
 
-		case BOTTOM:
+			case BOTTOM:
 			return Mathf.Abs(transform.position.y - vertExtent - trackedObject.position.y);
 
-		case LEFT:
+			case LEFT:
 			return Mathf.Abs(transform.position.x - horizExtent - trackedObject.position.x);
 
-		case RIGHT:
+			case RIGHT:
 			return Mathf.Abs(transform.position.x + horizExtent - trackedObject.position.x);
 
-		default:
+			default:
 			Assert.IsTrue(false, "** Default Case Reached **");
 			return ERROR;
 		}
