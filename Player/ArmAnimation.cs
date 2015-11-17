@@ -10,7 +10,7 @@ public class ArmAnimation : AnimationBehaviour, IPlayerAnimation
 	private string hurlAnimation;
 	private IPlayerStateFullAccess state;
 
-	void Start ()
+	void Start()
 	{
 		state = GameObject.Find(PLAYER).GetComponent<IPlayerStateFullAccess>();
 		SetAnimations(state.Character);

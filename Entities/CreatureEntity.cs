@@ -5,8 +5,6 @@ using System.Collections;
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider2D))]
-
 public class CreatureEntity : Entity
 {
 	public enum EntityType { Enemy };

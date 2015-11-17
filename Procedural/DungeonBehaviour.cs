@@ -1,9 +1,9 @@
-﻿using UnityEngine;
-using UnityEngine.Assertions;
-using System;
-using System.Collections.Generic;
-using Rotorz.Tile;
 using Matcha.Unity;
+using Rotorz.Tile;
+using System.Collections.Generic;
+using System;
+using UnityEngine.Assertions;
+using UnityEngine;
 
 // all map and tile operations below make use of the Matcha.Tiles extensions
 // which extend Rotorz.Tile and act as a safeguard against api changes, etc
@@ -57,16 +57,22 @@ public class DungeonBehaviour : CacheBehaviour
 		switch (Rand.Range(0, 1))
 		{
 			case 0:
+			{
 				AssessForStairsOffRoom();
 				break;
+			}
 
 			case 1:
+			{
 				AssessForStairsOffRoom();
 				break;
+			}
 
 			default:
+			{
 				Assert.IsTrue(false, "** Default Case Reached **");
 				break;
+			}
 		}
 	}
 
@@ -91,7 +97,7 @@ public class DungeonBehaviour : CacheBehaviour
 
 			// check that room will fit within map bounds
 			if (RoomInBounds(originX, originY, room) &&
-				!TouchingRooms(originX, originY, room))
+					!TouchingRooms(originX, originY, room))
 			{
 				// paint room
 				for (int x = 0; x < room.width; x++)
@@ -158,7 +164,7 @@ public class DungeonBehaviour : CacheBehaviour
 							if (TileInBounds(originX + x, originY + y))
 							{
 								// build stairs
-								if (map.GetTileInfo(originX, originY + y) != null )
+								if (map.GetTileInfo(originX, originY + y) != null)
 								{
 									brush.PaintTile(map, originX + x, originY + y);
 								}
@@ -178,7 +184,7 @@ public class DungeonBehaviour : CacheBehaviour
 							if (TileInBounds(originX - x, originY + y))
 							{
 								// build stairs
-								if (map.GetTileInfo(originX, originY + y) != null )
+								if (map.GetTileInfo(originX, originY + y) != null)
 								{
 									brush.PaintTile(map, originX - x, originY + y);
 								}
@@ -447,9 +453,9 @@ public class DungeonBehaviour : CacheBehaviour
 	protected bool TileInBounds(int originX, int originY)
 	{
 		if (originX < (mapColumns - mapMarginX) &&
-			originX > (mapMarginX) &&
-			originY < (mapRows - mapMarginY) &&
-			originY > (mapMarginY))
+				originX > (mapMarginX) &&
+				originY < (mapRows - mapMarginY) &&
+				originY > (mapMarginY))
 		{
 			return true;
 		}
@@ -514,9 +520,9 @@ public class DungeonBehaviour : CacheBehaviour
 				for (int i = 0; i < steps; i++)
 				{
 					x = (int) Rand.Gaussian
-						(room.originX, room.originX / 2, room.originX + 1, room.originX + room.width - 1);
+								(room.originX, room.originX / 2, room.originX + 1, room.originX + room.width - 1);
 					y = (int) Rand.Gaussian
-						(room.originY, room.originY, room.originY + 1, room.originY + room.height - 1);
+								(room.originY, room.originY, room.originY + 1, room.originY + room.height - 1);
 
 					// if (WithinRoomBounds(room, room.originX + x, room.originY - y))
 					// {

@@ -1,10 +1,9 @@
-﻿using UnityEngine;
-using System.Collections;
 using Matcha.Dreadful;
+using System.Collections;
+using UnityEngine;
 
-
-public class LightManager : CacheBehaviour {
-
+public class LightManager : CacheBehaviour
+{
 	private Light playerLight;
 	private Light creatureLight;
 	private Light pickupLight;
@@ -29,7 +28,7 @@ public class LightManager : CacheBehaviour {
 	private float pickupBelowGround            = 1.6f;
 	private float illuminatedPickupBelowGround = 1.55f;
 
-	void Start ()
+	void Start()
 	{
 		playerLight            = GameObject.Find("PlayerLight").GetComponent<Light>();
 		creatureLight          = GameObject.Find("CreatureLight").GetComponent<Light>();

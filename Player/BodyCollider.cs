@@ -2,8 +2,6 @@ using Matcha.Unity;
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider2D))]
-
 public class BodyCollider : CacheBehaviour
 {
 	private int layer;

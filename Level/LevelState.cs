@@ -1,10 +1,9 @@
-﻿using UnityEngine;
 using System.Collections;
-
+using UnityEngine;
 
 // a clearinghouse for temporary scene state
-public class LevelState : BaseBehaviour {
-
+public class LevelState : BaseBehaviour
+{
 	// player state
 	public bool Loading { get; set; }
 
@@ -15,11 +14,11 @@ public class LevelState : BaseBehaviour {
 
 	void OnEnable()
 	{
-		Messenger.AddListener<int>( "load level", OnLoadLevel);
+		Messenger.AddListener<int>("load level", OnLoadLevel);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<int>( "load level", OnLoadLevel);
+		Messenger.RemoveListener<int>("load level", OnLoadLevel);
 	}
 }

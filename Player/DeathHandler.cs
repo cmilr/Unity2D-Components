@@ -1,12 +1,9 @@
-using UnityEngine;
-using UnityEngine.Assertions;
-using System;
-using System.Collections;
-using Rewired;
 using Matcha.Unity;
-
-[RequireComponent(typeof(CharacterController2D))]
-[RequireComponent(typeof(PlayerMovement))]
+using Rewired;
+using System.Collections;
+using System;
+using UnityEngine.Assertions;
+using UnityEngine;
 
 public class DeathHandler : CacheBehaviour
 {
@@ -22,19 +19,18 @@ public class DeathHandler : CacheBehaviour
 	private bool physicsEnabled         = true;
 	private bool alreadyDead;
 
-	private string deathAnimation;
-	private float normalizedHorizontalSpeed;
-	private RaycastHit2D lastControllerColliderHit;
 	private Vector3 velocity;
 	private BoxCollider2D boxCollider;
 	private CharacterController2D controller;
 	private IPlayerStateFullAccess state;
-
+	private RaycastHit2D lastControllerColliderHit;
+	private float normalizedHorizontalSpeed;
+	private string deathAnimation;
 	private string struckdownAnimation;
 	private string struckdownAnimation_face_down;
 	private string drownedAnimation;
 	private int hitFrom;
-	
+
 	void Start()
 	{
 		// component takes over player physics, so we don't enable until player dies
@@ -63,7 +59,6 @@ public class DeathHandler : CacheBehaviour
 			struckdownAnimation_face_down = "MAC_struckdown_face_down";
 			drownedAnimation = "MAC_drowned";
 		}
-
 	}
 
 	void OnPlayerDead(string methodOfDeath, Collider2D coll, int hitFrom)
@@ -121,10 +116,10 @@ public class DeathHandler : CacheBehaviour
 			var smoothedMovementFactor = controller.isGrounded ? groundDamping : inAirDamping;
 
 			velocity.x = Mathf.Lerp(
-			velocity.x,
-			normalizedHorizontalSpeed * runSpeed,
-			Time.deltaTime * smoothedMovementFactor
-			);
+				velocity.x,
+				normalizedHorizontalSpeed * runSpeed,
+				Time.deltaTime * smoothedMovementFactor
+				);
 
 			velocity.y += gravity * Time.deltaTime;
 			velocity.y = Mathf.Clamp(velocity.y, -maxFallingSpeed, maxFallingSpeed);
@@ -172,16 +167,16 @@ public class DeathHandler : CacheBehaviour
 		Vector3 worldPos = incomingColl.transform.TransformPoint(centerPoint);
 
 		float left = worldPos.x - (size.x / 2f);
-		float right = worldPos.x + (size.x /2f);
+		float right = worldPos.x + (size.x / 2f);
 
 		float playerPositionX = transform.position.x;
 		float playerCenterOffset = (GetComponent<Renderer>().bounds.size.x / 2);
 
 		playerPositionX = Mathf.Clamp(
-		playerPositionX,
-		left + playerCenterOffset,
-		right - playerCenterOffset
-		);
+			playerPositionX,
+			left + playerCenterOffset,
+			right - playerCenterOffset
+			);
 
 		transform.SetXYPosition(playerPositionX, transform.position.y - .2f);
 	}
@@ -226,7 +221,7 @@ public class DeathHandler : CacheBehaviour
 		// ~~~~~~~~~~~~~~~~~~~
 		for (float f = 1f; f >= 0; f -= 0.1f)
 		{
-			if (f < 0) f = 0f;
+			if (f < 0) { f = 0f; }
 
 			if (hitFrom == RIGHT)
 			{
@@ -253,6 +248,6 @@ public class DeathHandler : CacheBehaviour
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<string, Collider2D, int>( "player dead", OnPlayerDead);
+		Messenger.RemoveListener<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 }

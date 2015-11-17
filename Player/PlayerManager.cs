@@ -1,4 +1,4 @@
-﻿using DG.Tweening;
+using DG.Tweening;
 using Matcha.Dreadful;
 using System.Collections;
 using UnityEngine;
@@ -10,7 +10,7 @@ public class PlayerManager : CacheBehaviour
 	void Start()
 	{
 		player = GameObject.Find(_PLAYER_DATA).GetComponent<_PlayerData>();
-		
+
 		Init();
 	}
 

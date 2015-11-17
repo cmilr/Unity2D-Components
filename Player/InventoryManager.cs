@@ -18,7 +18,7 @@ public class InventoryManager : CacheBehaviour
 	void OnInitWeapons(GameObject eWeapon, GameObject lWeapon, GameObject rWeapon)
 	{
 		// WEAPON GAMEOBJECTS — keep track of weapon GameObjects as they're equipped/stashed
-		if(weaponBelt == null) {
+		if (weaponBelt == null) {
 			weaponBelt = new GameObject[3];
 		}
 

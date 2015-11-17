@@ -4,8 +4,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(GameInit))]
-
 public class _GameData : BaseBehaviour
 {
 	public _GameData data;

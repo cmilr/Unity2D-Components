@@ -1,10 +1,10 @@
-﻿using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
-public interface ICreatureController {
-
-    void MoveRight();
-    void MoveLeft();
-    void Jump();
-    void Attack();
+public interface ICreatureController
+{
+	void MoveRight();
+	void MoveLeft();
+	void Jump();
+	void Attack();
 }

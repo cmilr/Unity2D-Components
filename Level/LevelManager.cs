@@ -1,10 +1,9 @@
-﻿using UnityEngine;
-using System.Collections;
 using Matcha.Dreadful;
+using System.Collections;
+using UnityEngine;
 
-
-public class LevelManager : CacheBehaviour {
-
+public class LevelManager : CacheBehaviour
+{
 	private IPlayerStateReadOnly player;
 
 	// screen-fader settings
@@ -14,7 +13,7 @@ public class LevelManager : CacheBehaviour {
 	private float timeBeforeLevelReload = 3f;
 
 	// tile map specs
-	public float groundLine             = -50.00f;		// where above-ground ends and below-ground begins
+	public float groundLine             = -50.00f;     // where above-ground ends and below-ground begins
 
 	void Start()
 	{
@@ -58,14 +57,16 @@ public class LevelManager : CacheBehaviour {
 		if (player.Y > groundLine)
 		{
 			// if player is not ALREADY above ground, broadcast message "player above ground"
-			if (!player.AboveGround)
+			if (!player.AboveGround) {
 				Messenger.Broadcast<bool>("player above ground", true);
+			}
 		}
 		else
 		{
 			// if player is not ALREADY below ground, broadcast message !"player above ground"
-			if (player.AboveGround)
+			if (player.AboveGround) {
 				Messenger.Broadcast<bool>("player above ground", false);
+			}
 		}
 	}
 

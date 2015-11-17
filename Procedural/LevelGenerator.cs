@@ -1,12 +1,11 @@
-﻿using UnityEngine;
-using System;
-using System.Collections.Generic;
-using Rotorz.Tile;
 using Matcha.Unity;
+using Rotorz.Tile;
+using System.Collections.Generic;
+using System;
+using UnityEngine;
 
 public class LevelGenerator : CacheBehaviour
 {
-
 	public Brush brush;
 	public Brush testBrush;
 	public Brush stepBrush;
@@ -51,7 +50,6 @@ public class LevelGenerator : CacheBehaviour
 
 	void PaintBaseTiles()
 	{
-
 		map.BulkEditBegin();
 
 		for (int x = 0; x < mapColumns; x++)
@@ -349,9 +347,9 @@ public class LevelGenerator : CacheBehaviour
 	bool TileInBounds(int originX, int originY)
 	{
 		if (originX < (mapColumns - mapMarginX) &&
-			originX > (mapMarginX) &&
-			originY < (mapRows - mapMarginY) &&
-			originY > (mapMarginY))
+				originX > (mapMarginX) &&
+				originY < (mapRows - mapMarginY) &&
+				originY > (mapMarginY))
 		{
 			return true;
 		}
@@ -416,9 +414,9 @@ public class LevelGenerator : CacheBehaviour
 				for (int i = 0; i < steps; i++)
 				{
 					x = (int) Rand.Gaussian
-						(room.originX, room.originX / 2, room.originX + 1, room.originX + room.width - 1);
+								(room.originX, room.originX / 2, room.originX + 1, room.originX + room.width - 1);
 					y = (int) Rand.Gaussian
-						(room.originY, room.originY, room.originY + 1, room.originY + room.height - 1);
+								(room.originY, room.originY, room.originY + 1, room.originY + room.height - 1);
 
 					// if (WithinRoomBounds(room, room.originX + x, room.originY - y))
 					// {

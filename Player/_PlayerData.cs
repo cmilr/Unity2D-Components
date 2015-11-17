@@ -1,20 +1,20 @@
-﻿using UnityEngine;
 using System.Collections;
-using System;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System;
+using UnityEngine;
 
 // this is a pseudo-singleton — it enforces a single instance, but doesn't expose
 // a static variable, so you can't access it without a GetComponent() call
-public class _PlayerData : BaseBehaviour {
-
+public class _PlayerData : BaseBehaviour
+{
 	public _PlayerData data;
 
-	public string Character 	{ get; set; }
-	public int HP 					{ get; set; }
-	public int AC 					{ get; set; }
-	public int XP					{ get; set; }
-	public int LVL					{ get; set; }
+	public string Character    { get; set; }
+	public int HP              { get; set; }
+	public int AC              { get; set; }
+	public int XP              { get; set; }
+	public int LVL             { get; set; }
 	public GameObject equippedWeapon;
 	public GameObject leftWeapon;
 	public GameObject rightWeapon;
@@ -53,7 +53,7 @@ public class _PlayerData : BaseBehaviour {
 
 	public void Load()
 	{
-		if(File.Exists(Application.persistentDataPath + "/PlayerData.dat"))
+		if (File.Exists(Application.persistentDataPath + "/PlayerData.dat"))
 		{
 			BinaryFormatter bf = new BinaryFormatter();
 			FileStream file = File.Open(Application.persistentDataPath + "/PlayerData.dat",FileMode.Open);
@@ -63,8 +63,8 @@ public class _PlayerData : BaseBehaviour {
 			Character = container.character;
 			HP        = container.hp;
 			AC        = container.ac;
-			XP    	  = container.xp;
-			LVL    	  = container.lvl;
+			XP         = container.xp;
+			LVL        = container.lvl;
 		}
 	}
 

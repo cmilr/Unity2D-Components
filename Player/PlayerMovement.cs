@@ -3,8 +3,6 @@ using System.Collections;
 using UnityEngine.Assertions;
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController2D))]
-
 public class PlayerMovement : CacheBehaviour, ICreatureController
 {
 	private float gravity         = -35f;           // set gravity for player

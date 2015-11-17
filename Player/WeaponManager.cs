@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine.Assertions;
 using UnityEngine;
 
@@ -12,8 +12,8 @@ public class WeaponManager : CacheBehaviour
 	void Start()
 	{
 		arm        = GetComponentInChildren<ArmAnimation>();
-		projectile = transform.parent.GetComponent<ProjectileManager>();
 		melee      = transform.parent.GetComponent<MeleeManager>();
+		projectile = transform.parent.GetComponent<ProjectileManager>();
 	}
 
 	// ACTION DISPATCHER
