@@ -9,7 +9,7 @@ using UnityEngine;
 // which extend Rotorz.Tile and act as a safeguard against api changes, etc
 public class DungeonBehaviour : CacheBehaviour
 {
-	public Brush brush;
+	public Brush stoneBrush;
 	public Brush boundsBrush;
 	public Brush stepBrush;
 	public Brush hallOriginBrush;
@@ -18,17 +18,17 @@ public class DungeonBehaviour : CacheBehaviour
 	protected TileSystem map;
 	protected int mapColumns;
 	protected int mapRows;
-	protected int mapMarginX;
-	protected int mapMarginY;
-	protected int roomMarginX;
-	protected int roomMarginY;
+	protected int mapMarginX     = 12;
+	protected int mapMarginY     = 12;
+	protected int roomMarginX    = 4;
+	protected int roomMarginY    = 4;
 	protected int direction;
 	protected List<ProcSpace> roomList;
 	protected List<ProcSpace> hallList;
 	protected List<ProcSpace> crawlspaceList;
 	protected ProcSpace currentRoom;
 
-	protected void PaintBaseTiles()
+	protected void PaintBaseTiles(Brush currentBrush)
 	{
 		map.BulkEditBegin();
 
@@ -36,7 +36,7 @@ public class DungeonBehaviour : CacheBehaviour
 		{
 			for (int y = 0; y < mapRows; y++)
 			{
-				brush.PaintTile(map, x, y);
+				currentBrush.PaintTile(map, x, y);
 			}
 		}
 
@@ -166,7 +166,7 @@ public class DungeonBehaviour : CacheBehaviour
 								// build stairs
 								if (map.GetTileInfo(originX, originY + y) != null)
 								{
-									brush.PaintTile(map, originX + x, originY + y);
+									stoneBrush.PaintTile(map, originX + x, originY + y);
 								}
 
 								// erase walls to the right of stairs
@@ -186,7 +186,7 @@ public class DungeonBehaviour : CacheBehaviour
 								// build stairs
 								if (map.GetTileInfo(originX, originY + y) != null)
 								{
-									brush.PaintTile(map, originX - x, originY + y);
+									stoneBrush.PaintTile(map, originX - x, originY + y);
 								}
 
 								// erase walls to the left of stairs
@@ -397,7 +397,8 @@ public class DungeonBehaviour : CacheBehaviour
 						if (TileInBounds(originX + x, originY + y))
 						{
 							// build stairs
-							brush.PaintTile(map, originX + x, originY + y);
+							stoneBrush.PaintTile(map, originX + x, originY + y);
+
 							// erase walls to the right of stairs
 							map.ClearTile(originX + x + 1, originY + y);
 							map.ClearTile(originX + x + 2, originY + y);
@@ -406,8 +407,9 @@ public class DungeonBehaviour : CacheBehaviour
 						}
 
 						// backfill stairs by one tile
-						brush.PaintTile(map, originX - 1, originY + y);
-						brush.PaintTile(map, originX - 2, originY + y);
+						stoneBrush.PaintTile(map, originX - 1, originY + y);
+						stoneBrush.PaintTile(map, originX - 2, originY + y);
+
 						break;
 					}
 
@@ -416,7 +418,8 @@ public class DungeonBehaviour : CacheBehaviour
 						if (TileInBounds(originX - x, originY + y))
 						{
 							// build stairs
-							brush.PaintTile(map, originX - x, originY + y);
+							stoneBrush.PaintTile(map, originX - x, originY + y);
+
 							// erase walls to the left of stairs
 							map.ClearTile(originX - x - 1, originY + y);
 							map.ClearTile(originX - x - 2, originY + y);
@@ -425,8 +428,9 @@ public class DungeonBehaviour : CacheBehaviour
 						}
 
 						// backfill stairs by one tile
-						brush.PaintTile(map, originX + 1, originY + y);
-						brush.PaintTile(map, originX + 2, originY + y);
+						stoneBrush.PaintTile(map, originX + 1, originY + y);
+						stoneBrush.PaintTile(map, originX + 2, originY + y);
+
 						break;
 					}
 				}
