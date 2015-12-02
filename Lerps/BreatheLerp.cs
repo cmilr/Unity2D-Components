@@ -4,7 +4,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Breathe : CacheBehaviour
+public class BreatheLerp : CacheBehaviour
 {
 	Vector3 startPos;
 
