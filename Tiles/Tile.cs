@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Tile : BaseBehaviour
+public class Tile : MonoBehaviour
 {
 	// TileType is used to block enemy AI from walking off into space, etc
 	public enum TileType { Decorative, Solid, OneWay };

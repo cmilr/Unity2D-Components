@@ -45,10 +45,8 @@ namespace Matcha.Dreadful
 		{
 			DOTween.Sequence()
 			.Append(gameObject.transform.DOScale(new Vector3(1, 1, 1), 0f))
-			.Append(gameObject.transform.DOScale(new Vector3(1.6f, 1.6f, 0), .10f)
-					.SetEase(Ease.InBounce))
-			.Append(gameObject.transform.DOScale(new Vector3(1, 1, 1), .1f)
-					.SetEase(Ease.Linear));
+			.Append(gameObject.transform.DOScale(new Vector3(1.6f, 1.6f, 0), .10f).SetEase(Ease.InBounce))
+			.Append(gameObject.transform.DOScale(new Vector3(1, 1, 1), .1f).SetEase(Ease.Linear));
 		}
 
 		public static void TextFlicker(Text text)
@@ -77,48 +75,42 @@ namespace Matcha.Dreadful
 		{
 			DOTween.Sequence()
 			.AppendInterval(fadeAfter)
-			.Append(element.DOFade(fadeTo, timeToFade)
-					.SetEase(Ease.InOutExpo));
+			.Append(element.DOFade(fadeTo, timeToFade).SetEase(Ease.InOutExpo));
 		}
 
 		public static void Fade(Text element, float fadeTo, float fadeAfter, float timeToFade)
 		{
 			DOTween.Sequence()
 			.AppendInterval(fadeAfter)
-			.Append(element.DOFade(fadeTo, timeToFade)
-					.SetEase(Ease.InOutExpo));
+			.Append(element.DOFade(fadeTo, timeToFade).SetEase(Ease.InOutExpo));
 		}
 
 		public static void Fade(Image element, float fadeTo, float fadeAfter, float timeToFade)
 		{
 			DOTween.Sequence()
 			.AppendInterval(fadeAfter)
-			.Append(element.DOFade(fadeTo, timeToFade)
-					.SetEase(Ease.InOutExpo));
+			.Append(element.DOFade(fadeTo, timeToFade).SetEase(Ease.InOutExpo));
 		}
 
 		public static void FadeOutProjectile(SpriteRenderer element, float fadeTo, float fadeAfter, float timeToFade)
 		{
 			DOTween.Sequence()
 			.AppendInterval(fadeAfter)
-			.Append(element.DOFade(fadeTo, timeToFade)
-					.SetEase(Ease.OutQuart));
+			.Append(element.DOFade(fadeTo, timeToFade).SetEase(Ease.OutQuart));
 		}
 
 		public static void FadeInLevel(SpriteRenderer spriteRenderer, float fadeAfter, float timeToFade)
 		{
 			DOTween.Sequence()
 			.AppendInterval(fadeAfter)
-			.Append(spriteRenderer.DOFade(0, timeToFade)
-					.SetEase(Ease.InOutExpo));
+			.Append(spriteRenderer.DOFade(0, timeToFade).SetEase(Ease.InOutExpo));
 		}
 
 		public static void FadeOutLevel(SpriteRenderer spriteRenderer, float fadeAfter, float timeToFade)
 		{
 			DOTween.Sequence()
 			.AppendInterval(fadeAfter)
-			.Append(spriteRenderer.DOFade(1, timeToFade)
-					.SetEase(Ease.OutQuart));
+			.Append(spriteRenderer.DOFade(1, timeToFade).SetEase(Ease.OutQuart));
 		}
 
 		public static void FadeIntensity(Light light, float targetIntensity, float fadeAfter, float timeToFade)
@@ -130,22 +122,19 @@ namespace Matcha.Dreadful
 			.Append(light.DOIntensity(targetIntensity, timeToFade));
 		}
 
-		public static void Flicker(Light light, float minIntensity, float maxIntensity)
-		{
-			light.DOKill();
-			DOTween.Sequence()
-			.Append(light.DOIntensity(
-						Rand.Range(minIntensity, maxIntensity),
-						Rand.Range(.1f, .5f)));
-		}
+		// public static void Flicker(Light light, float minIntensity, float maxIntensity)
+		// {
+		// 	light.DOKill();
+		// 	DOTween.Sequence().SetRecyclable(true)
+		// 	.Append(light.DOIntensity(Rand.Range(minIntensity, maxIntensity), Rand.Range(.1f, .5f)));
+		// }
 
 		public static void ExtinguishLight(Light light, float extinguishAfter, float timeToExtinguish)
 		{
 			DOTween.Sequence()
 			.AppendInterval(extinguishAfter)
 			.Append(light.DOIntensity(8, .00001f))
-			.Append(light.DOIntensity(0, timeToExtinguish)
-					.SetEase(Ease.InBack));
+			.Append(light.DOIntensity(0, timeToExtinguish).SetEase(Ease.InBack));
 		}
 
 		public static void FadeToColor(SpriteRenderer spriteRenderer, Color32 newColor, float fadeAfter, float timeToFade)
