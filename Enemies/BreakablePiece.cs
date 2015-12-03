@@ -1,6 +1,5 @@
 using Matcha.Dreadful;
 using Matcha.Unity;
-using System.Collections;
 using UnityEngine;
 
 public class BreakablePiece : CacheBehaviour

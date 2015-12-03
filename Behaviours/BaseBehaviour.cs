@@ -5,7 +5,6 @@
 //        \/_/  \/_/   \/_/\/_/     \/_/   \/_____/   \/_/\/_/   \/_/\/_/
 //         I  N  D  U  S  T  R  I  E  S             www.matcha.industries
 
-using System.Collections;
 using UnityEngine;
 
 public class BaseBehaviour : MonoBehaviour

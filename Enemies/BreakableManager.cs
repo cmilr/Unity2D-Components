@@ -1,5 +1,4 @@
 using Matcha.Unity;
-using System.Collections;
 using UnityEngine.Assertions;
 using UnityEngine;
 

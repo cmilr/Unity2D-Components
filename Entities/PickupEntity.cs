@@ -1,6 +1,4 @@
 using Matcha.Dreadful;
-using System.Collections;
-using System;
 using UnityEngine.Assertions;
 using UnityEngine;
 

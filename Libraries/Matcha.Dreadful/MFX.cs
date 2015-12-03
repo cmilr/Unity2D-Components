@@ -6,9 +6,7 @@
 //         I  N  D  U  S  T  R  I  E  S             www.matcha.industries
 
 using DG.Tweening;
-using Matcha.Dreadful;
 using Matcha.Unity;
-using System.Collections;
 using UnityEngine.UI;
 using UnityEngine;
 

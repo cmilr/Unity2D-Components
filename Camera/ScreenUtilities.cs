@@ -1,8 +1,5 @@
-using DG.Tweening;
-using System.Collections;
 using UnityEngine.Assertions;
 using UnityEngine;
-using UnityStandardAssets.ImageEffects;
 
 public class ScreenUtilities : CacheBehaviour
 {

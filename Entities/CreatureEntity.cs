@@ -1,8 +1,5 @@
-using DG.Tweening;
 using Matcha.Dreadful;
 using Matcha.Unity;
-using System.Collections;
-using System;
 using UnityEngine;
 
 public class CreatureEntity : Entity
