@@ -55,6 +55,7 @@ public class BaseBehaviour : MonoBehaviour
 	protected const int ENEMY_WEAPON                  = 17;
 	protected const int BREAKABLES                    = 18;
 	protected const int EDGE_BLOCKER                  = 24;
+	protected const int PICKUPS_LAYER                 = 15;
 
 	// player offsets
 	protected const float ABOUTFACE_OFFSET            = 0f;

@@ -34,6 +34,11 @@ namespace Matcha.Unity
 			transform.position = new Vector3(x, y, z);
 		}
 
+		public static void SetXLocalPosition(this Transform transform, float x)
+		{
+			transform.localPosition = new Vector3(x, transform.localPosition.y, transform.localPosition.z);
+		}
+
 		public static void SetLocalScaleX(this Transform transform, float x)
 		{
 			transform.localScale = new Vector3(x, transform.localScale.y, transform.localScale.z);

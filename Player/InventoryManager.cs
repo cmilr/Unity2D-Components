@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Matcha.Dreadful;
+using Matcha.Unity;
 using UnityEngine;
 
 public class InventoryManager : CacheBehaviour
@@ -28,6 +29,48 @@ public class InventoryManager : CacheBehaviour
 		CacheAndSetupWeapons();
 		PassInitialWeaponsToHUD();
 		PassEquippedWeaponToWeaponManager();
+	}
+
+	void OnEquipNewWeapon(GameObject newWeapon)
+	{
+		CloseoutCurrentEquippedWeapon();
+		InitNewEquippedWeapon(newWeapon);
+	}
+
+	void CloseoutCurrentEquippedWeapon()
+	{
+		// is weapon in inventory, or just loose on ground?
+		equippedWeapon.inInventory = false;
+		//disable weapon animations
+		equippedWeapon.EnableAnimation(false);
+		//disable weapon collider
+		equippedWeapon.GetComponent<BoxCollider2D>().enabled = false;
+		//enable weapon pickup collider
+		// equippedWeapon.GetComponentInChildren<BoxCollider2D>().enabled = true;
+		//enable weapon pickup sprite
+		weaponBelt[equipped].GetComponent<SpriteRenderer>().enabled = true;
+
+		weaponBelt[equipped].layer = PICKUPS_LAYER;
+		weaponBelt[equipped].transform.SetXLocalPosition(-1f);
+		weaponBelt[equipped].transform.SetLocalScaleX(1f);
+		weaponBelt[equipped].transform.parent = null;
+	}
+
+	void InitNewEquippedWeapon(GameObject newWeapon)
+	{
+		newWeapon.transform.parent = gameObject.transform;
+		newWeapon.transform.localPosition = new Vector3(0f, 0f, .1f);
+		weaponBelt[equipped] = newWeapon;
+		weaponBelt[equipped].transform.SetLocalScaleX(1f);
+		weaponBelt[equipped].layer = PLAYER_LAYER;
+		weaponBelt[equipped].GetComponent<SpriteRenderer>().enabled = false;
+		CacheAndSetupWeapons();
+		equippedWeapon.inInventory = true;
+		equippedWeapon.GetComponent<BoxCollider2D>().enabled = true;
+		// equippedWeapon.GetComponentInChildren<BoxCollider2D>().enabled = false;
+		PassNewWeaponsToHUD();
+		PassEquippedWeaponToWeaponManager();
+		Messenger.Broadcast<GameObject>("init new equipped weapon", weaponBelt[equipped]);
 	}
 
 	void OnSwitchWeapon(int shiftDirection)
@@ -163,6 +206,7 @@ public class InventoryManager : CacheBehaviour
 	void OnEnable()
 	{
 		Messenger.AddListener<GameObject, GameObject, GameObject>("init weapons", OnInitWeapons);
+		Messenger.AddListener<GameObject>("equip new weapon", OnEquipNewWeapon);
 		Messenger.AddListener<int>("switch weapon", OnSwitchWeapon);
 		Messenger.AddListener<bool>("level loading", OnLevelLoading);
 	}
@@ -170,6 +214,7 @@ public class InventoryManager : CacheBehaviour
 	void OnDestroy()
 	{
 		Messenger.RemoveListener<GameObject, GameObject, GameObject>("init weapons", OnInitWeapons);
+		Messenger.RemoveListener<GameObject>("equip new weapon", OnEquipNewWeapon);
 		Messenger.RemoveListener<int>("switch weapon", OnSwitchWeapon);
 		Messenger.RemoveListener<bool>("level loading", OnLevelLoading);
 	}

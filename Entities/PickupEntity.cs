@@ -2,10 +2,9 @@ using Matcha.Dreadful;
 using UnityEngine.Assertions;
 using UnityEngine;
 
-
 public class PickupEntity : Entity
 {
-	public enum EntityType { prize, levelUp, weapon, save, load };
+	public enum EntityType { prize, levelUp, save, load };
 	public EntityType entityType;
 	private Light glow;
 
@@ -40,12 +39,6 @@ public class PickupEntity : Entity
 					MFX.ExtinguishLight(glow, 0, .1f);
 					Messenger.Broadcast<int>("prize collected", worth);
 					Messenger.Broadcast<bool>("level completed", true);
-					break;
-				}
-
-				case EntityType.weapon:
-				{
-					MFX.PickupWeapon(gameObject);
 					break;
 				}
 
