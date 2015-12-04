@@ -1,6 +1,4 @@
-using Matcha.Dreadful;
 using Matcha.Unity;
-using System.Collections;
 using UnityEngine;
 
 public class Weapon : AnimationBehaviour
@@ -10,6 +8,10 @@ public class Weapon : AnimationBehaviour
 
 	[HideInInspector]
 	public bool alreadyCollided;
+
+	[Tooltip("Is this weapon in someone's inventory, or is it just loose on the floor?")]
+	public bool inInventory;
+
 
 	[Header("SPRITES")]
 	//~~~~~~~~~~~~~~~~~~~~~
@@ -71,13 +73,33 @@ public class Weapon : AnimationBehaviour
 	private WeaponPiece center;
 	private WeaponPiece lower;
 
+	private SpriteRenderer spritePickupIcon;
+
 	void Awake()
 	{
-		// if projectile is being carried by the player (as opposed to an enemy,)
-		// animate the weapon while player is walking, jumping, etc
+		Init();
+	}
+
+	void Init()
+	{
+		//populate SpriteRender component from iconSprite in this script
+		spritePickupIcon = gameObject.GetComponent<SpriteRenderer>();
+		spritePickupIcon.sprite = iconSprite;
+
+		//if weapon is loose on the floor, turn on its pickup icon so it can bee seen
+		if (!inInventory)
+		{
+			spritePickupIcon.enabled = true;
+		}
+		else
+		{
+			spritePickupIcon.enabled = false;
+		}
+
 		if (transform.parent != null)
 		{
-			if (transform.parent.name == "Inventory")
+			// if weapon is being carried by the player, animate it while player is walking, jumping, etc
+			if (weaponType != WeaponType.MagicProjectile)
 			{
 				// set weapon components on initialization
 				upper  = transform.FindChild("Upper").gameObject.GetComponent<WeaponPiece>();
