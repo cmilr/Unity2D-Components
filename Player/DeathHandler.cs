@@ -178,7 +178,7 @@ public class DeathHandler : CacheBehaviour
 			right - playerCenterOffset
 			);
 
-		transform.SetXYPosition(playerPositionX, transform.position.y - .2f);
+		transform.SetPositionXY(playerPositionX, transform.position.y - .2f);
 	}
 
 

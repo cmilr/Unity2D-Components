@@ -34,7 +34,7 @@ public abstract class Entity : CacheBehaviour
 	protected void AutoAlign()
 	{
 		float targetY = (float)(Math.Round(transform.position.y) - ALIGN_ENTITY_TO);
-		transform.SetYPosition(targetY);
+		transform.SetPositionY(targetY);
 	}
 
 	protected void LifecycleOver()

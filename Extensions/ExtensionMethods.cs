@@ -5,7 +5,6 @@
 //        \/_/  \/_/   \/_/\/_/     \/_/   \/_____/   \/_/\/_/   \/_/\/_/
 //         I  N  D  U  S  T  R  I  E  S             www.matcha.industries
 
-using System.Collections;
 using System;
 using UnityEngine;
 
@@ -14,17 +13,17 @@ namespace Matcha.Unity
 	public static class ExtensionMethods
 	{
 		// transform extensions
-		public static void SetXPosition(this Transform transform, float x)
+		public static void SetPositionX(this Transform transform, float x)
 		{
 			transform.position = new Vector3(x, transform.position.y, transform.position.z);
 		}
 
-		public static void SetYPosition(this Transform transform, float y)
+		public static void SetPositionY(this Transform transform, float y)
 		{
 			transform.position = new Vector3(transform.position.x, y, transform.position.z);
 		}
 
-		public static void SetXYPosition(this Transform transform, float x, float y)
+		public static void SetPositionXY(this Transform transform, float x, float y)
 		{
 			transform.position = new Vector3(x, y, transform.position.z);
 		}
@@ -34,14 +33,38 @@ namespace Matcha.Unity
 			transform.position = new Vector3(x, y, z);
 		}
 
-		public static void SetXLocalPosition(this Transform transform, float x)
+		public static void SetLocalPositionX(this Transform transform, float x)
 		{
 			transform.localPosition = new Vector3(x, transform.localPosition.y, transform.localPosition.z);
+		}
+
+		public static void SetAbsLocalPositionX(this Transform transform, float x)
+		{
+			if (transform.lossyScale.x > 0f)
+			{
+				transform.localPosition = new Vector3(x, transform.localPosition.y, transform.localPosition.z);
+			}
+			else
+			{
+				transform.localPosition = new Vector3(-x, transform.localPosition.y, transform.localPosition.z);
+			}
 		}
 
 		public static void SetLocalScaleX(this Transform transform, float x)
 		{
 			transform.localScale = new Vector3(x, transform.localScale.y, transform.localScale.z);
+		}
+
+		public static void SetAbsLocalScaleX(this Transform transform, float x)
+		{
+			if (transform.lossyScale.x > 0f)
+			{
+				transform.localScale = new Vector3(x, transform.localScale.y, transform.localScale.z);
+			}
+			else
+			{
+				transform.localScale = new Vector3(-x, transform.localScale.y, transform.localScale.z);
+			}
 		}
 
 		// allows comparison of two floats within a given margin of error

@@ -134,7 +134,7 @@ public class MovementAI : CacheBehaviour
 			rigidbody2D.angularVelocity = 0f;
 
 			if (transform.position.x > blockedRightAt) {
-				transform.SetXPosition(blockedRightAt);
+				transform.SetPositionX(blockedRightAt);
 			}
 		}
 		else if (blockedLeft && walkingDirection == LEFT)
@@ -144,7 +144,7 @@ public class MovementAI : CacheBehaviour
 			rigidbody2D.angularVelocity = 0f;
 
 			if (transform.position.x < blockedLeftAt) {
-				transform.SetXPosition(blockedLeftAt);
+				transform.SetPositionX(blockedLeftAt);
 			}
 		}
 		// if enemy and player are on roughly same x axis, movementPaused

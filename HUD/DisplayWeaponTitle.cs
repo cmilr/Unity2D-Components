@@ -1,6 +1,5 @@
 using DG.Tweening;
 using Matcha.Dreadful;
-using System.Collections;
 using UnityEngine.UI;
 using UnityEngine;
 

@@ -46,23 +46,23 @@ public class DontLeaveMap : CacheBehaviour
 	{
 		// check left bound.
 		if (transform.position.x - (spriteWidth / 2 - leftOffset) < leftBound) {
-			transform.SetXPosition(leftBound + (spriteWidth / 2 - leftOffset));
+			transform.SetPositionX(leftBound + (spriteWidth / 2 - leftOffset));
 		}
 
 		// check right bound.
 		if (transform.position.x + (spriteWidth / 2 - rightOffset) > rightBound) {
-			transform.SetXPosition(rightBound - (spriteWidth / 2 - rightOffset));
+			transform.SetPositionX(rightBound - (spriteWidth / 2 - rightOffset));
 		}
 
 		// check upper bound.
 		if (transform.position.y + (spriteHeight - upperOffset) > upperBound) {
-			transform.SetYPosition(upperBound - (spriteHeight - upperOffset));
+			transform.SetPositionY(upperBound - (spriteHeight - upperOffset));
 		}
 
 		// check lower bound.
 		if (transform.position.y - lowerOffset < lowerBound)
 		{
-			transform.SetYPosition(lowerBound - lowerOffset);
+			transform.SetPositionY(lowerBound - lowerOffset);
 			Messenger.Broadcast<string, Collider2D, int>("player dead", "out of bounds", null, -1);
 		}
 	}

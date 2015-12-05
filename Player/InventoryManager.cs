@@ -39,38 +39,31 @@ public class InventoryManager : CacheBehaviour
 
 	void CloseoutCurrentEquippedWeapon()
 	{
-		// is weapon in inventory, or just loose on ground?
-		equippedWeapon.inInventory = false;
-		//disable weapon animations
-		equippedWeapon.EnableAnimation(false);
-		//disable weapon collider
-		equippedWeapon.GetComponent<BoxCollider2D>().enabled = false;
-		//enable weapon pickup collider
-		// equippedWeapon.GetComponentInChildren<BoxCollider2D>().enabled = true;
-		//enable weapon pickup sprite
-		weaponBelt[equipped].GetComponent<SpriteRenderer>().enabled = true;
-
 		weaponBelt[equipped].layer = PICKUPS_LAYER;
-		weaponBelt[equipped].transform.SetXLocalPosition(-1f);
-		weaponBelt[equipped].transform.SetLocalScaleX(1f);
+		weaponBelt[equipped].GetComponentInChildren<WeaponCollider>().DisableWeaponCollider();
+		weaponBelt[equipped].GetComponentInChildren<WeaponPickupCollider>().EnableWeaponPickupCollider();
+		weaponBelt[equipped].GetComponent<SpriteRenderer>().enabled = true;
+		weaponBelt[equipped].transform.SetLocalPositionX(-1f);
+		weaponBelt[equipped].transform.SetAbsLocalScaleX(1f);
 		weaponBelt[equipped].transform.parent = null;
+		equippedWeapon.inInventory = false;
+		equippedWeapon.EnableAnimation(false);
 	}
 
 	void InitNewEquippedWeapon(GameObject newWeapon)
 	{
-		newWeapon.transform.parent = gameObject.transform;
-		newWeapon.transform.localPosition = new Vector3(0f, 0f, .1f);
 		weaponBelt[equipped] = newWeapon;
-		weaponBelt[equipped].transform.SetLocalScaleX(1f);
 		weaponBelt[equipped].layer = PLAYER_LAYER;
+		weaponBelt[equipped].transform.parent = gameObject.transform;
+		weaponBelt[equipped].transform.localPosition = new Vector3(0f, 0f, .1f);
+		weaponBelt[equipped].transform.SetLocalScaleX(1f);
 		weaponBelt[equipped].GetComponent<SpriteRenderer>().enabled = false;
+		weaponBelt[equipped].GetComponentInChildren<WeaponCollider>().EnableWeaponCollider();
+		weaponBelt[equipped].GetComponentInChildren<WeaponPickupCollider>().DisableWeaponPickupCollider();
+		weaponBelt[equipped].GetComponent<Weapon>().inInventory = true;
 		CacheAndSetupWeapons();
-		equippedWeapon.inInventory = true;
-		equippedWeapon.GetComponent<BoxCollider2D>().enabled = true;
-		// equippedWeapon.GetComponentInChildren<BoxCollider2D>().enabled = false;
-		PassNewWeaponsToHUD();
+		PassEquippedWeaponToHUD();
 		PassEquippedWeaponToWeaponManager();
-		Messenger.Broadcast<GameObject>("init new equipped weapon", weaponBelt[equipped]);
 	}
 
 	void OnSwitchWeapon(int shiftDirection)
@@ -186,6 +179,11 @@ public class InventoryManager : CacheBehaviour
 		Messenger.Broadcast<GameObject, int>("change stashed weapon", weaponBelt[left], LEFT);
 		Messenger.Broadcast<GameObject>("change equipped weapon", weaponBelt[equipped]);
 		Messenger.Broadcast<GameObject, int>("change stashed weapon", weaponBelt[right], RIGHT);
+	}
+
+	void PassEquippedWeaponToHUD()
+	{
+		Messenger.Broadcast<GameObject>("init new equipped weapon", weaponBelt[equipped]);
 	}
 
 	void PassEquippedWeaponToWeaponManager()

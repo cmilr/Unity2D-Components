@@ -185,7 +185,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			transform.SetLocalScaleX(-transform.localScale.x);
 
 			// offset so player isn't pushed too far forward when sprite flips
-			transform.SetXPosition(transform.position.x - ABOUTFACE_OFFSET);
+			transform.SetPositionX(transform.position.x - ABOUTFACE_OFFSET);
 		}
 
 		if (controller.isGrounded)
@@ -214,7 +214,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			transform.SetLocalScaleX(-transform.localScale.x);
 
 			// offset so player isn't pushed too far forward when sprite flips
-			transform.SetXPosition(transform.position.x + ABOUTFACE_OFFSET);
+			transform.SetPositionX(transform.position.x + ABOUTFACE_OFFSET);
 		}
 
 		if (controller.isGrounded)
