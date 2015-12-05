@@ -1,10 +1,12 @@
 using Matcha.Unity;
+using System;
 using UnityEngine;
 
 public class Weapon : AnimationBehaviour
 {
 	public enum WeaponType { Axe, Sword, Hammer, Dagger, MagicProjectile };
 	public WeaponType weaponType;
+	public int worth;
 
 	[HideInInspector]
 	public bool alreadyCollided;
@@ -82,14 +84,16 @@ public class Weapon : AnimationBehaviour
 
 	void Init()
 	{
-		//populate SpriteRender component from iconSprite in this script
 		spritePickupIcon = gameObject.GetComponent<SpriteRenderer>();
-		spritePickupIcon.sprite = iconSprite;
 
-		//if weapon is loose on the floor, turn on its pickup icon so it can bee seen
+		//if weapon is loose on the floor, turn on its pickup icon so it can be seen
 		if (!inInventory)
 		{
 			spritePickupIcon.enabled = true;
+
+			// auto-align
+			float targetY = (float)(Math.Round(transform.position.y) - ALIGN_ENTITY_TO);
+			transform.SetPositionY(targetY);
 		}
 		else
 		{
@@ -110,6 +114,11 @@ public class Weapon : AnimationBehaviour
 				upper.spriteRenderer.material.SetColor("_Color", M.HexToColor(upperColor));
 				center.spriteRenderer.material.SetColor("_Color", M.HexToColor(centerColor));
 				lower.spriteRenderer.material.SetColor("_Color", M.HexToColor(lowerColor));
+
+				// turn off weapon piece SpriteRenderer until picked up by player
+				upper.spriteRenderer.enabled = false;
+				center.spriteRenderer.enabled = false;
+				lower.spriteRenderer.enabled = false;
 			}
 		}
 	}

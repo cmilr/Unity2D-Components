@@ -16,7 +16,13 @@ public class WeaponCollider : CacheBehaviour
 		}
 	}
 
-	void OnTriggerStay2D(Collider2D coll) {}
+	public void EnableWeaponCollider()
+	{
+			collider2D.enabled = true;
+	}
 
-	void OnTriggerExit2D(Collider2D coll) {}
+	public void DisableWeaponCollider()
+	{
+			collider2D.enabled = false;
+	}
 }
