@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class ArmAnimation : AnimationBehaviour, IPlayerAnimation

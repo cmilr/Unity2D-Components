@@ -1,5 +1,4 @@
 using Matcha.Unity;
-using System;
 using UnityEngine;
 
 public class Weapon : AnimationBehaviour
@@ -12,7 +11,8 @@ public class Weapon : AnimationBehaviour
 	public bool alreadyCollided;
 
 	[Tooltip("Is this weapon in someone's inventory, or is it just loose on the floor?")]
-	public bool inInventory;
+	public bool inPlayerInventory;
+	public bool inEnemyInventory;
 
 
 	[Header("SPRITES")]
@@ -87,17 +87,28 @@ public class Weapon : AnimationBehaviour
 		spritePickupIcon = gameObject.GetComponent<SpriteRenderer>();
 
 		//if weapon is loose on the floor, turn on its pickup icon so it can be seen
-		if (!inInventory)
-		{
-			spritePickupIcon.enabled = true;
-
-			// auto-align
-			float targetY = (float)(Math.Round(transform.position.y) - ALIGN_ENTITY_TO);
-			transform.SetPositionY(targetY);
-		}
-		else
+		if (inPlayerInventory)
 		{
 			spritePickupIcon.enabled = false;
+			gameObject.GetComponentInChildren<Rigidbody2D>().isKinematic = true;
+			gameObject.GetComponentInChildren<PhysicsCollider>().DisablePhysicsCollider();
+			gameObject.GetComponentInChildren<MeleeCollider>().EnableMeleeCollider();
+			gameObject.GetComponentInChildren<WeaponPickupCollider>().DisableWeaponPickupCollider();
+		}
+		else if (inEnemyInventory)
+		{
+			spritePickupIcon.enabled = false;
+			gameObject.GetComponentInChildren<Rigidbody2D>().isKinematic = true;
+			gameObject.GetComponentInChildren<PhysicsCollider>().DisablePhysicsCollider();
+			gameObject.GetComponentInChildren<WeaponPickupCollider>().DisableWeaponPickupCollider();
+		}
+		else if (name != "Projectile(Clone)") //else not a pooled weapon
+		{
+			spritePickupIcon.enabled = true;
+			gameObject.GetComponentInChildren<Rigidbody2D>().isKinematic = false;
+			gameObject.GetComponentInChildren<PhysicsCollider>().EnablePhysicsCollider();
+			gameObject.GetComponentInChildren<MeleeCollider>().DisableMeleeCollider();
+			gameObject.GetComponentInChildren<WeaponPickupCollider>().EnableWeaponPickupCollider();
 		}
 
 		if (transform.parent != null)

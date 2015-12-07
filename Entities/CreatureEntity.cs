@@ -42,7 +42,7 @@ public class CreatureEntity : Entity
 
 	override public void OnWeaponCollisionEnter(Collider2D coll)
 	{
-		playerWeapon = coll.GetComponent<Weapon>();
+		playerWeapon = coll.GetComponentInParent<Weapon>();
 
 		hitFrom = M.HorizSideThatWasHit(gameObject, coll);
 

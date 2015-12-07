@@ -3,6 +3,11 @@ using UnityEngine;
 
 public class WeaponPickupCollider : CacheBehaviour
 {
+	void Start()
+	{
+		gameObject.layer = PICKUPS_LAYER;
+	}
+	
 	void OnTriggerEnter2D(Collider2D coll)
 	{
 		if (coll.gameObject.layer == PLAYER_COLLIDER)

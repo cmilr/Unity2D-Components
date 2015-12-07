@@ -1,11 +1,12 @@
 using UnityEngine;
 
-public class WeaponCollider : CacheBehaviour
+public class MeleeCollider : CacheBehaviour
 {
 	void Start()
 	{
-		// only enable WeaponCollider during attacks
+		// only enable MeleeCollider during attacks
 		collider2D.enabled = false;
+		gameObject.layer = WEAPON_COLLIDER;
 	}
 
 	void OnTriggerEnter2D(Collider2D coll)
@@ -16,12 +17,12 @@ public class WeaponCollider : CacheBehaviour
 		}
 	}
 
-	public void EnableWeaponCollider()
+	public void EnableMeleeCollider()
 	{
 			collider2D.enabled = true;
 	}
 
-	public void DisableWeaponCollider()
+	public void DisableMeleeCollider()
 	{
 			collider2D.enabled = false;
 	}

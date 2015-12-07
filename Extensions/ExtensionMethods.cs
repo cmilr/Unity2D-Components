@@ -38,6 +38,21 @@ namespace Matcha.Unity
 			transform.localPosition = new Vector3(x, transform.localPosition.y, transform.localPosition.z);
 		}
 
+		public static void SetLocalPositionY(this Transform transform, float y)
+		{
+			transform.localPosition = new Vector3(transform.localPosition.x, y, transform.localPosition.z);
+		}
+
+		public static void SetLocalPositionXY(this Transform transform, float x, float y)
+		{
+			transform.localPosition = new Vector3(x, y, transform.localPosition.z);
+		}
+
+		public static void SetLocalPosition(this Transform transform, float x, float y, float z)
+		{
+			transform.localPosition = new Vector3(x, y, z);
+		}
+
 		public static void SetAbsLocalPositionX(this Transform transform, float x)
 		{
 			if (transform.lossyScale.x > 0f)
@@ -53,6 +68,11 @@ namespace Matcha.Unity
 		public static void SetLocalScaleX(this Transform transform, float x)
 		{
 			transform.localScale = new Vector3(x, transform.localScale.y, transform.localScale.z);
+		}
+
+		public static void SetLocalScaleXYZ(this Transform transform, float x, float y, float z)
+		{
+			transform.localScale = new Vector3(x, y, z);
 		}
 
 		public static void SetAbsLocalScaleX(this Transform transform, float x)

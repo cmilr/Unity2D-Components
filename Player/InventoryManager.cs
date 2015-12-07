@@ -13,6 +13,7 @@ public class InventoryManager : CacheBehaviour
 	private int equipped = 1;
 	private int right = 2;
 	private GameObject[] weaponBelt;
+	private GameObject outgoingWeapon;
 	private bool levelLoading;
 
 	void OnInitWeapons(GameObject eWeapon, GameObject lWeapon, GameObject rWeapon)
@@ -39,15 +40,20 @@ public class InventoryManager : CacheBehaviour
 
 	void CloseoutCurrentEquippedWeapon()
 	{
-		weaponBelt[equipped].layer = PICKUPS_LAYER;
-		weaponBelt[equipped].GetComponentInChildren<WeaponCollider>().DisableWeaponCollider();
-		weaponBelt[equipped].GetComponentInChildren<WeaponPickupCollider>().EnableWeaponPickupCollider();
-		weaponBelt[equipped].GetComponent<SpriteRenderer>().enabled = true;
-		weaponBelt[equipped].transform.SetLocalPositionX(-1f);
-		weaponBelt[equipped].transform.SetAbsLocalScaleX(1f);
-		weaponBelt[equipped].transform.parent = null;
-		equippedWeapon.inInventory = false;
+		outgoingWeapon = weaponBelt[equipped];
+		outgoingWeapon.layer = PICKUPS_LAYER;
+		outgoingWeapon.GetComponentInChildren<PhysicsCollider>().EnablePhysicsCollider();
+		outgoingWeapon.GetComponentInChildren<MeleeCollider>().DisableMeleeCollider();
+		outgoingWeapon.GetComponentInChildren<Rigidbody2D>().isKinematic = false;
+		outgoingWeapon.GetComponent<SpriteRenderer>().enabled = true;
+		outgoingWeapon.transform.SetLocalPositionXY(0f, .5f);
+		outgoingWeapon.transform.SetAbsLocalScaleX(1f);
+		outgoingWeapon.transform.parent = null;
+		equippedWeapon.inPlayerInventory = false;
+		equippedWeapon.inEnemyInventory = false;
 		equippedWeapon.EnableAnimation(false);
+		TossOutgoingWeapon();
+		Invoke("EnablePickupCollider", 1f);
 	}
 
 	void InitNewEquippedWeapon(GameObject newWeapon)
@@ -56,14 +62,33 @@ public class InventoryManager : CacheBehaviour
 		weaponBelt[equipped].layer = PLAYER_LAYER;
 		weaponBelt[equipped].transform.parent = gameObject.transform;
 		weaponBelt[equipped].transform.localPosition = new Vector3(0f, 0f, .1f);
-		weaponBelt[equipped].transform.SetLocalScaleX(1f);
+		weaponBelt[equipped].transform.SetLocalScaleXYZ(1f, 1f, 1f);
 		weaponBelt[equipped].GetComponent<SpriteRenderer>().enabled = false;
-		weaponBelt[equipped].GetComponentInChildren<WeaponCollider>().EnableWeaponCollider();
+		weaponBelt[equipped].GetComponentInChildren<PhysicsCollider>().DisablePhysicsCollider();
+		weaponBelt[equipped].GetComponentInChildren<MeleeCollider>().EnableMeleeCollider();
 		weaponBelt[equipped].GetComponentInChildren<WeaponPickupCollider>().DisableWeaponPickupCollider();
-		weaponBelt[equipped].GetComponent<Weapon>().inInventory = true;
+		weaponBelt[equipped].GetComponentInChildren<Rigidbody2D>().isKinematic = true;
+		weaponBelt[equipped].GetComponent<Weapon>().inPlayerInventory = true;
+		weaponBelt[equipped].GetComponent<Weapon>().inEnemyInventory = false;
 		CacheAndSetupWeapons();
 		PassEquippedWeaponToHUD();
 		PassEquippedWeaponToWeaponManager();
+	}
+
+	void EnablePickupCollider()
+	{
+		//turn dropped weapon's pickup collider back on after a short delay
+		outgoingWeapon.GetComponentInChildren<WeaponPickupCollider>().EnableWeaponPickupCollider();
+	}
+
+	void TossOutgoingWeapon()
+	{
+		if (transform.lossyScale.x > 0f) {
+			outgoingWeapon.GetComponent<Rigidbody2D>().AddForce(new Vector3(-5, 5, 1), ForceMode2D.Impulse);
+		}
+		else {
+			outgoingWeapon.GetComponent<Rigidbody2D>().AddForce(new Vector3(5, 5, 1), ForceMode2D.Impulse);
+		}
 	}
 
 	void OnSwitchWeapon(int shiftDirection)

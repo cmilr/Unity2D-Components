@@ -6,11 +6,11 @@ public class MeleeManager : CacheBehaviour
 
 	public void Attack(Weapon equippedWeapon)
 	{
-		equippedWeapon.GetComponent<WeaponCollider>().DisableWeaponCollider();
+		equippedWeapon.GetComponentInChildren<MeleeCollider>().DisableMeleeCollider();
 
 		if (Time.time > nextAttack)
 		{
-			equippedWeapon.GetComponent<WeaponCollider>().EnableWeaponCollider();
+			equippedWeapon.GetComponentInChildren<MeleeCollider>().EnableMeleeCollider();
 			nextAttack = Time.time + equippedWeapon.rateOfAttack;
 		}
 	}
