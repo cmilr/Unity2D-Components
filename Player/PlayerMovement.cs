@@ -32,6 +32,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	private RaycastHit2D lastControllerColliderHit;
 	private CharacterController2D controller;
 	private IPlayerStateFullAccess state;
+	private Animator anim;
 	private WeaponManager weaponManager;
 	private enum Action { Idle, Run, Jump, Fall, Attack, Defend, RunAttack, JumpAttack };
 	private Action action;
@@ -41,27 +42,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		state = GetComponent<IPlayerStateFullAccess>();
 		controller = GetComponent<CharacterController2D>();
 		weaponManager = GetComponentInChildren<WeaponManager>();
-		SetCharacterAnimations(state.Character);
-	}
-
-	// set animations depending on which character is chosen
-	void SetCharacterAnimations(string character)
-	{
-		// uses string literals over concatenation in order to reduce GC calls
-		if (character == "LAURA")
-		{
-			idleAnimation   = "LAURA_Idle";
-			runAnimation    = "LAURA_Run";
-			jumpAnimation   = "LAURA_Jump";
-			attackAnimation = "LAURA_Swing";
-		}
-		else
-		{
-			idleAnimation   = "MAC_Idle";
-			runAnimation    = "MAC_Run";
-			jumpAnimation   = "MAC_Jump";
-			attackAnimation = "MAC_Swing";
-		}
+		anim = GameObject.Find("BodyParts").GetComponent<Animator>();
 	}
 
 	// input methods required by ICreatureController
@@ -94,50 +75,62 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		CheckIfStandingOrFalling();
 
-		// attack state
-		if (attack)
-		{
-			if (moveRight)
-			{
-				MovePlayerRight();
-				AttackWhileRunning();
-			}
-			else if (moveLeft)
-			{
-				MovePlayerLeft();
-				AttackWhileRunning();
-			}
-			else if (controller.isGrounded)
-			{
-				AttackWhileIdle();
-			}
+		// // attack state
+		// if (attack)
+		// {
+		// 	if (moveRight)
+		// 	{
+		// 		MovePlayerRight();
+		// 		AttackWhileRunning();
+		// 	}
+		// 	else if (moveLeft)
+		// 	{
+		// 		MovePlayerLeft();
+		// 		AttackWhileRunning();
+		// 	}
+		// 	else if (controller.isGrounded)
+		// 	{
+		// 		AttackWhileIdle();
+		// 	}
+		//
+		// 	if (!controller.isGrounded)
+		// 	{
+		// 		AttackWhileJumping();
+		// 	}
+		// }
 
-			if (!controller.isGrounded)
-			{
-				AttackWhileJumping();
-			}
+		// grounded state
+		if (controller.isGrounded)
+		{
+			PlayerGrounded();
+			anim.SetBool("jump", false);
+		}
+		else
+		{
+			anim.SetBool("jump", true);
 		}
 
 		// movement state
-		else if (moveRight)
+		if (moveRight)
 		{
 			MovePlayerRight();
+			anim.SetBool("run", true);
 		}
 		else if (moveLeft)
 		{
 			MovePlayerLeft();
+			anim.SetBool("run", true);
 		}
-
-		// idle state
-		else if (controller.isGrounded)
+		else	// if not moving right or left
 		{
-			PlayerGrounded();
+			anim.SetBool("run", false);
 		}
 
 		// jump state
 		if (jump)
 		{
 			PlayerJump();
+			anim.SetBool("jump", true);
 		}
 
 		CheckForFreefall();
@@ -311,56 +304,42 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		{
 			case Action.Idle:
 			{
-				animator.speed = IDLE_SPEED;
-				animator.Play(Animator.StringToHash(idleAnimation));
 				weaponManager.ActionDispatcher(IDLE);
 				break;
 			}
 
 			case Action.Run:
 			{
-				animator.speed = RUN_SPEED;
-				animator.Play(Animator.StringToHash(runAnimation));
 				weaponManager.ActionDispatcher(RUN);
 				break;
 			}
 
 			case Action.Jump:
 			{
-				animator.speed = JUMP_SPEED;
-				animator.Play(Animator.StringToHash(jumpAnimation));
 				weaponManager.ActionDispatcher(JUMP);
 				break;
 			}
 
 			case Action.Fall:
 			{
-				animator.speed = JUMP_SPEED;
-				animator.Play(Animator.StringToHash(jumpAnimation));
 				weaponManager.ActionDispatcher(FALL);
 				break;
 			}
 
 			case Action.Attack:
 			{
-				animator.speed = SWING_SPEED;
-				animator.Play(Animator.StringToHash(attackAnimation));
 				weaponManager.ActionDispatcher(ATTACK);
 				break;
 			}
 
 			case Action.RunAttack:
 			{
-				animator.speed = RUN_SPEED;
-				animator.Play(Animator.StringToHash(runAnimation));
 				weaponManager.ActionDispatcher(RUN_ATTACK);
 				break;
 			}
 
 			case Action.JumpAttack:
 			{
-				animator.speed = JUMP_SPEED;
-				animator.Play(Animator.StringToHash(jumpAnimation));
 				weaponManager.ActionDispatcher(JUMP_ATTACK);
 				break;
 			}

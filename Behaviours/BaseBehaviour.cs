@@ -36,6 +36,7 @@ public class BaseBehaviour : MonoBehaviour
 	protected const float ONE_PIXEL                   = .03125f;
 	protected const float ONE_HUD_PIXEL               = 5f;
 	protected const float ONE_COLLIDER_PIXEL          = .62f;
+	protected const float CULL_DISTANCE               = 20f;
 
 	// gameObject names
 	protected const string PLAYER                     = "Player";
