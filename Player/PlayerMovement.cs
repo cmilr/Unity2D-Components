@@ -42,7 +42,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		state = GetComponent<IPlayerStateFullAccess>();
 		controller = GetComponent<CharacterController2D>();
 		weaponManager = GetComponentInChildren<WeaponManager>();
-		anim = GameObject.Find("BodyParts").GetComponent<Animator>();
+		anim = GameObject.Find("Animations").GetComponent<Animator>();
 	}
 
 	// input methods required by ICreatureController
