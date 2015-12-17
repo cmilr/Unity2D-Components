@@ -42,7 +42,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		state = GetComponent<IPlayerStateFullAccess>();
 		controller = GetComponent<CharacterController2D>();
 		weaponManager = GetComponentInChildren<WeaponManager>();
-		anim = GameObject.Find("Animations").GetComponent<Animator>();
+		anim = GameObject.Find("Player").GetComponent<Animator>();
 	}
 
 	// input methods required by ICreatureController
@@ -58,9 +58,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 	public void Jump()
 	{
-		if (controller.isGrounded) {
-			jump = true;
-		}
+		jump = true;
 	}
 
 	public void Attack()
@@ -68,69 +66,55 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		attack = true;
 	}
 
-	// main movement loop — keep in LateUpdate() to prevent player falling through edge colliders
+	//main movement loop
+	//keep in LateUpdate() to prevent player falling through edge colliders
 	void LateUpdate()
 	{
 		InitializeVelocity();
 
 		CheckIfStandingOrFalling();
 
-		// // attack state
-		// if (attack)
-		// {
-		// 	if (moveRight)
-		// 	{
-		// 		MovePlayerRight();
-		// 		AttackWhileRunning();
-		// 	}
-		// 	else if (moveLeft)
-		// 	{
-		// 		MovePlayerLeft();
-		// 		AttackWhileRunning();
-		// 	}
-		// 	else if (controller.isGrounded)
-		// 	{
-		// 		AttackWhileIdle();
-		// 	}
-		//
-		// 	if (!controller.isGrounded)
-		// 	{
-		// 		AttackWhileJumping();
-		// 	}
-		// }
-
-		// grounded state
-		if (controller.isGrounded)
+		if (!attack)
 		{
-			PlayerGrounded();
-			anim.SetBool("jump", false);
+			if (moveRight)                         //run right
+			{
+				MovePlayerRight();
+			}
+			else if (moveLeft)                     //run left
+			{
+				MovePlayerLeft();
+			}
+			else if (controller.isGrounded)        //idle
+			{
+				PlayerIdle();
+			}
+
+			if (jump && controller.isGrounded)     //jump
+			{
+				PlayerJump();
+			}
 		}
 		else
 		{
-			anim.SetBool("jump", true);
-		}
+			if (moveRight)                         //attack while running right
+			{
+				MovePlayerRight();
+				AttackWhileRunning();
+			}
+			else if (moveLeft)                     //attack while running left
+			{
+				MovePlayerLeft();
+				AttackWhileRunning();
+			}
+			else if (controller.isGrounded)        //attack while idle
+			{
+				AttackWhileIdle();
+			}
 
-		// movement state
-		if (moveRight)
-		{
-			MovePlayerRight();
-			anim.SetBool("run", true);
-		}
-		else if (moveLeft)
-		{
-			MovePlayerLeft();
-			anim.SetBool("run", true);
-		}
-		else	// if not moving right or left
-		{
-			anim.SetBool("run", false);
-		}
-
-		// jump state
-		if (jump)
-		{
-			PlayerJump();
-			anim.SetBool("jump", true);
+			if (!controller.isGrounded)            //attack while jumping
+			{
+				AttackWhileJumping();
+			}
 		}
 
 		CheckForFreefall();
@@ -154,17 +138,48 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 	void CheckIfStandingOrFalling()
 	{
-		if (controller.isGrounded)
+		if (controller.isGrounded)       //player on solid ground
 		{
 			velocity.y = 0;
 			state.Grounded = true;
 			state.JumpedFromFastPlatform = false;
+			anim.SetBool("jump", false);
 		}
-		// falling state
-		else
+		else                             //player jumping or falling
 		{
 			action = Action.Fall;
 			state.Grounded = false;
+			anim.SetBool("jump", true);
+		}
+	}
+
+	void PlayerIdle()
+	{                                   //player idle
+		normalizedHorizontalSpeed = 0;
+
+		action = Action.Idle;
+		anim.SetBool("jump", false);
+		anim.SetBool("run", false);
+		anim.SetBool("attack", false);
+
+		state.Grounded = true;
+		state.JumpedFromFastPlatform = false;
+	}
+
+	void PlayerJump()
+	{
+		velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
+
+		action = Action.Jump;
+		anim.SetBool("jump", true);
+
+		jump = false;
+
+		state.Grounded = false;
+
+		if (state.RidingFastPlatform && state.MovingHorizontally)
+		{
+			state.JumpedFromFastPlatform = true;
 		}
 	}
 
@@ -181,10 +196,17 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			transform.SetPositionX(transform.position.x - ABOUTFACE_OFFSET);
 		}
 
-		if (controller.isGrounded)
+		if (controller.isGrounded)       //player running right
 		{
 			action = Action.Run;
+			anim.SetBool("run", true);
 		}
+		else                             //player flying right
+		{
+			anim.SetBool("run", false);
+		}
+
+		anim.SetBool("attack", false);
 
 		// only broadcast message once, each time player turns
 		if (!facingRight)
@@ -210,10 +232,17 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			transform.SetPositionX(transform.position.x + ABOUTFACE_OFFSET);
 		}
 
-		if (controller.isGrounded)
+		if (controller.isGrounded)       //player running left
 		{
 			action = Action.Run;
+			anim.SetBool("run", true);
 		}
+		else                             //player flying left
+		{
+			anim.SetBool("run", false);
+		}
+
+		anim.SetBool("attack", false);
 
 		// only broadcast message once, each time player turns
 		if (facingRight)
@@ -232,6 +261,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		{
 			action = Action.Attack;
 			normalizedHorizontalSpeed = 0;
+			anim.SetBool("attack", true);
+			anim.SetBool("run", false);
 		}
 
 		attack = false;
@@ -242,43 +273,18 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		if (controller.isGrounded)
 		{
 			action = Action.RunAttack;
+			anim.SetBool("attack", true);
+			anim.SetBool("run", true);
 		}
 
 		attack = false;
 	}
 
-	void PlayerGrounded()
-	{
-		normalizedHorizontalSpeed = 0;
-
-		if (controller.isGrounded)
-		{
-			action = Action.Idle;
-		}
-
-		state.Grounded = true;
-		state.JumpedFromFastPlatform = false;
-	}
-
-	void PlayerJump()
-	{
-		velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
-
-		action = Action.Jump;
-
-		jump = false;
-
-		state.Grounded = false;
-
-		if (state.RidingFastPlatform && state.MovingHorizontally)
-		{
-			state.JumpedFromFastPlatform = true;
-		}
-	}
-
 	void AttackWhileJumping()
 	{
 		action = Action.JumpAttack;
+		anim.SetBool("jump", true);
+		anim.SetBool("attack", true);
 
 		jump = false;
 

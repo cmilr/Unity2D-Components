@@ -23,15 +23,6 @@ public class Weapon : AnimationBehaviour
 	[Tooltip("Projectile sprite that will actually be fired.")]
 	public Sprite projectileSprite;
 
-	[Tooltip("Color of the upper element in the animated version of the weapon.")]
-	public string upperColor = "ffffff";
-
-	[Tooltip("Color of the center element in the animated version of the weapon.")]
-	public string centerColor = "ffffff";
-
-	[Tooltip("Color of the lower element in the animated version of the weapon.")]
-	public string lowerColor = "ffffff";
-
 
 	[Header("ALL WEAPONS")]
 	//~~~~~~~~~~~~~~~~~~~~~
@@ -71,9 +62,9 @@ public class Weapon : AnimationBehaviour
 
 
 	// genericized weapon pieces
-	private WeaponPiece upper;
-	private WeaponPiece center;
-	private WeaponPiece lower;
+	// private WeaponPiece upper;
+	// private WeaponPiece center;
+	// private WeaponPiece lower;
 
 	private SpriteRenderer spritePickupIcon;
 
@@ -116,20 +107,20 @@ public class Weapon : AnimationBehaviour
 			// if weapon is being carried by the player, animate it while player is walking, jumping, etc
 			if (weaponType != WeaponType.MagicProjectile)
 			{
-				// set weapon components on initialization
-				upper  = transform.FindChild("Upper").gameObject.GetComponent<WeaponPiece>();
-				center = transform.FindChild("Center").gameObject.GetComponent<WeaponPiece>();
-				lower  = transform.FindChild("Lower").gameObject.GetComponent<WeaponPiece>();
-
-				// set weapon colors here
-				upper.spriteRenderer.material.SetColor("_Color", M.HexToColor(upperColor));
-				center.spriteRenderer.material.SetColor("_Color", M.HexToColor(centerColor));
-				lower.spriteRenderer.material.SetColor("_Color", M.HexToColor(lowerColor));
-
-				// turn off weapon piece SpriteRenderer until picked up by player
-				upper.spriteRenderer.enabled = false;
-				center.spriteRenderer.enabled = false;
-				lower.spriteRenderer.enabled = false;
+				// // set weapon components on initialization
+				// upper  = transform.FindChild("Upper").gameObject.GetComponent<WeaponPiece>();
+				// center = transform.FindChild("Center").gameObject.GetComponent<WeaponPiece>();
+				// lower  = transform.FindChild("Lower").gameObject.GetComponent<WeaponPiece>();
+				//
+				// // set weapon colors here
+				// upper.spriteRenderer.material.SetColor("_Color", M.HexToColor(upperColor));
+				// center.spriteRenderer.material.SetColor("_Color", M.HexToColor(centerColor));
+				// lower.spriteRenderer.material.SetColor("_Color", M.HexToColor(lowerColor));
+				//
+				// // turn off weapon piece SpriteRenderer until picked up by player
+				// upper.spriteRenderer.enabled = false;
+				// center.spriteRenderer.enabled = false;
+				// lower.spriteRenderer.enabled = false;
 			}
 		}
 	}
@@ -137,40 +128,40 @@ public class Weapon : AnimationBehaviour
 	// animation state methods
 	public void PlayIdleAnimation(float xOffset, float yOffset)
 	{
-		upper.PlayIdleAnimation();
-		center.PlayIdleAnimation();
-		lower.PlayIdleAnimation();
-		OffsetAnimation(xOffset, yOffset);
+		// upper.PlayIdleAnimation();
+		// center.PlayIdleAnimation();
+		// lower.PlayIdleAnimation();
+		// OffsetAnimation(xOffset, yOffset);
 	}
 
 	public void PlayRunAnimation(float xOffset, float yOffset)
 	{
-		upper.PlayRunAnimation();
-		center.PlayRunAnimation();
-		lower.PlayRunAnimation();
-		OffsetAnimation(xOffset, yOffset);
+		// upper.PlayRunAnimation();
+		// center.PlayRunAnimation();
+		// lower.PlayRunAnimation();
+		// OffsetAnimation(xOffset, yOffset);
 	}
 
 	public void PlayJumpAnimation(float xOffset, float yOffset)
 	{
-		upper.PlayJumpAnimation();
-		center.PlayJumpAnimation();
-		lower.PlayJumpAnimation();
-		OffsetAnimation(xOffset, yOffset);
+		// upper.PlayJumpAnimation();
+		// center.PlayJumpAnimation();
+		// lower.PlayJumpAnimation();
+		// OffsetAnimation(xOffset, yOffset);
 	}
 
 	public void PlayAttackAnimation(float xOffset, float yOffset)
 	{
-		upper.PlayAttackAnimation();
-		center.PlayAttackAnimation();
-		lower.PlayAttackAnimation();
-		OffsetAnimation(xOffset, yOffset);
+		// upper.PlayAttackAnimation();
+		// center.PlayAttackAnimation();
+		// lower.PlayAttackAnimation();
+		// OffsetAnimation(xOffset, yOffset);
 	}
 
 	public void EnableAnimation(bool status)
 	{
-		upper.spriteRenderer.enabled = status;
-		center.spriteRenderer.enabled = status;
-		lower.spriteRenderer.enabled = status;
+		// upper.spriteRenderer.enabled = status;
+		// center.spriteRenderer.enabled = status;
+		// lower.spriteRenderer.enabled = status;
 	}
 }
