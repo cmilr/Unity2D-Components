@@ -15,12 +15,9 @@ public class InventoryManager : CacheBehaviour
 	private GameObject[] weaponBelt;
 	private GameObject outgoingWeapon;
 	private bool levelLoading;
-	private Animator anim;
 
 	void OnInitWeapons(GameObject eWeapon, GameObject lWeapon, GameObject rWeapon)
 	{
-		anim = GameObject.Find("Player").GetComponent<Animator>();
-
 		// WEAPON GAMEOBJECTS — keep track of weapon GameObjects as they're equipped/stashed
 		if (weaponBelt == null) {
 			weaponBelt = new GameObject[3];
@@ -55,7 +52,6 @@ public class InventoryManager : CacheBehaviour
 		outgoingWeapon.transform.parent = null;
 		equippedWeapon.inPlayerInventory = false;
 		equippedWeapon.inEnemyInventory = false;
-		equippedWeapon.EnableAnimation(false);
 		TossOutgoingWeapon();
 		Invoke("EnablePickupCollider", 1f);
 	}
@@ -190,8 +186,23 @@ public class InventoryManager : CacheBehaviour
 		FadeOutStashedWeapons(leftWeapon);
 		FadeOutStashedWeapons(rightWeapon);
 
-		// reset weapon animations
-		anim.Rebind();
+		SetWeaponAnimations(equippedWeapon);
+	}
+
+	void SetWeaponAnimations(Weapon equipped)
+	{
+		if (equipped.weaponType == Weapon.WeaponType.Sword)
+		{
+			gameObject.SendMessageUpwards("NewWeaponEquipped", SWORD);
+		}
+		else if (equipped.weaponType == Weapon.WeaponType.Axe)
+		{
+			gameObject.SendMessageUpwards("NewWeaponEquipped", AXE);
+		}
+		else if (equipped.weaponType == Weapon.WeaponType.Hammer)
+		{
+			gameObject.SendMessageUpwards("NewWeaponEquipped", HAMMER);
+		}
 	}
 
 	void FadeOutStashedWeapons(Weapon stashedWeapon)

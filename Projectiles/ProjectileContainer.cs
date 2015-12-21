@@ -20,7 +20,7 @@ public class ProjectileContainer : Weapon
 		damage                = incoming.damage;
 		hp                    = incoming.hp;
 		rateOfAttack          = incoming.rateOfAttack;
-		spriteRenderer.sprite = incoming.projectileSprite;
+		spriteRenderer.sprite = incoming.carriedSprite;
 		speed                 = incoming.speed;
 		maxDistance           = incoming.maxDistance;
 		lob                   = incoming.lob;
@@ -28,6 +28,9 @@ public class ProjectileContainer : Weapon
 		fadeIn                = incoming.fadeIn;
 		collider2D.enabled    = true;
 		origin                = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+
+		//flip projectile
+		transform.SetLocalScaleX(-1f);
 
 		// initialize animation controller if projectile is animated
 		if (incoming.GetComponent<Weapon>().animatedProjectile)

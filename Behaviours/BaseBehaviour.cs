@@ -92,6 +92,11 @@ public class BaseBehaviour : MonoBehaviour
 	protected const int MELEE                         = 0;
 	protected const int PROJECTILE                    = 1;
 
+	// weapons
+	protected const int SWORD                         = 0;
+	protected const int AXE                 		     = 1;
+	protected const int HAMMER                 		  = 2;
+
 	// player/death animation speeds
 	protected const float STRUCKDOWN_SPEED            = 1f;
 	protected const float DROWNED_SPEED               = 8f;
