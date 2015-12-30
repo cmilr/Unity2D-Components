@@ -53,6 +53,7 @@ public class PlayerManager : CacheBehaviour
 		}
 		else
 		{
+			PlayerState.Dead = true;
 			Messenger.Broadcast<string, Collider2D, int>("player dead", "projectile", coll, hitFrom);
 		}
 	}
@@ -71,6 +72,7 @@ public class PlayerManager : CacheBehaviour
 		}
 		else
 		{
+			PlayerState.Dead = true;
 			Messenger.Broadcast<string, Collider2D, int>("player dead", "struckdown", coll, hitFrom);
 		}
 	}

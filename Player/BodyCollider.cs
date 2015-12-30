@@ -7,7 +7,6 @@ public class BodyCollider : CacheBehaviour
 	private int layer;
 	private int hitFrom;
 	private PlayerManager player;
-	private IPlayerStateFullAccess state;
 	private IGameStateReadOnly game;
 	private Weapon enemyWeapon;
 	private CreatureEntity enemy;
@@ -15,7 +14,6 @@ public class BodyCollider : CacheBehaviour
 	void Start()
 	{
 		player = transform.parent.GetComponent<PlayerManager>();
-		state = transform.parent.GetComponent<IPlayerStateFullAccess>();
 		game = GameObject.Find(GAME_STATE).GetComponent<IGameStateReadOnly>();
 	}
 
@@ -27,7 +25,7 @@ public class BodyCollider : CacheBehaviour
 		{
 			enemyWeapon = coll.GetComponent<Weapon>();
 
-			if (!enemyWeapon.alreadyCollided && !game.LevelLoading && !state.Dead)
+			if (!enemyWeapon.alreadyCollided && !game.LevelLoading && !PlayerState.Dead)
 			{
 				hitFrom = M.HorizSideThatWasHit(gameObject, coll);
 
@@ -45,7 +43,7 @@ public class BodyCollider : CacheBehaviour
 		{
 			enemy = coll.GetComponent<CreatureEntity>();
 
-			if (!enemy.alreadyCollided && !game.LevelLoading && !state.Dead)
+			if (!enemy.alreadyCollided && !game.LevelLoading && !PlayerState.Dead)
 			{
 				hitFrom = M.HorizSideThatWasHit(gameObject, coll);
 

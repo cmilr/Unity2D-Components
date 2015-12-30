@@ -15,7 +15,6 @@ public abstract class Entity : CacheBehaviour
 	protected bool collidedWithWeapon;
 	protected bool onScreen;
 	protected IGameStateReadOnly game;
-	protected IPlayerStateReadOnly player;
 
 	public abstract void OnBodyCollisionEnter(Collider2D coll);
 	public abstract void OnBodyCollisionStay();
@@ -28,7 +27,6 @@ public abstract class Entity : CacheBehaviour
 	void OnEnable()
 	{
 		game   = GameObject.Find(GAME_STATE).GetComponent<IGameStateReadOnly>();
-		player = GameObject.Find(PLAYER).GetComponent<IPlayerStateReadOnly>();
 	}
 
 	protected void AutoAlign()

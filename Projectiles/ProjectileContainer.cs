@@ -20,7 +20,7 @@ public class ProjectileContainer : Weapon
 		damage                = incoming.damage;
 		hp                    = incoming.hp;
 		rateOfAttack          = incoming.rateOfAttack;
-		spriteRenderer.sprite = incoming.projectileSprite;
+		spriteRenderer.sprite = incoming.carriedSprite;
 		speed                 = incoming.speed;
 		maxDistance           = incoming.maxDistance;
 		lob                   = incoming.lob;
@@ -33,7 +33,7 @@ public class ProjectileContainer : Weapon
 		if (incoming.GetComponent<Weapon>().animatedProjectile)
 		{
 			anim = (RuntimeAnimatorController)RuntimeAnimatorController.Instantiate
-						(Resources.Load(("AnimControllers/Projectiles/" + incoming.name + "_0"), typeof(RuntimeAnimatorController)));
+						(Resources.Load(("Sprites/Projectiles/" + incoming.name + "_0"), typeof(RuntimeAnimatorController)));
 			animator.runtimeAnimatorController = anim;
 			animator.speed = .5f;
 		}
@@ -45,6 +45,10 @@ public class ProjectileContainer : Weapon
 	public void Fire(bool firedByPlayer, Weapon weapon, float direction)
 	{
 		Init(weapon);
+
+		//player sprite and weapon sprites actually face opposite directions,
+		//this flips the weapon sprite to match that of the player
+		transform.SetLocalScaleX(-direction);
 
 		if (fadeIn)
 		{

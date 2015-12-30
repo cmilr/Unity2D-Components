@@ -1,5 +1,4 @@
 using System.Collections;
-using UnityEngine;
 
 // a clearinghouse for temporary game state
 public class GameState : BaseBehaviour, IGameStateReadOnly, IGameStateFullAccess

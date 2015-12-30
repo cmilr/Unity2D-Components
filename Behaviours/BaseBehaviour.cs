@@ -36,6 +36,7 @@ public class BaseBehaviour : MonoBehaviour
 	protected const float ONE_PIXEL                   = .03125f;
 	protected const float ONE_HUD_PIXEL               = 5f;
 	protected const float ONE_COLLIDER_PIXEL          = .62f;
+	protected const float CULL_DISTANCE               = 20f;
 
 	// gameObject names
 	protected const string PLAYER                     = "Player";
@@ -55,7 +56,18 @@ public class BaseBehaviour : MonoBehaviour
 	protected const int ENEMY_WEAPON                  = 17;
 	protected const int BREAKABLES                    = 18;
 	protected const int EDGE_BLOCKER                  = 24;
-	protected const int PICKUPS_LAYER                 = 15;
+	protected const int PICKUP_LAYER                 = 15;
+
+	// sorting layer names
+	protected const string PLATFORM_SORTING_LAYER      = "Platforms";
+	protected const string INTERACTIVE_SORTING_LAYER   = "Interactives";
+	protected const string PICKUP_SORTING_LAYER        = "Pickups";
+	protected const string ENEMY_SORTING_LAYER         = "Enemies";
+	protected const string HERO_ARM_SORTING_LAYER      = "HeroArm";
+	protected const string HERO_WEAPON_SORTING_LAYER   = "HeroWeapon";
+	protected const string HERO_SORTING_LAYER          = "Hero";
+	protected const string FOREGROUND_SORTING_LAYER    = "Foreground";
+	protected const string PROJECTILE_SORTING_LAYER    = "Projectiles";
 
 	// player offsets
 	protected const float ABOUTFACE_OFFSET            = 0f;
@@ -79,6 +91,11 @@ public class BaseBehaviour : MonoBehaviour
 	// weapon types
 	protected const int MELEE                         = 0;
 	protected const int PROJECTILE                    = 1;
+
+	// weapons
+	protected const int SWORD                         = 0;
+	protected const int AXE                 		     = 1;
+	protected const int HAMMER                 		  = 2;
 
 	// player/death animation speeds
 	protected const float STRUCKDOWN_SPEED            = 1f;

@@ -12,6 +12,7 @@ public class WaterEntity : Entity
 	override public void OnBodyCollisionEnter(Collider2D coll)
 	{
 		collidedWithBody = true;
+		PlayerState.Dead = true;
 		Messenger.Broadcast<string, Collider2D, int>("player dead", "drowned", thisCollider, 0);
 	}
 

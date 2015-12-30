@@ -2,9 +2,6 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-	// TileType is used to block enemy AI from walking off into space, etc
-	public enum TileType { Decorative, Solid, OneWay };
-	public TileType tileType = TileType.Decorative;
 	private Shader shader1;
 	private MeshRenderer meshRenderer;
 

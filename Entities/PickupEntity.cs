@@ -21,7 +21,7 @@ public class PickupEntity : Entity
 	{
 		collidedWithBody = true;
 
-		if (!game.LevelLoading && !player.Dead)
+		if (!game.LevelLoading && !PlayerState.Dead)
 		{
 			switch (entityType)
 			{

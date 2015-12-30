@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class LevelManager : CacheBehaviour
 {
-	private IPlayerStateReadOnly player;
-
 	// screen-fader settings
 	private float timeToFade            = 2f;
 	private float fadeInAfter           = 2f;
@@ -17,7 +15,6 @@ public class LevelManager : CacheBehaviour
 
 	void Start()
 	{
-		player = GameObject.Find(PLAYER).GetComponent<IPlayerStateReadOnly>();
 		spriteRenderer.enabled = true;
 
 		FadeInNewLevel();
@@ -54,17 +51,19 @@ public class LevelManager : CacheBehaviour
 
 	void CheckIfAboveGround()
 	{
-		if (player.Y > groundLine)
+		if (PlayerState.Y > groundLine)
 		{
 			// if player is not ALREADY above ground, broadcast message "player above ground"
-			if (!player.AboveGround) {
+			if (!PlayerState.AboveGround) {
+				PlayerState.AboveGround = true;
 				Messenger.Broadcast<bool>("player above ground", true);
 			}
 		}
 		else
 		{
 			// if player is not ALREADY below ground, broadcast message !"player above ground"
-			if (player.AboveGround) {
+			if (PlayerState.AboveGround) {
+				PlayerState.AboveGround = false;
 				Messenger.Broadcast<bool>("player above ground", false);
 			}
 		}

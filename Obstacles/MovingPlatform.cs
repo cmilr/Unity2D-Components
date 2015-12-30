@@ -83,7 +83,7 @@ public class MovingPlatform : CacheBehaviour
 		}
 
 		if (layer == PLAYER_COLLIDER && fastPlatform) {
-			Messenger.Broadcast<bool>("riding fast platform", true);
+			PlayerState.RidingFastPlatform = true;
 		}
 	}
 
@@ -94,7 +94,7 @@ public class MovingPlatform : CacheBehaviour
 		coll.transform.parent = null;
 
 		if (layer == PLAYER_COLLIDER && fastPlatform) {
-			Messenger.Broadcast<bool>("riding fast platform", false);
+			PlayerState.RidingFastPlatform = false;
 		}
 	}
 

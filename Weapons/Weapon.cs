@@ -1,7 +1,7 @@
 using Matcha.Unity;
 using UnityEngine;
 
-public class Weapon : AnimationBehaviour
+public class Weapon : CacheBehaviour
 {
 	public enum WeaponType { Axe, Sword, Hammer, Dagger, MagicProjectile };
 	public WeaponType weaponType;
@@ -17,20 +17,12 @@ public class Weapon : AnimationBehaviour
 
 	[Header("SPRITES")]
 	//~~~~~~~~~~~~~~~~~~~~~
-	[Tooltip("This is the pickup/HUD icon.")]
+	[Tooltip("This is the pickup/HUD icon.")]			//weapon sprite with black outline
 	public Sprite iconSprite;
 
-	[Tooltip("Projectile sprite that will actually be fired.")]
-	public Sprite projectileSprite;
-
-	[Tooltip("Color of the upper element in the animated version of the weapon.")]
-	public string upperColor = "ffffff";
-
-	[Tooltip("Color of the center element in the animated version of the weapon.")]
-	public string centerColor = "ffffff";
-
-	[Tooltip("Color of the lower element in the animated version of the weapon.")]
-	public string lowerColor = "ffffff";
+	[HideInInspector]
+	[Tooltip("Actual sprite our hero carries.")]    //weapon sprite without outline
+	public Sprite carriedSprite;							//loaded automatically from Resources/
 
 
 	[Header("ALL WEAPONS")]
@@ -69,14 +61,6 @@ public class Weapon : AnimationBehaviour
 	[Tooltip("If Animated, ProjectileContainer will attempt to load an animation.")]
 	public bool animatedProjectile;
 
-
-	// genericized weapon pieces
-	private WeaponPiece upper;
-	private WeaponPiece center;
-	private WeaponPiece lower;
-
-	private SpriteRenderer spritePickupIcon;
-
 	void Awake()
 	{
 		Init();
@@ -84,12 +68,24 @@ public class Weapon : AnimationBehaviour
 
 	void Init()
 	{
-		spritePickupIcon = gameObject.GetComponent<SpriteRenderer>();
+		//all weapons have two sprites: one that's outlined in black (iconSprite), one that's not (carriedSprite.)
+		//this routine automatically loads the  correct sprite (carriedSprite) for the hero's carried weapon.
+		//if instead it's an enemy's magical projectile, we just use the main SpriteRenderer's sprite.
+		if (weaponType == WeaponType.MagicProjectile)
+		{
+			carriedSprite = iconSprite;
+		}
+		else
+		{
+			carriedSprite = (Sprite)(Resources.Load(("Sprites/Pickups/NoOutlines/weapon/" + iconSprite.name), typeof(Sprite)));
+		}
 
-		//if weapon is loose on the floor, turn on its pickup icon so it can be seen
+
+		//if weapon is loose on the floor, turn its pickup icon on so it can be seen
 		if (inPlayerInventory)
 		{
-			spritePickupIcon.enabled = false;
+			spriteRenderer.sprite = carriedSprite;
+			spriteRenderer.enabled = false;
 			gameObject.GetComponentInChildren<Rigidbody2D>().isKinematic = true;
 			gameObject.GetComponentInChildren<PhysicsCollider>().DisablePhysicsCollider();
 			gameObject.GetComponentInChildren<MeleeCollider>().EnableMeleeCollider();
@@ -97,80 +93,23 @@ public class Weapon : AnimationBehaviour
 		}
 		else if (inEnemyInventory)
 		{
-			spritePickupIcon.enabled = false;
+			spriteRenderer.enabled = false;
 			gameObject.GetComponentInChildren<Rigidbody2D>().isKinematic = true;
 			gameObject.GetComponentInChildren<PhysicsCollider>().DisablePhysicsCollider();
 			gameObject.GetComponentInChildren<WeaponPickupCollider>().DisableWeaponPickupCollider();
 		}
-		else if (name != "Projectile(Clone)") //else not a pooled weapon
+		else if (name != "Projectile(Clone)") //else not a pooled weapon (ie: this weapon is equipped)
 		{
-			spritePickupIcon.enabled = true;
+			spriteRenderer.sprite = carriedSprite;
+			spriteRenderer.enabled = true;
 			gameObject.GetComponentInChildren<Rigidbody2D>().isKinematic = false;
 			gameObject.GetComponentInChildren<PhysicsCollider>().EnablePhysicsCollider();
 			gameObject.GetComponentInChildren<MeleeCollider>().DisableMeleeCollider();
 			gameObject.GetComponentInChildren<WeaponPickupCollider>().EnableWeaponPickupCollider();
 		}
-
-		if (transform.parent != null)
+		else //weapon is on the ground, so needs icon sprite (ie: the outlined one)
 		{
-			// if weapon is being carried by the player, animate it while player is walking, jumping, etc
-			if (weaponType != WeaponType.MagicProjectile)
-			{
-				// set weapon components on initialization
-				upper  = transform.FindChild("Upper").gameObject.GetComponent<WeaponPiece>();
-				center = transform.FindChild("Center").gameObject.GetComponent<WeaponPiece>();
-				lower  = transform.FindChild("Lower").gameObject.GetComponent<WeaponPiece>();
-
-				// set weapon colors here
-				upper.spriteRenderer.material.SetColor("_Color", M.HexToColor(upperColor));
-				center.spriteRenderer.material.SetColor("_Color", M.HexToColor(centerColor));
-				lower.spriteRenderer.material.SetColor("_Color", M.HexToColor(lowerColor));
-
-				// turn off weapon piece SpriteRenderer until picked up by player
-				upper.spriteRenderer.enabled = false;
-				center.spriteRenderer.enabled = false;
-				lower.spriteRenderer.enabled = false;
-			}
+			spriteRenderer.sprite = iconSprite;
 		}
-	}
-
-	// animation state methods
-	public void PlayIdleAnimation(float xOffset, float yOffset)
-	{
-		upper.PlayIdleAnimation();
-		center.PlayIdleAnimation();
-		lower.PlayIdleAnimation();
-		OffsetAnimation(xOffset, yOffset);
-	}
-
-	public void PlayRunAnimation(float xOffset, float yOffset)
-	{
-		upper.PlayRunAnimation();
-		center.PlayRunAnimation();
-		lower.PlayRunAnimation();
-		OffsetAnimation(xOffset, yOffset);
-	}
-
-	public void PlayJumpAnimation(float xOffset, float yOffset)
-	{
-		upper.PlayJumpAnimation();
-		center.PlayJumpAnimation();
-		lower.PlayJumpAnimation();
-		OffsetAnimation(xOffset, yOffset);
-	}
-
-	public void PlayAttackAnimation(float xOffset, float yOffset)
-	{
-		upper.PlayAttackAnimation();
-		center.PlayAttackAnimation();
-		lower.PlayAttackAnimation();
-		OffsetAnimation(xOffset, yOffset);
-	}
-
-	public void EnableAnimation(bool status)
-	{
-		upper.spriteRenderer.enabled = status;
-		center.spriteRenderer.enabled = status;
-		lower.spriteRenderer.enabled = status;
 	}
 }

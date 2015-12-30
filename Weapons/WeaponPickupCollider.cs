@@ -5,7 +5,7 @@ public class WeaponPickupCollider : CacheBehaviour
 {
 	void Start()
 	{
-		gameObject.layer = PICKUPS_LAYER;
+		gameObject.layer = PICKUP_LAYER;
 	}
 	
 	void OnTriggerEnter2D(Collider2D coll)
