@@ -29,6 +29,9 @@ public class ProjectileContainer : Weapon
 		collider2D.enabled    = true;
 		origin                = new Vector3(transform.position.x, transform.position.y, transform.position.z);
 
+		//flip projectile
+		transform.SetLocalScaleX(-1f);
+
 		// initialize animation controller if projectile is animated
 		if (incoming.GetComponent<Weapon>().animatedProjectile)
 		{

@@ -27,6 +27,10 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	private Vector3 velocity;
 	private RaycastHit2D lastControllerColliderHit;
 	private CharacterController2D controller;
+<<<<<<< HEAD
+=======
+	private IPlayerStateFullAccess state;
+>>>>>>> 4ce521d70c6ad8139e94c592f0e8390f764d9f9d
 	private Animator anim;
 	private WeaponManager weaponManager;
 
@@ -131,6 +135,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		if (controller.isGrounded)       //player on solid ground
 		{
 			velocity.y = 0;
+<<<<<<< HEAD
 			PlayerState.Grounded = true;
 			PlayerState.JumpedFromFastPlatform = false;
 			anim.SetBool("jump", false);
@@ -167,6 +172,47 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		if (PlayerState.RidingFastPlatform && PlayerState.MovingHorizontally)
 		{
 			PlayerState.JumpedFromFastPlatform = true;
+=======
+			state.Grounded = true;
+			state.JumpedFromFastPlatform = false;
+			anim.SetBool("jump", false);
+		}
+		else                             //player jumping or falling
+		{
+			action = Action.Fall;
+			state.Grounded = false;
+			anim.SetBool("jump", true);
+		}
+	}
+
+	void PlayerIdle()
+	{                                   //player idle
+		normalizedHorizontalSpeed = 0;
+
+		action = Action.Idle;
+		anim.SetBool("jump", false);
+		anim.SetBool("run", false);
+		anim.SetBool("attack", false);
+
+		state.Grounded = true;
+		state.JumpedFromFastPlatform = false;
+	}
+
+	void PlayerJump()
+	{
+		velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
+
+		action = Action.Jump;
+		anim.SetBool("jump", true);
+
+		jump = false;
+
+		state.Grounded = false;
+
+		if (state.RidingFastPlatform && state.MovingHorizontally)
+		{
+			state.JumpedFromFastPlatform = true;
+>>>>>>> 4ce521d70c6ad8139e94c592f0e8390f764d9f9d
 		}
 	}
 
@@ -185,12 +231,23 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		if (controller.isGrounded)       //player running right
 		{
+<<<<<<< HEAD
+			anim.SetBool("run", true);
+=======
+			action = Action.Run;
 			anim.SetBool("run", true);
 		}
 		else                             //player flying right
 		{
 			anim.SetBool("run", false);
+>>>>>>> 4ce521d70c6ad8139e94c592f0e8390f764d9f9d
 		}
+		else                             //player flying right
+		{
+			anim.SetBool("run", false);
+		}
+
+		anim.SetBool("attack", false);
 
 		anim.SetBool("attack", false);
 
@@ -219,12 +276,23 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		if (controller.isGrounded)       //player running left
 		{
+<<<<<<< HEAD
+			anim.SetBool("run", true);
+=======
+			action = Action.Run;
 			anim.SetBool("run", true);
 		}
 		else                             //player flying left
 		{
 			anim.SetBool("run", false);
+>>>>>>> 4ce521d70c6ad8139e94c592f0e8390f764d9f9d
 		}
+		else                             //player flying left
+		{
+			anim.SetBool("run", false);
+		}
+
+		anim.SetBool("attack", false);
 
 		anim.SetBool("attack", false);
 
@@ -245,7 +313,10 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			normalizedHorizontalSpeed = 0;
 			anim.SetBool("attack", true);
 			anim.SetBool("run", false);
+<<<<<<< HEAD
 			weaponManager.Attack();
+=======
+>>>>>>> 4ce521d70c6ad8139e94c592f0e8390f764d9f9d
 		}
 
 		attack = false;
@@ -255,9 +326,15 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		if (controller.isGrounded)
 		{
+<<<<<<< HEAD
 			anim.SetBool("attack", true);
 			anim.SetBool("run", true);
 			weaponManager.Attack();
+=======
+			action = Action.RunAttack;
+			anim.SetBool("attack", true);
+			anim.SetBool("run", true);
+>>>>>>> 4ce521d70c6ad8139e94c592f0e8390f764d9f9d
 		}
 
 		attack = false;
@@ -265,9 +342,15 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 	void AttackWhileJumping()
 	{
+<<<<<<< HEAD
 		anim.SetBool("jump", true);
 		anim.SetBool("attack", true);
 		weaponManager.Attack();
+=======
+		action = Action.JumpAttack;
+		anim.SetBool("jump", true);
+		anim.SetBool("attack", true);
+>>>>>>> 4ce521d70c6ad8139e94c592f0e8390f764d9f9d
 
 		jump = false;
 
@@ -285,6 +368,65 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	//    attack = false;
 	// }
 
+<<<<<<< HEAD
+=======
+	// mix & match animations for various activity states,
+	// and pass instructions on to WeaponManager
+	void ActionDispatcher()
+	{
+		switch (action)
+		{
+			case Action.Idle:
+			{
+				weaponManager.ActionDispatcher(IDLE);
+				break;
+			}
+
+			case Action.Run:
+			{
+				weaponManager.ActionDispatcher(RUN);
+				break;
+			}
+
+			case Action.Jump:
+			{
+				weaponManager.ActionDispatcher(JUMP);
+				break;
+			}
+
+			case Action.Fall:
+			{
+				weaponManager.ActionDispatcher(FALL);
+				break;
+			}
+
+			case Action.Attack:
+			{
+				weaponManager.ActionDispatcher(ATTACK);
+				break;
+			}
+
+			case Action.RunAttack:
+			{
+				weaponManager.ActionDispatcher(RUN_ATTACK);
+				break;
+			}
+
+			case Action.JumpAttack:
+			{
+				weaponManager.ActionDispatcher(JUMP_ATTACK);
+				break;
+			}
+
+			default:
+			{
+				Assert.IsTrue(false, "** Default Case Reached **");
+				break;
+			}
+		}
+	}
+
+>>>>>>> 4ce521d70c6ad8139e94c592f0e8390f764d9f9d
 	void InitializeVelocity()
 	{
 		velocity = controller.velocity;
