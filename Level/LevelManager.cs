@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class LevelManager : CacheBehaviour
 {
-	// screen-fader settings
+	public float groundLine             = -50.00f;     // where above-ground ends and below-ground begins
+
 	private float timeToFade            = 2f;
 	private float fadeInAfter           = 2f;
 	private float fadeOutAfter          = 0f;
 	private float timeBeforeLevelReload = 3f;
-
-	// tile map specs
-	public float groundLine             = -50.00f;     // where above-ground ends and below-ground begins
+	private float playerPositionY;
+	private bool playerAboveGround;
 
 	void Start()
 	{
@@ -24,7 +24,7 @@ public class LevelManager : CacheBehaviour
 	void FadeInNewLevel()
 	{
 		MFX.FadeInLevel(spriteRenderer, fadeOutAfter, timeToFade);
-		Messenger.Broadcast<bool>("level loading", true);
+		Evnt.Broadcast<bool>("level loading", true);
 	}
 
 	void FadeOutCurrentLevel()
@@ -51,31 +51,38 @@ public class LevelManager : CacheBehaviour
 
 	void CheckIfAboveGround()
 	{
-		if (PlayerState.Y > groundLine)
+		if (playerPositionY > groundLine)
 		{
 			// if player is not ALREADY above ground, broadcast message "player above ground"
-			if (!PlayerState.AboveGround) {
-				PlayerState.AboveGround = true;
-				Messenger.Broadcast<bool>("player above ground", true);
+			if (!playerAboveGround) {
+				playerAboveGround = true;
+				Evnt.Broadcast<bool>("player above ground", true);
 			}
 		}
 		else
 		{
 			// if player is not ALREADY below ground, broadcast message !"player above ground"
-			if (PlayerState.AboveGround) {
-				PlayerState.AboveGround = false;
-				Messenger.Broadcast<bool>("player above ground", false);
+			if (playerAboveGround) {
+				playerAboveGround = false;
+				Evnt.Broadcast<bool>("player above ground", false);
 			}
 		}
 	}
 
+	void OnPlayerPosition(float x, float y)
+	{
+		playerPositionY = y;
+	}
+
 	void OnEnable()
 	{
-		Messenger.AddListener<int>("load level", OnLoadLevel);
+		Evnt.Subscribe<int>("load level", OnLoadLevel);
+		Evnt.Subscribe<float, float>("player position", OnPlayerPosition);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<int>("load level", OnLoadLevel);
+		Evnt.Unsubscribe<int>("load level", OnLoadLevel);
+		Evnt.Unsubscribe<float, float>("player position", OnPlayerPosition);
 	}
 }

@@ -49,15 +49,15 @@ public class DisplayScore : BaseBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<int>("init score", OnInitScore);
-		Messenger.AddListener<int>("change score", OnChangeScore);
-		Messenger.AddListener<bool>("fade hud", OnFadeHud);
+		Evnt.Subscribe<int>("init score", OnInitScore);
+		Evnt.Subscribe<int>("change score", OnChangeScore);
+		Evnt.Subscribe<bool>("fade hud", OnFadeHud);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<int>("init score", OnInitScore);
-		Messenger.RemoveListener<int>("change score", OnChangeScore);
-		Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
+		Evnt.Unsubscribe<int>("init score", OnInitScore);
+		Evnt.Unsubscribe<int>("change score", OnChangeScore);
+		Evnt.Unsubscribe<bool>("fade hud", OnFadeHud);
 	}
 }

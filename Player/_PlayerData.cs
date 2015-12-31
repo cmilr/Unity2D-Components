@@ -93,14 +93,14 @@ public class _PlayerData : BaseBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<bool>("save player data", OnSavePlayerData);
-		Messenger.AddListener<bool>("load player data", OnLoadPlayerData);
+		Evnt.Subscribe<bool>("save player data", OnSavePlayerData);
+		Evnt.Subscribe<bool>("load player data", OnLoadPlayerData);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<bool>("save player data", OnSavePlayerData);
-		Messenger.RemoveListener<bool>("load player data", OnLoadPlayerData);
+		Evnt.Unsubscribe<bool>("save player data", OnSavePlayerData);
+		Evnt.Unsubscribe<bool>("load player data", OnLoadPlayerData);
 	}
 }
 

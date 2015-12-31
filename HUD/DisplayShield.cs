@@ -48,13 +48,13 @@ public class DisplayShield : CacheBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<bool>("fade hud", OnFadeHud);
-		Messenger.AddListener<float, float>("screen size changed", OnScreenSizeChanged);
+		Evnt.Subscribe<bool>("fade hud", OnFadeHud);
+		Evnt.Subscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
-		Messenger.RemoveListener<float, float>("screen size changed", OnScreenSizeChanged);
+		Evnt.Unsubscribe<bool>("fade hud", OnFadeHud);
+		Evnt.Unsubscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}
 }

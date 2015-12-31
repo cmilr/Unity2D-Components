@@ -10,15 +10,7 @@ using System;
 public static class PlayerState : object
 {
 	public static string Character                     	{ get; set; }
-	public static bool 	RidingFastPlatform              	{ get; set; }
 	public static bool 	JumpedFromFastPlatform          	{ get; set; }
 	public static bool 	TouchingWall                    	{ get; set; }
-	public static bool 	Dead                            	{ get; set; }
-	public static bool 	AboveGround                     	{ get; set; }
 	public static bool 	Grounded                        	{ get; set; }
-	public static bool 	MovingHorizontally              	{ get; set; }
-	public static float 	PreviousX                      	{ get; set; }
-	public static float 	PreviousY                      	{ get; set; }
-	public static float 	X                              	{ get; set; }
-	public static float 	Y                              	{ get; set; }
 }

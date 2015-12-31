@@ -247,11 +247,11 @@ public class DeathHandler : CacheBehaviour
 
 	void AddListeners()
 	{
-		Messenger.AddListener<string, Collider2D, int>("player dead", OnPlayerDead);
+		Evnt.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<string, Collider2D, int>("player dead", OnPlayerDead);
+		Evnt.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 }

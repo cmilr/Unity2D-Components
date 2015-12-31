@@ -29,7 +29,7 @@ public class ScreenUtilities : CacheBehaviour
 			vertExtent  = Camera.main.GetComponent<Camera>().orthographicSize;
 			horizExtent = vertExtent * Screen.width / Screen.height;
 
-			Messenger.Broadcast<float, float>("screen size changed", vertExtent, horizExtent);
+			Evnt.Broadcast<float, float>("screen size changed", vertExtent, horizExtent);
 		}
 	}
 

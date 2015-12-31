@@ -14,6 +14,7 @@ public abstract class Entity : CacheBehaviour
 	protected bool collidedWithBody;
 	protected bool collidedWithWeapon;
 	protected bool onScreen;
+	protected bool playerDead;
 	protected IGameStateReadOnly game;
 
 	public abstract void OnBodyCollisionEnter(Collider2D coll);
@@ -27,6 +28,12 @@ public abstract class Entity : CacheBehaviour
 	void OnEnable()
 	{
 		game   = GameObject.Find(GAME_STATE).GetComponent<IGameStateReadOnly>();
+		Evnt.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+	}
+
+	void OnDisable()
+	{
+		Evnt.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 
 	protected void AutoAlign()
@@ -90,5 +97,10 @@ public abstract class Entity : CacheBehaviour
 			OnWeaponCollisionExit();
 			collidedWithWeapon = false;
 		}
+	}
+
+	void OnPlayerDead(string methodOfDeath, Collider2D coll, int hitFrom)
+	{
+		playerDead = true;
 	}
 }

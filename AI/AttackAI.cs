@@ -114,12 +114,12 @@ public class AttackAI : CacheBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<bool>("level loading", OnLevelLoading);
+		Evnt.Subscribe<bool>("level loading", OnLevelLoading);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<bool>("level loading", OnLevelLoading);
+		Evnt.Unsubscribe<bool>("level loading", OnLevelLoading);
 	}
 
 

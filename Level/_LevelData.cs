@@ -74,14 +74,14 @@ public class _LevelData : BaseBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<bool>("save level data", OnSaveLevelData);
-		Messenger.AddListener<bool>("load level data", OnLoadLevelData);
+		Evnt.Subscribe<bool>("save level data", OnSaveLevelData);
+		Evnt.Subscribe<bool>("load level data", OnLoadLevelData);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<bool>("save level data", OnSaveLevelData);
-		Messenger.RemoveListener<bool>("load level data", OnLoadLevelData);
+		Evnt.Unsubscribe<bool>("save level data", OnSaveLevelData);
+		Evnt.Unsubscribe<bool>("load level data", OnLoadLevelData);
 	}
 }
 

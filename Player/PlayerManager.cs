@@ -16,13 +16,13 @@ public class PlayerManager : CacheBehaviour
 
 	void Init()
 	{
-		Messenger.Broadcast<int>("init lvl", player.LVL);
-		Messenger.Broadcast<int>("init hp", player.HP);
-		Messenger.Broadcast<int>("init ac", player.AC);
-		Messenger.Broadcast<int>("init xp", player.XP);
-		Messenger.Broadcast<GameObject, GameObject, GameObject>
+		Evnt.Broadcast<int>("init lvl", player.LVL);
+		Evnt.Broadcast<int>("init hp", player.HP);
+		Evnt.Broadcast<int>("init ac", player.AC);
+		Evnt.Broadcast<int>("init xp", player.XP);
+		Evnt.Broadcast<GameObject, GameObject, GameObject>
 			("init weapons", player.equippedWeapon, player.leftWeapon, player.rightWeapon);
-		Messenger.Broadcast<Transform>("player placed", transform);
+		Evnt.Broadcast<Transform>("player placed", transform);
 	}
 
 	public void TakesHit(string weaponType, Weapon weapon, Collider2D coll, int hitFrom)
@@ -32,8 +32,8 @@ public class PlayerManager : CacheBehaviour
 
 		// produce effects
 		// params for ShakeCamera = duration, strength, vibrato, randomness
-		Messenger.Broadcast<float, float, int, float>("shake camera", .5f, .3f, 20, 5f);
-		Messenger.Broadcast<int>("reduce hp", player.HP);
+		Evnt.Broadcast<float, float, int, float>("shake camera", .5f, .3f, 20, 5f);
+		Evnt.Broadcast<int>("reduce hp", player.HP);
 
 		// float xDistance = hitFrom == LEFT ? 2f : -2f;
 		// transform.DOJump(new Vector3(transform.position.x + xDistance, transform.position.y, transform.position.z), .2f, 1, .5f, false);
@@ -53,8 +53,7 @@ public class PlayerManager : CacheBehaviour
 		}
 		else
 		{
-			PlayerState.Dead = true;
-			Messenger.Broadcast<string, Collider2D, int>("player dead", "projectile", coll, hitFrom);
+			Evnt.Broadcast<string, Collider2D, int>("player dead", "projectile", coll, hitFrom);
 		}
 	}
 
@@ -64,7 +63,7 @@ public class PlayerManager : CacheBehaviour
 		player.HP -= (int)(enemy.touchDamage * DIFFICULTY_DAMAGE_MODIFIER);
 
 		// produce effects
-		Messenger.Broadcast<int>("reduce hp", player.HP);
+		Evnt.Broadcast<int>("reduce hp", player.HP);
 
 		if (player.HP > 0)
 		{
@@ -72,14 +71,13 @@ public class PlayerManager : CacheBehaviour
 		}
 		else
 		{
-			PlayerState.Dead = true;
-			Messenger.Broadcast<string, Collider2D, int>("player dead", "struckdown", coll, hitFrom);
+			Evnt.Broadcast<string, Collider2D, int>("player dead", "struckdown", coll, hitFrom);
 		}
 	}
 
 	void OnPlayerHit(string weaponType, Collider2D coll, int hitFrom)
 	{
-		// Messenger.Broadcast<string, Collider2D, int>("player dead", "projectile", coll, hitFrom);
+		// Evnt.Broadcast<string, Collider2D, int>("player dead", "projectile", coll, hitFrom);
 	}
 
 	void OnPrizeCollected(int worth)
@@ -92,15 +90,15 @@ public class PlayerManager : CacheBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<string, Collider2D, int>("player hit", OnPlayerHit);
-		Messenger.AddListener<int>("prize collected", OnPrizeCollected);
-		Messenger.AddListener<bool>("level completed", OnLevelCompleted);
+		Evnt.Subscribe<string, Collider2D, int>("player hit", OnPlayerHit);
+		Evnt.Subscribe<int>("prize collected", OnPrizeCollected);
+		Evnt.Subscribe<bool>("level completed", OnLevelCompleted);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<string, Collider2D, int>("player hit", OnPlayerHit);
-		Messenger.RemoveListener<int>("prize collected", OnPrizeCollected);
-		Messenger.RemoveListener<bool>("level completed", OnLevelCompleted);
+		Evnt.Unsubscribe<string, Collider2D, int>("player hit", OnPlayerHit);
+		Evnt.Unsubscribe<int>("prize collected", OnPrizeCollected);
+		Evnt.Unsubscribe<bool>("level completed", OnLevelCompleted);
 	}
 }

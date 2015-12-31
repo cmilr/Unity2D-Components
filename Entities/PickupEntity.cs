@@ -21,7 +21,7 @@ public class PickupEntity : Entity
 	{
 		collidedWithBody = true;
 
-		if (!game.LevelLoading && !PlayerState.Dead)
+		if (!game.LevelLoading && !playerDead)
 		{
 			switch (entityType)
 			{
@@ -29,7 +29,7 @@ public class PickupEntity : Entity
 				{
 					MFX.PickupPrize(gameObject);
 					MFX.ExtinguishLight(glow, 0, .1f);
-					Messenger.Broadcast<int>("prize collected", worth);
+					Evnt.Broadcast<int>("prize collected", worth);
 					break;
 				}
 
@@ -37,20 +37,20 @@ public class PickupEntity : Entity
 				{
 					MFX.PickupPrize(gameObject);
 					MFX.ExtinguishLight(glow, 0, .1f);
-					Messenger.Broadcast<int>("prize collected", worth);
-					Messenger.Broadcast<bool>("level completed", true);
+					Evnt.Broadcast<int>("prize collected", worth);
+					Evnt.Broadcast<bool>("level completed", true);
 					break;
 				}
 
 				case EntityType.save:
 				{
-					Messenger.Broadcast<bool>("save player data", true);
+					Evnt.Broadcast<bool>("save player data", true);
 					break;
 				}
 
 				case EntityType.load:
 				{
-					Messenger.Broadcast<bool>("load player data", true);
+					Evnt.Broadcast<bool>("load player data", true);
 					break;
 				}
 

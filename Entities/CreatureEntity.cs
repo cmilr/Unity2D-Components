@@ -79,7 +79,7 @@ public class CreatureEntity : Entity
 
 		if (hp <= 0)
 		{
-			Messenger.Broadcast<int>("prize collected", worth);
+			Evnt.Broadcast<int>("prize collected", worth);
 			KillSelf(hitFrom, MELEE);
 		}
 	}
@@ -106,7 +106,7 @@ public class CreatureEntity : Entity
 
 		if (hp <= 0)
 		{
-			Messenger.Broadcast<int>("prize collected", worth);
+			Evnt.Broadcast<int>("prize collected", worth);
 			KillSelf(hitFrom, PROJECTILE);
 		}
 	}

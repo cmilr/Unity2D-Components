@@ -22,11 +22,11 @@ public class SoundManager : CacheBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<int>("prize collected", OnPrizeCollected);
+		Evnt.Subscribe<int>("prize collected", OnPrizeCollected);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<int>("prize collected", OnPrizeCollected);
+		Evnt.Unsubscribe<int>("prize collected", OnPrizeCollected);
 	}
 }

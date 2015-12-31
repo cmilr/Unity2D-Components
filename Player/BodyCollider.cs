@@ -6,6 +6,7 @@ public class BodyCollider : CacheBehaviour
 {
 	private int layer;
 	private int hitFrom;
+	private bool dead;
 	private PlayerManager player;
 	private IGameStateReadOnly game;
 	private Weapon enemyWeapon;
@@ -25,7 +26,7 @@ public class BodyCollider : CacheBehaviour
 		{
 			enemyWeapon = coll.GetComponent<Weapon>();
 
-			if (!enemyWeapon.alreadyCollided && !game.LevelLoading && !PlayerState.Dead)
+			if (!enemyWeapon.alreadyCollided && !game.LevelLoading && !dead)
 			{
 				hitFrom = M.HorizSideThatWasHit(gameObject, coll);
 
@@ -43,7 +44,7 @@ public class BodyCollider : CacheBehaviour
 		{
 			enemy = coll.GetComponent<CreatureEntity>();
 
-			if (!enemy.alreadyCollided && !game.LevelLoading && !PlayerState.Dead)
+			if (!enemy.alreadyCollided && !game.LevelLoading && !dead)
 			{
 				hitFrom = M.HorizSideThatWasHit(gameObject, coll);
 
@@ -73,5 +74,20 @@ public class BodyCollider : CacheBehaviour
 
 			enemy.alreadyCollided = false;
 		}
+	}
+
+	void OnEnable()
+	{
+		Evnt.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+	}
+
+	void OnDisable()
+	{
+		Evnt.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+	}
+
+	void OnPlayerDead(string methodOfDeath, Collider2D coll, int hitFrom)
+	{
+		dead = true;
 	}
 }

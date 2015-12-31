@@ -43,15 +43,15 @@ public class DisplayInteger : BaseBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<int>("init score", OnInitInteger);
-		Messenger.AddListener<int>("change score", OnChangeInteger);
-		Messenger.AddListener<bool>("fade hud", OnFadeHud);
+		Evnt.Subscribe<int>("init score", OnInitInteger);
+		Evnt.Subscribe<int>("change score", OnChangeInteger);
+		Evnt.Subscribe<bool>("fade hud", OnFadeHud);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<int>("init score", OnInitInteger);
-		Messenger.RemoveListener<int>("change score", OnChangeInteger);
-		Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
+		Evnt.Unsubscribe<int>("init score", OnInitInteger);
+		Evnt.Unsubscribe<int>("change score", OnChangeInteger);
+		Evnt.Unsubscribe<bool>("fade hud", OnFadeHud);
 	}
 }

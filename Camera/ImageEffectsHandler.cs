@@ -40,11 +40,11 @@ public class ImageEffectsHandler : CacheBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<bool>("player above ground", OnPlayerAboveGround);
+		Evnt.Subscribe<bool>("player above ground", OnPlayerAboveGround);
 	}
 
 	void OnDisable()
 	{
-		Messenger.RemoveListener<bool>("player above ground", OnPlayerAboveGround);
+		Evnt.Unsubscribe<bool>("player above ground", OnPlayerAboveGround);
 	}
 }

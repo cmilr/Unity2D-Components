@@ -24,6 +24,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	private bool attack;
 	private bool repulseRight;
 	private bool repulseLeft;
+	private bool ridingFastPlatform;
+	private bool movingHorizontally;
 	private Vector3 velocity;
 	private RaycastHit2D lastControllerColliderHit;
 	private CharacterController2D controller;
@@ -35,6 +37,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		controller = GetComponent<CharacterController2D>();
 		weaponManager = GetComponentInChildren<WeaponManager>();
 		anim = GameObject.Find("Player").GetComponent<Animator>();
+		
+		InvokeRepeating("BroadcastCurrentPosition", .3f, .3f);
 	}
 
 	// input methods required by ICreatureController
@@ -111,8 +115,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		CheckForFreefall();
 
-		SaveCurrentPosition();
-
 		ComputeMovement();
 
 		ApplyGravity();
@@ -164,7 +166,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		PlayerState.Grounded = false;
 
-		if (PlayerState.RidingFastPlatform && PlayerState.MovingHorizontally)
+		if (ridingFastPlatform && movingHorizontally)
 		{
 			PlayerState.JumpedFromFastPlatform = true;
 		}
@@ -328,7 +330,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		// clamp to maxRisingSpeed to eliminate jitteriness when rising too fast,
 		// otherwise, clamp to maxFallingSpeed to prevent player leaving screen
-		if (MovingTooFast() && PlayerState.RidingFastPlatform && !PlayerState.MovingHorizontally)
+		if (MovingTooFast() && ridingFastPlatform && !movingHorizontally)
 		{
 			velocity.y = Mathf.Clamp(velocity.y, -maxFallingSpeed, maxRisingSpeed);
 		}
@@ -343,10 +345,9 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		controller.move(velocity * Time.deltaTime);
 	}
 
-	void SaveCurrentPosition()
+	void BroadcastCurrentPosition()
 	{
-		PlayerState.X = transform.position.x;
-		PlayerState.Y = transform.position.y;
+		Evnt.Broadcast<float, float>("player position", transform.position.x, transform.position.y);
 	}
 
 	void ComputeMovement()
@@ -365,17 +366,15 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		if (previousX != transform.position.x)
 		{
-			PlayerState.MovingHorizontally = true;
+			movingHorizontally = true;
 		}
 		else
 		{
-			PlayerState.MovingHorizontally = false;
+			movingHorizontally = false;
 		}
 
 		previousX = transform.position.x;
 		previousY = transform.position.y;
-		PlayerState.PreviousX = previousX;
-		PlayerState.PreviousY = previousY;
 	}
 
 	void RepulseToLeft(float maxVelocity)
@@ -404,13 +403,20 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		this.enabled = false;
 	}
 
+	void OnPlayerRidingFastPlatform(bool status)
+	{
+		ridingFastPlatform = status;
+	}
+
 	void OnEnable()
 	{
-		Messenger.AddListener<string, Collider2D, int>("player dead", OnPlayerDead);
+		Evnt.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		Evnt.Subscribe<bool>("player riding fast platform", OnPlayerRidingFastPlatform);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<string, Collider2D, int>("player dead", OnPlayerDead);
+		Evnt.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		Evnt.Unsubscribe<bool>("player riding fast platform", OnPlayerRidingFastPlatform);
 	}
 }

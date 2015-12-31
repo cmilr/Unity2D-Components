@@ -121,17 +121,17 @@ public class DisplayStashed : CacheBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<GameObject, int>("init stashed weapon", OnInitStashedWeapon);
-		Messenger.AddListener<GameObject, int>("change stashed weapon", OnChangeStashedWeapon);
-		Messenger.AddListener<bool>("fade hud", OnFadeHud);
-		Messenger.AddListener<float, float>("screen size changed", OnScreenSizeChanged);
+		Evnt.Subscribe<GameObject, int>("init stashed weapon", OnInitStashedWeapon);
+		Evnt.Subscribe<GameObject, int>("change stashed weapon", OnChangeStashedWeapon);
+		Evnt.Subscribe<bool>("fade hud", OnFadeHud);
+		Evnt.Subscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<GameObject, int>("init stashed weapon", OnInitStashedWeapon);
-		Messenger.RemoveListener<GameObject, int>("change stashed weapon", OnChangeStashedWeapon);
-		Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
-		Messenger.RemoveListener<float, float>("screen size changed", OnScreenSizeChanged);
+		Evnt.Unsubscribe<GameObject, int>("init stashed weapon", OnInitStashedWeapon);
+		Evnt.Unsubscribe<GameObject, int>("change stashed weapon", OnChangeStashedWeapon);
+		Evnt.Unsubscribe<bool>("fade hud", OnFadeHud);
+		Evnt.Unsubscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}
 }

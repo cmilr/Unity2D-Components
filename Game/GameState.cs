@@ -13,11 +13,11 @@ public class GameState : BaseBehaviour, IGameStateReadOnly, IGameStateFullAccess
 
 	void OnEnable()
 	{
-		Messenger.AddListener<int>("load level", OnLoadLevel);
+		Evnt.Subscribe<int>("load level", OnLoadLevel);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<int>("load level", OnLoadLevel);
+		Evnt.Unsubscribe<int>("load level", OnLoadLevel);
 	}
 }

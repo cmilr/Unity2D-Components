@@ -93,19 +93,19 @@ public class DisplayEquipped : CacheBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<GameObject>("init equipped weapon", OnInitEquippedWeapon);
-		Messenger.AddListener<GameObject>("init new equipped weapon", OnInitNewEquippedWeapon);
-		Messenger.AddListener<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
-		Messenger.AddListener<bool>("fade hud", OnFadeHud);
-		Messenger.AddListener<float, float>("screen size changed", OnScreenSizeChanged);
+		Evnt.Subscribe<GameObject>("init equipped weapon", OnInitEquippedWeapon);
+		Evnt.Subscribe<GameObject>("init new equipped weapon", OnInitNewEquippedWeapon);
+		Evnt.Subscribe<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
+		Evnt.Subscribe<bool>("fade hud", OnFadeHud);
+		Evnt.Subscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<GameObject>("init equipped weapon", OnInitEquippedWeapon);
-		Messenger.RemoveListener<GameObject>("init new equipped weapon", OnInitNewEquippedWeapon);
-		Messenger.RemoveListener<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
-		Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
-		Messenger.RemoveListener<float, float>("screen size changed", OnScreenSizeChanged);
+		Evnt.Unsubscribe<GameObject>("init equipped weapon", OnInitEquippedWeapon);
+		Evnt.Unsubscribe<GameObject>("init new equipped weapon", OnInitNewEquippedWeapon);
+		Evnt.Unsubscribe<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
+		Evnt.Unsubscribe<bool>("fade hud", OnFadeHud);
+		Evnt.Unsubscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}
 }

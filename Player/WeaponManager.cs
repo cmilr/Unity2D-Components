@@ -56,11 +56,11 @@ public class WeaponManager : CacheBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<Weapon>("new equipped weapon", OnNewEquippedWeapon);
+		Evnt.Subscribe<Weapon>("new equipped weapon", OnNewEquippedWeapon);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<Weapon>("new equipped weapon", OnNewEquippedWeapon);
+		Evnt.Unsubscribe<Weapon>("new equipped weapon", OnNewEquippedWeapon);
 	}
 }
