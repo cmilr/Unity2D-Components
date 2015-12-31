@@ -1,4 +1,4 @@
-using Matcha.Dreadful;
+ using Matcha.Dreadful;
 using UnityEngine.Assertions;
 using UnityEngine;
 
@@ -21,7 +21,7 @@ public class PickupEntity : Entity
 	{
 		collidedWithBody = true;
 
-		if (!game.LevelLoading && !playerDead)
+		if (!levelCompleted && !playerDead)
 		{
 			switch (entityType)
 			{
@@ -37,6 +37,7 @@ public class PickupEntity : Entity
 				{
 					MFX.PickupPrize(gameObject);
 					MFX.ExtinguishLight(glow, 0, .1f);
+					levelCompleted = true;
 					Evnt.Broadcast<int>("prize collected", worth);
 					Evnt.Broadcast<bool>("level completed", true);
 					break;

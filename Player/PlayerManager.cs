@@ -22,7 +22,6 @@ public class PlayerManager : CacheBehaviour
 		Evnt.Broadcast<int>("init xp", player.XP);
 		Evnt.Broadcast<GameObject, GameObject, GameObject>
 			("init weapons", player.equippedWeapon, player.leftWeapon, player.rightWeapon);
-		Evnt.Broadcast<Transform>("player placed", transform);
 	}
 
 	public void TakesHit(string weaponType, Weapon weapon, Collider2D coll, int hitFrom)
@@ -73,32 +72,5 @@ public class PlayerManager : CacheBehaviour
 		{
 			Evnt.Broadcast<string, Collider2D, int>("player dead", "struckdown", coll, hitFrom);
 		}
-	}
-
-	void OnPlayerHit(string weaponType, Collider2D coll, int hitFrom)
-	{
-		// Evnt.Broadcast<string, Collider2D, int>("player dead", "projectile", coll, hitFrom);
-	}
-
-	void OnPrizeCollected(int worth)
-	{
-	}
-
-	void OnLevelCompleted(bool status)
-	{
-	}
-
-	void OnEnable()
-	{
-		Evnt.Subscribe<string, Collider2D, int>("player hit", OnPlayerHit);
-		Evnt.Subscribe<int>("prize collected", OnPrizeCollected);
-		Evnt.Subscribe<bool>("level completed", OnLevelCompleted);
-	}
-
-	void OnDestroy()
-	{
-		Evnt.Unsubscribe<string, Collider2D, int>("player hit", OnPlayerHit);
-		Evnt.Unsubscribe<int>("prize collected", OnPrizeCollected);
-		Evnt.Unsubscribe<bool>("level completed", OnLevelCompleted);
 	}
 }

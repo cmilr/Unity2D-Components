@@ -39,7 +39,7 @@ public class DeathHandler : CacheBehaviour
 		boxCollider  = GetComponent<BoxCollider2D>();
 		AddListeners();
 
-		SetCharacterAnimations(PlayerState.Character);
+		SetCharacterAnimations("LAURA");
 	}
 
 	// set animations depending on which character is chosen

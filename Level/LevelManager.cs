@@ -9,7 +9,7 @@ public class LevelManager : CacheBehaviour
 	private float timeToFade            = 2f;
 	private float fadeInAfter           = 2f;
 	private float fadeOutAfter          = 0f;
-	private float timeBeforeLevelReload = 3f;
+	private float timeBeforeLevelReload = 3.2f;
 	private float playerPositionY;
 	private bool playerAboveGround;
 
@@ -30,18 +30,6 @@ public class LevelManager : CacheBehaviour
 	void FadeOutCurrentLevel()
 	{
 		MFX.FadeOutLevel(spriteRenderer, fadeInAfter, timeToFade);
-	}
-
-	void OnLoadLevel(int newLevel)
-	{
-		FadeOutCurrentLevel();
-
-		// load next level and trigger garbage collection
-		StartCoroutine(Timer.Start(timeBeforeLevelReload, false, () =>
-		{
-			Application.LoadLevel("Level" + newLevel);
-			System.GC.Collect();
-		}));
 	}
 
 	void GetPlayerPosition()
@@ -69,11 +57,6 @@ public class LevelManager : CacheBehaviour
 		}
 	}
 
-	void OnPlayerPosition(float x, float y)
-	{
-		playerPositionY = y;
-	}
-
 	void OnEnable()
 	{
 		Evnt.Subscribe<int>("load level", OnLoadLevel);
@@ -84,5 +67,22 @@ public class LevelManager : CacheBehaviour
 	{
 		Evnt.Unsubscribe<int>("load level", OnLoadLevel);
 		Evnt.Unsubscribe<float, float>("player position", OnPlayerPosition);
+	}
+
+	void OnLoadLevel(int newLevel)
+	{
+		FadeOutCurrentLevel();
+
+		// load next level and trigger garbage collection
+		StartCoroutine(Timer.Start(timeBeforeLevelReload, false, () =>
+		{
+			Application.LoadLevel("Level" + newLevel);
+			System.GC.Collect();
+		}));
+	}
+
+	void OnPlayerPosition(float x, float y)
+	{
+		playerPositionY = y;
 	}
 }

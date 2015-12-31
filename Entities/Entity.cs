@@ -15,7 +15,7 @@ public abstract class Entity : CacheBehaviour
 	protected bool collidedWithWeapon;
 	protected bool onScreen;
 	protected bool playerDead;
-	protected IGameStateReadOnly game;
+	protected bool levelCompleted;
 
 	public abstract void OnBodyCollisionEnter(Collider2D coll);
 	public abstract void OnBodyCollisionStay();
@@ -23,18 +23,6 @@ public abstract class Entity : CacheBehaviour
 	public abstract void OnWeaponCollisionEnter(Collider2D coll);
 	public abstract void OnWeaponCollisionStay();
 	public abstract void OnWeaponCollisionExit();
-
-
-	void OnEnable()
-	{
-		game   = GameObject.Find(GAME_STATE).GetComponent<IGameStateReadOnly>();
-		Evnt.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
-	}
-
-	void OnDisable()
-	{
-		Evnt.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
-	}
 
 	protected void AutoAlign()
 	{
@@ -99,8 +87,25 @@ public abstract class Entity : CacheBehaviour
 		}
 	}
 
+	void OnEnable()
+	{
+		Evnt.Subscribe<bool>("level completed", OnLevelCompleted);
+		Evnt.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+	}
+
+	void OnDisable()
+	{
+		Evnt.Unsubscribe<bool>("level completed", OnLevelCompleted);
+		Evnt.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+	}
+
 	void OnPlayerDead(string methodOfDeath, Collider2D coll, int hitFrom)
 	{
 		playerDead = true;
+	}
+
+	void OnLevelCompleted(bool status)
+	{
+		levelCompleted = status;
 	}
 }

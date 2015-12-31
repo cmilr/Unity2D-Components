@@ -7,15 +7,14 @@ public class BodyCollider : CacheBehaviour
 	private int layer;
 	private int hitFrom;
 	private bool dead;
+	private bool levelCompleted;
 	private PlayerManager player;
-	private IGameStateReadOnly game;
 	private Weapon enemyWeapon;
 	private CreatureEntity enemy;
 
 	void Start()
 	{
 		player = transform.parent.GetComponent<PlayerManager>();
-		game = GameObject.Find(GAME_STATE).GetComponent<IGameStateReadOnly>();
 	}
 
 	void OnTriggerEnter2D(Collider2D coll)
@@ -26,7 +25,7 @@ public class BodyCollider : CacheBehaviour
 		{
 			enemyWeapon = coll.GetComponent<Weapon>();
 
-			if (!enemyWeapon.alreadyCollided && !game.LevelLoading && !dead)
+			if (!enemyWeapon.alreadyCollided && !levelCompleted && !dead)
 			{
 				hitFrom = M.HorizSideThatWasHit(gameObject, coll);
 
@@ -44,7 +43,7 @@ public class BodyCollider : CacheBehaviour
 		{
 			enemy = coll.GetComponent<CreatureEntity>();
 
-			if (!enemy.alreadyCollided && !game.LevelLoading && !dead)
+			if (!enemy.alreadyCollided && !levelCompleted && !dead)
 			{
 				hitFrom = M.HorizSideThatWasHit(gameObject, coll);
 
@@ -78,16 +77,23 @@ public class BodyCollider : CacheBehaviour
 
 	void OnEnable()
 	{
+		Evnt.Subscribe<bool>("level completed", OnLevelCompleted);
 		Evnt.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 
 	void OnDisable()
 	{
+		Evnt.Unsubscribe<bool>("level completed", OnLevelCompleted);
 		Evnt.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 
 	void OnPlayerDead(string methodOfDeath, Collider2D coll, int hitFrom)
 	{
 		dead = true;
+	}
+
+	void OnLevelCompleted(bool status)
+	{
+		levelCompleted = status;
 	}
 }

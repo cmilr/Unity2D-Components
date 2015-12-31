@@ -26,6 +26,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	private bool repulseLeft;
 	private bool ridingFastPlatform;
 	private bool movingHorizontally;
+	private bool touchingWall;
+	private bool jumpedFromFastPlatform;
 	private Vector3 velocity;
 	private RaycastHit2D lastControllerColliderHit;
 	private CharacterController2D controller;
@@ -37,7 +39,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		controller = GetComponent<CharacterController2D>();
 		weaponManager = GetComponentInChildren<WeaponManager>();
 		anim = GameObject.Find("Player").GetComponent<Animator>();
-		
+
 		InvokeRepeating("BroadcastCurrentPosition", .3f, .3f);
 	}
 
@@ -133,13 +135,16 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		if (controller.isGrounded)       //player on solid ground
 		{
 			velocity.y = 0;
-			PlayerState.Grounded = true;
-			PlayerState.JumpedFromFastPlatform = false;
+
 			anim.SetBool("jump", false);
+
+			if (jumpedFromFastPlatform) {
+				jumpedFromFastPlatform = false;
+				Evnt.Broadcast<bool>("player jumped from fast platform", false);
+			}
 		}
 		else                             //player jumping or falling
 		{
-			PlayerState.Grounded = false;
 			anim.SetBool("jump", true);
 		}
 	}
@@ -151,9 +156,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		anim.SetBool("jump", false);
 		anim.SetBool("run", false);
 		anim.SetBool("attack", false);
-
-		PlayerState.Grounded = true;
-		PlayerState.JumpedFromFastPlatform = false;
 	}
 
 	void PlayerJump()
@@ -164,11 +166,12 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		jump = false;
 
-		PlayerState.Grounded = false;
-
 		if (ridingFastPlatform && movingHorizontally)
 		{
-			PlayerState.JumpedFromFastPlatform = true;
+			if (!jumpedFromFastPlatform) {
+				jumpedFromFastPlatform = true;
+				Evnt.Broadcast<bool>("player jumped from fast platform", true);
+			}
 		}
 	}
 
@@ -196,7 +199,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		anim.SetBool("attack", false);
 
-		// only broadcast message once, each time player turns
 		if (!facingRight)
 		{
 			facingRight = true;
@@ -295,7 +297,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	void CheckForFreefall()
 	{
 		// flush horizontal axis if player is falling while pressed against a wall
-		if (PlayerState.TouchingWall && !controller.isGrounded)
+		if (touchingWall && !controller.isGrounded)
 		{
 			normalizedHorizontalSpeed = 0;
 			velocity.x = 0f;
@@ -408,15 +410,22 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		ridingFastPlatform = status;
 	}
 
+	void OnPlayerTouchingWall(bool status)
+	{
+		touchingWall = status;
+	}
+
 	void OnEnable()
 	{
 		Evnt.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
 		Evnt.Subscribe<bool>("player riding fast platform", OnPlayerRidingFastPlatform);
+		Evnt.Subscribe<bool>("player touching wall", OnPlayerTouchingWall);
 	}
 
 	void OnDestroy()
 	{
 		Evnt.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
 		Evnt.Unsubscribe<bool>("player riding fast platform", OnPlayerRidingFastPlatform);
+		Evnt.Unsubscribe<bool>("player touching wall", OnPlayerTouchingWall);
 	}
 }
