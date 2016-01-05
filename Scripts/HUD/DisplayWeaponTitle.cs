@@ -1,59 +1,67 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 using DG.Tweening;
 using Matcha.Dreadful;
-
+using UnityEngine.UI;
+using UnityEngine;
 
 public class DisplayWeaponTitle : BaseBehaviour
 {
-    private Text textComponent;
+	private Text textComponent;
 
-    void OnInitEquippedWeapon(GameObject weapon)
-    {
-        textComponent      = gameObject.GetComponent<Text>();
-        textComponent.text = weapon.GetComponent<Weapon>().title;
-        textComponent.DOKill();
-        FadeInInitialTitle();
-    }
+	void OnInitEquippedWeapon(GameObject weapon)
+	{
+		textComponent      = gameObject.GetComponent<Text>();
+		textComponent.text = weapon.GetComponent<Weapon>().title;
+		textComponent.DOKill();
+		FadeInInitialTitle();
+	}
 
-    void FadeInInitialTitle()
-    {
-        // fade to zero instantly, then fade up slowly
-        MFX.Fade(textComponent, 0, 0, 0);
-        MFX.Fade(textComponent, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
-    }
+	void OnInitNewEquippedWeapon(GameObject weapon)
+	{
+		textComponent      = gameObject.GetComponent<Text>();
+		textComponent.text = weapon.GetComponent<Weapon>().title;
+		textComponent.DOKill();
+		// FadeInInitialTitle();
+	}
 
-    void OnChangeEquippedWeapon(GameObject newWeapon)
-    {
-        textComponent.text = newWeapon.GetComponent<Weapon>().title;
-        textComponent.DOKill();
-        FadeInNewTitle();
-    }
+	void FadeInInitialTitle()
+	{
+		// fade to zero instantly, then fade up slowly
+		MFX.Fade(textComponent, 0, 0, 0);
+		MFX.Fade(textComponent, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
+	}
 
-    void FadeInNewTitle()
-    {
-        // fade to zero instantly, then fade up slowly
-        MFX.Fade(textComponent, 0, 0, 0);
-        MFX.Fade(textComponent, 1, 0, HUD_WEAPON_CHANGE_FADE);
-    }
+	void OnChangeEquippedWeapon(GameObject newWeapon)
+	{
+		textComponent.text = newWeapon.GetComponent<Weapon>().title;
+		textComponent.DOKill();
+		FadeInNewTitle();
+	}
 
-    void OnFadeHud(bool status)
-    {
-        MFX.Fade(textComponent, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE);
-    }
+	void FadeInNewTitle()
+	{
+		// fade to zero instantly, then fade up slowly
+		MFX.Fade(textComponent, 0, 0, 0);
+		MFX.Fade(textComponent, 1, 0, HUD_WEAPON_CHANGE_FADE);
+	}
 
-    void OnEnable()
-    {
-        Messenger.AddListener<GameObject>("init equipped weapon", OnInitEquippedWeapon);
-        Messenger.AddListener<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
-        Messenger.AddListener<bool>("fade hud", OnFadeHud);
-    }
+	void OnFadeHud(bool status)
+	{
+		MFX.Fade(textComponent, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE);
+	}
 
-    void OnDestroy()
-    {
-        Messenger.RemoveListener<GameObject>("init equipped weapon", OnInitEquippedWeapon);
-        Messenger.RemoveListener<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
-        Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
-    }
+	void OnEnable()
+	{
+		EventKit.Subscribe<GameObject>("init equipped weapon", OnInitEquippedWeapon);
+		EventKit.Subscribe<GameObject>("init new equipped weapon", OnInitNewEquippedWeapon);
+		EventKit.Subscribe<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
+		EventKit.Subscribe<bool>("fade hud", OnFadeHud);
+	}
+
+	void OnDestroy()
+	{
+		EventKit.Unsubscribe<GameObject>("init equipped weapon", OnInitEquippedWeapon);
+		EventKit.Unsubscribe<GameObject>("init new equipped weapon", OnInitNewEquippedWeapon);
+		EventKit.Unsubscribe<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
+		EventKit.Unsubscribe<bool>("fade hud", OnFadeHud);
+	}
 }

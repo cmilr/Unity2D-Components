@@ -1,5 +1,3 @@
-﻿
-
-public class ProcRoom : ProcBase {
-
+﻿public class ProcRoom : ProcBase
+{
 }

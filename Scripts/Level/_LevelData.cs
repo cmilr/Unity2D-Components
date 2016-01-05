@@ -1,19 +1,18 @@
-﻿using UnityEngine;
 using System.Collections;
-using System;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-
+using System.Runtime.Serialization.Formatters.Binary;
+using System;
+using UnityEngine;
 
 // this is a pseudo-singleton — it enforces a single instance, but doesn't expose
 // a static variable, so you can't access it without a GetComponent() call
-public class _LevelData : BaseBehaviour {
-
+public class _LevelData : BaseBehaviour
+{
 	public _LevelData data;
 
-	public int HP 		{ get; set; }
-	public int AC 		{ get; set; }
-	public int Damage	{ get; set; }
+	public int HP     { get; set; }
+	public int AC     { get; set; }
+	public int Damage { get; set; }
 
 	void Awake()
 	{
@@ -37,7 +36,7 @@ public class _LevelData : BaseBehaviour {
 
 	public void Load()
 	{
-		if(File.Exists(Application.persistentDataPath + "/LevelData.dat"))
+		if (File.Exists(Application.persistentDataPath + "/LevelData.dat"))
 		{
 			BinaryFormatter bf = new BinaryFormatter();
 			FileStream file = File.Open(Application.persistentDataPath + "/LevelData.dat",FileMode.Open);
@@ -75,14 +74,14 @@ public class _LevelData : BaseBehaviour {
 
 	void OnEnable()
 	{
-		Messenger.AddListener<bool>("save level data", OnSaveLevelData);
-		Messenger.AddListener<bool>("load level data", OnLoadLevelData);
+		EventKit.Subscribe<bool>("save level data", OnSaveLevelData);
+		EventKit.Subscribe<bool>("load level data", OnLoadLevelData);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<bool>("save level data", OnSaveLevelData);
-		Messenger.RemoveListener<bool>("load level data", OnLoadLevelData);
+		EventKit.Unsubscribe<bool>("save level data", OnSaveLevelData);
+		EventKit.Unsubscribe<bool>("load level data", OnLoadLevelData);
 	}
 }
 

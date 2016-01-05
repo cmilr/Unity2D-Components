@@ -9,12 +9,11 @@ public class CameraShake : CacheBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<float, float, int, float>("shake camera", OnShakeCamera);
+		EventKit.Subscribe<float, float, int, float>("shake camera", OnShakeCamera);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<float, float, int, float>("shake camera", OnShakeCamera);
+		EventKit.Unsubscribe<float, float, int, float>("shake camera", OnShakeCamera);
 	}
-
 }

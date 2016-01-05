@@ -1,41 +1,52 @@
-﻿using UnityEngine;
-using System;
-using System.Collections.Generic;
-using Rotorz.Tile;
 using Matcha.Unity;
+using Rotorz.Tile;
+using System.Collections.Generic;
+using System;
+using UnityEngine;
 
-public class DungeonGenerator : DungeonBehaviour
+public class DungeonGenerator : CacheBehaviour
 {
-	void Awake()
+	public Brush stoneBrush;
+	public Brush boundsBrush;
+	public Brush stepBrush;
+	public Brush hallOriginBrush;
+	public Brush roomOriginBrush;
+
+	private TileSystem map;
+	private int mapColumns;
+	private int mapRows;
+
+	void SetTileMapSpecs(TileSystem mapGo)
 	{
-		// fields inherited from DungeonBehaviour
-		mapMarginX     = 12;
-		mapMarginY     = 12;
-		roomMarginX    = 4;
-		roomMarginY    = 4;
-
-		map            = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
-		mapColumns     = map.ColumnCount;
-		mapRows        = map.RowCount;
-		roomList       = new List<ProcSpace>();
-		hallList       = new List<ProcSpace>();
-		crawlspaceList = new List<ProcSpace>();
-
-		GenerateRandomDungeons();
+		map            = mapGo;
+		mapColumns     = mapGo.ColumnCount;
+		mapRows        = mapGo.RowCount;
 	}
 
-	void GenerateRandomDungeons()
+	public void FillTileMapWithStone(TileSystem mapGo)
 	{
-		PaintBaseTiles();
-		CarveRoom();
-		ChooseExitType();
 
+		SetTileMapSpecs(mapGo);
+		PaintBaseTiles(stoneBrush);
+	}
 
+	void PaintBaseTiles(Brush currentBrush)
+	{
+		map.BulkEditBegin();
 
-		// CarveRandomRooms(numberOfRooms);
-		// CarveHalls();
-		// CarveCrawlspaces();
-		// AssessForStairs();
-		RefreshAllTiles();
+		for (int x = 0; x < mapColumns; x++)
+		{
+			for (int y = 0; y < mapRows; y++)
+			{
+				currentBrush.PaintTile(map, x, y);
+			}
+		}
+
+		map.BulkEditEnd();
+	}
+
+	void RefreshAllTiles()
+	{
+		map.RefreshTiles();
 	}
 }

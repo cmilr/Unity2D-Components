@@ -1,134 +1,115 @@
-﻿using UnityEngine;
-using System.Collections;
 using Matcha.Unity;
-using Matcha.Dreadful;
+using UnityEngine;
 
-public class Weapon : AnimationBehaviour {
+public class Weapon : CacheBehaviour
+{
+	public enum WeaponType { Axe, Sword, Hammer, Dagger, MagicProjectile };
+	public WeaponType weaponType;
+	public int worth;
 
-    public enum WeaponType { Axe, Sword, Hammer, Dagger, MagicProjectile };
-    public WeaponType weaponType;
+	[HideInInspector]
+	public bool alreadyCollided;
 
-    [HideInInspector]
-    public bool alreadyCollided;
-
-    [Header("SPRITES")]
-    //~~~~~~~~~~~~~~~~~~~~~
-    [Tooltip("This is the pickup/HUD icon.")]
-    public Sprite iconSprite;
-
-    [Tooltip("Projectile sprite that will actually be fired.")]
-    public Sprite projectileSprite;
-
-    [Tooltip("Color of the upper element in the animated version of the weapon.")]
-    public string upperColor = "ffffff";
-
-    [Tooltip("Color of the center element in the animated version of the weapon.")]
-    public string centerColor = "ffffff";
-
-    [Tooltip("Color of the lower element in the animated version of the weapon.")]
-    public string lowerColor = "ffffff";
+	[Tooltip("Is this weapon in someone's inventory, or is it just loose on the floor?")]
+	public bool inPlayerInventory;
+	public bool inEnemyInventory;
 
 
-    [Header("ALL WEAPONS")]
-    //~~~~~~~~~~~~~~~~~~~~~
-    [Tooltip("What title should be displayed when this weapon is equipped?")]
-    public string title;
+	[Header("SPRITES")]
+	//~~~~~~~~~~~~~~~~~~~~~
+	[Tooltip("This is the pickup/HUD icon.")]			//weapon sprite with black outline
+	public Sprite iconSprite;
 
-    [Tooltip("How much damage does this weapon do?")]
-    public int damage;
-
-    [Tooltip("How many hits can this weapon take before it's unuseable?")]
-    public int hp;
-
-    [Tooltip("How many times per second can this weapon be fired?")]
-    public float rateOfAttack;
+	[HideInInspector]
+	[Tooltip("Actual sprite our hero carries.")]    //weapon sprite without outline
+	public Sprite carriedSprite;							//loaded automatically from Resources/
 
 
-    [Header("RANGED WEAPONS ONLY")]
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    [Range (8, 20)]
-    [Tooltip("How fast should projectile travel?")]
-    public float speed = 12f;
+	[Header("ALL WEAPONS")]
+	//~~~~~~~~~~~~~~~~~~~~~
+	[Tooltip("What title should be displayed when this weapon is equipped?")]
+	public string title;
 
-    [Tooltip("How far should projectile travel before fading out?")]
-    public float maxDistance = 40f;
+	[Tooltip("How much damage does this weapon do?")]
+	public int damage;
 
-    [Tooltip("Should projectile be lobbed?")]
-    public bool lob;
+	[Tooltip("How many hits can this weapon take before it's unuseable?")]
+	public int hp;
 
-    [Tooltip("ONLY EFFECTS PLAYER: If 'Lob' is true, how much should gravity effect projectile?")]
-    public float lobGravity;
-
-    [Tooltip("Should projectile fade-in when thrown?")]
-    public bool fadeIn;
-
-    [Tooltip("If Animated, ProjectileContainer will attempt to load an animation.")]
-    public bool animatedProjectile;
+	[Tooltip("How many times per second can this weapon be fired?")]
+	public float rateOfAttack;
 
 
-    // genericized weapon pieces
-    private WeaponPiece upper;
-    private WeaponPiece center;
-    private WeaponPiece lower;
+	[Header("RANGED WEAPONS ONLY")]
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	[Range(8, 20)]
+	[Tooltip("How fast should projectile travel?")]
+	public float speed = 12f;
 
-    void Awake ()
-    {
-        // if projectile is being carried by the player (as opposed to an enemy,)
-        // animate the weapon while player is walking, jumping, etc
-        if (transform.parent != null)
-        {
-            if (transform.parent.name == "Inventory")
-            {
-                // set weapon components on initialization
-                upper  = transform.FindChild("Upper").gameObject.GetComponent<WeaponPiece>();
-                center = transform.FindChild("Center").gameObject.GetComponent<WeaponPiece>();
-                lower  = transform.FindChild("Lower").gameObject.GetComponent<WeaponPiece>();
+	[Tooltip("How far should projectile travel before fading out?")]
+	public float maxDistance = 40f;
 
-                // set weapon colors here
-               upper.spriteRenderer.material.SetColor("_Color", M.HexToColor(upperColor));
-               center.spriteRenderer.material.SetColor("_Color", M.HexToColor(centerColor));
-               lower.spriteRenderer.material.SetColor("_Color", M.HexToColor(lowerColor));
-            }
-        }
-    }
+	[Tooltip("Should projectile be lobbed?")]
+	public bool lob;
 
-    // animation state methods
-    public void PlayIdleAnimation(float xOffset, float yOffset)
-    {
-        upper.PlayIdleAnimation();
-        center.PlayIdleAnimation();
-        lower.PlayIdleAnimation();
-        OffsetAnimation(xOffset, yOffset);
-    }
+	[Tooltip("ONLY EFFECTS PLAYER: If 'Lob' is true, how much should gravity effect projectile?")]
+	public float lobGravity;
 
-    public void PlayRunAnimation(float xOffset, float yOffset)
-    {
-        upper.PlayRunAnimation();
-        center.PlayRunAnimation();
-        lower.PlayRunAnimation();
-        OffsetAnimation(xOffset, yOffset);
-    }
+	[Tooltip("Should projectile fade-in when thrown?")]
+	public bool fadeIn;
 
-    public void PlayJumpAnimation(float xOffset, float yOffset)
-    {
-        upper.PlayJumpAnimation();
-        center.PlayJumpAnimation();
-        lower.PlayJumpAnimation();
-        OffsetAnimation(xOffset, yOffset);
-    }
+	[Tooltip("If Animated, ProjectileContainer will attempt to load an animation.")]
+	public bool animatedProjectile;
 
-    public void PlayAttackAnimation(float xOffset, float yOffset)
-    {
-        upper.PlayAttackAnimation();
-        center.PlayAttackAnimation();
-        lower.PlayAttackAnimation();
-        OffsetAnimation(xOffset, yOffset);
-    }
+	void Awake()
+	{
+		Init();
+	}
 
-    public void EnableAnimation(bool status)
-    {
-        upper.spriteRenderer.enabled = status;
-        center.spriteRenderer.enabled = status;
-        lower.spriteRenderer.enabled = status;
-    }
+	void Init()
+	{
+		//all weapons have two sprites: one that's outlined in black (iconSprite), one that's not (carriedSprite.)
+		//this routine automatically loads the  correct sprite (carriedSprite) for the hero's carried weapon.
+		//if instead it's an enemy's magical projectile, we just use the main SpriteRenderer's sprite.
+		if (weaponType == WeaponType.MagicProjectile)
+		{
+			carriedSprite = iconSprite;
+		}
+		else
+		{
+			carriedSprite = (Sprite)(Resources.Load(("Sprites/Pickups/NoOutlines/weapon/" + iconSprite.name), typeof(Sprite)));
+		}
+
+
+		//if weapon is loose on the floor, turn its pickup icon on so it can be seen
+		if (inPlayerInventory)
+		{
+			spriteRenderer.sprite = carriedSprite;
+			spriteRenderer.enabled = false;
+			gameObject.GetComponentInChildren<Rigidbody2D>().isKinematic = true;
+			gameObject.GetComponentInChildren<PhysicsCollider>().DisablePhysicsCollider();
+			gameObject.GetComponentInChildren<MeleeCollider>().EnableMeleeCollider();
+			gameObject.GetComponentInChildren<WeaponPickupCollider>().DisableWeaponPickupCollider();
+		}
+		else if (inEnemyInventory)
+		{
+			spriteRenderer.enabled = false;
+			gameObject.GetComponentInChildren<Rigidbody2D>().isKinematic = true;
+			gameObject.GetComponentInChildren<PhysicsCollider>().DisablePhysicsCollider();
+			gameObject.GetComponentInChildren<WeaponPickupCollider>().DisableWeaponPickupCollider();
+		}
+		else if (name != "Projectile(Clone)") //else not a pooled weapon (ie: this weapon is equipped)
+		{
+			spriteRenderer.sprite = carriedSprite;
+			spriteRenderer.enabled = true;
+			gameObject.GetComponentInChildren<Rigidbody2D>().isKinematic = false;
+			gameObject.GetComponentInChildren<PhysicsCollider>().EnablePhysicsCollider();
+			gameObject.GetComponentInChildren<MeleeCollider>().DisableMeleeCollider();
+			gameObject.GetComponentInChildren<WeaponPickupCollider>().EnableWeaponPickupCollider();
+		}
+		else //weapon is on the ground, so needs icon sprite (ie: the outlined one)
+		{
+			spriteRenderer.sprite = iconSprite;
+		}
+	}
 }

@@ -1,4 +1,4 @@
-﻿using Matcha.Dreadful;
+using Matcha.Dreadful;
 using Matcha.Unity;
 using System.Collections;
 using UnityEngine;
@@ -7,8 +7,8 @@ public class AttackAI : CacheBehaviour
 {
 	public enum Style { RandomProjectile };
 	public Style style;
-	public float chanceOfAttack = 40f;     // test
-	public float attackWhenInRange = 20f;  // test 2
+	public float chanceOfAttack	 = 40f;
+	public float attackWhenInRange = 30f;
 	public bool attackPaused;
 
 	private ProjectileManager projectile;
@@ -16,19 +16,20 @@ public class AttackAI : CacheBehaviour
 	private Transform target;
 	private float attackInterval;
 	private bool levelLoading;
+	private bool dead;
 
 	void Start()
 	{
-		projectile = GetComponent<ProjectileManager>();
-		weapon = GetComponentInChildren<Weapon>();
-		target = GameObject.Find(PLAYER).transform;
+		projectile		= GetComponent<ProjectileManager>();
+		weapon			= GetComponentInChildren<Weapon>();
+		target			= GameObject.Find(PLAYER).transform;
 		attackInterval = Rand.Range(1.5f, 2.5f);
 	}
 
 	// master controller
 	void OnBecameVisible()
 	{
-		if (!attackPaused)
+		if (!attackPaused && !dead)
 		{
 			if (test)
 			{
@@ -50,7 +51,7 @@ public class AttackAI : CacheBehaviour
 
 	void AttackRandomly()
 	{
-		if (!attackPaused && !levelLoading)
+		if (!attackPaused && !levelLoading && !dead)
 		{
 			float distance = Vector3.Distance(target.position, transform.position);
 
@@ -58,7 +59,7 @@ public class AttackAI : CacheBehaviour
 			{
 				if (Rand.Range(1, 100) <= chanceOfAttack)
 				{
-					// only attack if creature is facing the same direction as target
+					// only attack if creature is facing the direction of target
 					if ((target.position.x > transform.position.x && transform.localScale.x.FloatEquals(1f)) ||
 							(target.position.x < transform.position.x && transform.localScale.x.FloatEquals(-1f)))
 					{
@@ -71,7 +72,7 @@ public class AttackAI : CacheBehaviour
 
 	void RotateTowardsTarget()
 	{
-		if (!attackPaused)
+		if (!attackPaused && !dead)
 		{
 			Vector3 vel = GetForceFrom(transform.position, target.position);
 			float angle = Mathf.Atan2(vel.y, vel.x) * Mathf.Rad2Deg;
@@ -86,9 +87,14 @@ public class AttackAI : CacheBehaviour
 		return (new Vector2(toPos.x, toPos.y) - new Vector2(fromPos.x, fromPos.y)) * power;
 	}
 
+	void CreatureDead()
+	{
+		dead = true;
+	}
+	
 	void OnBecameInvisible()
 	{
-		if (!test)
+		if (!test && !dead)
 		{
 			CancelInvoke("AttackRandomly");
 			StopCoroutine(LobCompTest());
@@ -114,12 +120,12 @@ public class AttackAI : CacheBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<bool>("level loading", OnLevelLoading);
+		EventKit.Subscribe<bool>("level loading", OnLevelLoading);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<bool>("level loading", OnLevelLoading);
+		EventKit.Unsubscribe<bool>("level loading", OnLevelLoading);
 	}
 
 

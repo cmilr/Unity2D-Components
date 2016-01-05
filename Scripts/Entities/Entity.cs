@@ -1,10 +1,9 @@
-﻿using UnityEngine;
-using System;
-using System.Collections;
 using Matcha.Unity;
+using System;
+using UnityEngine;
 
-public abstract class Entity : CacheBehaviour {
-
+public abstract class Entity : CacheBehaviour
+{
 	[HideInInspector]
 	public bool alreadyCollided;
 	public int worth;
@@ -15,8 +14,8 @@ public abstract class Entity : CacheBehaviour {
 	protected bool collidedWithBody;
 	protected bool collidedWithWeapon;
 	protected bool onScreen;
-	protected IGameStateReadOnly game;
-	protected IPlayerStateReadOnly player;
+	protected bool playerDead;
+	protected bool levelCompleted;
 
 	public abstract void OnBodyCollisionEnter(Collider2D coll);
 	public abstract void OnBodyCollisionStay();
@@ -25,17 +24,10 @@ public abstract class Entity : CacheBehaviour {
 	public abstract void OnWeaponCollisionStay();
 	public abstract void OnWeaponCollisionExit();
 
-
-	void OnEnable()
-	{
-		game   = GameObject.Find(GAME_STATE).GetComponent<IGameStateReadOnly>();
-		player = GameObject.Find(PLAYER).GetComponent<IPlayerStateReadOnly>();
-	}
-
 	protected void AutoAlign()
 	{
 		float targetY = (float)(Math.Round(transform.position.y) - ALIGN_ENTITY_TO);
-		transform.SetYPosition(targetY);
+		transform.SetPositionY(targetY);
 	}
 
 	protected void LifecycleOver()
@@ -50,14 +42,14 @@ public abstract class Entity : CacheBehaviour {
 
 	void OnBecameVisible()
 	{
-	    enabled = true;
-	    onScreen = true;
+		enabled = true;
+		onScreen = true;
 	}
 
 	void OnBecameInvisible()
 	{
-	    enabled = false;
-	    onScreen = false;
+		enabled = false;
+		onScreen = false;
 	}
 
 	void OnTriggerEnter2D(Collider2D coll)
@@ -93,5 +85,27 @@ public abstract class Entity : CacheBehaviour {
 			OnWeaponCollisionExit();
 			collidedWithWeapon = false;
 		}
+	}
+
+	void OnEnable()
+	{
+		EventKit.Subscribe<bool>("level completed", OnLevelCompleted);
+		EventKit.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+	}
+
+	void OnDisable()
+	{
+		EventKit.Unsubscribe<bool>("level completed", OnLevelCompleted);
+		EventKit.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+	}
+
+	void OnPlayerDead(string methodOfDeath, Collider2D coll, int hitFrom)
+	{
+		playerDead = true;
+	}
+
+	void OnLevelCompleted(bool status)
+	{
+		levelCompleted = status;
 	}
 }

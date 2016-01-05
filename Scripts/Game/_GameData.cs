@@ -1,24 +1,21 @@
-﻿using UnityEngine;
 using System.Collections;
-using System;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System;
+using UnityEngine;
 
-[RequireComponent(typeof(GameInit))]
-
-
-public class _GameData : BaseBehaviour {
-
+public class _GameData : BaseBehaviour
+{
 	public _GameData data;
 
 	// game stats
-	public float DifficultyMultiplier 	{ get; set; }
+	public float DifficultyMultiplier   { get; set; }
 
 	// player stats
-	public int CurrentScore 			{ get; set; }
-	public int LastSavedScore 			{ get; set; }
-	public int Lives 					{ get; set; }
-	public int CurrentLevel 			{ get; set; }
+	public int CurrentScore          	{ get; set; }
+	public int LastSavedScore        	{ get; set; }
+	public int Lives              		{ get; set; }
+	public int CurrentLevel          	{ get; set; }
 
 	void Awake()
 	{
@@ -90,14 +87,14 @@ public class _GameData : BaseBehaviour {
 
 	void OnEnable()
 	{
-		Messenger.AddListener<bool>("save game data", OnSaveGameData);
-		Messenger.AddListener<bool>("load game data", OnLoadGameData);
+		EventKit.Subscribe<bool>("save game data", OnSaveGameData);
+		EventKit.Subscribe<bool>("load game data", OnLoadGameData);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<bool>("save game data", OnSaveGameData);
-		Messenger.RemoveListener<bool>("load game data", OnLoadGameData);
+		EventKit.Unsubscribe<bool>("save game data", OnSaveGameData);
+		EventKit.Unsubscribe<bool>("load game data", OnLoadGameData);
 	}
 }
 
@@ -105,7 +102,6 @@ public class _GameData : BaseBehaviour {
 class GameDataContainer
 {
 	public float difficultyMultiplier;
-
 	public int currentScore;
 	public int lastSavedScore;
 	public int lives;

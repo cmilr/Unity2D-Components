@@ -1,6 +1,7 @@
-﻿using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
-public class SpawnPointTrace : BaseBehaviour {
-    // allows ProjectileManager.cs to easily cache a specific spawn point for its projectiles
+public class SpawnPointTrace : BaseBehaviour
+{
+	// allows ProjectileManager.cs to easily cache a specific spawn point for its projectiles
 }

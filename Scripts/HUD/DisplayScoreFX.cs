@@ -1,9 +1,8 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 using DG.Tweening;
 using Matcha.Dreadful;
-
+using System.Collections;
+using UnityEngine.UI;
+using UnityEngine;
 
 public class DisplayScoreFX : BaseBehaviour
 {
@@ -50,15 +49,15 @@ public class DisplayScoreFX : BaseBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<int>("init score", OnInitScore);
-		Messenger.AddListener<int>("change score", OnChangeScore);
-		Messenger.AddListener<bool>("fade hud", OnFadeHud);
+		EventKit.Subscribe<int>("init score", OnInitScore);
+		EventKit.Subscribe<int>("change score", OnChangeScore);
+		EventKit.Subscribe<bool>("fade hud", OnFadeHud);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<int>("init score", OnInitScore);
-		Messenger.RemoveListener<int>("change score", OnChangeScore);
-		Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
+		EventKit.Unsubscribe<int>("init score", OnInitScore);
+		EventKit.Unsubscribe<int>("change score", OnChangeScore);
+		EventKit.Unsubscribe<bool>("fade hud", OnFadeHud);
 	}
 }

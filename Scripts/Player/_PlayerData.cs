@@ -1,22 +1,25 @@
-﻿using UnityEngine;
 using System.Collections;
-using System;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System;
+using UnityEngine;
 
 // this is a pseudo-singleton — it enforces a single instance, but doesn't expose
 // a static variable, so you can't access it without a GetComponent() call
-public class _PlayerData : BaseBehaviour {
-
+public class _PlayerData : BaseBehaviour
+{
+	public string Character    { get; set; }
+	public int HP              { get; set; }
+	public int AC              { get; set; }
+	public int XP              { get; set; }
+	public int LVL             { get; set; }
+	[HideInInspector]
 	public _PlayerData data;
-
-	public string Character 	{ get; set; }
-	public int HP 					{ get; set; }
-	public int AC 					{ get; set; }
-	public int XP					{ get; set; }
-	public int LVL					{ get; set; }
+	[HideInInspector]
 	public GameObject equippedWeapon;
+	[HideInInspector]
 	public GameObject leftWeapon;
+	[HideInInspector]
 	public GameObject rightWeapon;
 
 	void Awake()
@@ -29,9 +32,9 @@ public class _PlayerData : BaseBehaviour {
 		AC             = 10;
 		XP             = 0;
 		LVL            = 1;
-		equippedWeapon = GameObject.Find("Player/Inventory/DefaultSword");
-		leftWeapon     = GameObject.Find("Player/Inventory/DefaultDagger");
-		rightWeapon    = GameObject.Find("Player/Inventory/DefaultHammer");
+		equippedWeapon = GameObject.Find("Player/Inventory/Equipped");
+		leftWeapon     = GameObject.Find("Player/Inventory/Left");
+		rightWeapon    = GameObject.Find("Player/Inventory/Right");
 	}
 
 	public void Save()
@@ -53,7 +56,7 @@ public class _PlayerData : BaseBehaviour {
 
 	public void Load()
 	{
-		if(File.Exists(Application.persistentDataPath + "/PlayerData.dat"))
+		if (File.Exists(Application.persistentDataPath + "/PlayerData.dat"))
 		{
 			BinaryFormatter bf = new BinaryFormatter();
 			FileStream file = File.Open(Application.persistentDataPath + "/PlayerData.dat",FileMode.Open);
@@ -63,8 +66,8 @@ public class _PlayerData : BaseBehaviour {
 			Character = container.character;
 			HP        = container.hp;
 			AC        = container.ac;
-			XP    	  = container.xp;
-			LVL    	  = container.lvl;
+			XP         = container.xp;
+			LVL        = container.lvl;
 		}
 	}
 
@@ -93,14 +96,14 @@ public class _PlayerData : BaseBehaviour {
 
 	void OnEnable()
 	{
-		Messenger.AddListener<bool>("save player data", OnSavePlayerData);
-		Messenger.AddListener<bool>("load player data", OnLoadPlayerData);
+		EventKit.Subscribe<bool>("save player data", OnSavePlayerData);
+		EventKit.Subscribe<bool>("load player data", OnLoadPlayerData);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<bool>("save player data", OnSavePlayerData);
-		Messenger.RemoveListener<bool>("load player data", OnLoadPlayerData);
+		EventKit.Unsubscribe<bool>("save player data", OnSavePlayerData);
+		EventKit.Unsubscribe<bool>("load player data", OnLoadPlayerData);
 	}
 }
 
