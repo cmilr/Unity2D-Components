@@ -8,15 +8,18 @@ using UnityEngine;
 // a static variable, so you can't access it without a GetComponent() call
 public class _PlayerData : BaseBehaviour
 {
-	public _PlayerData data;
-
 	public string Character    { get; set; }
 	public int HP              { get; set; }
 	public int AC              { get; set; }
 	public int XP              { get; set; }
 	public int LVL             { get; set; }
+	[HideInInspector]
+	public _PlayerData data;
+	[HideInInspector]
 	public GameObject equippedWeapon;
+	[HideInInspector]
 	public GameObject leftWeapon;
+	[HideInInspector]
 	public GameObject rightWeapon;
 
 	void Awake()
@@ -93,14 +96,14 @@ public class _PlayerData : BaseBehaviour
 
 	void OnEnable()
 	{
-		Evnt.Subscribe<bool>("save player data", OnSavePlayerData);
-		Evnt.Subscribe<bool>("load player data", OnLoadPlayerData);
+		EventKit.Subscribe<bool>("save player data", OnSavePlayerData);
+		EventKit.Subscribe<bool>("load player data", OnLoadPlayerData);
 	}
 
 	void OnDestroy()
 	{
-		Evnt.Unsubscribe<bool>("save player data", OnSavePlayerData);
-		Evnt.Unsubscribe<bool>("load player data", OnLoadPlayerData);
+		EventKit.Unsubscribe<bool>("save player data", OnSavePlayerData);
+		EventKit.Unsubscribe<bool>("load player data", OnLoadPlayerData);
 	}
 }
 

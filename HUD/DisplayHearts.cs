@@ -52,13 +52,13 @@ public class DisplayHearts : CacheBehaviour
 
 	void OnEnable()
 	{
-		Evnt.Subscribe<bool>("fade hud", OnFadeHud);
-		Evnt.Subscribe<float, float>("screen size changed", OnScreenSizeChanged);
+		EventKit.Subscribe<bool>("fade hud", OnFadeHud);
+		EventKit.Subscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}
 
 	void OnDestroy()
 	{
-		Evnt.Unsubscribe<bool>("fade hud", OnFadeHud);
-		Evnt.Unsubscribe<float, float>("screen size changed", OnScreenSizeChanged);
+		EventKit.Unsubscribe<bool>("fade hud", OnFadeHud);
+		EventKit.Unsubscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}
 }

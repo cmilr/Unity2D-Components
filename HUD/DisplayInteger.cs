@@ -43,15 +43,15 @@ public class DisplayInteger : BaseBehaviour
 
 	void OnEnable()
 	{
-		Evnt.Subscribe<int>("init score", OnInitInteger);
-		Evnt.Subscribe<int>("change score", OnChangeInteger);
-		Evnt.Subscribe<bool>("fade hud", OnFadeHud);
+		EventKit.Subscribe<int>("init score", OnInitInteger);
+		EventKit.Subscribe<int>("change score", OnChangeInteger);
+		EventKit.Subscribe<bool>("fade hud", OnFadeHud);
 	}
 
 	void OnDestroy()
 	{
-		Evnt.Unsubscribe<int>("init score", OnInitInteger);
-		Evnt.Unsubscribe<int>("change score", OnChangeInteger);
-		Evnt.Unsubscribe<bool>("fade hud", OnFadeHud);
+		EventKit.Unsubscribe<int>("init score", OnInitInteger);
+		EventKit.Unsubscribe<int>("change score", OnChangeInteger);
+		EventKit.Unsubscribe<bool>("fade hud", OnFadeHud);
 	}
 }

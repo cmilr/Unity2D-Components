@@ -217,26 +217,26 @@ public class InventoryManager : CacheBehaviour
 
 	void PassInitialWeaponsToHUD()
 	{
-		Evnt.Broadcast<GameObject, int>("init stashed weapon", weaponBelt[left], LEFT);
-		Evnt.Broadcast<GameObject>("init equipped weapon", weaponBelt[equipped]);
-		Evnt.Broadcast<GameObject, int>("init stashed weapon", weaponBelt[right], RIGHT);
+		EventKit.Broadcast<GameObject, int>("init stashed weapon", weaponBelt[left], LEFT);
+		EventKit.Broadcast<GameObject>("init equipped weapon", weaponBelt[equipped]);
+		EventKit.Broadcast<GameObject, int>("init stashed weapon", weaponBelt[right], RIGHT);
 	}
 
 	void PassNewWeaponsToHUD()
 	{
-		Evnt.Broadcast<GameObject, int>("change stashed weapon", weaponBelt[left], LEFT);
-		Evnt.Broadcast<GameObject>("change equipped weapon", weaponBelt[equipped]);
-		Evnt.Broadcast<GameObject, int>("change stashed weapon", weaponBelt[right], RIGHT);
+		EventKit.Broadcast<GameObject, int>("change stashed weapon", weaponBelt[left], LEFT);
+		EventKit.Broadcast<GameObject>("change equipped weapon", weaponBelt[equipped]);
+		EventKit.Broadcast<GameObject, int>("change stashed weapon", weaponBelt[right], RIGHT);
 	}
 
 	void PassEquippedWeaponToHUD()
 	{
-		Evnt.Broadcast<GameObject>("init new equipped weapon", weaponBelt[equipped]);
+		EventKit.Broadcast<GameObject>("init new equipped weapon", weaponBelt[equipped]);
 	}
 
 	void PassEquippedWeaponToWeaponManager()
 	{
-		Evnt.Broadcast<Weapon>("new equipped weapon", equippedWeapon);
+		EventKit.Broadcast<Weapon>("new equipped weapon", equippedWeapon);
 	}
 
 	void OnLevelLoading(bool status)
@@ -251,17 +251,17 @@ public class InventoryManager : CacheBehaviour
 
 	void OnEnable()
 	{
-		Evnt.Subscribe<GameObject, GameObject, GameObject>("init weapons", OnInitWeapons);
-		Evnt.Subscribe<GameObject>("equip new weapon", OnEquipNewWeapon);
-		Evnt.Subscribe<int>("switch weapon", OnSwitchWeapon);
-		Evnt.Subscribe<bool>("level loading", OnLevelLoading);
+		EventKit.Subscribe<GameObject, GameObject, GameObject>("init weapons", OnInitWeapons);
+		EventKit.Subscribe<GameObject>("equip new weapon", OnEquipNewWeapon);
+		EventKit.Subscribe<int>("switch weapon", OnSwitchWeapon);
+		EventKit.Subscribe<bool>("level loading", OnLevelLoading);
 	}
 
 	void OnDestroy()
 	{
-		Evnt.Unsubscribe<GameObject, GameObject, GameObject>("init weapons", OnInitWeapons);
-		Evnt.Unsubscribe<GameObject>("equip new weapon", OnEquipNewWeapon);
-		Evnt.Unsubscribe<int>("switch weapon", OnSwitchWeapon);
-		Evnt.Unsubscribe<bool>("level loading", OnLevelLoading);
+		EventKit.Unsubscribe<GameObject, GameObject, GameObject>("init weapons", OnInitWeapons);
+		EventKit.Unsubscribe<GameObject>("equip new weapon", OnEquipNewWeapon);
+		EventKit.Unsubscribe<int>("switch weapon", OnSwitchWeapon);
+		EventKit.Unsubscribe<bool>("level loading", OnLevelLoading);
 	}
 }

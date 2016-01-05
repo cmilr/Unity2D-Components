@@ -56,11 +56,11 @@ public class WeaponManager : CacheBehaviour
 
 	void OnEnable()
 	{
-		Evnt.Subscribe<Weapon>("new equipped weapon", OnNewEquippedWeapon);
+		EventKit.Subscribe<Weapon>("new equipped weapon", OnNewEquippedWeapon);
 	}
 
 	void OnDestroy()
 	{
-		Evnt.Unsubscribe<Weapon>("new equipped weapon", OnNewEquippedWeapon);
+		EventKit.Unsubscribe<Weapon>("new equipped weapon", OnNewEquippedWeapon);
 	}
 }

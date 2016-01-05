@@ -23,11 +23,11 @@ public class PixelArtCamera : BaseBehaviour
 
 	void OnEnable()
 	{
-		Evnt.Subscribe<float, float>("screen size changed", OnScreenSizeChanged);
+		EventKit.Subscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}
 
 	void OnDestroy()
 	{
-		Evnt.Unsubscribe<float, float>("screen size changed", OnScreenSizeChanged);
+		EventKit.Unsubscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}
 }

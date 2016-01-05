@@ -49,15 +49,15 @@ public class DisplayScore : BaseBehaviour
 
 	void OnEnable()
 	{
-		Evnt.Subscribe<int>("init score", OnInitScore);
-		Evnt.Subscribe<int>("change score", OnChangeScore);
-		Evnt.Subscribe<bool>("fade hud", OnFadeHud);
+		EventKit.Subscribe<int>("init score", OnInitScore);
+		EventKit.Subscribe<int>("change score", OnChangeScore);
+		EventKit.Subscribe<bool>("fade hud", OnFadeHud);
 	}
 
 	void OnDestroy()
 	{
-		Evnt.Unsubscribe<int>("init score", OnInitScore);
-		Evnt.Unsubscribe<int>("change score", OnChangeScore);
-		Evnt.Unsubscribe<bool>("fade hud", OnFadeHud);
+		EventKit.Unsubscribe<int>("init score", OnInitScore);
+		EventKit.Unsubscribe<int>("change score", OnChangeScore);
+		EventKit.Unsubscribe<bool>("fade hud", OnFadeHud);
 	}
 }

@@ -36,15 +36,15 @@ public class DisplayHP : BaseBehaviour
 
 	void OnEnable()
 	{
-		Evnt.Subscribe<int>("init hp", OnInitHP);
-		Evnt.Subscribe<int>("reduce hp", OnReduceHP);
-		Evnt.Subscribe<bool>("fade hud", OnFadeHud);
+		EventKit.Subscribe<int>("init hp", OnInitHP);
+		EventKit.Subscribe<int>("reduce hp", OnReduceHP);
+		EventKit.Subscribe<bool>("fade hud", OnFadeHud);
 	}
 
 	void OnDestroy()
 	{
-		Evnt.Unsubscribe<int>("init hp", OnInitHP);
-		Evnt.Unsubscribe<int>("reduce hp", OnReduceHP);
-		Evnt.Unsubscribe<bool>("fade hud", OnFadeHud);
+		EventKit.Unsubscribe<int>("init hp", OnInitHP);
+		EventKit.Unsubscribe<int>("reduce hp", OnReduceHP);
+		EventKit.Unsubscribe<bool>("fade hud", OnFadeHud);
 	}
 }

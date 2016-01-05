@@ -37,15 +37,15 @@ public class DisplayLvl : BaseBehaviour
 
 	void OnEnable()
 	{
-		Evnt.Subscribe<int>("init lvl", OnInitInteger);
-		// Evnt.Subscribe<int>("change score", OnChangeInteger);
-		Evnt.Subscribe<bool>("fade hud", OnFadeHud);
+		EventKit.Subscribe<int>("init lvl", OnInitInteger);
+		// EventKit.Subscribe<int>("change score", OnChangeInteger);
+		EventKit.Subscribe<bool>("fade hud", OnFadeHud);
 	}
 
 	void OnDestroy()
 	{
-		Evnt.Unsubscribe<int>("init lvl", OnInitInteger);
-		// Evnt.Unsubscribe<int>("change score", OnChangeInteger);
-		Evnt.Unsubscribe<bool>("fade hud", OnFadeHud);
+		EventKit.Unsubscribe<int>("init lvl", OnInitInteger);
+		// EventKit.Unsubscribe<int>("change score", OnChangeInteger);
+		EventKit.Unsubscribe<bool>("fade hud", OnFadeHud);
 	}
 }

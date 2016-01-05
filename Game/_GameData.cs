@@ -87,14 +87,14 @@ public class _GameData : BaseBehaviour
 
 	void OnEnable()
 	{
-		Evnt.Subscribe<bool>("save game data", OnSaveGameData);
-		Evnt.Subscribe<bool>("load game data", OnLoadGameData);
+		EventKit.Subscribe<bool>("save game data", OnSaveGameData);
+		EventKit.Subscribe<bool>("load game data", OnLoadGameData);
 	}
 
 	void OnDestroy()
 	{
-		Evnt.Unsubscribe<bool>("save game data", OnSaveGameData);
-		Evnt.Unsubscribe<bool>("load game data", OnLoadGameData);
+		EventKit.Unsubscribe<bool>("save game data", OnSaveGameData);
+		EventKit.Unsubscribe<bool>("load game data", OnLoadGameData);
 	}
 }
 

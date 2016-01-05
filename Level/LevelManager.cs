@@ -24,7 +24,7 @@ public class LevelManager : CacheBehaviour
 	void FadeInNewLevel()
 	{
 		MFX.FadeInLevel(spriteRenderer, fadeOutAfter, timeToFade);
-		Evnt.Broadcast<bool>("level loading", true);
+		EventKit.Broadcast<bool>("level loading", true);
 	}
 
 	void FadeOutCurrentLevel()
@@ -44,7 +44,7 @@ public class LevelManager : CacheBehaviour
 			// if player is not ALREADY above ground, broadcast message "player above ground"
 			if (!playerAboveGround) {
 				playerAboveGround = true;
-				Evnt.Broadcast<bool>("player above ground", true);
+				EventKit.Broadcast<bool>("player above ground", true);
 			}
 		}
 		else
@@ -52,21 +52,21 @@ public class LevelManager : CacheBehaviour
 			// if player is not ALREADY below ground, broadcast message !"player above ground"
 			if (playerAboveGround) {
 				playerAboveGround = false;
-				Evnt.Broadcast<bool>("player above ground", false);
+				EventKit.Broadcast<bool>("player above ground", false);
 			}
 		}
 	}
 
 	void OnEnable()
 	{
-		Evnt.Subscribe<int>("load level", OnLoadLevel);
-		Evnt.Subscribe<float, float>("player position", OnPlayerPosition);
+		EventKit.Subscribe<int>("load level", OnLoadLevel);
+		EventKit.Subscribe<float, float>("player position", OnPlayerPosition);
 	}
 
 	void OnDestroy()
 	{
-		Evnt.Unsubscribe<int>("load level", OnLoadLevel);
-		Evnt.Unsubscribe<float, float>("player position", OnPlayerPosition);
+		EventKit.Unsubscribe<int>("load level", OnLoadLevel);
+		EventKit.Unsubscribe<float, float>("player position", OnPlayerPosition);
 	}
 
 	void OnLoadLevel(int newLevel)

@@ -93,19 +93,19 @@ public class DisplayEquipped : CacheBehaviour
 
 	void OnEnable()
 	{
-		Evnt.Subscribe<GameObject>("init equipped weapon", OnInitEquippedWeapon);
-		Evnt.Subscribe<GameObject>("init new equipped weapon", OnInitNewEquippedWeapon);
-		Evnt.Subscribe<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
-		Evnt.Subscribe<bool>("fade hud", OnFadeHud);
-		Evnt.Subscribe<float, float>("screen size changed", OnScreenSizeChanged);
+		EventKit.Subscribe<GameObject>("init equipped weapon", OnInitEquippedWeapon);
+		EventKit.Subscribe<GameObject>("init new equipped weapon", OnInitNewEquippedWeapon);
+		EventKit.Subscribe<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
+		EventKit.Subscribe<bool>("fade hud", OnFadeHud);
+		EventKit.Subscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}
 
 	void OnDestroy()
 	{
-		Evnt.Unsubscribe<GameObject>("init equipped weapon", OnInitEquippedWeapon);
-		Evnt.Unsubscribe<GameObject>("init new equipped weapon", OnInitNewEquippedWeapon);
-		Evnt.Unsubscribe<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
-		Evnt.Unsubscribe<bool>("fade hud", OnFadeHud);
-		Evnt.Unsubscribe<float, float>("screen size changed", OnScreenSizeChanged);
+		EventKit.Unsubscribe<GameObject>("init equipped weapon", OnInitEquippedWeapon);
+		EventKit.Unsubscribe<GameObject>("init new equipped weapon", OnInitNewEquippedWeapon);
+		EventKit.Unsubscribe<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
+		EventKit.Unsubscribe<bool>("fade hud", OnFadeHud);
+		EventKit.Unsubscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}
 }
