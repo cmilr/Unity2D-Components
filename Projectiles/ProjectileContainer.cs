@@ -29,14 +29,11 @@ public class ProjectileContainer : Weapon
 		collider2D.enabled    = true;
 		origin                = new Vector3(transform.position.x, transform.position.y, transform.position.z);
 
-		//flip projectile
-		transform.SetLocalScaleX(-1f);
-
 		// initialize animation controller if projectile is animated
 		if (incoming.GetComponent<Weapon>().animatedProjectile)
 		{
 			anim = (RuntimeAnimatorController)RuntimeAnimatorController.Instantiate
-						(Resources.Load(("AnimControllers/Projectiles/" + incoming.name + "_0"), typeof(RuntimeAnimatorController)));
+						(Resources.Load(("Sprites/Projectiles/" + incoming.name + "_0"), typeof(RuntimeAnimatorController)));
 			animator.runtimeAnimatorController = anim;
 			animator.speed = .5f;
 		}
@@ -48,6 +45,10 @@ public class ProjectileContainer : Weapon
 	public void Fire(bool firedByPlayer, Weapon weapon, float direction)
 	{
 		Init(weapon);
+
+		//player sprite and weapon sprites actually face opposite directions,
+		//this flips the weapon sprite to match that of the player
+		transform.SetLocalScaleX(-direction);
 
 		if (fadeIn)
 		{

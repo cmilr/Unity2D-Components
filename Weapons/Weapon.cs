@@ -17,12 +17,12 @@ public class Weapon : CacheBehaviour
 
 	[Header("SPRITES")]
 	//~~~~~~~~~~~~~~~~~~~~~
-	[Tooltip("This is the pickup/HUD icon.")]
+	[Tooltip("This is the pickup/HUD icon.")]			//weapon sprite with black outline
 	public Sprite iconSprite;
 
 	[HideInInspector]
-	[Tooltip("Actual sprite our hero carries.")]		//this sprite will be loaded automatically from Resources/
-	public Sprite carriedSprite;
+	[Tooltip("Actual sprite our hero carries.")]    //weapon sprite without outline
+	public Sprite carriedSprite;							//loaded automatically from Resources/
 
 
 	[Header("ALL WEAPONS")]
@@ -68,8 +68,18 @@ public class Weapon : CacheBehaviour
 
 	void Init()
 	{
-		//automatically load correct sprite (sans outline) for the hero's carried weapon
-		carriedSprite = (Sprite)(Resources.Load(("Sprites/Pickups/NoOutlines/weapon/" + iconSprite.name), typeof(Sprite)));
+		//all weapons have two sprites: one that's outlined in black (iconSprite), one that's not (carriedSprite.)
+		//this routine automatically loads the  correct sprite (carriedSprite) for the hero's carried weapon.
+		//if instead it's an enemy's magical projectile, we just use the main SpriteRenderer's sprite.
+		if (weaponType == WeaponType.MagicProjectile)
+		{
+			carriedSprite = iconSprite;
+		}
+		else
+		{
+			carriedSprite = (Sprite)(Resources.Load(("Sprites/Pickups/NoOutlines/weapon/" + iconSprite.name), typeof(Sprite)));
+		}
+
 
 		//if weapon is loose on the floor, turn its pickup icon on so it can be seen
 		if (inPlayerInventory)

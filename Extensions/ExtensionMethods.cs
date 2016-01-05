@@ -12,7 +12,7 @@ namespace Matcha.Unity
 {
 	public static class ExtensionMethods
 	{
-		// transform extensions
+		//transform extensions
 		public static void SetPositionX(this Transform transform, float x)
 		{
 			transform.position = new Vector3(x, transform.position.y, transform.position.z);

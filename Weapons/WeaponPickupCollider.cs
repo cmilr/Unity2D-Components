@@ -13,8 +13,8 @@ public class WeaponPickupCollider : CacheBehaviour
 		if (coll.gameObject.layer == PLAYER_COLLIDER)
 		{
 			MFX.PickupWeapon(gameObject);
-			Messenger.Broadcast<int>("prize collected", transform.parent.GetComponent<Weapon>().worth);
-			Messenger.Broadcast<GameObject>("equip new weapon", transform.parent.gameObject);
+			Evnt.Broadcast<int>("prize collected", transform.parent.GetComponent<Weapon>().worth);
+			Evnt.Broadcast<GameObject>("equip new weapon", transform.parent.gameObject);
 		}
 	}
 

@@ -36,7 +36,7 @@ public class RewiredInputAdapter : BaseBehaviour
 		}
 
 		if (playerControls.GetButtonDown("Next Weapon")) {
-			Messenger.Broadcast<int>("switch weapon", RIGHT);
+			Evnt.Broadcast<int>("switch weapon", RIGHT);
 		}
 	}
 }

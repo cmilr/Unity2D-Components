@@ -59,7 +59,7 @@ public class BreakablePiece : CacheBehaviour
 			{
 				alreadyCollided = true;
 
-				Messenger.Broadcast<int>("prize collected", 5);
+				Evnt.Broadcast<int>("prize collected", 5);
 
 				FadeOutFast();
 			}

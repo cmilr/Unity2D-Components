@@ -36,15 +36,15 @@ public class DisplayHP : BaseBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<int>("init hp", OnInitHP);
-		Messenger.AddListener<int>("reduce hp", OnReduceHP);
-		Messenger.AddListener<bool>("fade hud", OnFadeHud);
+		Evnt.Subscribe<int>("init hp", OnInitHP);
+		Evnt.Subscribe<int>("reduce hp", OnReduceHP);
+		Evnt.Subscribe<bool>("fade hud", OnFadeHud);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<int>("init hp", OnInitHP);
-		Messenger.RemoveListener<int>("reduce hp", OnReduceHP);
-		Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
+		Evnt.Unsubscribe<int>("init hp", OnInitHP);
+		Evnt.Unsubscribe<int>("reduce hp", OnReduceHP);
+		Evnt.Unsubscribe<bool>("fade hud", OnFadeHud);
 	}
 }

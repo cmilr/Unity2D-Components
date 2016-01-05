@@ -18,11 +18,11 @@ public class DeathHandler : CacheBehaviour
 	protected float previousY           = 0f;
 	private bool physicsEnabled         = true;
 	private bool alreadyDead;
+	private bool facingRight;
 
 	private Vector3 velocity;
 	private BoxCollider2D boxCollider;
 	private CharacterController2D controller;
-	private IPlayerStateFullAccess state;
 	private RaycastHit2D lastControllerColliderHit;
 	private float normalizedHorizontalSpeed;
 	private string deathAnimation;
@@ -35,12 +35,11 @@ public class DeathHandler : CacheBehaviour
 	{
 		// component takes over player physics, so we don't enable until player dies
 		this.enabled = false;
-		state        = GetComponent<IPlayerStateFullAccess>();
 		controller   = GetComponent<CharacterController2D>();
 		boxCollider  = GetComponent<BoxCollider2D>();
 		AddListeners();
 
-		SetCharacterAnimations(state.Character);
+		SetCharacterAnimations("LAURA");
 	}
 
 	// set animations depending on which character is chosen
@@ -147,7 +146,7 @@ public class DeathHandler : CacheBehaviour
 
 		if (!alreadyDead)
 		{
-			if (state.FacingRight)
+			if (facingRight)
 			{
 				transform.SetLocalScaleX(-1f);
 			}
@@ -198,7 +197,7 @@ public class DeathHandler : CacheBehaviour
 			normalizedHorizontalSpeed = -intensity;
 
 			// set sprite to facing up or down, depending on direction of hit, and direction player is facing
-			if (!state.FacingRight)
+			if (!facingRight)
 			{
 				transform.SetLocalScaleX(-transform.localScale.x);
 				animator.Play(Animator.StringToHash(struckdownAnimation_face_down));
@@ -210,7 +209,7 @@ public class DeathHandler : CacheBehaviour
 			normalizedHorizontalSpeed = intensity;
 
 			// set sprite to facing up or down, depending on direction of hit, and direction player is facing
-			if (state.FacingRight)
+			if (facingRight)
 			{
 				transform.SetLocalScaleX(-transform.localScale.x);
 				animator.Play(Animator.StringToHash(struckdownAnimation_face_down));
@@ -241,13 +240,18 @@ public class DeathHandler : CacheBehaviour
 		StopCoroutine(Repulse(0, 0));
 	}
 
+	void OnFacingRight(bool status)
+	{
+		facingRight = status;
+	}
+
 	void AddListeners()
 	{
-		Messenger.AddListener<string, Collider2D, int>("player dead", OnPlayerDead);
+		Evnt.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<string, Collider2D, int>("player dead", OnPlayerDead);
+		Evnt.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 }

@@ -23,11 +23,11 @@ public class PixelArtCamera : BaseBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<float, float>("screen size changed", OnScreenSizeChanged);
+		Evnt.Subscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<float, float>("screen size changed", OnScreenSizeChanged);
+		Evnt.Unsubscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}
 }

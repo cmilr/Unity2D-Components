@@ -24,25 +24,23 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	private bool attack;
 	private bool repulseRight;
 	private bool repulseLeft;
-	private string idleAnimation;
-	private string runAnimation;
-	private string jumpAnimation;
-	private string attackAnimation;
+	private bool ridingFastPlatform;
+	private bool movingHorizontally;
+	private bool touchingWall;
+	private bool jumpedFromFastPlatform;
 	private Vector3 velocity;
 	private RaycastHit2D lastControllerColliderHit;
 	private CharacterController2D controller;
-	private IPlayerStateFullAccess state;
 	private Animator anim;
 	private WeaponManager weaponManager;
-	private enum Action { Idle, Run, Jump, Fall, Attack, Defend, RunAttack, JumpAttack };
-	private Action action;
 
 	void Start()
 	{
-		state = GetComponent<IPlayerStateFullAccess>();
 		controller = GetComponent<CharacterController2D>();
 		weaponManager = GetComponentInChildren<WeaponManager>();
 		anim = GameObject.Find("Player").GetComponent<Animator>();
+
+		InvokeRepeating("BroadcastCurrentPosition", .3f, .3f);
 	}
 
 	// input methods required by ICreatureController
@@ -119,10 +117,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		CheckForFreefall();
 
-		ActionDispatcher();
-
-		SaveCurrentPosition();
-
 		ComputeMovement();
 
 		ApplyGravity();
@@ -141,14 +135,16 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		if (controller.isGrounded)       //player on solid ground
 		{
 			velocity.y = 0;
-			state.Grounded = true;
-			state.JumpedFromFastPlatform = false;
+
 			anim.SetBool("jump", false);
+
+			if (jumpedFromFastPlatform) {
+				jumpedFromFastPlatform = false;
+				Evnt.Broadcast<bool>("player jumped from fast platform", false);
+			}
 		}
 		else                             //player jumping or falling
 		{
-			action = Action.Fall;
-			state.Grounded = false;
 			anim.SetBool("jump", true);
 		}
 	}
@@ -157,29 +153,25 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{                                   //player idle
 		normalizedHorizontalSpeed = 0;
 
-		action = Action.Idle;
 		anim.SetBool("jump", false);
 		anim.SetBool("run", false);
 		anim.SetBool("attack", false);
-
-		state.Grounded = true;
-		state.JumpedFromFastPlatform = false;
 	}
 
 	void PlayerJump()
 	{
 		velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
 
-		action = Action.Jump;
 		anim.SetBool("jump", true);
 
 		jump = false;
 
-		state.Grounded = false;
-
-		if (state.RidingFastPlatform && state.MovingHorizontally)
+		if (ridingFastPlatform && movingHorizontally)
 		{
-			state.JumpedFromFastPlatform = true;
+			if (!jumpedFromFastPlatform) {
+				jumpedFromFastPlatform = true;
+				Evnt.Broadcast<bool>("player jumped from fast platform", true);
+			}
 		}
 	}
 
@@ -198,7 +190,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		if (controller.isGrounded)       //player running right
 		{
-			action = Action.Run;
 			anim.SetBool("run", true);
 		}
 		else                             //player flying right
@@ -208,11 +199,9 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		anim.SetBool("attack", false);
 
-		// only broadcast message once, each time player turns
 		if (!facingRight)
 		{
 			facingRight = true;
-			state.FacingRight = true;
 			BroadcastMessage("OnFacingRight", true);
 		}
 
@@ -234,7 +223,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		if (controller.isGrounded)       //player running left
 		{
-			action = Action.Run;
 			anim.SetBool("run", true);
 		}
 		else                             //player flying left
@@ -248,7 +236,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		if (facingRight)
 		{
 			facingRight = false;
-			state.FacingRight = false;
 			BroadcastMessage("OnFacingRight", false);
 		}
 
@@ -259,10 +246,10 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		if (controller.isGrounded)
 		{
-			action = Action.Attack;
 			normalizedHorizontalSpeed = 0;
 			anim.SetBool("attack", true);
 			anim.SetBool("run", false);
+			weaponManager.Attack();
 		}
 
 		attack = false;
@@ -272,9 +259,9 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		if (controller.isGrounded)
 		{
-			action = Action.RunAttack;
 			anim.SetBool("attack", true);
 			anim.SetBool("run", true);
+			weaponManager.Attack();
 		}
 
 		attack = false;
@@ -282,9 +269,9 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 	void AttackWhileJumping()
 	{
-		action = Action.JumpAttack;
 		anim.SetBool("jump", true);
 		anim.SetBool("attack", true);
+		weaponManager.Attack();
 
 		jump = false;
 
@@ -302,62 +289,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	//    attack = false;
 	// }
 
-	// mix & match animations for various activity states,
-	// and pass instructions on to WeaponManager
-	void ActionDispatcher()
-	{
-		switch (action)
-		{
-			case Action.Idle:
-			{
-				weaponManager.ActionDispatcher(IDLE);
-				break;
-			}
-
-			case Action.Run:
-			{
-				weaponManager.ActionDispatcher(RUN);
-				break;
-			}
-
-			case Action.Jump:
-			{
-				weaponManager.ActionDispatcher(JUMP);
-				break;
-			}
-
-			case Action.Fall:
-			{
-				weaponManager.ActionDispatcher(FALL);
-				break;
-			}
-
-			case Action.Attack:
-			{
-				weaponManager.ActionDispatcher(ATTACK);
-				break;
-			}
-
-			case Action.RunAttack:
-			{
-				weaponManager.ActionDispatcher(RUN_ATTACK);
-				break;
-			}
-
-			case Action.JumpAttack:
-			{
-				weaponManager.ActionDispatcher(JUMP_ATTACK);
-				break;
-			}
-
-			default:
-			{
-				Assert.IsTrue(false, "** Default Case Reached **");
-				break;
-			}
-		}
-	}
-
 	void InitializeVelocity()
 	{
 		velocity = controller.velocity;
@@ -366,7 +297,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	void CheckForFreefall()
 	{
 		// flush horizontal axis if player is falling while pressed against a wall
-		if (state.TouchingWall && !controller.isGrounded)
+		if (touchingWall && !controller.isGrounded)
 		{
 			normalizedHorizontalSpeed = 0;
 			velocity.x = 0f;
@@ -401,7 +332,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		// clamp to maxRisingSpeed to eliminate jitteriness when rising too fast,
 		// otherwise, clamp to maxFallingSpeed to prevent player leaving screen
-		if (MovingTooFast() && state.RidingFastPlatform && !state.MovingHorizontally)
+		if (MovingTooFast() && ridingFastPlatform && !movingHorizontally)
 		{
 			velocity.y = Mathf.Clamp(velocity.y, -maxFallingSpeed, maxRisingSpeed);
 		}
@@ -416,10 +347,9 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		controller.move(velocity * Time.deltaTime);
 	}
 
-	void SaveCurrentPosition()
+	void BroadcastCurrentPosition()
 	{
-		state.X = transform.position.x;
-		state.Y = transform.position.y;
+		Evnt.Broadcast<float, float>("player position", transform.position.x, transform.position.y);
 	}
 
 	void ComputeMovement()
@@ -438,17 +368,15 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		if (previousX != transform.position.x)
 		{
-			state.MovingHorizontally = true;
+			movingHorizontally = true;
 		}
 		else
 		{
-			state.MovingHorizontally = false;
+			movingHorizontally = false;
 		}
 
 		previousX = transform.position.x;
 		previousY = transform.position.y;
-		state.PreviousX = previousX;
-		state.PreviousY = previousY;
 	}
 
 	void RepulseToLeft(float maxVelocity)
@@ -477,13 +405,27 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		this.enabled = false;
 	}
 
+	void OnPlayerRidingFastPlatform(bool status)
+	{
+		ridingFastPlatform = status;
+	}
+
+	void OnPlayerTouchingWall(bool status)
+	{
+		touchingWall = status;
+	}
+
 	void OnEnable()
 	{
-		Messenger.AddListener<string, Collider2D, int>("player dead", OnPlayerDead);
+		Evnt.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		Evnt.Subscribe<bool>("player riding fast platform", OnPlayerRidingFastPlatform);
+		Evnt.Subscribe<bool>("player touching wall", OnPlayerTouchingWall);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<string, Collider2D, int>("player dead", OnPlayerDead);
+		Evnt.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		Evnt.Unsubscribe<bool>("player riding fast platform", OnPlayerRidingFastPlatform);
+		Evnt.Unsubscribe<bool>("player touching wall", OnPlayerTouchingWall);
 	}
 }

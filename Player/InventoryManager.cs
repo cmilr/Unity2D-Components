@@ -217,26 +217,26 @@ public class InventoryManager : CacheBehaviour
 
 	void PassInitialWeaponsToHUD()
 	{
-		Messenger.Broadcast<GameObject, int>("init stashed weapon", weaponBelt[left], LEFT);
-		Messenger.Broadcast<GameObject>("init equipped weapon", weaponBelt[equipped]);
-		Messenger.Broadcast<GameObject, int>("init stashed weapon", weaponBelt[right], RIGHT);
+		Evnt.Broadcast<GameObject, int>("init stashed weapon", weaponBelt[left], LEFT);
+		Evnt.Broadcast<GameObject>("init equipped weapon", weaponBelt[equipped]);
+		Evnt.Broadcast<GameObject, int>("init stashed weapon", weaponBelt[right], RIGHT);
 	}
 
 	void PassNewWeaponsToHUD()
 	{
-		Messenger.Broadcast<GameObject, int>("change stashed weapon", weaponBelt[left], LEFT);
-		Messenger.Broadcast<GameObject>("change equipped weapon", weaponBelt[equipped]);
-		Messenger.Broadcast<GameObject, int>("change stashed weapon", weaponBelt[right], RIGHT);
+		Evnt.Broadcast<GameObject, int>("change stashed weapon", weaponBelt[left], LEFT);
+		Evnt.Broadcast<GameObject>("change equipped weapon", weaponBelt[equipped]);
+		Evnt.Broadcast<GameObject, int>("change stashed weapon", weaponBelt[right], RIGHT);
 	}
 
 	void PassEquippedWeaponToHUD()
 	{
-		Messenger.Broadcast<GameObject>("init new equipped weapon", weaponBelt[equipped]);
+		Evnt.Broadcast<GameObject>("init new equipped weapon", weaponBelt[equipped]);
 	}
 
 	void PassEquippedWeaponToWeaponManager()
 	{
-		Messenger.Broadcast<Weapon>("new equipped weapon", equippedWeapon);
+		Evnt.Broadcast<Weapon>("new equipped weapon", equippedWeapon);
 	}
 
 	void OnLevelLoading(bool status)
@@ -251,17 +251,17 @@ public class InventoryManager : CacheBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<GameObject, GameObject, GameObject>("init weapons", OnInitWeapons);
-		Messenger.AddListener<GameObject>("equip new weapon", OnEquipNewWeapon);
-		Messenger.AddListener<int>("switch weapon", OnSwitchWeapon);
-		Messenger.AddListener<bool>("level loading", OnLevelLoading);
+		Evnt.Subscribe<GameObject, GameObject, GameObject>("init weapons", OnInitWeapons);
+		Evnt.Subscribe<GameObject>("equip new weapon", OnEquipNewWeapon);
+		Evnt.Subscribe<int>("switch weapon", OnSwitchWeapon);
+		Evnt.Subscribe<bool>("level loading", OnLevelLoading);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<GameObject, GameObject, GameObject>("init weapons", OnInitWeapons);
-		Messenger.RemoveListener<GameObject>("equip new weapon", OnEquipNewWeapon);
-		Messenger.RemoveListener<int>("switch weapon", OnSwitchWeapon);
-		Messenger.RemoveListener<bool>("level loading", OnLevelLoading);
+		Evnt.Unsubscribe<GameObject, GameObject, GameObject>("init weapons", OnInitWeapons);
+		Evnt.Unsubscribe<GameObject>("equip new weapon", OnEquipNewWeapon);
+		Evnt.Unsubscribe<int>("switch weapon", OnSwitchWeapon);
+		Evnt.Unsubscribe<bool>("level loading", OnLevelLoading);
 	}
 }
