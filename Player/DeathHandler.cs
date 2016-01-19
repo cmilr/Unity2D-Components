@@ -60,15 +60,15 @@ public class DeathHandler : CacheBehaviour
 		}
 	}
 
-	void OnPlayerDead(string methodOfDeath, Collider2D coll, int hitFrom)
+	void OnPlayerDead(int hitFrom, Weapon.WeaponType weaponType)
 	{
 		this.enabled = true;
 		this.hitFrom = hitFrom;
 		rigidbody2D.velocity = Vector2.zero;
 
-		switch (methodOfDeath)
+		switch (weaponType)
 		{
-			case "struckdown":
+			case Weapon.WeaponType.Axe:
 			{
 				animator.speed = STRUCKDOWN_SPEED;
 				animator.Play(Animator.StringToHash(struckdownAnimation));
@@ -76,7 +76,7 @@ public class DeathHandler : CacheBehaviour
 				break;
 			}
 
-			case "projectile":
+			case Weapon.WeaponType.Dagger:
 			{
 				animator.speed = STRUCKDOWN_SPEED;
 				animator.Play(Animator.StringToHash(struckdownAnimation));
@@ -84,18 +84,39 @@ public class DeathHandler : CacheBehaviour
 				break;
 			}
 
-			case "drowned":
-			{
-				animator.speed = DROWNED_SPEED;
-				animator.Play(Animator.StringToHash(drownedAnimation));
-				PlayerDrowned(coll);
-				break;
-			}
-
-			case "out of bounds":
+			case Weapon.WeaponType.Hammer:
 			{
 				animator.speed = STRUCKDOWN_SPEED;
 				animator.Play(Animator.StringToHash(struckdownAnimation));
+				PlayerHitByProjectile();
+				break;
+			}
+
+			case Weapon.WeaponType.Sword:
+			{
+				animator.speed = STRUCKDOWN_SPEED;
+				animator.Play(Animator.StringToHash(struckdownAnimation));
+				PlayerHitByProjectile();
+				break;
+			}
+
+			case Weapon.WeaponType.MagicProjectile:
+			{
+				animator.speed = STRUCKDOWN_SPEED;
+				animator.Play(Animator.StringToHash(struckdownAnimation));
+				PlayerHitByProjectile();
+				break;
+			}
+
+			case Weapon.WeaponType.OutOfBounds:
+			{
+				animator.speed = STRUCKDOWN_SPEED;
+				animator.Play(Animator.StringToHash(struckdownAnimation));
+				break;
+			}
+
+			case Weapon.WeaponType.Ignore:
+			{
 				break;
 			}
 
@@ -140,9 +161,12 @@ public class DeathHandler : CacheBehaviour
 		alreadyDead = true;
 	}
 
-	void PlayerDrowned(Collider2D incomingColl)
+	void OnPlayerDrowned(Collider2D incomingColl)
 	{
 		physicsEnabled = false;
+
+		animator.speed = DROWNED_SPEED;
+		animator.Play(Animator.StringToHash(drownedAnimation));
 
 		if (!alreadyDead)
 		{
@@ -247,11 +271,13 @@ public class DeathHandler : CacheBehaviour
 
 	void AddListeners()
 	{
-		EventKit.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Subscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
+		EventKit.Subscribe<Collider2D>("player drowned", OnPlayerDrowned);
 	}
 
 	void OnDestroy()
 	{
-		EventKit.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Unsubscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
+		EventKit.Unsubscribe<Collider2D>("player drowned", OnPlayerDrowned);
 	}
 }

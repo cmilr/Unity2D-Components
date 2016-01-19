@@ -90,8 +90,10 @@ public class AttackAI : CacheBehaviour
 	void CreatureDead()
 	{
 		dead = true;
+		attackPaused = true;
+		this.enabled = false;
 	}
-	
+
 	void OnBecameInvisible()
 	{
 		if (!test && !dead)

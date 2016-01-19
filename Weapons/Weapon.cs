@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Weapon : CacheBehaviour
 {
-	public enum WeaponType { Axe, Sword, Hammer, Dagger, MagicProjectile };
+	public enum WeaponType { Axe, Sword, Hammer, Dagger, MagicProjectile, Ignore, OutOfBounds, Struckdown };
 	public WeaponType weaponType;
 	public int worth;
 

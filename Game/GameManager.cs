@@ -23,7 +23,7 @@ public class GameManager : BaseBehaviour
 		EventKit.Broadcast<int>("change score", gameData.CurrentScore);
 	}
 
-	void OnPlayerDead(string methodOfDeath, Collider2D coll, int hitFrom)
+	void OnPlayerDead(int hitFrom, Weapon.WeaponType weaponType)
 	{
 		gameData.CurrentScore = gameData.LastSavedScore;
 		gameData.Lives -= 1;
@@ -42,14 +42,14 @@ public class GameManager : BaseBehaviour
 	void OnEnable()
 	{
 		EventKit.Subscribe<int>("prize collected", OnPrizeCollected);
-		EventKit.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Subscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
 		EventKit.Subscribe<bool>("level completed", OnLevelCompleted);
 	}
 
 	void OnDestroy()
 	{
 		EventKit.Unsubscribe<int>("prize collected", OnPrizeCollected);
-		EventKit.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Unsubscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
 		EventKit.Unsubscribe<bool>("level completed", OnLevelCompleted);
 	}
 }

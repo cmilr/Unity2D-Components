@@ -12,8 +12,6 @@ public class CreatureEntity : Entity
 
 	private BoxCollider2D thisCollider;
 	private Weapon playerWeapon;
-	private AttackAI attackAI;
-	private MovementAI movementAI;
 	private BreakableManager breakable;
 	private bool dead;
 	private bool blockedRight;
@@ -24,8 +22,6 @@ public class CreatureEntity : Entity
 
 	void Start()
 	{
-		attackAI   = gameObject.GetComponent<AttackAI>();
-		movementAI = gameObject.GetComponent<MovementAI>();
 		breakable  = gameObject.GetComponentInChildren<BreakableManager>();
 
 		if (entityType == EntityType.Enemy) { AutoAlign(); }
@@ -138,16 +134,12 @@ public class CreatureEntity : Entity
 			// deactivate and fade solid sprite
 			rigidbody2D.isKinematic   = true;
 			collider2D.enabled        = false;
-			attackAI.attackPaused     = true;
-			movementAI.movementPaused = true;
-			attackAI.enabled          = false;
-			movementAI.enabled        = false;
 
 			MFX.Fade(spriteRenderer, 0f, 0f, 0f);
 
-			gameObject.SendMessage("CreatureDead");
-
 			dead = true;
+
+			gameObject.SendMessage("CreatureDead");
 
 			Invoke("DeactivateObject", MAX_BEFORE_FADE + 5f);
 		}

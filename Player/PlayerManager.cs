@@ -24,17 +24,17 @@ public class PlayerManager : CacheBehaviour
 			("init weapons", player.equippedWeapon, player.leftWeapon, player.rightWeapon);
 	}
 
-	public void TakesHit(string weaponType, Weapon weapon, Collider2D coll, int hitFrom)
+	public void TakesHit(Hit hit)
 	{
 		// calculate damage
-		player.HP -= (int)(weapon.damage * DIFFICULTY_DAMAGE_MODIFIER);
+		player.HP -= (int)(hit.weapon.damage * DIFFICULTY_DAMAGE_MODIFIER);
 
 		// produce effects
 		// params for ShakeCamera = duration, strength, vibrato, randomness
 		EventKit.Broadcast<float, float, int, float>("shake camera", .5f, .3f, 20, 5f);
 		EventKit.Broadcast<int>("reduce hp", player.HP);
 
-		if (hitFrom == RIGHT)
+		if (hit.hitFrom == RIGHT)
 		{
 			BroadcastMessage("RepulseToLeft", 5.0F);
 		}
@@ -49,7 +49,7 @@ public class PlayerManager : CacheBehaviour
 		}
 		else
 		{
-			EventKit.Broadcast<string, Collider2D, int>("player dead", "projectile", coll, hitFrom);
+			EventKit.Broadcast<int, Weapon.WeaponType>("player dead", hit.hitFrom, hit.weaponType);
 		}
 	}
 
@@ -67,7 +67,7 @@ public class PlayerManager : CacheBehaviour
 		}
 		else
 		{
-			EventKit.Broadcast<string, Collider2D, int>("player dead", "struckdown", coll, hitFrom);
+			EventKit.Broadcast<int, Weapon.WeaponType>("player dead", hitFrom, Weapon.WeaponType.Struckdown);
 		}
 	}
 }

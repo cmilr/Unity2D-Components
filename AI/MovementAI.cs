@@ -252,12 +252,12 @@ public class MovementAI : CacheBehaviour
 
 	void CreatureDead()
 	{
-		CancelInvoke("FollowTarget");
-		CancelInvoke("LookAtTarget");
 		dead = true;
+		movementPaused = true;
+		this.enabled = false;
 	}
 
-	void OnPlayerDead(string causeOfDeath, Collider2D coll, int directionHit)
+	void OnPlayerDead(int hitFrom, Weapon.WeaponType weaponType)
 	{
 		// causes enemy to periodically do a victory dance
 		xAxisOffset = .005f;
@@ -271,11 +271,11 @@ public class MovementAI : CacheBehaviour
 
 	void OnEnable()
 	{
-		EventKit.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Subscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
 	}
 
 	void OnDestroy()
 	{
-		EventKit.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Unsubscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
 	}
 }

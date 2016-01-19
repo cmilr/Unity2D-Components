@@ -252,9 +252,9 @@ public class MovementAI : CacheBehaviour
 
 	void CreatureDead()
 	{
-		CancelInvoke("FollowTarget");
-		CancelInvoke("LookAtTarget");
 		dead = true;
+		movementPaused = true;
+		this.enabled = false;
 	}
 
 	void OnPlayerDead(string causeOfDeath, Collider2D coll, int directionHit)

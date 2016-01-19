@@ -400,7 +400,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		repulseRight = false;
 	}
 
-	void OnPlayerDead(string methodOfDeath, Collider2D coll, int hitFrom)
+	void OnPlayerDead(int hitFrom, Weapon.WeaponType weaponType)
 	{
 		this.enabled = false;
 	}
@@ -417,14 +417,14 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 	void OnEnable()
 	{
-		EventKit.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Subscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
 		EventKit.Subscribe<bool>("player riding fast platform", OnPlayerRidingFastPlatform);
 		EventKit.Subscribe<bool>("player touching wall", OnPlayerTouchingWall);
 	}
 
 	void OnDestroy()
 	{
-		EventKit.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Unsubscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
 		EventKit.Unsubscribe<bool>("player riding fast platform", OnPlayerRidingFastPlatform);
 		EventKit.Unsubscribe<bool>("player touching wall", OnPlayerTouchingWall);
 	}

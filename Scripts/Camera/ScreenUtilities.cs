@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class ScreenUtilities : CacheBehaviour
 {
-	private GameObject objectToTrack;         // object whose position we are tracking.
 	private Transform trackedObject;          // reference to the tracked object's transform.
 	private float vertExtent;                 // half the height of the game screen.
 	private float horizExtent;                // half the width of the game screen.
@@ -12,8 +11,7 @@ public class ScreenUtilities : CacheBehaviour
 
 	void Start()
 	{
-		objectToTrack        = GameObject.Find(PLAYER);
-		trackedObject        = objectToTrack.transform;
+		trackedObject        = GameObject.Find(PLAYER).transform;
 		vertExtent           = Camera.main.GetComponent<Camera>().orthographicSize;
 		horizExtent          = vertExtent * Screen.width / Screen.height;
 		currentScreenWidth   = Screen.width;

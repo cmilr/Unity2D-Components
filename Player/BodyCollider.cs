@@ -1,11 +1,11 @@
 using Matcha.Unity;
-using System.Collections;
 using UnityEngine;
 
 public class BodyCollider : CacheBehaviour
 {
+	public Hit hit;
+
 	private int layer;
-	private int hitFrom;
 	private bool dead;
 	private bool levelCompleted;
 	private PlayerManager player;
@@ -14,7 +14,7 @@ public class BodyCollider : CacheBehaviour
 
 	void Start()
 	{
-		player = transform.parent.GetComponent<PlayerManager>();
+		hit = new Hit();
 	}
 
 	void OnTriggerEnter2D(Collider2D coll)
@@ -27,15 +27,13 @@ public class BodyCollider : CacheBehaviour
 
 			if (!enemyWeapon.alreadyCollided && !levelCompleted && !dead)
 			{
-				hitFrom = M.HorizSideThatWasHit(gameObject, coll);
-
 				if (enemyWeapon.weaponType == Weapon.WeaponType.Hammer ||
 						enemyWeapon.weaponType == Weapon.WeaponType.Dagger ||
 						enemyWeapon.weaponType == Weapon.WeaponType.MagicProjectile)
 				{
 					enemyWeapon.alreadyCollided = true;
 
-					player.TakesHit("projectile", enemyWeapon, coll, hitFrom);
+					SendMessageUpwards("TakesHit", hit.Args(gameObject, coll));
 				}
 			}
 		}
@@ -45,8 +43,6 @@ public class BodyCollider : CacheBehaviour
 
 			if (!enemy.alreadyCollided && !levelCompleted && !dead)
 			{
-				hitFrom = M.HorizSideThatWasHit(gameObject, coll);
-
 				if (enemy.entityType == CreatureEntity.EntityType.Enemy)
 				{
 					enemy.alreadyCollided = true;
@@ -78,16 +74,16 @@ public class BodyCollider : CacheBehaviour
 	void OnEnable()
 	{
 		EventKit.Subscribe<bool>("level completed", OnLevelCompleted);
-		EventKit.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Subscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
 	}
 
 	void OnDisable()
 	{
 		EventKit.Unsubscribe<bool>("level completed", OnLevelCompleted);
-		EventKit.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Unsubscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
 	}
 
-	void OnPlayerDead(string methodOfDeath, Collider2D coll, int hitFrom)
+	void OnPlayerDead(int hitFrom, Weapon.WeaponType weaponType)
 	{
 		dead = true;
 	}

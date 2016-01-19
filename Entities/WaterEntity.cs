@@ -12,7 +12,8 @@ public class WaterEntity : Entity
 	override public void OnBodyCollisionEnter(Collider2D coll)
 	{
 		collidedWithBody = true;
-		EventKit.Broadcast<string, Collider2D, int>("player dead", "drowned", thisCollider, 0);
+		EventKit.Broadcast<Collider2D>("player drowned", thisCollider);
+		EventKit.Broadcast<int, Weapon.WeaponType>("player dead", -1, Weapon.WeaponType.Ignore);
 	}
 
 	override public void OnBodyCollisionStay() {}

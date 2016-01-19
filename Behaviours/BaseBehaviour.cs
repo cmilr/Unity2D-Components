@@ -91,11 +91,9 @@ public class BaseBehaviour : MonoBehaviour
 	// weapon types
 	protected const int MELEE                         = 0;
 	protected const int PROJECTILE                    = 1;
-
-	// weapons
-	protected const int SWORD                         = 0;
-	protected const int AXE                 		     = 1;
-	protected const int HAMMER                 		  = 2;
+	protected const int SWORD                         = 3;
+	protected const int AXE                           = 4;
+	protected const int HAMMER                        = 5;
 
 	// player/death animation speeds
 	protected const float STRUCKDOWN_SPEED            = 1f;
