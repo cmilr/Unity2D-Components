@@ -72,28 +72,9 @@ public class BaseBehaviour : MonoBehaviour
 	// player offsets
 	protected const float ABOUTFACE_OFFSET            = 0f;
 
-	// player/weapon animation speeds
-	protected const float IDLE_SPEED                  = 1f;
-	protected const float RUN_SPEED                   = .5f;
-	protected const float JUMP_SPEED                  = 10f;
-	protected const float SWING_SPEED                 = 1f;
-	protected const float HURL_SPEED                  = 1f;
-
-	// player/weapon states
-	protected const int IDLE                          = 0;
-	protected const int RUN                           = 1;
-	protected const int JUMP                          = 2;
-	protected const int FALL                          = 3;
-	protected const int ATTACK                        = 4;
-	protected const int RUN_ATTACK                    = 5;
-	protected const int JUMP_ATTACK                   = 6;
-
 	// weapon types
 	protected const int MELEE                         = 0;
 	protected const int PROJECTILE                    = 1;
-	protected const int SWORD                         = 3;
-	protected const int AXE                           = 4;
-	protected const int HAMMER                        = 5;
 
 	// player/death animation speeds
 	protected const float STRUCKDOWN_SPEED            = 1f;

@@ -186,23 +186,7 @@ public class InventoryManager : CacheBehaviour
 		FadeOutStashedWeapons(leftWeapon);
 		FadeOutStashedWeapons(rightWeapon);
 
-		SetWeaponAnimations(equippedWeapon);
-	}
-
-	void SetWeaponAnimations(Weapon equipped)
-	{
-		if (equipped.weaponType == Weapon.WeaponType.Sword)
-		{
-			gameObject.SendMessageUpwards("NewWeaponEquipped", SWORD);
-		}
-		else if (equipped.weaponType == Weapon.WeaponType.Axe)
-		{
-			gameObject.SendMessageUpwards("NewWeaponEquipped", AXE);
-		}
-		else if (equipped.weaponType == Weapon.WeaponType.Hammer)
-		{
-			gameObject.SendMessageUpwards("NewWeaponEquipped", HAMMER);
-		}
+		SendMessageUpwards("NewWeaponEquipped", equippedWeapon.weaponType);
 	}
 
 	void FadeOutStashedWeapons(Weapon stashedWeapon)
