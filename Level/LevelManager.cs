@@ -16,7 +16,6 @@ public class LevelManager : CacheBehaviour
 	void Start()
 	{
 		spriteRenderer.enabled = true;
-
 		FadeInNewLevel();
 		GetPlayerPosition();
 	}
@@ -73,12 +72,17 @@ public class LevelManager : CacheBehaviour
 	{
 		FadeOutCurrentLevel();
 
-		// load next level and trigger garbage collection
+		//load next level
 		StartCoroutine(Timer.Start(timeBeforeLevelReload, false, () =>
 		{
 			Application.LoadLevel("Level" + newLevel);
-			System.GC.Collect();
 		}));
+	}
+
+	void OnLevelWasLoaded()
+	{
+		//trigger garbage collection
+		System.GC.Collect();
 	}
 
 	void OnPlayerPosition(float x, float y)
