@@ -17,11 +17,3 @@ public class Hit
 		return this;
 	}
 }
-
-//for sending multiple arguments in a unity SendMessage call
-//
-//example usage:
-//private Hit hit;
-//hit = new Hit();
-//
-//gameObject.SendMessage("PlayerHit", hit.Args(gameObject, coll));

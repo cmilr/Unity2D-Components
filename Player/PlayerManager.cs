@@ -9,6 +9,7 @@ public class PlayerManager : CacheBehaviour
 
 	void Start()
 	{
+		EventKit.Broadcast<Transform>("player announced", transform);
 		player = GameObject.Find(_PLAYER_DATA).GetComponent<_PlayerData>();
 
 		Init();
