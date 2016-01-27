@@ -1,5 +1,4 @@
 using Matcha.Dreadful;
-using System.Collections;
 using UnityEngine;
 
 public class LightManager : CacheBehaviour

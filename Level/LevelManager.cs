@@ -1,5 +1,4 @@
 using Matcha.Dreadful;
-using System.Collections;
 using UnityEngine;
 
 public class LevelManager : CacheBehaviour
@@ -12,8 +11,9 @@ public class LevelManager : CacheBehaviour
 	private float timeBeforeLevelReload = 3.2f;
 	private float playerPositionY;
 	private bool playerAboveGround;
+	private Transform player;
 
-	void Start()
+	void Continue()
 	{
 		spriteRenderer.enabled = true;
 		FadeInNewLevel();
@@ -38,7 +38,7 @@ public class LevelManager : CacheBehaviour
 
 	void CheckIfAboveGround()
 	{
-		if (playerPositionY > groundLine)
+		if (player.position.y > groundLine)
 		{
 			// if player is not ALREADY above ground, broadcast message "player above ground"
 			if (!playerAboveGround) {
@@ -54,18 +54,6 @@ public class LevelManager : CacheBehaviour
 				EventKit.Broadcast<bool>("player above ground", false);
 			}
 		}
-	}
-
-	void OnEnable()
-	{
-		EventKit.Subscribe<int>("load level", OnLoadLevel);
-		EventKit.Subscribe<float, float>("player position", OnPlayerPosition);
-	}
-
-	void OnDestroy()
-	{
-		EventKit.Unsubscribe<int>("load level", OnLoadLevel);
-		EventKit.Unsubscribe<float, float>("player position", OnPlayerPosition);
 	}
 
 	void OnLoadLevel(int newLevel)
@@ -85,8 +73,22 @@ public class LevelManager : CacheBehaviour
 		System.GC.Collect();
 	}
 
-	void OnPlayerPosition(float x, float y)
+	void OnPlayerAnnounced(Transform playerTransform)
 	{
-		playerPositionY = y;
+		player = playerTransform;
+
+		Continue();
+	}
+
+	void OnEnable()
+	{
+		EventKit.Subscribe<int>("load level", OnLoadLevel);
+		EventKit.Subscribe<Transform>("player announced", OnPlayerAnnounced);
+	}
+
+	void OnDestroy()
+	{
+		EventKit.Unsubscribe<int>("load level", OnLoadLevel);
+		EventKit.Unsubscribe<Transform>("player announced", OnPlayerAnnounced);
 	}
 }

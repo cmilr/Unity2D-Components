@@ -12,9 +12,9 @@ public class InventoryManager : CacheBehaviour
 	private int left = 0;
 	private int equipped = 1;
 	private int right = 2;
+	private bool levelLoading;
 	private GameObject[] weaponBelt;
 	private GameObject outgoingWeapon;
-	private bool levelLoading;
 
 	void OnInitWeapons(GameObject eWeapon, GameObject lWeapon, GameObject rWeapon)
 	{

@@ -22,7 +22,7 @@ public class CreatureEntity : Entity
 
 	void Start()
 	{
-		breakable  = gameObject.GetComponentInChildren<BreakableManager>();
+		breakable = gameObject.GetComponentInChildren<BreakableManager>();
 
 		if (entityType == EntityType.Enemy) { AutoAlign(); }
 	}

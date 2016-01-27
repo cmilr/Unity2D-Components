@@ -1,6 +1,4 @@
-using System.Collections;
 using UnityEngine.Assertions;
-using UnityEngine;
 
 public class WeaponManager : CacheBehaviour
 {

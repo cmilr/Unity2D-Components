@@ -1,6 +1,4 @@
 using Rewired;
-using System.Collections;
-using UnityEngine;
 
 public class RewiredInputAdapter : BaseBehaviour
 {

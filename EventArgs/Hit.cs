@@ -8,10 +8,10 @@ public class Hit
 	public Weapon.WeaponType weaponType;
 	public int hitFrom;
 
-	public object Args(GameObject goThatReceivedHit, Collider2D coll)
+	public object Args(GameObject collidee, Collider2D collider)
 	{
-		hitFrom = M.HorizSideThatWasHit(goThatReceivedHit, coll);
-		weapon = coll.GetComponent<Weapon>();
+		hitFrom = M.HorizSideThatWasHit(collidee, collider);
+		weapon = collider.GetComponent<Weapon>();
 		weaponType = weapon.weaponType;
 
 		return this;

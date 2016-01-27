@@ -1,6 +1,5 @@
 using Matcha.Unity;
 using System.Collections;
-using UnityEngine.Assertions;
 using UnityEngine;
 
 public class PlayerMovement : CacheBehaviour, ICreatureController
@@ -31,16 +30,12 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	private Vector3 velocity;
 	private RaycastHit2D lastControllerColliderHit;
 	private CharacterController2D controller;
-	private Animator anim;
 	private WeaponManager weaponManager;
 
 	void Start()
 	{
 		controller = GetComponent<CharacterController2D>();
 		weaponManager = GetComponentInChildren<WeaponManager>();
-		anim = GameObject.Find("Player").GetComponent<Animator>();
-
-		InvokeRepeating("BroadcastCurrentPosition", .3f, .3f);
 	}
 
 	// input methods required by ICreatureController
@@ -136,7 +131,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		{
 			velocity.y = 0;
 
-			anim.SetBool("jump", false);
+			animator.SetBool("jump", false);
 
 			if (jumpedFromFastPlatform) {
 				jumpedFromFastPlatform = false;
@@ -145,7 +140,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		}
 		else                             //player jumping or falling
 		{
-			anim.SetBool("jump", true);
+			animator.SetBool("jump", true);
 		}
 	}
 
@@ -153,16 +148,16 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{                                   //player idle
 		normalizedHorizontalSpeed = 0;
 
-		anim.SetBool("jump", false);
-		anim.SetBool("run", false);
-		anim.SetBool("attack", false);
+		animator.SetBool("jump", false);
+		animator.SetBool("run", false);
+		animator.SetBool("attack", false);
 	}
 
 	void PlayerJump()
 	{
 		velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
 
-		anim.SetBool("jump", true);
+		animator.SetBool("jump", true);
 
 		jump = false;
 
@@ -190,14 +185,14 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		if (controller.isGrounded)       //player running right
 		{
-			anim.SetBool("run", true);
+			animator.SetBool("run", true);
 		}
 		else                             //player flying right
 		{
-			anim.SetBool("run", false);
+			animator.SetBool("run", false);
 		}
 
-		anim.SetBool("attack", false);
+		animator.SetBool("attack", false);
 
 		if (!facingRight)
 		{
@@ -223,14 +218,14 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		if (controller.isGrounded)       //player running left
 		{
-			anim.SetBool("run", true);
+			animator.SetBool("run", true);
 		}
 		else                             //player flying left
 		{
-			anim.SetBool("run", false);
+			animator.SetBool("run", false);
 		}
 
-		anim.SetBool("attack", false);
+		animator.SetBool("attack", false);
 
 		// only broadcast message once, each time player turns
 		if (facingRight)
@@ -247,8 +242,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		if (controller.isGrounded)
 		{
 			normalizedHorizontalSpeed = 0;
-			anim.SetBool("attack", true);
-			anim.SetBool("run", false);
+			animator.SetBool("attack", true);
+			animator.SetBool("run", false);
 			weaponManager.Attack();
 		}
 
@@ -259,8 +254,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	{
 		if (controller.isGrounded)
 		{
-			anim.SetBool("attack", true);
-			anim.SetBool("run", true);
+			animator.SetBool("attack", true);
+			animator.SetBool("run", true);
 			weaponManager.Attack();
 		}
 
@@ -269,8 +264,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 	void AttackWhileJumping()
 	{
-		anim.SetBool("jump", true);
-		anim.SetBool("attack", true);
+		animator.SetBool("jump", true);
+		animator.SetBool("attack", true);
 		weaponManager.Attack();
 
 		jump = false;
@@ -345,11 +340,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	void ApplyMovement()
 	{
 		controller.move(velocity * Time.deltaTime);
-	}
-
-	void BroadcastCurrentPosition()
-	{
-		EventKit.Broadcast<float, float>("player position", transform.position.x, transform.position.y);
 	}
 
 	void ComputeMovement()

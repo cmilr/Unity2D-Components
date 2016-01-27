@@ -8,14 +8,14 @@ public class BreatheLerp : CacheBehaviour
 	public float amplitude = 1f;
 	public float period = 1f;
 
+	bool disabled;
 	Vector3 startPos;
 	Transform player;
-	bool disabled;
 
-	protected void Start()
+	protected void Continue()
 	{
 		startPos = transform.position;
-		player = GameObject.Find(PLAYER).transform;
+
 		InvokeRepeating("CullingCheck", 0f, .2f);
 	}
 
@@ -34,5 +34,22 @@ public class BreatheLerp : CacheBehaviour
 	{
 		float distance = Vector3.Distance(player.position, transform.position);
 		disabled = (distance > CULL_DISTANCE ? true : false);
+	}
+
+	void OnPlayerAnnounced(Transform playerTransform)
+	{
+		player = playerTransform;
+
+		Continue();
+	}
+
+	void OnEnable()
+	{
+		EventKit.Subscribe<Transform>("player announced", OnPlayerAnnounced);
+	}
+
+	void OnDestroy()
+	{
+		EventKit.Unsubscribe<Transform>("player announced", OnPlayerAnnounced);
 	}
 }

@@ -1,7 +1,5 @@
 using Matcha.Unity;
-using Rewired;
 using System.Collections;
-using System;
 using UnityEngine.Assertions;
 using UnityEngine;
 
