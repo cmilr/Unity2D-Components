@@ -48,7 +48,7 @@ public class BreatheLerp : CacheBehaviour
 		EventKit.Subscribe<Transform>("player announced", OnPlayerAnnounced);
 	}
 
-	void OnDestroy()
+	void OnDisable()
 	{
 		EventKit.Unsubscribe<Transform>("player announced", OnPlayerAnnounced);
 	}

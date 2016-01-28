@@ -1,4 +1,3 @@
-using Matcha.Unity;
 using UnityEngine;
 
 public class Weapon : CacheBehaviour
@@ -17,12 +16,12 @@ public class Weapon : CacheBehaviour
 
 	[Header("SPRITES")]
 	//~~~~~~~~~~~~~~~~~~~~~
-	[Tooltip("This is the pickup/HUD icon.")]			//weapon sprite with black outline
+	[Tooltip("This is the pickup/HUD icon.")]       //weapon sprite with black outline
 	public Sprite iconSprite;
 
 	[HideInInspector]
 	[Tooltip("Actual sprite our hero carries.")]    //weapon sprite without outline
-	public Sprite carriedSprite;							//loaded automatically from Resources/
+	public Sprite carriedSprite;                    //loaded automatically from Resources/
 
 
 	[Header("ALL WEAPONS")]

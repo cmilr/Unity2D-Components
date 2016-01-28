@@ -19,11 +19,11 @@ public class MeleeCollider : CacheBehaviour
 
 	public void EnableMeleeCollider()
 	{
-			collider2D.enabled = true;
+		collider2D.enabled = true;
 	}
 
 	public void DisableMeleeCollider()
 	{
-			collider2D.enabled = false;
+		collider2D.enabled = false;
 	}
 }
