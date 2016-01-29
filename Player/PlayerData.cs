@@ -5,15 +5,13 @@ using UnityEngine;
 
 // this is a pseudo-singleton — it enforces a single instance, but doesn't expose
 // a static variable, so you can't access it without a GetComponent() call
-public class _PlayerData : BaseBehaviour
+public class PlayerData : BaseBehaviour
 {
 	public string Character    { get; set; }
 	public int HP              { get; set; }
 	public int AC              { get; set; }
 	public int XP              { get; set; }
 	public int LVL             { get; set; }
-	[HideInInspector]
-	public _PlayerData data;
 	[HideInInspector]
 	public GameObject equippedWeapon;
 	[HideInInspector]
@@ -23,8 +21,6 @@ public class _PlayerData : BaseBehaviour
 
 	void Awake()
 	{
-		MakePseudoSingleton();
-
 		// initialize settings
 		Character      = "LAURA";
 		HP             = 25;
@@ -67,19 +63,6 @@ public class _PlayerData : BaseBehaviour
 			AC        = container.ac;
 			XP         = container.xp;
 			LVL        = container.lvl;
-		}
-	}
-
-	void MakePseudoSingleton()
-	{
-		if (data == null)
-		{
-			DontDestroyOnLoad(gameObject);
-			data = this;
-		}
-		else if (data != this)
-		{
-			Destroy(gameObject);
 		}
 	}
 

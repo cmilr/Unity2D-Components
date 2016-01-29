@@ -12,10 +12,10 @@ public class BreatheLerp : CacheBehaviour
 	Vector3 startPos;
 	Transform player;
 
-	protected void Continue()
+	protected void Start()
 	{
+		player = GameObject.Find(PLAYER).GetComponent<Transform>();
 		startPos = transform.position;
-
 		InvokeRepeating("CullingCheck", 0f, .2f);
 	}
 
@@ -34,22 +34,5 @@ public class BreatheLerp : CacheBehaviour
 	{
 		float distance = Vector3.Distance(player.position, transform.position);
 		disabled = (distance > CULL_DISTANCE ? true : false);
-	}
-
-	void OnPlayerAnnounced(Transform playerTransform)
-	{
-		player = playerTransform;
-
-		Continue();
-	}
-
-	void OnEnable()
-	{
-		EventKit.Subscribe<Transform>("player announced", OnPlayerAnnounced);
-	}
-
-	void OnDisable()
-	{
-		EventKit.Unsubscribe<Transform>("player announced", OnPlayerAnnounced);
 	}
 }

@@ -13,8 +13,9 @@ public class FlickeringFireLerp : CacheBehaviour
 	bool disabled;
 	Transform player;
 
-	void Continue()
+	void Start()
 	{
+		player = GameObject.Find(PLAYER).GetComponent<Transform>();
 		InvokeRepeating("CullingCheck", 0f, .2f);
 	}
 
@@ -44,22 +45,5 @@ public class FlickeringFireLerp : CacheBehaviour
 	{
 		float distance = Vector3.Distance(player.position, transform.position);
 		disabled = (distance > CULL_DISTANCE ? true : false);
-	}
-
-	void OnPlayerAnnounced(Transform playerTransform)
-	{
-		player = playerTransform;
-
-		Continue();
-	}
-
-	void OnEnable()
-	{
-		EventKit.Subscribe<Transform>("player announced", OnPlayerAnnounced);
-	}
-
-	void OnDestroy()
-	{
-		EventKit.Unsubscribe<Transform>("player announced", OnPlayerAnnounced);
 	}
 }

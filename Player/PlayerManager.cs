@@ -3,12 +3,11 @@ using UnityEngine;
 
 public class PlayerManager : CacheBehaviour
 {
-	private _PlayerData player;
+	private PlayerData player;
 
 	void Start()
 	{
-		EventKit.Broadcast<Transform>("player announced", transform);
-		player = GameObject.Find(_PLAYER_DATA).GetComponent<_PlayerData>();
+		player = GameObject.Find(_PLAYER_DATA).GetComponent<PlayerData>();
 
 		Init();
 	}

@@ -1,5 +1,6 @@
 using Matcha.Dreadful;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : CacheBehaviour
 {
@@ -13,8 +14,9 @@ public class LevelManager : CacheBehaviour
 	private bool playerAboveGround;
 	private Transform player;
 
-	void Continue()
+	void Start()
 	{
+		player = GameObject.Find(PLAYER).GetComponent<Transform>();
 		spriteRenderer.enabled = true;
 		FadeInNewLevel();
 		GetPlayerPosition();
@@ -63,7 +65,7 @@ public class LevelManager : CacheBehaviour
 		//load next level
 		StartCoroutine(Timer.Start(timeBeforeLevelReload, false, () =>
 		{
-			Application.LoadLevel("Level" + newLevel);
+			SceneManager.LoadScene("Level" + newLevel);
 		}));
 	}
 
@@ -73,22 +75,13 @@ public class LevelManager : CacheBehaviour
 		System.GC.Collect();
 	}
 
-	void OnPlayerAnnounced(Transform playerTransform)
-	{
-		player = playerTransform;
-
-		Continue();
-	}
-
 	void OnEnable()
 	{
 		EventKit.Subscribe<int>("load level", OnLoadLevel);
-		EventKit.Subscribe<Transform>("player announced", OnPlayerAnnounced);
 	}
 
 	void OnDestroy()
 	{
 		EventKit.Unsubscribe<int>("load level", OnLoadLevel);
-		EventKit.Unsubscribe<Transform>("player announced", OnPlayerAnnounced);
 	}
 }

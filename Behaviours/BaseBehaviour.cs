@@ -42,6 +42,7 @@ public class BaseBehaviour : MonoBehaviour
 	protected const string PLAYER                     = "Player";
 	protected const string _PLAYER_DATA               = "_PlayerData";
 	protected const string _GAME_DATA                 = "_GameData";
+	protected const string TILE_MAP                   = "TileMap";
 
 	// layer names
 	protected const int PLAYER_LAYER                  = 8;
