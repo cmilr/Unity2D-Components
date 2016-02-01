@@ -34,14 +34,12 @@ public class BaseBehaviour : MonoBehaviour
 
 	// global measurements
 	protected const float ONE_PIXEL                   = .03125f;
-	protected const float ONE_HUD_PIXEL               = 5f;
 	protected const float ONE_COLLIDER_PIXEL          = .62f;
 	protected const float CULL_DISTANCE               = 20f;
 
 	// gameObject names
+	protected const string _DATA           		     = "_Data";
 	protected const string PLAYER                     = "Player";
-	protected const string _PLAYER_DATA               = "_PlayerData";
-	protected const string _GAME_DATA                 = "_GameData";
 	protected const string TILE_MAP                   = "TileMap";
 
 	// layer names

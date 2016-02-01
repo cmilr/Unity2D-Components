@@ -2,20 +2,30 @@ using UnityEngine;
 
 public class Bootstrap : BaseBehaviour
 {
-	PlayerData playerData;
-
 	void Awake()
 	{
-		if (FindObjectOfType(typeof(PlayerData)) == null)
+		//instantiate new _Data object
+		if (FindObjectOfType(typeof(GameData)) == null)
 		{
-			GameObject newPD = new GameObject();
-			newPD.name = "_PlayerData";
-			newPD.AddComponent<PlayerData>();
-			playerData = (PlayerData)newPD.GetComponent("PlayerData");
-		}
-		else
-		{
-			playerData = (PlayerData)FindObjectOfType(typeof(PlayerData));
+			GameObject instance = new GameObject();
+			instance.name = "_Data";
+			instance.AddComponent<GameData>();
+			instance.AddComponent<LevelData>();
+			instance.AddComponent<PlayerData>();
 		}
 	}
 }
+
+
+//instantiate new _PlayerData object
+// if (FindObjectOfType(typeof(PlayerData)) == null)
+// {
+// 	GameObject instance = new GameObject();
+// 	instance.name = "_PlayerData";
+// 	instance.AddComponent<PlayerData>();
+// 	playerData = (PlayerData)instance.GetComponent<PlayerData>();
+// }
+// else
+// {
+// 	playerData = (PlayerData)FindObjectOfType(typeof(PlayerData));
+// }

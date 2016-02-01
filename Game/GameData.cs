@@ -1,13 +1,10 @@
-using System.Collections;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System;
 using UnityEngine;
 
-public class _GameData : BaseBehaviour
+public class GameData : BaseBehaviour
 {
-	public _GameData data;
-
 	// game stats
 	public float DifficultyMultiplier   { get; set; }
 
@@ -19,8 +16,6 @@ public class _GameData : BaseBehaviour
 
 	void Awake()
 	{
-		MakePseudoSingleton();
-
 		DifficultyMultiplier = 1.0f;
 		CurrentScore         = 0;
 		LastSavedScore       = 0;
@@ -59,19 +54,6 @@ public class _GameData : BaseBehaviour
 			LastSavedScore       = container.lastSavedScore;
 			Lives                = container.lives;
 			CurrentLevel         = container.currentLevel;
-		}
-	}
-
-	void MakePseudoSingleton()
-	{
-		if (data == null)
-		{
-			DontDestroyOnLoad(gameObject);
-			data = this;
-		}
-		else if (data != this)
-		{
-			Destroy(gameObject);
 		}
 	}
 

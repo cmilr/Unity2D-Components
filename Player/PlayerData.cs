@@ -3,8 +3,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System;
 using UnityEngine;
 
-// this is a pseudo-singleton — it enforces a single instance, but doesn't expose
-// a static variable, so you can't access it without a GetComponent() call
 public class PlayerData : BaseBehaviour
 {
 	public string Character    { get; set; }

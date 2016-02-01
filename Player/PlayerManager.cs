@@ -7,7 +7,7 @@ public class PlayerManager : CacheBehaviour
 
 	void Start()
 	{
-		player = GameObject.Find(_PLAYER_DATA).GetComponent<PlayerData>();
+		player = GameObject.Find(_DATA).GetComponent<PlayerData>();
 
 		Init();
 	}
