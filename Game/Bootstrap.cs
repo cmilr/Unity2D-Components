@@ -12,20 +12,8 @@ public class Bootstrap : BaseBehaviour
 			instance.AddComponent<GameData>();
 			instance.AddComponent<LevelData>();
 			instance.AddComponent<PlayerData>();
+
+			DontDestroyOnLoad(instance);
 		}
 	}
 }
-
-
-//instantiate new _PlayerData object
-// if (FindObjectOfType(typeof(PlayerData)) == null)
-// {
-// 	GameObject instance = new GameObject();
-// 	instance.name = "_PlayerData";
-// 	instance.AddComponent<PlayerData>();
-// 	playerData = (PlayerData)instance.GetComponent<PlayerData>();
-// }
-// else
-// {
-// 	playerData = (PlayerData)FindObjectOfType(typeof(PlayerData));
-// }

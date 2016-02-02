@@ -3,12 +3,17 @@ using UnityEngine;
 public class GameManager : BaseBehaviour
 {
 	public bool disableAttack;
-
 	private GameData gameData;
+
+	public float dDamageMod
+	{
+		get { return gameData.DDamageMod; }
+	}
 
 	void Awake()
 	{
 		_attackDisabled = disableAttack;
+		EventKit.Broadcast("wake singletons");
 	}
 
 	void Start()

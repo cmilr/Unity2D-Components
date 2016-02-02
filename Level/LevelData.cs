@@ -3,8 +3,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System;
 using UnityEngine;
 
-// this is a pseudo-singleton — it enforces a single instance, but doesn't expose
-// a static variable, so you can't access it without a GetComponent() call
 public class LevelData : BaseBehaviour
 {
 	public int HP     { get; set; }
@@ -15,7 +13,6 @@ public class LevelData : BaseBehaviour
 	{
 		BinaryFormatter bf = new BinaryFormatter();
 		FileStream file = File.Create(Application.persistentDataPath + "/LevelData.dat");
-
 		LevelDataContainer container = new LevelDataContainer();
 
 		container.hp     = HP;

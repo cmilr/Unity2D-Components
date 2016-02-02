@@ -4,10 +4,12 @@ using UnityEngine;
 public class PlayerManager : CacheBehaviour
 {
 	private PlayerData player;
+	private GameManager game;
 
 	void Start()
 	{
 		player = GameObject.Find(_DATA).GetComponent<PlayerData>();
+		game 	 = GameObject.Find(GAME_MANAGER).GetComponent<GameManager>();
 
 		Init();
 	}
@@ -25,7 +27,7 @@ public class PlayerManager : CacheBehaviour
 	public void TakesHit(Hit hit)
 	{
 		// calculate damage
-		player.HP -= (int)(hit.weapon.damage * DIFFICULTY_DAMAGE_MODIFIER);
+		player.HP -= (int)(hit.weapon.damage * game.dDamageMod);
 
 		// produce effects
 		// params for ShakeCamera = duration, strength, vibrato, randomness
@@ -54,7 +56,7 @@ public class PlayerManager : CacheBehaviour
 	public void TouchesEnemy(string weaponType, CreatureEntity enemy, Collider2D coll, int hitFrom)
 	{
 		// calculate damage
-		player.HP -= (int)(enemy.touchDamage * DIFFICULTY_DAMAGE_MODIFIER);
+		player.HP -= (int)(enemy.touchDamage * game.dDamageMod);
 
 		// produce effects
 		EventKit.Broadcast<int>("reduce hp", player.HP);

@@ -37,25 +37,15 @@ public class DeathHandler : CacheBehaviour
 		boxCollider  = GetComponent<BoxCollider2D>();
 		AddListeners();
 
-		SetCharacterAnimations("LAURA");
+		SetCharacterAnimations();
 	}
 
 	// set animations depending on which character is chosen
-	void SetCharacterAnimations(string character)
+	void SetCharacterAnimations()
 	{
-		// uses string literals over concatenation in order to reduce GC calls
-		if (character == "LAURA")
-		{
-			struckdownAnimation = "LAURA_struckdown";
-			struckdownAnimation_face_down = "LAURA_struckdown_face_down";
-			drownedAnimation = "LAURA_drowned";
-		}
-		else
-		{
-			struckdownAnimation = "MAC_struckdown";
-			struckdownAnimation_face_down = "MAC_struckdown_face_down";
-			drownedAnimation = "MAC_drowned";
-		}
+		struckdownAnimation = "LAURA_struckdown";
+		struckdownAnimation_face_down = "LAURA_struckdown_face_down";
+		drownedAnimation = "LAURA_drowned";
 	}
 
 	void OnPlayerDead(int hitFrom, Weapon.WeaponType weaponType)

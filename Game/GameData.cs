@@ -5,18 +5,16 @@ using UnityEngine;
 
 public class GameData : BaseBehaviour
 {
-	// game stats
-	public float DifficultyMultiplier   { get; set; }
-
-	// player stats
+	public float DDamageMod   				{ get; set; }		//difficulty damage modifier
 	public int CurrentScore          	{ get; set; }
 	public int LastSavedScore        	{ get; set; }
 	public int Lives              		{ get; set; }
 	public int CurrentLevel          	{ get; set; }
 
+	//only called once since this is a singleton
 	void Awake()
 	{
-		DifficultyMultiplier = 1.0f;
+		DDamageMod 				= 1f;
 		CurrentScore         = 0;
 		LastSavedScore       = 0;
 		Lives                = 3;
@@ -27,10 +25,9 @@ public class GameData : BaseBehaviour
 	{
 		BinaryFormatter bf = new BinaryFormatter();
 		FileStream file = File.Create(Application.persistentDataPath + "/GameData.dat");
-
 		GameDataContainer container = new GameDataContainer();
 
-		container.difficultyMultiplier = DifficultyMultiplier;
+		container.dDamageMod 			 = DDamageMod;
 		container.currentScore         = CurrentScore;
 		container.lastSavedScore       = LastSavedScore;
 		container.lives                = Lives;
@@ -49,7 +46,7 @@ public class GameData : BaseBehaviour
 			GameDataContainer container = (GameDataContainer)bf.Deserialize(file);
 			file.Close();
 
-			DifficultyMultiplier = container.difficultyMultiplier;
+			DDamageMod 			   = container.dDamageMod;
 			CurrentScore         = container.currentScore;
 			LastSavedScore       = container.lastSavedScore;
 			Lives                = container.lives;
@@ -83,9 +80,9 @@ public class GameData : BaseBehaviour
 [Serializable]
 class GameDataContainer
 {
-	public float difficultyMultiplier;
-	public int currentScore;
-	public int lastSavedScore;
-	public int lives;
-	public int currentLevel;
+	public float 	dDamageMod;
+	public int 		currentScore;
+	public int 		lastSavedScore;
+	public int 		lives;
+	public int 		currentLevel;
 }

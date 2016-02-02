@@ -17,10 +17,9 @@ public class PlayerData : BaseBehaviour
 	[HideInInspector]
 	public GameObject rightWeapon;
 
-	void Awake()
+	//called whenever awake() is called
+	void SingletonAwake()
 	{
-		// initialize settings
-		Character      = "LAURA";
 		HP             = 25;
 		AC             = 10;
 		XP             = 0;
@@ -34,7 +33,6 @@ public class PlayerData : BaseBehaviour
 	{
 		BinaryFormatter bf = new BinaryFormatter();
 		FileStream file = File.Create(Application.persistentDataPath + "/PlayerData.dat");
-
 		PlayerDataContainer container = new PlayerDataContainer();
 
 		container.character = Character;
@@ -76,12 +74,14 @@ public class PlayerData : BaseBehaviour
 
 	void OnEnable()
 	{
+		EventKit.Subscribe("wake singletons", SingletonAwake);
 		EventKit.Subscribe<bool>("save player data", OnSavePlayerData);
 		EventKit.Subscribe<bool>("load player data", OnLoadPlayerData);
 	}
 
 	void OnDestroy()
 	{
+		EventKit.Unsubscribe("wake singletons", SingletonAwake);
 		EventKit.Unsubscribe<bool>("save player data", OnSavePlayerData);
 		EventKit.Unsubscribe<bool>("load player data", OnLoadPlayerData);
 	}
