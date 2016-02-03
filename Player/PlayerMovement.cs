@@ -127,7 +127,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 	void CheckIfStandingOrFalling()
 	{
-		if (controller.isGrounded)       //player on solid ground
+		//player grounded
+		if (controller.isGrounded)
 		{
 			velocity.y = 0;
 
@@ -138,14 +139,15 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 				EventKit.Broadcast<bool>("player jumped from fast platform", false);
 			}
 		}
-		else                             //player jumping or falling
+		else
 		{
+			//player jumping or falling
 			animator.SetBool("jump", true);
 		}
 	}
 
 	void PlayerIdle()
-	{                                   //player idle
+	{
 		normalizedHorizontalSpeed = 0;
 
 		animator.SetBool("jump", false);
@@ -176,19 +178,21 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		if (transform.localScale.x < 0f)
 		{
-			// reverse sprite direction
+			//reverse sprite direction
 			transform.SetLocalScaleX(-transform.localScale.x);
 
-			// offset so player isn't pushed too far forward when sprite flips
+			//offset so player isn't pushed too far forward when sprite flips
 			transform.SetPositionX(transform.position.x - ABOUTFACE_OFFSET);
 		}
 
-		if (controller.isGrounded)       //player running right
+		if (controller.isGrounded)
 		{
+			//player running right
 			animator.SetBool("run", true);
 		}
-		else                             //player flying right
+		else
 		{
+			//player flying right
 			animator.SetBool("run", false);
 		}
 
@@ -209,25 +213,27 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		if (transform.localScale.x > 0f)
 		{
-			// reverse sprite direction
+			//reverse sprite direction
 			transform.SetLocalScaleX(-transform.localScale.x);
 
-			// offset so player isn't pushed too far forward when sprite flips
+			//offset so player isn't pushed too far forward when sprite flips
 			transform.SetPositionX(transform.position.x + ABOUTFACE_OFFSET);
 		}
 
-		if (controller.isGrounded)       //player running left
+		if (controller.isGrounded)
 		{
+			//player running left
 			animator.SetBool("run", true);
 		}
-		else                             //player flying left
+		else
 		{
+			//player flying left
 			animator.SetBool("run", false);
 		}
 
 		animator.SetBool("attack", false);
 
-		// only broadcast message once, each time player turns
+		//only broadcast message once, each time player turns
 		if (facingRight)
 		{
 			facingRight = false;
@@ -291,7 +297,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 	void CheckForFreefall()
 	{
-		// flush horizontal axis if player is falling while pressed against a wall
+		//flush horizontal axis if player is falling while pressed against a wall
 		if (touchingWall && !controller.isGrounded)
 		{
 			normalizedHorizontalSpeed = 0;
@@ -325,8 +331,8 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 	void ClampYMovement()
 	{
-		// clamp to maxRisingSpeed to eliminate jitteriness when rising too fast,
-		// otherwise, clamp to maxFallingSpeed to prevent player leaving screen
+		//clamp to maxRisingSpeed to eliminate jitteriness when rising too fast,
+		//otherwise, clamp to maxFallingSpeed to prevent player leaving screen
 		if (MovingTooFast() && ridingFastPlatform && !movingHorizontally)
 		{
 			velocity.y = Mathf.Clamp(velocity.y, -maxFallingSpeed, maxRisingSpeed);
@@ -344,7 +350,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 	void ComputeMovement()
 	{
-		// compute x and y movements
 		var smoothedMovementFactor = controller.isGrounded ? groundDamping : inAirDamping;
 
 		velocity.x = Mathf.Lerp(

@@ -26,11 +26,9 @@ public class PlayerManager : CacheBehaviour
 
 	public void TakesHit(Hit hit)
 	{
-		// calculate damage
 		player.HP -= (int)(hit.weapon.damage * game.dDamageMod);
 
-		// produce effects
-		// params for ShakeCamera = duration, strength, vibrato, randomness
+		//params for ShakeCamera = duration, strength, vibrato, randomness
 		EventKit.Broadcast<float, float, int, float>("shake camera", .5f, .3f, 20, 5f);
 		EventKit.Broadcast<int>("reduce hp", player.HP);
 
@@ -55,10 +53,8 @@ public class PlayerManager : CacheBehaviour
 
 	public void TouchesEnemy(string weaponType, CreatureEntity enemy, Collider2D coll, int hitFrom)
 	{
-		// calculate damage
 		player.HP -= (int)(enemy.touchDamage * game.dDamageMod);
 
-		// produce effects
 		EventKit.Broadcast<int>("reduce hp", player.HP);
 
 		if (player.HP > 0)
