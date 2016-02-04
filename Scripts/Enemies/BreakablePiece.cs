@@ -71,16 +71,16 @@ public class BreakablePiece : CacheBehaviour
 	void OnEnable()
 	{
 		EventKit.Subscribe<bool>("level completed", OnLevelCompleted);
-		EventKit.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Subscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
 	}
 
 	void OnDisable()
 	{
 		EventKit.Unsubscribe<bool>("level completed", OnLevelCompleted);
-		EventKit.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Unsubscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
 	}
 
-	void OnPlayerDead(string methodOfDeath, Collider2D coll, int hitFrom)
+	void OnPlayerDead(int hitFrom, Weapon.WeaponType weaponType)
 	{
 		playerDead = true;
 	}

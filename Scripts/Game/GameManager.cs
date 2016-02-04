@@ -3,17 +3,22 @@ using UnityEngine;
 public class GameManager : BaseBehaviour
 {
 	public bool disableAttack;
+	private GameData gameData;
 
-	private _GameData gameData;
+	public float dDamageMod
+	{
+		get { return gameData.DDamageMod; }
+	}
 
 	void Awake()
 	{
 		_attackDisabled = disableAttack;
+		EventKit.Broadcast("wake singletons");
 	}
 
 	void Start()
 	{
-		gameData = GameObject.Find(_GAME_DATA).GetComponent<_GameData>();
+		gameData = GameObject.Find(_DATA).GetComponent<GameData>();
 		EventKit.Broadcast<int>("init score", gameData.CurrentScore);
 	}
 
@@ -23,7 +28,7 @@ public class GameManager : BaseBehaviour
 		EventKit.Broadcast<int>("change score", gameData.CurrentScore);
 	}
 
-	void OnPlayerDead(string methodOfDeath, Collider2D coll, int hitFrom)
+	void OnPlayerDead(int hitFrom, Weapon.WeaponType weaponType)
 	{
 		gameData.CurrentScore = gameData.LastSavedScore;
 		gameData.Lives -= 1;
@@ -42,14 +47,14 @@ public class GameManager : BaseBehaviour
 	void OnEnable()
 	{
 		EventKit.Subscribe<int>("prize collected", OnPrizeCollected);
-		EventKit.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Subscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
 		EventKit.Subscribe<bool>("level completed", OnLevelCompleted);
 	}
 
 	void OnDestroy()
 	{
 		EventKit.Unsubscribe<int>("prize collected", OnPrizeCollected);
-		EventKit.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Unsubscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
 		EventKit.Unsubscribe<bool>("level completed", OnLevelCompleted);
 	}
 }

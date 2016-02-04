@@ -22,7 +22,7 @@ public class CreatureEntity : Entity
 
 	void Start()
 	{
-		breakable  = gameObject.GetComponentInChildren<BreakableManager>();
+		breakable = gameObject.GetComponentInChildren<BreakableManager>();
 
 		if (entityType == EntityType.Enemy) { AutoAlign(); }
 	}
@@ -63,7 +63,7 @@ public class CreatureEntity : Entity
 	{
 		if (!dead)
 		{
-			hp -= (int)(playerWeapon.damage * DIFFICULTY_DAMAGE_MODIFIER);
+			hp -= (int)(playerWeapon.damage);
 
 			// bounceback from projectile
 			if (hitFrom == RIGHT && !blockedLeft)
@@ -91,7 +91,7 @@ public class CreatureEntity : Entity
 	{
 		if (!dead)
 		{
-			hp -= (int)(playerWeapon.damage * DIFFICULTY_DAMAGE_MODIFIER);
+			hp -= (int)(playerWeapon.damage);
 
 			// bounceback from projectile
 			if (hitFrom == RIGHT && !blockedLeft)

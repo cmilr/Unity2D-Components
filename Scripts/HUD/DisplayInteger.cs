@@ -1,8 +1,6 @@
 using DG.Tweening;
 using Matcha.Dreadful;
-using System.Collections;
 using UnityEngine.UI;
-using UnityEngine;
 
 // this is a template for basic integer stats that need to be displayed
 // instead of using this actual file, copy & paste this code into a new component

@@ -8,14 +8,14 @@ public class BreatheLerp : CacheBehaviour
 	public float amplitude = 1f;
 	public float period = 1f;
 
+	bool disabled;
 	Vector3 startPos;
 	Transform player;
-	bool disabled;
 
 	protected void Start()
 	{
+		player = GameObject.Find(PLAYER).GetComponent<Transform>();
 		startPos = transform.position;
-		player = GameObject.Find(PLAYER).transform;
 		InvokeRepeating("CullingCheck", 0f, .2f);
 	}
 

@@ -9,8 +9,6 @@ using UnityEngine;
 
 public class BaseBehaviour : MonoBehaviour
 {
-	protected static bool _attackDisabled             = false;
-
 	//global direction
 	protected const int RIGHT                         = 1;
 	protected const int LEFT                          = -1;
@@ -94,4 +92,11 @@ public class BaseBehaviour : MonoBehaviour
 	//breakable pieces
 	protected const int MIN_BEFORE_FADE               = 5;
 	protected const int MAX_BEFORE_FADE               = 10;
+
+	void Awake()
+	{
+		#if UNITY_EDITOR
+			Debug.Log("Unity Editor");
+		#endif
+	}
 }

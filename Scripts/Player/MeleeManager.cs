@@ -2,15 +2,17 @@ using UnityEngine;
 
 public class MeleeManager : CacheBehaviour
 {
+	private MeleeCollider meleeCollider;
 	private float nextAttack;
 
 	public void Attack(Weapon equippedWeapon)
 	{
-		equippedWeapon.GetComponentInChildren<MeleeCollider>().DisableMeleeCollider();
+		meleeCollider = equippedWeapon.GetComponentInChildren<MeleeCollider>();
+		meleeCollider.DisableMeleeCollider();
 
 		if (Time.time > nextAttack)
 		{
-			equippedWeapon.GetComponentInChildren<MeleeCollider>().EnableMeleeCollider();
+			meleeCollider.EnableMeleeCollider();
 			nextAttack = Time.time + equippedWeapon.rateOfAttack;
 		}
 	}

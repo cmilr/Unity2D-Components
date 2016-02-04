@@ -1,12 +1,9 @@
-using System.Collections;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System;
 using UnityEngine;
 
-// this is a pseudo-singleton — it enforces a single instance, but doesn't expose
-// a static variable, so you can't access it without a GetComponent() call
-public class _PlayerData : BaseBehaviour
+public class PlayerData : BaseBehaviour
 {
 	public string Character    { get; set; }
 	public int HP              { get; set; }
@@ -14,20 +11,15 @@ public class _PlayerData : BaseBehaviour
 	public int XP              { get; set; }
 	public int LVL             { get; set; }
 	[HideInInspector]
-	public _PlayerData data;
-	[HideInInspector]
 	public GameObject equippedWeapon;
 	[HideInInspector]
 	public GameObject leftWeapon;
 	[HideInInspector]
 	public GameObject rightWeapon;
 
-	void Awake()
+	//called whenever awake() is called
+	void SingletonAwake()
 	{
-		MakePseudoSingleton();
-
-		// initialize settings
-		Character      = "LAURA";
 		HP             = 25;
 		AC             = 10;
 		XP             = 0;
@@ -41,7 +33,6 @@ public class _PlayerData : BaseBehaviour
 	{
 		BinaryFormatter bf = new BinaryFormatter();
 		FileStream file = File.Create(Application.persistentDataPath + "/PlayerData.dat");
-
 		PlayerDataContainer container = new PlayerDataContainer();
 
 		container.character = Character;
@@ -71,19 +62,6 @@ public class _PlayerData : BaseBehaviour
 		}
 	}
 
-	void MakePseudoSingleton()
-	{
-		if (data == null)
-		{
-			DontDestroyOnLoad(gameObject);
-			data = this;
-		}
-		else if (data != this)
-		{
-			Destroy(gameObject);
-		}
-	}
-
 	void OnSavePlayerData(bool status)
 	{
 		Save();
@@ -96,12 +74,14 @@ public class _PlayerData : BaseBehaviour
 
 	void OnEnable()
 	{
+		EventKit.Subscribe("wake singletons", SingletonAwake);
 		EventKit.Subscribe<bool>("save player data", OnSavePlayerData);
 		EventKit.Subscribe<bool>("load player data", OnLoadPlayerData);
 	}
 
 	void OnDestroy()
 	{
+		EventKit.Unsubscribe("wake singletons", SingletonAwake);
 		EventKit.Unsubscribe<bool>("save player data", OnSavePlayerData);
 		EventKit.Unsubscribe<bool>("load player data", OnLoadPlayerData);
 	}

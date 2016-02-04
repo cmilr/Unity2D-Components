@@ -1,7 +1,5 @@
 using DG.Tweening;
 using Matcha.Dreadful;
-using System.Collections;
-using UnityEngine.UI;
 using UnityEngine;
 
 public class DisplayShield : CacheBehaviour
@@ -12,7 +10,7 @@ public class DisplayShield : CacheBehaviour
 
 	void Start()
 	{
-		mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+		mainCamera = Camera.main.GetComponent<Camera>();
 		HUDShield = spriteRenderer;
 		HUDShield.sprite = equippedShield;
 		HUDShield.DOKill();

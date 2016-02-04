@@ -12,7 +12,7 @@ public class GameManager : BaseBehaviour
 
 	void Awake()
 	{
-		_attackDisabled = disableAttack;
+		Dbg.attackDisabled = disableAttack;
 		EventKit.Broadcast("wake singletons");
 	}
 

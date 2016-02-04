@@ -1,5 +1,4 @@
 using Matcha.Unity;
-using System.Collections;
 using UnityEngine;
 
 public class FlickeringFireLerp : CacheBehaviour
@@ -16,7 +15,7 @@ public class FlickeringFireLerp : CacheBehaviour
 
 	void Start()
 	{
-		player = GameObject.Find(PLAYER).transform;
+		player = GameObject.Find(PLAYER).GetComponent<Transform>();
 		InvokeRepeating("CullingCheck", 0f, .2f);
 	}
 

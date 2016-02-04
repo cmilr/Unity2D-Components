@@ -1,13 +1,20 @@
-﻿using UnityEngine;
+using UnityEngine;
+using Rotorz.Tile;
 
-public class DisableShadows : BaseBehaviour
+public class TileSystemManager : BaseBehaviour
 {
 	private Shader shader;
 
 	void Start()
 	{
-		MeshRenderer[] allChildren = GetComponentsInChildren<MeshRenderer>();
+		EventKit.Broadcast<TileSystem>("tilesystem announced", GetComponent<TileSystem>());
 		shader = Shader.Find("Sprites/Diffuse");
+		DisableShadows();
+	}
+
+	void DisableShadows()
+	{
+		MeshRenderer[] allChildren = GetComponentsInChildren<MeshRenderer>();
 
 		foreach (MeshRenderer child in allChildren)
 		{

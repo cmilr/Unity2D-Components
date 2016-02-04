@@ -1,8 +1,5 @@
 using Matcha.Unity;
 using Rotorz.Tile;
-using System.Collections.Generic;
-using System;
-using UnityEngine;
 
 public class DungeonGenerator : CacheBehaviour
 {

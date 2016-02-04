@@ -1,29 +1,18 @@
-using System.Collections;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System;
 using UnityEngine;
 
-// this is a pseudo-singleton — it enforces a single instance, but doesn't expose
-// a static variable, so you can't access it without a GetComponent() call
-public class _LevelData : BaseBehaviour
+public class LevelData : BaseBehaviour
 {
-	public _LevelData data;
-
 	public int HP     { get; set; }
 	public int AC     { get; set; }
 	public int Damage { get; set; }
-
-	void Awake()
-	{
-		MakePseudoSingleton();
-	}
 
 	public void Save()
 	{
 		BinaryFormatter bf = new BinaryFormatter();
 		FileStream file = File.Create(Application.persistentDataPath + "/LevelData.dat");
-
 		LevelDataContainer container = new LevelDataContainer();
 
 		container.hp     = HP;
@@ -46,19 +35,6 @@ public class _LevelData : BaseBehaviour
 			HP     = container.hp;
 			AC     = container.ac;
 			Damage = container.damage;
-		}
-	}
-
-	void MakePseudoSingleton()
-	{
-		if (data == null)
-		{
-			DontDestroyOnLoad(gameObject);
-			data = this;
-		}
-		else if (data != this)
-		{
-			Destroy(gameObject);
 		}
 	}
 

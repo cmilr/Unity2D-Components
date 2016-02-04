@@ -1,27 +1,20 @@
-using System.Collections;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System;
 using UnityEngine;
 
-public class _GameData : BaseBehaviour
+public class GameData : BaseBehaviour
 {
-	public _GameData data;
-
-	// game stats
-	public float DifficultyMultiplier   { get; set; }
-
-	// player stats
+	public float DDamageMod   				{ get; set; }		//difficulty damage modifier
 	public int CurrentScore          	{ get; set; }
 	public int LastSavedScore        	{ get; set; }
 	public int Lives              		{ get; set; }
 	public int CurrentLevel          	{ get; set; }
 
+	//only called once since this is a singleton
 	void Awake()
 	{
-		MakePseudoSingleton();
-
-		DifficultyMultiplier = 1.0f;
+		DDamageMod 				= 1f;
 		CurrentScore         = 0;
 		LastSavedScore       = 0;
 		Lives                = 3;
@@ -32,10 +25,9 @@ public class _GameData : BaseBehaviour
 	{
 		BinaryFormatter bf = new BinaryFormatter();
 		FileStream file = File.Create(Application.persistentDataPath + "/GameData.dat");
-
 		GameDataContainer container = new GameDataContainer();
 
-		container.difficultyMultiplier = DifficultyMultiplier;
+		container.dDamageMod 			 = DDamageMod;
 		container.currentScore         = CurrentScore;
 		container.lastSavedScore       = LastSavedScore;
 		container.lives                = Lives;
@@ -54,24 +46,11 @@ public class _GameData : BaseBehaviour
 			GameDataContainer container = (GameDataContainer)bf.Deserialize(file);
 			file.Close();
 
-			DifficultyMultiplier = container.difficultyMultiplier;
+			DDamageMod 			   = container.dDamageMod;
 			CurrentScore         = container.currentScore;
 			LastSavedScore       = container.lastSavedScore;
 			Lives                = container.lives;
 			CurrentLevel         = container.currentLevel;
-		}
-	}
-
-	void MakePseudoSingleton()
-	{
-		if (data == null)
-		{
-			DontDestroyOnLoad(gameObject);
-			data = this;
-		}
-		else if (data != this)
-		{
-			Destroy(gameObject);
 		}
 	}
 
@@ -101,9 +80,9 @@ public class _GameData : BaseBehaviour
 [Serializable]
 class GameDataContainer
 {
-	public float difficultyMultiplier;
-	public int currentScore;
-	public int lastSavedScore;
-	public int lives;
-	public int currentLevel;
+	public float 	dDamageMod;
+	public int 		currentScore;
+	public int 		lastSavedScore;
+	public int 		lives;
+	public int 		currentLevel;
 }
