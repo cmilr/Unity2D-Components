@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : CacheBehaviour
 {
-	public float groundLine             = -50.00f;
+	public float groundLine             = 0f;
 	private float timeToFade            = 2f;
 	private float fadeInAfter           = 2f;
 	private float fadeOutAfter          = 0f;

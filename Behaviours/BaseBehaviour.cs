@@ -25,6 +25,11 @@ public class BaseBehaviour : MonoBehaviour
 	protected const int LARGE                         = 3;
 	protected const int XLARGE                        = 4;
 
+	//global difficulty
+	protected const int NORMAL								  = 1;
+	protected const int HARD 							     = 2;
+	protected const int KILL_ME_NOW 						  = 3;
+
 	//global pauses
 	protected const float WEAPON_PAUSE_ON_LEVEL_LOAD  = 1.5f;
 	protected const float ENEMY_PAUSE_ON_LEVEL_LOAD   = 3f;
@@ -92,11 +97,4 @@ public class BaseBehaviour : MonoBehaviour
 	//breakable pieces
 	protected const int MIN_BEFORE_FADE               = 5;
 	protected const int MAX_BEFORE_FADE               = 10;
-
-	void Awake()
-	{
-		#if UNITY_EDITOR
-			Debug.Log("Unity Editor");
-		#endif
-	}
 }

@@ -5,14 +5,9 @@ public class GameManager : BaseBehaviour
 	public bool disableAttack;
 	private GameData gameData;
 
-	public float dDamageMod
-	{
-		get { return gameData.DDamageMod; }
-	}
-
 	void Awake()
 	{
-		Dbg.attackDisabled = disableAttack;
+		MDebug.attackDisabled = disableAttack;
 		EventKit.Broadcast("wake singletons");
 	}
 
@@ -20,6 +15,7 @@ public class GameManager : BaseBehaviour
 	{
 		gameData = GameObject.Find(_DATA).GetComponent<GameData>();
 		EventKit.Broadcast<int>("init score", gameData.CurrentScore);
+		EventKit.Broadcast<int>("set difficulty", NORMAL);
 	}
 
 	void OnPrizeCollected(int worth)

@@ -55,7 +55,7 @@ public class AttackAI : CacheBehaviour
 		{
 			float distance = Vector3.Distance(target.position, transform.position);
 
-			if (distance <= attackWhenInRange && !Dbg.attackDisabled)
+			if (distance <= attackWhenInRange && !MDebug.attackDisabled)
 			{
 				if (Rand.Range(1, 100) <= chanceOfAttack)
 				{
