@@ -1,8 +1,11 @@
+using UnityEngine;
 
 public class AnimationHandler : CacheBehaviour {
 
 	void NewWeaponEquipped(Weapon.WeaponType weaponType)
 	{
+		Profiler.BeginSample("NewWeaponEquipped >> AnimationHandler.cs");
+
 		//reset weapon animations
 		animator.Rebind();
 
@@ -25,5 +28,7 @@ public class AnimationHandler : CacheBehaviour {
 			animator.SetLayerWeight(3, 0);
 			animator.SetLayerWeight(4, 1);
 		}
+
+		Profiler.EndSample();
 	}
 }

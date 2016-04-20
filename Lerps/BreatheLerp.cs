@@ -15,6 +15,7 @@ public class BreatheLerp : CacheBehaviour
 	protected void Start()
 	{
 		player = GameObject.Find(PLAYER).GetComponent<Transform>();
+
 		startPos = transform.position;
 		InvokeRepeating("CullingCheck", 0f, .2f);
 	}

@@ -21,8 +21,9 @@ public class DontLeaveMap : CacheBehaviour
 	private float spriteHeight;
 	private TileSystem tileSystem;
 
-	void Continue()
+	void Start()
 	{
+		tileSystem   = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
 		spriteWidth  = renderer.bounds.size.x;
 		spriteHeight = renderer.bounds.size.y;
 
@@ -61,22 +62,5 @@ public class DontLeaveMap : CacheBehaviour
 			transform.SetPositionY(lowerBound - lowerOffset);
 			EventKit.Broadcast<int, Weapon.WeaponType>("player dead", -1, Weapon.WeaponType.OutOfBounds);
 		}
-	}
-
-	void OnTileSystemAnnounced(TileSystem incomingTileSystem)
-	{
-		tileSystem = incomingTileSystem;
-
-		Continue();
-	}
-
-	void OnEnable()
-	{
-		EventKit.Subscribe<TileSystem>("tilesystem announced", OnTileSystemAnnounced);
-	}
-
-	void OnDestroy()
-	{
-		EventKit.Unsubscribe<TileSystem>("tilesystem announced", OnTileSystemAnnounced);
 	}
 }

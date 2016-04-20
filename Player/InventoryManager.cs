@@ -131,6 +131,8 @@ public class InventoryManager : CacheBehaviour
 
 	void CacheAndSetupWeapons()
 	{
+		Profiler.BeginSample("CacheAndSetupWeapons >> InventoryManager.cs");
+
 		// WEAPON GAMEOBJECT'S 'WEAPON' COMPONENT
 		// ~~~~~~~~~~~~~~~~~~~~~~~~
 		// cache specific weapons (Sword, Hammer, etc) via parent class 'Weapon'
@@ -187,6 +189,8 @@ public class InventoryManager : CacheBehaviour
 		FadeOutStashedWeapons(rightWeapon);
 
 		SendMessageUpwards("NewWeaponEquipped", equippedWeapon.weaponType);
+
+		Profiler.EndSample();
 	}
 
 	void FadeOutStashedWeapons(Weapon stashedWeapon)

@@ -1,5 +1,5 @@
-// This version of CacheBehaviour was modified by C.Miller.
-// See below for original Copyright and Disclaimer info.
+//this version of CacheBehaviour was modified by C.Miller
+//see below for original Copyright and Disclaimer info
 
 /*
  * Copyright (c) 2014, Nick Gravelyn.
@@ -27,10 +27,6 @@
 using System;
 using UnityEngine;
 
-/// <summary>
-/// A safe, drop-in replacement for MonoBehaviour as your base class. Each property value is cached
-/// and GetComponent will be called if the instance is null or is destroyed.
-/// </summary>
 public abstract class CacheBehaviour : BaseBehaviour
 {
 	[HideInInspector, NonSerialized]

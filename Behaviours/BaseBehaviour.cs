@@ -54,7 +54,8 @@ public class BaseBehaviour : MonoBehaviour
 	protected const int ENEMY_WEAPON                  = 17;
 	protected const int BREAKABLES                    = 18;
 	protected const int EDGE_BLOCKER                  = 24;
-	protected const int PICKUP_LAYER                 = 15;
+	protected const int PICKUP_LAYER                  = 15;
+	protected const int PLATFORM_LAYER                = 21;
 
 	//sorting layer names
 	protected const string PLATFORM_SORTING_LAYER      = "Platforms";

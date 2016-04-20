@@ -4,18 +4,17 @@ using UnityEngine;
 
 public class PlayerMovement : CacheBehaviour, ICreatureController
 {
-	private float gravity         = -35f;           // set gravity for player
-	private float runSpeed        = 7f;             // set player's run speed
-	private float groundDamping   = 20f;            // how fast do we change direction? higher means faster
-	private float inAirDamping    = 5f;             // how fast do we change direction mid-air?
-	private float jumpHeight      = 3.50f;          // player's jump height
-	private float maxFallingSpeed = 100f;           // max falling speed, for throttling falls, etc
-	// private float maxRisingSpeed  = 2f;             // max rising speed, for throttling player on moving platforms, etc
-	// private float speedCheck      = .1f;            // compare against to see if we need to throttle rising speed
+	private float gravity         = -35f;           //set gravity for player
+	private float runSpeed        = 7f;             //set player's run speed
+	private float groundDamping   = 20f;            //how fast do we change direction? higher means faster
+	private float inAirDamping    = 5f;             //how fast do we change direction mid-air?
+	private float jumpHeight      = 3.50f;          //player's jump height
+	private float maxFallingSpeed = 100f;           //max falling speed, for throttling falls, etc
+	private float jumpModifier    = 30f;            //increase jump height if traveling upwards, platforms etc
+	private float yVelocity;
 	private float normalizedHorizontalSpeed;
-	// private float previousX;
-	// private float previousY;
 	private float repulseVelocity;
+	private float previousY;
 	private bool facingRight;
 	private bool moveRight;
 	private bool moveLeft;
@@ -23,10 +22,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	private bool attack;
 	private bool repulseRight;
 	private bool repulseLeft;
-	// private bool movingHorizontally;
-	// private bool touchingWall;
-	// private bool ridingFastPlatform;
-	// private bool jumpedFromFastPlatform;
 	private Vector3 velocity;
 	private RaycastHit2D lastControllerColliderHit;
 	private CharacterController2D controller;
@@ -34,11 +29,11 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 	void Start()
 	{
-		controller = GetComponent<CharacterController2D>();
+		controller    = GetComponent<CharacterController2D>();
 		weaponManager = GetComponentInChildren<WeaponManager>();
 	}
 
-	// input methods required by ICreatureController
+	//input methods required by ICreatureController
 	public void MoveRight()
 	{
 		moveRight = true;
@@ -60,9 +55,11 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 	}
 
 	//main movement loop
-	//keep in LateUpdate() to prevent player falling through edge colliders
+	//keep in LateUpdate() to prevent player falling through edge colliders, bouncing, etc
 	void LateUpdate()
 	{
+		GetYVelocity();
+
 		InitializeVelocity();
 
 		CheckIfStandingOrFalling();
@@ -110,8 +107,6 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			}
 		}
 
-		// CheckForFreefall();
-
 		ComputeMovement();
 
 		ApplyGravity();
@@ -122,7 +117,19 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 		ApplyMovement();
 
-		// SavePreviousPosition();
+		SavePreviousPosition();
+	}
+
+	void GetYVelocity()
+	{
+		if (transform.position.y > previousY)
+		{
+			yVelocity = transform.position.y - previousY;
+		}
+		else
+		{
+			yVelocity = 0f;
+		}
 	}
 
 	void CheckIfStandingOrFalling()
@@ -133,16 +140,12 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			velocity.y = 0;
 
 			animator.SetBool("jump", false);
-
-			// if (jumpedFromFastPlatform) {
-			// 	jumpedFromFastPlatform = false;
-			// 	EventKit.Broadcast<bool>("player jumped from fast platform", false);
-			// }
 		}
 		else
 		{
 			//player jumping or falling
 			animator.SetBool("jump", true);
+			animator.SetBool("attack", false);
 		}
 	}
 
@@ -157,19 +160,13 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 	void PlayerJump()
 	{
-		velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
+		velocity.y = Mathf.Sqrt(2f * (jumpHeight +
+						(yVelocity * jumpModifier)) *    //jump higher if already traveling upwards
+						-gravity);
 
 		animator.SetBool("jump", true);
 
 		jump = false;
-
-		// if (ridingFastPlatform && movingHorizontally)
-		// {
-		// 	if (!jumpedFromFastPlatform) {
-		// 		jumpedFromFastPlatform = true;
-		// 		EventKit.Broadcast<bool>("player jumped from fast platform", true);
-		// 	}
-		// }
 	}
 
 	void MovePlayerRight()
@@ -279,36 +276,21 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		attack = false;
 	}
 
-	// void AttackWhileJumpingBUG()
-	// {
-	//    velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
+	//void AttackWhileJumpingBUG()
+	//{
+	//velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
 
-	//    action = Action.JumpAttack;
+	//action = Action.JumpAttack;
 
-	//    jump = false;
+	//jump = false;
 
-	//    attack = false;
-	// }
+	//attack = false;
+	//}
 
 	void InitializeVelocity()
 	{
 		velocity = controller.velocity;
 	}
-
-	// void CheckForFreefall()
-	// {
-	// 	//flush horizontal axis if player is falling while pressed against a wall
-	// 	if (touchingWall && !controller.isGrounded)
-	// 	{
-	// 		normalizedHorizontalSpeed = 0;
-	// 		velocity.x = 0f;
-	// 	}
-	// }
-
-	// bool MovingTooFast()
-	// {
-	// 	return transform.position.y - previousY > speedCheck;
-	// }
 
 	void ApplyGravity()
 	{
@@ -331,23 +313,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 	void ClampYMovement()
 	{
-		//clamp to maxRisingSpeed to eliminate jitteriness when rising too fast,
-		//otherwise, clamp to maxFallingSpeed to prevent player leaving screen
-		// if (MovingTooFast() && ridingFastPlatform && !movingHorizontally)
-		// {
-		// 	velocity.y = Mathf.Clamp(velocity.y, -maxFallingSpeed, maxRisingSpeed);
-		// }
-		// else
-		// {
-		// 	velocity.y = Mathf.Clamp(velocity.y, -maxFallingSpeed, maxFallingSpeed);
-		// }
-
 		velocity.y = Mathf.Clamp(velocity.y, -maxFallingSpeed, maxFallingSpeed);
-	}
-
-	void ApplyMovement()
-	{
-		controller.move(velocity * Time.deltaTime);
 	}
 
 	void ComputeMovement()
@@ -361,20 +327,15 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 			);
 	}
 
-	// void SavePreviousPosition()
-	// {
-	// 	// if (previousX != transform.position.x)
-	// 	// {
-	// 	// 	movingHorizontally = true;
-	// 	// }
-	// 	// else
-	// 	// {
-	// 	// 	movingHorizontally = false;
-	// 	// }
-	//
-	// 	previousX = transform.position.x;
-	// 	previousY = transform.position.y;
-	// }
+	void ApplyMovement()
+	{
+		controller.move(velocity * Time.deltaTime);
+	}
+
+	void SavePreviousPosition()
+	{
+		previousY = transform.position.y;
+	}
 
 	void RepulseToLeft(float maxVelocity)
 	{
@@ -402,27 +363,13 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		this.enabled = false;
 	}
 
-	void OnPlayerRidingFastPlatform(bool status)
-	{
-		// ridingFastPlatform = status;
-	}
-
-	void OnPlayerTouchingWall(bool status)
-	{
-		// touchingWall = status;
-	}
-
 	void OnEnable()
 	{
 		EventKit.Subscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
-		EventKit.Subscribe<bool>("player riding fast platform", OnPlayerRidingFastPlatform);
-		EventKit.Subscribe<bool>("player touching wall", OnPlayerTouchingWall);
 	}
 
 	void OnDestroy()
 	{
 		EventKit.Unsubscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
-		EventKit.Unsubscribe<bool>("player riding fast platform", OnPlayerRidingFastPlatform);
-		EventKit.Unsubscribe<bool>("player touching wall", OnPlayerTouchingWall);
 	}
 }

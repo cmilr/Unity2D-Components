@@ -4,14 +4,14 @@ public class PixelArtCamera : BaseBehaviour
 {
 	private float baseOrthographicSize;
 
-	void Start ()
+	void Start()
 	{
 		SetOrthographicSize();
 	}
 
 	void SetOrthographicSize()
 	{
-		// Experiment with: 32, 48, 64, 96.
+		//experiment with: 32, 48, 64, 96.
 		baseOrthographicSize = Screen.height / 64.0f / 2.0f;
 		Camera.main.orthographicSize = baseOrthographicSize;
 	}

@@ -25,8 +25,9 @@ public class LevelGenerator : CacheBehaviour
 	List<ProcHall> halls;
 	List<ProcHall> crawlways;
 
-	void Continue()
+	void Start()
 	{
+		map        = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
 		mapColumns = map.ColumnCount;
 		mapRows    = map.RowCount;
 		rooms      = new List<ProcRoom>();
@@ -465,22 +466,5 @@ public class LevelGenerator : CacheBehaviour
 	void RefreshAllTiles()
 	{
 		map.RefreshTiles();
-	}
-
-	void OnTileSystemAnnounced(TileSystem incomingTileSystem)
-	{
-		map = incomingTileSystem;
-
-		Continue();
-	}
-
-	void OnEnable()
-	{
-		EventKit.Subscribe<TileSystem>("tilesystem announced", OnTileSystemAnnounced);
-	}
-
-	void OnDestroy()
-	{
-		EventKit.Unsubscribe<TileSystem>("tilesystem announced", OnTileSystemAnnounced);
 	}
 }
