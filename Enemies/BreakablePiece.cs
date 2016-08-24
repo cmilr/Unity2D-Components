@@ -9,6 +9,8 @@ public class BreakablePiece : CacheBehaviour
 	private float newX;
 	private float newY;
 	private bool alreadyCollided;
+	private bool levelCompleted;
+	private bool playerDead;
 
 	void Start()
 	{
@@ -51,7 +53,7 @@ public class BreakablePiece : CacheBehaviour
 
 	void OnTriggerEnter2D(Collider2D coll)
 	{
-		if (!alreadyCollided)
+		if (!alreadyCollided && !levelCompleted && !playerDead)
 		{
 			int layer = coll.gameObject.layer;
 
@@ -59,10 +61,32 @@ public class BreakablePiece : CacheBehaviour
 			{
 				alreadyCollided = true;
 
-				Evnt.Broadcast<int>("prize collected", 5);
+				EventKit.Broadcast<int>("prize collected", 5);
 
 				FadeOutFast();
 			}
 		}
+	}
+
+	void OnEnable()
+	{
+		EventKit.Subscribe<bool>("level completed", OnLevelCompleted);
+		EventKit.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+	}
+
+	void OnDisable()
+	{
+		EventKit.Unsubscribe<bool>("level completed", OnLevelCompleted);
+		EventKit.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+	}
+
+	void OnPlayerDead(string methodOfDeath, Collider2D coll, int hitFrom)
+	{
+		playerDead = true;
+	}
+
+	void OnLevelCompleted(bool status)
+	{
+		levelCompleted = status;
 	}
 }

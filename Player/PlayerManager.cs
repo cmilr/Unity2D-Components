@@ -16,11 +16,11 @@ public class PlayerManager : CacheBehaviour
 
 	void Init()
 	{
-		Evnt.Broadcast<int>("init lvl", player.LVL);
-		Evnt.Broadcast<int>("init hp", player.HP);
-		Evnt.Broadcast<int>("init ac", player.AC);
-		Evnt.Broadcast<int>("init xp", player.XP);
-		Evnt.Broadcast<GameObject, GameObject, GameObject>
+		EventKit.Broadcast<int>("init lvl", player.LVL);
+		EventKit.Broadcast<int>("init hp", player.HP);
+		EventKit.Broadcast<int>("init ac", player.AC);
+		EventKit.Broadcast<int>("init xp", player.XP);
+		EventKit.Broadcast<GameObject, GameObject, GameObject>
 			("init weapons", player.equippedWeapon, player.leftWeapon, player.rightWeapon);
 	}
 
@@ -31,11 +31,8 @@ public class PlayerManager : CacheBehaviour
 
 		// produce effects
 		// params for ShakeCamera = duration, strength, vibrato, randomness
-		Evnt.Broadcast<float, float, int, float>("shake camera", .5f, .3f, 20, 5f);
-		Evnt.Broadcast<int>("reduce hp", player.HP);
-
-		// float xDistance = hitFrom == LEFT ? 2f : -2f;
-		// transform.DOJump(new Vector3(transform.position.x + xDistance, transform.position.y, transform.position.z), .2f, 1, .5f, false);
+		EventKit.Broadcast<float, float, int, float>("shake camera", .5f, .3f, 20, 5f);
+		EventKit.Broadcast<int>("reduce hp", player.HP);
 
 		if (hitFrom == RIGHT)
 		{
@@ -52,7 +49,7 @@ public class PlayerManager : CacheBehaviour
 		}
 		else
 		{
-			Evnt.Broadcast<string, Collider2D, int>("player dead", "projectile", coll, hitFrom);
+			EventKit.Broadcast<string, Collider2D, int>("player dead", "projectile", coll, hitFrom);
 		}
 	}
 
@@ -62,7 +59,7 @@ public class PlayerManager : CacheBehaviour
 		player.HP -= (int)(enemy.touchDamage * DIFFICULTY_DAMAGE_MODIFIER);
 
 		// produce effects
-		Evnt.Broadcast<int>("reduce hp", player.HP);
+		EventKit.Broadcast<int>("reduce hp", player.HP);
 
 		if (player.HP > 0)
 		{
@@ -70,7 +67,7 @@ public class PlayerManager : CacheBehaviour
 		}
 		else
 		{
-			Evnt.Broadcast<string, Collider2D, int>("player dead", "struckdown", coll, hitFrom);
+			EventKit.Broadcast<string, Collider2D, int>("player dead", "struckdown", coll, hitFrom);
 		}
 	}
 }

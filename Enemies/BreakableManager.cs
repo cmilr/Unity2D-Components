@@ -181,7 +181,7 @@ public class BreakableManager : CacheBehaviour
 					int force = (hitFrom == RIGHT) ? -50 : 50;
 					rigidbody2D.AddForce(new Vector3(force, 50, 50), ForceMode2D.Impulse);
 					// params for ShakeCamera = duration, strength, vibrato, randomness
-					Evnt.Broadcast<float, float, int, float>("shake camera", .7f, .4f, 20, 3f);
+					EventKit.Broadcast<float, float, int, float>("shake camera", .7f, .4f, 20, 3f);
 					break;
 				}
 

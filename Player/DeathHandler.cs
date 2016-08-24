@@ -247,11 +247,11 @@ public class DeathHandler : CacheBehaviour
 
 	void AddListeners()
 	{
-		Evnt.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 
 	void OnDestroy()
 	{
-		Evnt.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 }

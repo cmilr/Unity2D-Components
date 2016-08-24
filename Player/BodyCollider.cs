@@ -77,14 +77,14 @@ public class BodyCollider : CacheBehaviour
 
 	void OnEnable()
 	{
-		Evnt.Subscribe<bool>("level completed", OnLevelCompleted);
-		Evnt.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Subscribe<bool>("level completed", OnLevelCompleted);
+		EventKit.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 
 	void OnDisable()
 	{
-		Evnt.Unsubscribe<bool>("level completed", OnLevelCompleted);
-		Evnt.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Unsubscribe<bool>("level completed", OnLevelCompleted);
+		EventKit.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 
 	void OnPlayerDead(string methodOfDeath, Collider2D coll, int hitFrom)

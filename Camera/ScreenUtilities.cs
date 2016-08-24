@@ -19,7 +19,7 @@ public class ScreenUtilities : CacheBehaviour
 		currentScreenWidth   = Screen.width;
 		currentScreenHeight  = Screen.height;
 
-		InvokeRepeating("CheckScreenSize", 0f, 0.1F);
+		InvokeRepeating("CheckScreenSize", 0f, 0.2F);
 	}
 
 	void CheckScreenSize()
@@ -29,7 +29,7 @@ public class ScreenUtilities : CacheBehaviour
 			vertExtent  = Camera.main.GetComponent<Camera>().orthographicSize;
 			horizExtent = vertExtent * Screen.width / Screen.height;
 
-			Evnt.Broadcast<float, float>("screen size changed", vertExtent, horizExtent);
+			EventKit.Broadcast<float, float>("screen size changed", vertExtent, horizExtent);
 		}
 	}
 

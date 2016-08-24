@@ -3,10 +3,10 @@ using UnityEngine;
 public class ProjectileManager : CacheBehaviour
 {
 	private GameObject pooledProjectile;
+	private Transform projectileSpawnPoint;
 	private bool firedByPlayer;
 	private float fireRate;
 	private float nextFire;
-	private Transform projectileSpawnPoint;
 
 	void Start()
 	{

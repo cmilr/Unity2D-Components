@@ -140,7 +140,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 			if (jumpedFromFastPlatform) {
 				jumpedFromFastPlatform = false;
-				Evnt.Broadcast<bool>("player jumped from fast platform", false);
+				EventKit.Broadcast<bool>("player jumped from fast platform", false);
 			}
 		}
 		else                             //player jumping or falling
@@ -170,7 +170,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 		{
 			if (!jumpedFromFastPlatform) {
 				jumpedFromFastPlatform = true;
-				Evnt.Broadcast<bool>("player jumped from fast platform", true);
+				EventKit.Broadcast<bool>("player jumped from fast platform", true);
 			}
 		}
 	}
@@ -349,7 +349,7 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 	void BroadcastCurrentPosition()
 	{
-		Evnt.Broadcast<float, float>("player position", transform.position.x, transform.position.y);
+		EventKit.Broadcast<float, float>("player position", transform.position.x, transform.position.y);
 	}
 
 	void ComputeMovement()
@@ -417,15 +417,15 @@ public class PlayerMovement : CacheBehaviour, ICreatureController
 
 	void OnEnable()
 	{
-		Evnt.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
-		Evnt.Subscribe<bool>("player riding fast platform", OnPlayerRidingFastPlatform);
-		Evnt.Subscribe<bool>("player touching wall", OnPlayerTouchingWall);
+		EventKit.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Subscribe<bool>("player riding fast platform", OnPlayerRidingFastPlatform);
+		EventKit.Subscribe<bool>("player touching wall", OnPlayerTouchingWall);
 	}
 
 	void OnDestroy()
 	{
-		Evnt.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
-		Evnt.Unsubscribe<bool>("player riding fast platform", OnPlayerRidingFastPlatform);
-		Evnt.Unsubscribe<bool>("player touching wall", OnPlayerTouchingWall);
+		EventKit.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Unsubscribe<bool>("player riding fast platform", OnPlayerRidingFastPlatform);
+		EventKit.Unsubscribe<bool>("player touching wall", OnPlayerTouchingWall);
 	}
 }

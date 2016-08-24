@@ -1,4 +1,4 @@
- using Matcha.Dreadful;
+using Matcha.Dreadful;
 using UnityEngine.Assertions;
 using UnityEngine;
 
@@ -29,7 +29,7 @@ public class PickupEntity : Entity
 				{
 					MFX.PickupPrize(gameObject);
 					MFX.ExtinguishLight(glow, 0, .1f);
-					Evnt.Broadcast<int>("prize collected", worth);
+					EventKit.Broadcast<int>("prize collected", worth);
 					break;
 				}
 
@@ -38,20 +38,20 @@ public class PickupEntity : Entity
 					MFX.PickupPrize(gameObject);
 					MFX.ExtinguishLight(glow, 0, .1f);
 					levelCompleted = true;
-					Evnt.Broadcast<int>("prize collected", worth);
-					Evnt.Broadcast<bool>("level completed", true);
+					EventKit.Broadcast<int>("prize collected", worth);
+					EventKit.Broadcast<bool>("level completed", true);
 					break;
 				}
 
 				case EntityType.save:
 				{
-					Evnt.Broadcast<bool>("save player data", true);
+					EventKit.Broadcast<bool>("save player data", true);
 					break;
 				}
 
 				case EntityType.load:
 				{
-					Evnt.Broadcast<bool>("load player data", true);
+					EventKit.Broadcast<bool>("load player data", true);
 					break;
 				}
 

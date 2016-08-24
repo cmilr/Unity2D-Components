@@ -83,7 +83,7 @@ public class MovingPlatform : CacheBehaviour
 		}
 
 		if (layer == PLAYER_COLLIDER && fastPlatform) {
-			Evnt.Broadcast<bool>("player riding fast platform", true);
+			EventKit.Broadcast<bool>("player riding fast platform", true);
 		}
 	}
 
@@ -94,7 +94,7 @@ public class MovingPlatform : CacheBehaviour
 		coll.transform.parent = null;
 
 		if (layer == PLAYER_COLLIDER && fastPlatform) {
-			Evnt.Broadcast<bool>("player riding fast platform", false);
+			EventKit.Broadcast<bool>("player riding fast platform", false);
 		}
 	}
 

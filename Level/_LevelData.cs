@@ -74,14 +74,14 @@ public class _LevelData : BaseBehaviour
 
 	void OnEnable()
 	{
-		Evnt.Subscribe<bool>("save level data", OnSaveLevelData);
-		Evnt.Subscribe<bool>("load level data", OnLoadLevelData);
+		EventKit.Subscribe<bool>("save level data", OnSaveLevelData);
+		EventKit.Subscribe<bool>("load level data", OnLoadLevelData);
 	}
 
 	void OnDestroy()
 	{
-		Evnt.Unsubscribe<bool>("save level data", OnSaveLevelData);
-		Evnt.Unsubscribe<bool>("load level data", OnLoadLevelData);
+		EventKit.Unsubscribe<bool>("save level data", OnSaveLevelData);
+		EventKit.Unsubscribe<bool>("load level data", OnLoadLevelData);
 	}
 }
 

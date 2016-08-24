@@ -40,11 +40,11 @@ public class ImageEffectsHandler : CacheBehaviour
 
 	void OnEnable()
 	{
-		Evnt.Subscribe<bool>("player above ground", OnPlayerAboveGround);
+		EventKit.Subscribe<bool>("player above ground", OnPlayerAboveGround);
 	}
 
 	void OnDisable()
 	{
-		Evnt.Unsubscribe<bool>("player above ground", OnPlayerAboveGround);
+		EventKit.Unsubscribe<bool>("player above ground", OnPlayerAboveGround);
 	}
 }

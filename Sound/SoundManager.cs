@@ -22,11 +22,11 @@ public class SoundManager : CacheBehaviour
 
 	void OnEnable()
 	{
-		Evnt.Subscribe<int>("prize collected", OnPrizeCollected);
+		EventKit.Subscribe<int>("prize collected", OnPrizeCollected);
 	}
 
 	void OnDestroy()
 	{
-		Evnt.Unsubscribe<int>("prize collected", OnPrizeCollected);
+		EventKit.Unsubscribe<int>("prize collected", OnPrizeCollected);
 	}
 }

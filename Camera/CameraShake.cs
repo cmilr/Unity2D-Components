@@ -9,11 +9,11 @@ public class CameraShake : CacheBehaviour
 
 	void OnEnable()
 	{
-		Evnt.Subscribe<float, float, int, float>("shake camera", OnShakeCamera);
+		EventKit.Subscribe<float, float, int, float>("shake camera", OnShakeCamera);
 	}
 
 	void OnDestroy()
 	{
-		Evnt.Unsubscribe<float, float, int, float>("shake camera", OnShakeCamera);
+		EventKit.Unsubscribe<float, float, int, float>("shake camera", OnShakeCamera);
 	}
 }

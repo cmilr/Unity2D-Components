@@ -63,7 +63,7 @@ public class DontLeaveMap : CacheBehaviour
 		if (transform.position.y - lowerOffset < lowerBound)
 		{
 			transform.SetPositionY(lowerBound - lowerOffset);
-			Evnt.Broadcast<string, Collider2D, int>("player dead", "out of bounds", null, -1);
+			EventKit.Broadcast<string, Collider2D, int>("player dead", "out of bounds", null, -1);
 		}
 	}
 }

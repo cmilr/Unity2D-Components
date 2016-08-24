@@ -7,24 +7,24 @@ public class WeaponPickupCollider : CacheBehaviour
 	{
 		gameObject.layer = PICKUP_LAYER;
 	}
-	
+
 	void OnTriggerEnter2D(Collider2D coll)
 	{
 		if (coll.gameObject.layer == PLAYER_COLLIDER)
 		{
 			MFX.PickupWeapon(gameObject);
-			Evnt.Broadcast<int>("prize collected", transform.parent.GetComponent<Weapon>().worth);
-			Evnt.Broadcast<GameObject>("equip new weapon", transform.parent.gameObject);
+			EventKit.Broadcast<int>("prize collected", transform.parent.GetComponent<Weapon>().worth);
+			EventKit.Broadcast<GameObject>("equip new weapon", transform.parent.gameObject);
 		}
 	}
 
 	public void EnableWeaponPickupCollider()
 	{
-			collider2D.enabled = true;
+		collider2D.enabled = true;
 	}
 
 	public void DisableWeaponPickupCollider()
 	{
-			collider2D.enabled = false;
+		collider2D.enabled = false;
 	}
 }

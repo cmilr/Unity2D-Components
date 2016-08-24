@@ -23,6 +23,7 @@ public class MovementAI : CacheBehaviour
 	private bool hesitant;
 	private bool blockedLeft;
 	private bool blockedRight;
+	private bool dead;
 	private float blockedRightAt;
 	private float blockedLeftAt;
 	private Transform target;
@@ -42,13 +43,16 @@ public class MovementAI : CacheBehaviour
 
 	void LateUpdate()
 	{
-		switch (style)
+		if (!dead)
 		{
-			case Style.Scout:
-			case Style.HesitantScout:
+			switch (style)
 			{
-				StopCheck();
-				break;
+				case Style.Scout:
+				case Style.HesitantScout:
+				{
+					StopCheck();
+					break;
+				}
 			}
 		}
 	}
@@ -56,62 +60,71 @@ public class MovementAI : CacheBehaviour
 	// MASTER CONTROLLER
 	void OnBecameVisible()
 	{
-		switch (style)
+		if (!dead)
 		{
-			case Style.Sentinel:
+			switch (style)
 			{
-				InvokeRepeating("LookAtTarget", 1f, lookInterval);
-				break;
-			}
+				case Style.Sentinel:
+				{
+					InvokeRepeating("LookAtTarget", 1f, lookInterval);
+					break;
+				}
 
-			case Style.Scout:
-			case Style.HesitantScout:
-			{
-				InvokeRepeating("LookAtTarget", 1f, lookInterval);
-				InvokeRepeating("FollowTarget", 1f, movementInterval);
-				break;
+				case Style.Scout:
+				case Style.HesitantScout:
+				{
+					InvokeRepeating("LookAtTarget", 1f, lookInterval);
+					InvokeRepeating("FollowTarget", 1f, movementInterval);
+					break;
+				}
 			}
 		}
 	}
 
 	void LookAtTarget()
 	{
-		int direction = (target.position.x > transform.position.x) ? RIGHT : LEFT;
+		if (!dead)
+		{
+			int direction = (target.position.x > transform.position.x) ? RIGHT : LEFT;
 
-		transform.SetLocalScaleX((float)direction);
+			transform.SetLocalScaleX((float)direction);
+		}
 	}
 
 	void FollowTarget()
 	{
-		if (!enabled) { return; }
-
-		// get the proper direction for the enemy to move, then send him moving
-		if (target.position.x > transform.position.x + playerOffset)
+		if (!dead)
 		{
-			walkingDirection = RIGHT;
-		}
-		else if (target.position.x < transform.position.x - playerOffset)
-		{
-			walkingDirection = LEFT;
-		}
-		else
-		{
-			movementPaused = true;
-			rigidbody2D.velocity = Vector2.zero;
-		}
+			if (!enabled) { return; }
 
-		if (!movementPaused)
-		{
-			rigidbody2D.velocity = transform.right * movementSpeed * walkingDirection;
-
-			// ensure that actor is always facing in the direction it is moving
-			transform.SetLocalScaleX((float)walkingDirection);
-
-			// add some random pauses
-			if (hesitant && Rand.Range(0f, 100f) <= chanceOfPause)
+			// get the proper direction for the enemy to move, then send him moving
+			if (target.position.x > transform.position.x + playerOffset)
 			{
+				walkingDirection = RIGHT;
+			}
+			else if (target.position.x < transform.position.x - playerOffset)
+			{
+				walkingDirection = LEFT;
+			}
+			else
+			{
+				movementPaused = true;
 				rigidbody2D.velocity = Vector2.zero;
-				StartCoroutine(PauseFollowTarget());
+			}
+
+			if (!movementPaused)
+			{
+				rigidbody2D.velocity = transform.right * movementSpeed * walkingDirection;
+
+				// ensure that actor is always facing in the direction it is moving
+				transform.SetLocalScaleX((float)walkingDirection);
+
+				// add some random pauses
+				if (hesitant && Rand.Range(0f, 100f) <= chanceOfPause)
+				{
+					rigidbody2D.velocity = Vector2.zero;
+					StartCoroutine(PauseFollowTarget());
+				}
 			}
 		}
 	}
@@ -125,47 +138,53 @@ public class MovementAI : CacheBehaviour
 
 	void StopCheck()
 	{
-		walkingDirection = (target.position.x > transform.position.x) ? RIGHT : LEFT;
-
-		if (blockedRight && walkingDirection == RIGHT)
+		if (!dead)
 		{
-			movementPaused = true;
-			rigidbody2D.velocity = Vector2.zero;
-			rigidbody2D.angularVelocity = 0f;
+			walkingDirection = (target.position.x > transform.position.x) ? RIGHT : LEFT;
 
-			if (transform.position.x > blockedRightAt) {
-				transform.SetPositionX(blockedRightAt);
+			if (blockedRight && walkingDirection == RIGHT)
+			{
+				movementPaused = true;
+				rigidbody2D.velocity = Vector2.zero;
+				rigidbody2D.angularVelocity = 0f;
+
+				if (transform.position.x > blockedRightAt) {
+					transform.SetPositionX(blockedRightAt);
+				}
 			}
-		}
-		else if (blockedLeft && walkingDirection == LEFT)
-		{
-			movementPaused = true;
-			rigidbody2D.velocity = Vector2.zero;
-			rigidbody2D.angularVelocity = 0f;
+			else if (blockedLeft && walkingDirection == LEFT)
+			{
+				movementPaused = true;
+				rigidbody2D.velocity = Vector2.zero;
+				rigidbody2D.angularVelocity = 0f;
 
-			if (transform.position.x < blockedLeftAt) {
-				transform.SetPositionX(blockedLeftAt);
+				if (transform.position.x < blockedLeftAt) {
+					transform.SetPositionX(blockedLeftAt);
+				}
 			}
-		}
-		// if enemy and player are on roughly same x axis, movementPaused
-		else if (transform.position.x.FloatEquals(target.position.x, xAxisOffset))
-		{
-			movementPaused = true;
-			rigidbody2D.velocity = Vector2.zero;
-			rigidbody2D.angularVelocity = 0f;
-		}
-		else
-		{
-			movementPaused = false;
+			// if enemy and player are on roughly same x axis, movementPaused
+			else if (transform.position.x.FloatEquals(target.position.x, xAxisOffset))
+			{
+				movementPaused = true;
+				rigidbody2D.velocity = Vector2.zero;
+				rigidbody2D.angularVelocity = 0f;
+			}
+			else
+			{
+				movementPaused = false;
+			}
 		}
 	}
 
 	void RotateTowardsTarget()
 	{
-		Vector3 vel = GetForceFrom(transform.position, target.position);
-		float angle = Mathf.Atan2(vel.y, vel.x) * Mathf.Rad2Deg;
+		if (!dead)
+		{
+			Vector3 vel = GetForceFrom(transform.position, target.position);
+			float angle = Mathf.Atan2(vel.y, vel.x) * Mathf.Rad2Deg;
 
-		transform.eulerAngles = new Vector3(0, 0, angle);
+			transform.eulerAngles = new Vector3(0, 0, angle);
+		}
 	}
 
 	static Vector2 GetForceFrom(Vector3 fromPos, Vector3 toPos)
@@ -178,51 +197,64 @@ public class MovementAI : CacheBehaviour
 	// check for edge blockers
 	void OnTriggerEnter2D(Collider2D coll)
 	{
-		int layer = coll.gameObject.layer;
-
-		if (layer == EDGE_BLOCKER)
+		if (!dead)
 		{
-			sideHit = M.HorizSideThatWasHit(gameObject, coll);
+			int layer = coll.gameObject.layer;
 
-			if (sideHit == RIGHT)
+			if (layer == EDGE_BLOCKER)
 			{
-				blockedRight   = true;
-				blockedRightAt = transform.position.x;
-				gameObject.BroadcastMessage("SetBlockedRightState", true);
-			}
-			else if (sideHit == LEFT)
-			{
-				blockedLeft   = true;
-				blockedLeftAt = transform.position.x;
-				gameObject.BroadcastMessage("SetBlockedLeftState", true);
-			}
+				sideHit = M.HorizSideThatWasHit(gameObject, coll);
 
-			rigidbody2D.velocity = Vector2.zero;
+				if (sideHit == RIGHT)
+				{
+					blockedRight   = true;
+					blockedRightAt = transform.position.x;
+					gameObject.BroadcastMessage("SetBlockedRightState", true);
+				}
+				else if (sideHit == LEFT)
+				{
+					blockedLeft   = true;
+					blockedLeftAt = transform.position.x;
+					gameObject.BroadcastMessage("SetBlockedLeftState", true);
+				}
+
+				rigidbody2D.velocity = Vector2.zero;
+			}
 		}
 	}
 
 	// check if cleared edge blocker
 	void OnTriggerExit2D(Collider2D coll)
 	{
-		int layer = coll.gameObject.layer;
-
-		if (layer == EDGE_BLOCKER)
+		if (!dead)
 		{
-			int sideThatWasHit = M.HorizSideThatWasHit(gameObject, coll);
+			int layer = coll.gameObject.layer;
 
-			if (sideThatWasHit == RIGHT)
+			if (layer == EDGE_BLOCKER)
 			{
-				blockedRight = false;
-				gameObject.BroadcastMessage("SetBlockedRightState", false);
-			}
-			else if (sideThatWasHit == LEFT)
-			{
-				blockedLeft = false;
-				gameObject.BroadcastMessage("SetBlockedLeftState", false);
-			}
+				int sideThatWasHit = M.HorizSideThatWasHit(gameObject, coll);
 
-			movementPaused = false;
+				if (sideThatWasHit == RIGHT)
+				{
+					blockedRight = false;
+					gameObject.BroadcastMessage("SetBlockedRightState", false);
+				}
+				else if (sideThatWasHit == LEFT)
+				{
+					blockedLeft = false;
+					gameObject.BroadcastMessage("SetBlockedLeftState", false);
+				}
+
+				movementPaused = false;
+			}
 		}
+	}
+
+	void CreatureDead()
+	{
+		CancelInvoke("FollowTarget");
+		CancelInvoke("LookAtTarget");
+		dead = true;
 	}
 
 	void OnPlayerDead(string causeOfDeath, Collider2D coll, int directionHit)
@@ -239,11 +271,11 @@ public class MovementAI : CacheBehaviour
 
 	void OnEnable()
 	{
-		Evnt.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 
 	void OnDestroy()
 	{
-		Evnt.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+		EventKit.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
 	}
 }
