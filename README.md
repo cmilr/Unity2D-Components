@@ -1,6 +1,3 @@
-[![Join the chat at https://gitter.im/jguarShark/Unity2D-Components](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jguarShark/Unity2D-Components?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) 
-
-[![Stories in Ready](https://badge.waffle.io/jguarshark/unity2d-components.png?label=ready&title=Ready)](https://waffle.io/jguarshark/unity2d-components)
 # Unity2D Components
 
 This repository holds a varied collection of Unity3D components which I've been building for use in the 2D Platformer/RPG I'm currently developing. **It is very much a work in progress,** but please feel free to take a look around.
