@@ -1,16 +1,14 @@
-using DG.Tweening;
 using Matcha.Dreadful;
-using System.Collections;
 using UnityEngine;
 
 public class PlayerManager : CacheBehaviour
 {
-	private _PlayerData player;
+	private int diffDamageModifier;
+	private PlayerData player;
 
 	void Start()
 	{
-		player = GameObject.Find(_PLAYER_DATA).GetComponent<_PlayerData>();
-
+		player = GameObject.Find(_DATA).GetComponent<PlayerData>();
 		Init();
 	}
 
@@ -20,21 +18,32 @@ public class PlayerManager : CacheBehaviour
 		EventKit.Broadcast<int>("init hp", player.HP);
 		EventKit.Broadcast<int>("init ac", player.AC);
 		EventKit.Broadcast<int>("init xp", player.XP);
+<<<<<<< HEAD
 		EventKit.Broadcast<GameObject, GameObject, GameObject>
 			("init weapons", player.equippedWeapon, player.leftWeapon, player.rightWeapon);
+=======
+		EventKit.Broadcast<GameObject, GameObject, GameObject>("init weapons",
+					player.equippedWeapon, player.leftWeapon, player.rightWeapon);
+>>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
 	}
 
-	public void TakesHit(string weaponType, Weapon weapon, Collider2D coll, int hitFrom)
+	public void TakesHit(Hit hit)
 	{
+<<<<<<< HEAD
 		// calculate damage
 		player.HP -= (int)(weapon.damage * DIFFICULTY_DAMAGE_MODIFIER);
 
 		// produce effects
 		// params for ShakeCamera = duration, strength, vibrato, randomness
+=======
+		player.HP -= (int)(hit.weapon.damage * diffDamageModifier);
+
+		//params for ShakeCamera = duration, strength, vibrato, randomness
+>>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
 		EventKit.Broadcast<float, float, int, float>("shake camera", .5f, .3f, 20, 5f);
 		EventKit.Broadcast<int>("reduce hp", player.HP);
 
-		if (hitFrom == RIGHT)
+		if (hit.hitFrom == RIGHT)
 		{
 			BroadcastMessage("RepulseToLeft", 5.0F);
 		}
@@ -49,16 +58,22 @@ public class PlayerManager : CacheBehaviour
 		}
 		else
 		{
+<<<<<<< HEAD
 			EventKit.Broadcast<string, Collider2D, int>("player dead", "projectile", coll, hitFrom);
+=======
+			EventKit.Broadcast<int, Weapon.WeaponType>("player dead", hit.hitFrom, hit.weaponType);
+>>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
 		}
 	}
 
 	public void TouchesEnemy(string weaponType, CreatureEntity enemy, Collider2D coll, int hitFrom)
 	{
-		// calculate damage
-		player.HP -= (int)(enemy.touchDamage * DIFFICULTY_DAMAGE_MODIFIER);
+		player.HP -= (int)(enemy.touchDamage * diffDamageModifier);
 
+<<<<<<< HEAD
 		// produce effects
+=======
+>>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
 		EventKit.Broadcast<int>("reduce hp", player.HP);
 
 		if (player.HP > 0)
@@ -67,7 +82,26 @@ public class PlayerManager : CacheBehaviour
 		}
 		else
 		{
+<<<<<<< HEAD
 			EventKit.Broadcast<string, Collider2D, int>("player dead", "struckdown", coll, hitFrom);
+=======
+			EventKit.Broadcast<int, Weapon.WeaponType>("player dead", hitFrom, Weapon.WeaponType.Struckdown);
+>>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
 		}
+	}
+
+	void OnSetDiffDamageModifier(int modifier)
+	{
+		diffDamageModifier = modifier;
+	}
+
+	void OnEnable()
+	{
+		EventKit.Subscribe<int>("set difficulty damage modifier", OnSetDiffDamageModifier);
+	}
+
+	void OnDestroy()
+	{
+		EventKit.Unsubscribe<int>("set difficulty damage modifier", OnSetDiffDamageModifier);
 	}
 }

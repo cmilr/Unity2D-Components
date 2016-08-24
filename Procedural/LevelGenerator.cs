@@ -25,8 +25,7 @@ public class LevelGenerator : CacheBehaviour
 	List<ProcHall> halls;
 	List<ProcHall> crawlways;
 
-
-	void Awake()
+	void Start()
 	{
 		map        = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
 		mapColumns = map.ColumnCount;

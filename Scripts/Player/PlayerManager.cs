@@ -1,44 +1,38 @@
-﻿using DG.Tweening;
 using Matcha.Dreadful;
-using System.Collections;
 using UnityEngine;
 
 public class PlayerManager : CacheBehaviour
 {
-	private _PlayerData player;
+	private PlayerData player;
+	private GameManager game;
 
 	void Start()
 	{
-		player = GameObject.Find(_PLAYER_DATA).GetComponent<_PlayerData>();
-		
+		player = GameObject.Find(_DATA).GetComponent<PlayerData>();
+		game 	 = GameObject.Find(GAME_MANAGER).GetComponent<GameManager>();
+
 		Init();
 	}
 
 	void Init()
 	{
-		Messenger.Broadcast<int>("init lvl", player.LVL);
-		Messenger.Broadcast<int>("init hp", player.HP);
-		Messenger.Broadcast<int>("init ac", player.AC);
-		Messenger.Broadcast<int>("init xp", player.XP);
-		Messenger.Broadcast<GameObject, GameObject, GameObject>
+		EventKit.Broadcast<int>("init lvl", player.LVL);
+		EventKit.Broadcast<int>("init hp", player.HP);
+		EventKit.Broadcast<int>("init ac", player.AC);
+		EventKit.Broadcast<int>("init xp", player.XP);
+		EventKit.Broadcast<GameObject, GameObject, GameObject>
 			("init weapons", player.equippedWeapon, player.leftWeapon, player.rightWeapon);
-		Messenger.Broadcast<Transform>("player placed", transform);
 	}
 
-	public void TakesHit(string weaponType, Weapon weapon, Collider2D coll, int hitFrom)
+	public void TakesHit(Hit hit)
 	{
-		// calculate damage
-		player.HP -= (int)(weapon.damage * DIFFICULTY_DAMAGE_MODIFIER);
+		player.HP -= (int)(hit.weapon.damage * game.dDamageMod);
 
-		// produce effects
-		// params for ShakeCamera = duration, strength, vibrato, randomness
-		Messenger.Broadcast<float, float, int, float>("shake camera", .5f, .3f, 20, 5f);
-		Messenger.Broadcast<int>("reduce hp", player.HP);
+		//params for ShakeCamera = duration, strength, vibrato, randomness
+		EventKit.Broadcast<float, float, int, float>("shake camera", .5f, .3f, 20, 5f);
+		EventKit.Broadcast<int>("reduce hp", player.HP);
 
-		// float xDistance = hitFrom == LEFT ? 2f : -2f;
-		// transform.DOJump(new Vector3(transform.position.x + xDistance, transform.position.y, transform.position.z), .2f, 1, .5f, false);
-
-		if (hitFrom == RIGHT)
+		if (hit.hitFrom == RIGHT)
 		{
 			BroadcastMessage("RepulseToLeft", 5.0F);
 		}
@@ -53,17 +47,15 @@ public class PlayerManager : CacheBehaviour
 		}
 		else
 		{
-			Messenger.Broadcast<string, Collider2D, int>("player dead", "projectile", coll, hitFrom);
+			EventKit.Broadcast<int, Weapon.WeaponType>("player dead", hit.hitFrom, hit.weaponType);
 		}
 	}
 
 	public void TouchesEnemy(string weaponType, CreatureEntity enemy, Collider2D coll, int hitFrom)
 	{
-		// calculate damage
-		player.HP -= (int)(enemy.touchDamage * DIFFICULTY_DAMAGE_MODIFIER);
+		player.HP -= (int)(enemy.touchDamage * game.dDamageMod);
 
-		// produce effects
-		Messenger.Broadcast<int>("reduce hp", player.HP);
+		EventKit.Broadcast<int>("reduce hp", player.HP);
 
 		if (player.HP > 0)
 		{
@@ -71,34 +63,7 @@ public class PlayerManager : CacheBehaviour
 		}
 		else
 		{
-			Messenger.Broadcast<string, Collider2D, int>("player dead", "struckdown", coll, hitFrom);
+			EventKit.Broadcast<int, Weapon.WeaponType>("player dead", hitFrom, Weapon.WeaponType.Struckdown);
 		}
-	}
-
-	void OnPlayerHit(string weaponType, Collider2D coll, int hitFrom)
-	{
-		// Messenger.Broadcast<string, Collider2D, int>("player dead", "projectile", coll, hitFrom);
-	}
-
-	void OnPrizeCollected(int worth)
-	{
-	}
-
-	void OnLevelCompleted(bool status)
-	{
-	}
-
-	void OnEnable()
-	{
-		Messenger.AddListener<string, Collider2D, int>("player hit", OnPlayerHit);
-		Messenger.AddListener<int>("prize collected", OnPrizeCollected);
-		Messenger.AddListener<bool>("level completed", OnLevelCompleted);
-	}
-
-	void OnDestroy()
-	{
-		Messenger.RemoveListener<string, Collider2D, int>("player hit", OnPlayerHit);
-		Messenger.RemoveListener<int>("prize collected", OnPrizeCollected);
-		Messenger.RemoveListener<bool>("level completed", OnLevelCompleted);
 	}
 }

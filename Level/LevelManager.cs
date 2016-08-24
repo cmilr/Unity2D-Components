@@ -1,22 +1,22 @@
 using Matcha.Dreadful;
-using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : CacheBehaviour
 {
-	public float groundLine             = -50.00f;     // where above-ground ends and below-ground begins
-
+	public float groundLine             = 0f;
 	private float timeToFade            = 2f;
 	private float fadeInAfter           = 2f;
 	private float fadeOutAfter          = 0f;
 	private float timeBeforeLevelReload = 3.2f;
 	private float playerPositionY;
 	private bool playerAboveGround;
+	private Transform player;
 
 	void Start()
 	{
+		player = GameObject.Find(PLAYER).GetComponent<Transform>();
 		spriteRenderer.enabled = true;
-
 		FadeInNewLevel();
 		GetPlayerPosition();
 	}
@@ -39,7 +39,7 @@ public class LevelManager : CacheBehaviour
 
 	void CheckIfAboveGround()
 	{
-		if (playerPositionY > groundLine)
+		if (player.position.y > groundLine)
 		{
 			// if player is not ALREADY above ground, broadcast message "player above ground"
 			if (!playerAboveGround) {
@@ -57,6 +57,7 @@ public class LevelManager : CacheBehaviour
 		}
 	}
 
+<<<<<<< HEAD
 	void OnEnable()
 	{
 		EventKit.Subscribe<int>("load level", OnLoadLevel);
@@ -69,20 +70,32 @@ public class LevelManager : CacheBehaviour
 		EventKit.Unsubscribe<float, float>("player position", OnPlayerPosition);
 	}
 
+=======
+>>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
 	void OnLoadLevel(int newLevel)
 	{
 		FadeOutCurrentLevel();
 
-		// load next level and trigger garbage collection
+		//load next level
 		StartCoroutine(Timer.Start(timeBeforeLevelReload, false, () =>
 		{
-			Application.LoadLevel("Level" + newLevel);
-			System.GC.Collect();
+			SceneManager.LoadScene("Level" + newLevel);
 		}));
 	}
 
-	void OnPlayerPosition(float x, float y)
+	void OnLevelWasLoaded()
 	{
-		playerPositionY = y;
+		//trigger garbage collection
+		System.GC.Collect();
+	}
+
+	void OnEnable()
+	{
+		EventKit.Subscribe<int>("load level", OnLoadLevel);
+	}
+
+	void OnDestroy()
+	{
+		EventKit.Unsubscribe<int>("load level", OnLoadLevel);
 	}
 }

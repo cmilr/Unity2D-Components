@@ -1,13 +1,10 @@
-﻿using UnityEngine;
-using UnityEngine.Assertions;
-using System;
-using System.Collections;
 using Matcha.Dreadful;
-
+using UnityEngine.Assertions;
+using UnityEngine;
 
 public class PickupEntity : Entity
 {
-	public enum EntityType { prize, levelUp, weapon, save, load };
+	public enum EntityType { prize, levelUp, save, load };
 	public EntityType entityType;
 	private Light glow;
 
@@ -15,46 +12,54 @@ public class PickupEntity : Entity
 	{
 		glow = gameObject.GetComponent<Light>() as Light;
 
-		if ((entityType == EntityType.prize || entityType == EntityType.levelUp) && autoAlign)
+		if ((entityType == EntityType.prize || entityType == EntityType.levelUp) && autoAlign) {
 			AutoAlign();
+		}
 	}
 
 	override public void OnBodyCollisionEnter(Collider2D coll)
 	{
 		collidedWithBody = true;
 
-		if (!game.LevelLoading && !player.Dead)
+		if (!levelCompleted && !playerDead)
 		{
 			switch (entityType)
 			{
 				case EntityType.prize:
+				{
 					MFX.PickupPrize(gameObject);
 					MFX.ExtinguishLight(glow, 0, .1f);
-					Messenger.Broadcast<int>("prize collected", worth);
+					EventKit.Broadcast<int>("prize collected", worth);
 					break;
+				}
 
 				case EntityType.levelUp:
+				{
 					MFX.PickupPrize(gameObject);
 					MFX.ExtinguishLight(glow, 0, .1f);
-					Messenger.Broadcast<int>("prize collected", worth);
-			    	Messenger.Broadcast<bool>("level completed", true);
+					levelCompleted = true;
+					EventKit.Broadcast<int>("prize collected", worth);
+					EventKit.Broadcast<bool>("level completed", true);
 					break;
-
-				case EntityType.weapon:
-					MFX.PickupWeapon(gameObject);
-					break;
+				}
 
 				case EntityType.save:
-					Messenger.Broadcast<bool>("save player data", true);
+				{
+					EventKit.Broadcast<bool>("save player data", true);
 					break;
+				}
 
 				case EntityType.load:
-					Messenger.Broadcast<bool>("load player data", true);
+				{
+					EventKit.Broadcast<bool>("load player data", true);
 					break;
+				}
 
 				default:
+				{
 					Assert.IsTrue(false, "** Default Case Reached **");
 					break;
+				}
 			}
 		}
 	}

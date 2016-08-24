@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
 
 public class ProjectilePool : BaseBehaviour
@@ -43,7 +42,7 @@ public class ProjectilePool : BaseBehaviour
 		{
 			GameObject obj = (GameObject) Instantiate(pooledObject);
 			obj.SetActive(false);
-			
+
 			// allocate memory for references at instantiation
 			obj.GetComponent<ProjectileContainer>().AllocateMemory();
 			pooledObjects.Add(obj);

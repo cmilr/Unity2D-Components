@@ -1,103 +1,109 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 using DG.Tweening;
 using Matcha.Dreadful;
-
+using UnityEngine;
 
 public class DisplayEquipped : CacheBehaviour
 {
-    private SpriteRenderer HUDWeapon;
-    private Camera mainCamera;
-    private Vector3 hudPosition;
+	private SpriteRenderer HUDWeapon;
+	private Camera mainCamera;
+	private Vector3 hudPosition;
 
-    void Start()
-    {
-        mainCamera = Camera.main.GetComponent<Camera>();
-        PositionHUDElements();
-    }
+	void Start()
+	{
+		mainCamera = Camera.main.GetComponent<Camera>();
+		PositionHUDElements();
+	}
 
-    void PositionHUDElements()
-    {
-        transform.position = mainCamera.ScreenToWorldPoint(new Vector3(
-            Screen.width / 2,
-            Screen.height - HUD_WEAPON_TOP_MARGIN,
-            HUD_Z));
+	void PositionHUDElements()
+	{
+		transform.position = mainCamera.ScreenToWorldPoint(new Vector3(
+							Screen.width / 2,
+							Screen.height - HUD_WEAPON_TOP_MARGIN,
+							HUD_Z));
 
-        hudPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z);
-    }
+		hudPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z);
+	}
 
-    void OnInitEquippedWeapon(GameObject weapon)
-    {
-        HUDWeapon = spriteRenderer;
-        HUDWeapon.sprite = weapon.GetComponent<Weapon>().iconSprite;
-        HUDWeapon.DOKill();
-        FadeInWeapon();
-    }
+	void OnInitEquippedWeapon(GameObject weapon)
+	{
+		HUDWeapon = spriteRenderer;
+		HUDWeapon.sprite = weapon.GetComponent<Weapon>().iconSprite;
+		HUDWeapon.DOKill();
+		FadeInWeapon();
+	}
 
-    void OnChangeEquippedWeapon(GameObject weapon)
-    {
-        HUDWeapon = spriteRenderer;
-        HUDWeapon.sprite = weapon.GetComponent<Weapon>().iconSprite;
-        transform.localPosition = hudPosition;
+	void OnInitNewEquippedWeapon(GameObject weapon)
+	{
+		HUDWeapon = spriteRenderer;
+		HUDWeapon.sprite = weapon.GetComponent<Weapon>().iconSprite;
+		HUDWeapon.DOKill();
+	}
 
-        // upon receiving new weapon for the equipped slot, instantly relocate it back to its previous location,
-        // while setting opacity to that of a stashed weapon, then tween the image to the right, into the final
-        // equipped slot position, all while tweening the opacity back to 100%
-        MFX.Fade(HUDWeapon, HUD_STASHED_TRANSPARENCY, 0, 0);
-        MFX.Fade(HUDWeapon, 1f, 0f, .2f);
+	void OnChangeEquippedWeapon(GameObject weapon)
+	{
+		HUDWeapon = spriteRenderer;
+		HUDWeapon.sprite = weapon.GetComponent<Weapon>().iconSprite;
+		transform.localPosition = hudPosition;
 
-        // shift weapon left, to roughly the position it was just in
-        transform.localPosition = new Vector3(
-            transform.localPosition.x -SPACE_BETWEEN_WEAPONS,
-            transform.localPosition.y,
-            transform.localPosition.z)
-        ;
+		// upon receiving new weapon for the equipped slot, instantly relocate it back to its previous location,
+		// while setting opacity to that of a stashed weapon, then tween the image to the right, into the final
+		// equipped slot position, all while tweening the opacity back to 100%
+		MFX.Fade(HUDWeapon, HUD_STASHED_TRANSPARENCY, 0, 0);
+		MFX.Fade(HUDWeapon, 1f, 0f, .2f);
 
-        // tween weapon to new position
-        transform.DOLocalMove(new Vector3(
-            transform.localPosition.x + SPACE_BETWEEN_WEAPONS,
-            transform.localPosition.y,
-            transform.localPosition.z), INVENTORY_SHIFT_SPEED, false).OnComplete(()=>SetFinalPosition()
-        );
-    }
+		// shift weapon left, to roughly the position it was just in
+		transform.localPosition = new Vector3(
+			transform.localPosition.x - SPACE_BETWEEN_WEAPONS,
+			transform.localPosition.y,
+			transform.localPosition.z)
+		;
 
-    void SetFinalPosition()
-    {
-        // set weapon into final position; fixes graphical bugs if operation gets interrupted by a new click
-        // transform.localPosition = hudPosition;
-    }
+		// tween weapon to new position
+		transform.DOLocalMove(new Vector3(
+					transform.localPosition.x + SPACE_BETWEEN_WEAPONS,
+					transform.localPosition.y,
+					transform.localPosition.z), INVENTORY_SHIFT_SPEED, false).OnComplete(() => SetFinalPosition()
+				);
+	}
 
-    void FadeInWeapon()
-    {
-        // fade weapon to zero instantly, then fade up slowly
-        MFX.Fade(HUDWeapon, 0, 0, 0);
-        MFX.Fade(HUDWeapon, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
-    }
+	void SetFinalPosition()
+	{
+		// set weapon into final position; fixes graphical bugs if operation gets interrupted by a new click
+		// transform.localPosition = hudPosition;
+	}
 
-    void OnFadeHud(bool status)
-    {
-        MFX.Fade(HUDWeapon, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE);
-    }
+	void FadeInWeapon()
+	{
+		// fade weapon to zero instantly, then fade up slowly
+		MFX.Fade(HUDWeapon, 0, 0, 0);
+		MFX.Fade(HUDWeapon, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
+	}
 
-    void OnScreenSizeChanged(float vExtent, float hExtent)
-    {
-        PositionHUDElements();
-    }
+	void OnFadeHud(bool status)
+	{
+		MFX.Fade(HUDWeapon, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE);
+	}
 
-    void OnEnable()
-    {
-        Messenger.AddListener<GameObject>("init equipped weapon", OnInitEquippedWeapon);
-        Messenger.AddListener<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
-        Messenger.AddListener<bool>("fade hud", OnFadeHud);
-        Messenger.AddListener<float, float>( "screen size changed", OnScreenSizeChanged);
-    }
+	void OnScreenSizeChanged(float vExtent, float hExtent)
+	{
+		PositionHUDElements();
+	}
 
-    void OnDestroy()
-    {
-        Messenger.RemoveListener<GameObject>("init equipped weapon", OnInitEquippedWeapon);
-        Messenger.RemoveListener<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
-        Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
-        Messenger.RemoveListener<float, float>( "screen size changed", OnScreenSizeChanged);
-    }
+	void OnEnable()
+	{
+		EventKit.Subscribe<GameObject>("init equipped weapon", OnInitEquippedWeapon);
+		EventKit.Subscribe<GameObject>("init new equipped weapon", OnInitNewEquippedWeapon);
+		EventKit.Subscribe<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
+		EventKit.Subscribe<bool>("fade hud", OnFadeHud);
+		EventKit.Subscribe<float, float>("screen size changed", OnScreenSizeChanged);
+	}
+
+	void OnDestroy()
+	{
+		EventKit.Unsubscribe<GameObject>("init equipped weapon", OnInitEquippedWeapon);
+		EventKit.Unsubscribe<GameObject>("init new equipped weapon", OnInitNewEquippedWeapon);
+		EventKit.Unsubscribe<GameObject>("change equipped weapon", OnChangeEquippedWeapon);
+		EventKit.Unsubscribe<bool>("fade hud", OnFadeHud);
+		EventKit.Unsubscribe<float, float>("screen size changed", OnScreenSizeChanged);
+	}
 }

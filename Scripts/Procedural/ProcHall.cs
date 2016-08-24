@@ -1,5 +1,3 @@
-﻿
-
-public class ProcHall : ProcBase {
-
+﻿public class ProcHall : ProcBase
+{
 }

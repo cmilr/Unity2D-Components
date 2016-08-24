@@ -1,5 +1,4 @@
 using DG.Tweening;
-using System.Collections;
 using UnityEngine.Assertions;
 using UnityEngine;
 
@@ -16,11 +15,9 @@ public class MovingPlatform : CacheBehaviour
 	public float pauseTime = .1f;
 
 	private int layer;
-	private bool fastPlatform;
 
 	void Start()
 	{
-		CheckPlatformSpeed();
 		transform.DOKill();
 
 		switch (direction)
@@ -73,7 +70,7 @@ public class MovingPlatform : CacheBehaviour
 	{
 		layer = coll.gameObject.layer;
 
-		if (layer == PLAYER_COLLIDER && coll.transform.position.y - .3f > gameObject.transform.position.y)
+		if (layer == PLAYER_COLLIDER)
 		{
 			coll.transform.parent = gameObject.transform;
 		}
@@ -81,9 +78,33 @@ public class MovingPlatform : CacheBehaviour
 		{
 			coll.transform.parent = gameObject.transform;
 		}
+<<<<<<< HEAD
 
 		if (layer == PLAYER_COLLIDER && fastPlatform) {
 			EventKit.Broadcast<bool>("player riding fast platform", true);
+		}
+=======
+>>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
+	}
+
+	void OnTriggerStay2D(Collider2D coll)
+	{
+		layer = coll.gameObject.layer;
+
+<<<<<<< HEAD
+		coll.transform.parent = null;
+
+		if (layer == PLAYER_COLLIDER && fastPlatform) {
+			EventKit.Broadcast<bool>("player riding fast platform", false);
+=======
+		if (layer == PLAYER_COLLIDER)
+		{
+			coll.transform.parent = gameObject.transform;
+		}
+		else if (layer != PLAYER_COLLIDER)
+		{
+			coll.transform.parent = gameObject.transform;
+>>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
 		}
 	}
 
@@ -92,21 +113,5 @@ public class MovingPlatform : CacheBehaviour
 		layer = coll.gameObject.layer;
 
 		coll.transform.parent = null;
-
-		if (layer == PLAYER_COLLIDER && fastPlatform) {
-			EventKit.Broadcast<bool>("player riding fast platform", false);
-		}
-	}
-
-	// if platform is particularly fast and long, send a message to PlayerState, so PlayerMovement can
-	// throttle y-speed to alleviate jitteriness. formula below was attained through experimentation.
-	void CheckPlatformSpeed()
-	{
-		if (direction == Direction.up || direction == Direction.down)
-		{
-			if (distance > 4 && distance / time >= 5) {
-				fastPlatform = true;
-			}
-		}
 	}
 }

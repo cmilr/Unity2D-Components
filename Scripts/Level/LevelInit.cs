@@ -1,10 +1,7 @@
-﻿using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
-public class LevelInit : BaseBehaviour {
+public class LevelInit : BaseBehaviour
+{
 
-	// Use this for initialization
-	void Start () {
-
-	}
 }

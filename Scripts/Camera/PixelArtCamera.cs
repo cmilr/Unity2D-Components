@@ -1,6 +1,4 @@
 using UnityEngine;
-using System.Collections;
-
 
 public class PixelArtCamera : BaseBehaviour
 {
@@ -25,11 +23,11 @@ public class PixelArtCamera : BaseBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<float, float>( "screen size changed", OnScreenSizeChanged);
+		EventKit.Subscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<float, float>( "screen size changed", OnScreenSizeChanged);
+		EventKit.Unsubscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}
 }

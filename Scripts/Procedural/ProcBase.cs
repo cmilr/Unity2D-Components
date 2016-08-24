@@ -1,49 +1,47 @@
-﻿
+public class ProcBase
+{
+	public int originX  { get; set; }
+	public int originY  { get; set; }
+	public int width	= 1;
+	public int height = 1;
 
-public class ProcBase {
+	public int TopLeftX()
+	{
+		return originX;
+	}
 
-    public int originX  { get; set; }
-    public int originY  { get; set; }
-    public int width = 1;
-    public int height = 1;
+	public int TopLeftY()
+	{
+		return originY;
+	}
 
-    public int TopLeftX()
-    {
-        return originX;
-    }
+	public int TopRightX()
+	{
+		return originX + width - 1;
+	}
 
-    public int TopLeftY()
-    {
-        return originY;
-    }
+	public int TopRightY()
+	{
+		return originY;
+	}
 
-    public int TopRightX()
-    {
-        return originX + width - 1;
-    }
+	public int BottomLeftX()
+	{
+		return originX;
+	}
 
-    public int TopRightY()
-    {
-        return originY;
-    }
+	public int BottomLeftY()
+	{
+		return originY + height - 1;
+	}
 
-    public int BottomLeftX()
-    {
-        return originX;
-    }
+	public int BottomRightX()
+	{
+		return originX + width - 1;
+	}
 
-    public int BottomLeftY()
-    {
-        return originY + height - 1;
-    }
-
-    public int BottomRightX()
-    {
-        return originX + width - 1;
-    }
-
-    public int BottomRightY()
-    {
-        return originY + height - 1;
-    }
+	public int BottomRightY()
+	{
+		return originY + height - 1;
+	}
 }

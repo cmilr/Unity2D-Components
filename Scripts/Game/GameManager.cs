@@ -1,56 +1,60 @@
 using UnityEngine;
-using System.Collections;
-
 
 public class GameManager : BaseBehaviour
 {
-	private _GameData gameData;
 	public bool disableAttack;
+	private GameData gameData;
+
+	public float dDamageMod
+	{
+		get { return gameData.DDamageMod; }
+	}
 
 	void Awake()
 	{
 		_attackDisabled = disableAttack;
+		EventKit.Broadcast("wake singletons");
 	}
 
 	void Start()
 	{
-		gameData = GameObject.Find(_GAME_DATA).GetComponent<_GameData>();
-		Messenger.Broadcast<int>("init score", gameData.CurrentScore);
+		gameData = GameObject.Find(_DATA).GetComponent<GameData>();
+		EventKit.Broadcast<int>("init score", gameData.CurrentScore);
 	}
 
 	void OnPrizeCollected(int worth)
 	{
 		gameData.CurrentScore += worth;
-		Messenger.Broadcast<int>("change score", gameData.CurrentScore);
+		EventKit.Broadcast<int>("change score", gameData.CurrentScore);
 	}
 
-	void OnPlayerDead(string methodOfDeath, Collider2D coll, int hitFrom)
+	void OnPlayerDead(int hitFrom, Weapon.WeaponType weaponType)
 	{
 		gameData.CurrentScore = gameData.LastSavedScore;
 		gameData.Lives -= 1;
-		Messenger.Broadcast<bool>("fade hud", true);
-		Messenger.Broadcast<int>("load level", gameData.CurrentLevel);
+		EventKit.Broadcast<bool>("fade hud", true);
+		EventKit.Broadcast<int>("load level", gameData.CurrentLevel);
 	}
 
 	void OnLevelCompleted(bool status)
 	{
 		gameData.LastSavedScore = gameData.CurrentScore;
 		gameData.CurrentLevel = gameData.CurrentLevel;
-		Messenger.Broadcast<bool>("fade hud", true);
-		Messenger.Broadcast<int>("load level", gameData.CurrentLevel);
+		EventKit.Broadcast<bool>("fade hud", true);
+		EventKit.Broadcast<int>("load level", gameData.CurrentLevel);
 	}
 
 	void OnEnable()
 	{
-		Messenger.AddListener<int>( "prize collected", OnPrizeCollected);
-		Messenger.AddListener<string, Collider2D, int>( "player dead", OnPlayerDead);
-		Messenger.AddListener<bool>( "level completed", OnLevelCompleted);
+		EventKit.Subscribe<int>("prize collected", OnPrizeCollected);
+		EventKit.Subscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
+		EventKit.Subscribe<bool>("level completed", OnLevelCompleted);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<int>( "prize collected", OnPrizeCollected );
-		Messenger.RemoveListener<string, Collider2D, int>( "player dead", OnPlayerDead);
-		Messenger.RemoveListener<bool>( "level completed", OnLevelCompleted);
+		EventKit.Unsubscribe<int>("prize collected", OnPrizeCollected);
+		EventKit.Unsubscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
+		EventKit.Unsubscribe<bool>("level completed", OnLevelCompleted);
 	}
 }

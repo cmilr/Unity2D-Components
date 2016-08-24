@@ -1,24 +1,19 @@
-using Matcha.Unity;
-using System.Collections;
 using UnityEngine;
-
-[RequireComponent(typeof(BoxCollider2D))]
 
 public class BodyCollider : CacheBehaviour
 {
+	public Hit hit;
+
 	private int layer;
-	private int hitFrom;
+	private bool dead;
+	private bool levelCompleted;
 	private PlayerManager player;
-	private IPlayerStateFullAccess state;
-	private IGameStateReadOnly game;
 	private Weapon enemyWeapon;
 	private CreatureEntity enemy;
 
 	void Start()
 	{
-		player = transform.parent.GetComponent<PlayerManager>();
-		state = transform.parent.GetComponent<IPlayerStateFullAccess>();
-		game = GameObject.Find(GAME_STATE).GetComponent<IGameStateReadOnly>();
+		hit = new Hit();
 	}
 
 	void OnTriggerEnter2D(Collider2D coll)
@@ -29,17 +24,15 @@ public class BodyCollider : CacheBehaviour
 		{
 			enemyWeapon = coll.GetComponent<Weapon>();
 
-			if (!enemyWeapon.alreadyCollided && !game.LevelLoading && !state.Dead)
+			if (!enemyWeapon.alreadyCollided && !levelCompleted && !dead)
 			{
-				hitFrom = M.HorizSideThatWasHit(gameObject, coll);
-
 				if (enemyWeapon.weaponType == Weapon.WeaponType.Hammer ||
 						enemyWeapon.weaponType == Weapon.WeaponType.Dagger ||
 						enemyWeapon.weaponType == Weapon.WeaponType.MagicProjectile)
 				{
 					enemyWeapon.alreadyCollided = true;
 
-					player.TakesHit("projectile", enemyWeapon, coll, hitFrom);
+					SendMessageUpwards("TakesHit", hit.Args(gameObject, coll));
 				}
 			}
 		}
@@ -47,10 +40,8 @@ public class BodyCollider : CacheBehaviour
 		{
 			enemy = coll.GetComponent<CreatureEntity>();
 
-			if (!enemy.alreadyCollided && !game.LevelLoading && !state.Dead)
+			if (!enemy.alreadyCollided && !levelCompleted && !dead)
 			{
-				hitFrom = M.HorizSideThatWasHit(gameObject, coll);
-
 				if (enemy.entityType == CreatureEntity.EntityType.Enemy)
 				{
 					enemy.alreadyCollided = true;
@@ -77,5 +68,27 @@ public class BodyCollider : CacheBehaviour
 
 			enemy.alreadyCollided = false;
 		}
+	}
+
+	void OnEnable()
+	{
+		EventKit.Subscribe<bool>("level completed", OnLevelCompleted);
+		EventKit.Subscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
+	}
+
+	void OnDisable()
+	{
+		EventKit.Unsubscribe<bool>("level completed", OnLevelCompleted);
+		EventKit.Unsubscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
+	}
+
+	void OnPlayerDead(int hitFrom, Weapon.WeaponType weaponType)
+	{
+		dead = true;
+	}
+
+	void OnLevelCompleted(bool status)
+	{
+		levelCompleted = status;
 	}
 }

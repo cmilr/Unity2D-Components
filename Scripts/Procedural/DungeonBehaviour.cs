@@ -1,15 +1,15 @@
-﻿using UnityEngine;
-using UnityEngine.Assertions;
-using System;
-using System.Collections.Generic;
-using Rotorz.Tile;
 using Matcha.Unity;
+using Rotorz.Tile;
+using System.Collections.Generic;
+using System;
+using UnityEngine.Assertions;
+using UnityEngine;
 
 // all map and tile operations below make use of the Matcha.Tiles extensions
 // which extend Rotorz.Tile and act as a safeguard against api changes, etc
 public class DungeonBehaviour : CacheBehaviour
 {
-	public Brush brush;
+	public Brush stoneBrush;
 	public Brush boundsBrush;
 	public Brush stepBrush;
 	public Brush hallOriginBrush;
@@ -18,17 +18,17 @@ public class DungeonBehaviour : CacheBehaviour
 	protected TileSystem map;
 	protected int mapColumns;
 	protected int mapRows;
-	protected int mapMarginX;
-	protected int mapMarginY;
-	protected int roomMarginX;
-	protected int roomMarginY;
+	protected int mapMarginX     = 12;
+	protected int mapMarginY     = 12;
+	protected int roomMarginX    = 4;
+	protected int roomMarginY    = 4;
 	protected int direction;
 	protected List<ProcSpace> roomList;
 	protected List<ProcSpace> hallList;
 	protected List<ProcSpace> crawlspaceList;
 	protected ProcSpace currentRoom;
 
-	protected void PaintBaseTiles()
+	protected void PaintBaseTiles(Brush currentBrush)
 	{
 		map.BulkEditBegin();
 
@@ -36,7 +36,7 @@ public class DungeonBehaviour : CacheBehaviour
 		{
 			for (int y = 0; y < mapRows; y++)
 			{
-				brush.PaintTile(map, x, y);
+				currentBrush.PaintTile(map, x, y);
 			}
 		}
 
@@ -57,16 +57,22 @@ public class DungeonBehaviour : CacheBehaviour
 		switch (Rand.Range(0, 1))
 		{
 			case 0:
+			{
 				AssessForStairsOffRoom();
 				break;
+			}
 
 			case 1:
+			{
 				AssessForStairsOffRoom();
 				break;
+			}
 
 			default:
+			{
 				Assert.IsTrue(false, "** Default Case Reached **");
 				break;
+			}
 		}
 	}
 
@@ -91,7 +97,7 @@ public class DungeonBehaviour : CacheBehaviour
 
 			// check that room will fit within map bounds
 			if (RoomInBounds(originX, originY, room) &&
-				!TouchingRooms(originX, originY, room))
+					!TouchingRooms(originX, originY, room))
 			{
 				// paint room
 				for (int x = 0; x < room.width; x++)
@@ -158,9 +164,9 @@ public class DungeonBehaviour : CacheBehaviour
 							if (TileInBounds(originX + x, originY + y))
 							{
 								// build stairs
-								if (map.GetTileInfo(originX, originY + y) != null )
+								if (map.GetTileInfo(originX, originY + y) != null)
 								{
-									brush.PaintTile(map, originX + x, originY + y);
+									stoneBrush.PaintTile(map, originX + x, originY + y);
 								}
 
 								// erase walls to the right of stairs
@@ -178,9 +184,9 @@ public class DungeonBehaviour : CacheBehaviour
 							if (TileInBounds(originX - x, originY + y))
 							{
 								// build stairs
-								if (map.GetTileInfo(originX, originY + y) != null )
+								if (map.GetTileInfo(originX, originY + y) != null)
 								{
-									brush.PaintTile(map, originX - x, originY + y);
+									stoneBrush.PaintTile(map, originX - x, originY + y);
 								}
 
 								// erase walls to the left of stairs
@@ -391,7 +397,8 @@ public class DungeonBehaviour : CacheBehaviour
 						if (TileInBounds(originX + x, originY + y))
 						{
 							// build stairs
-							brush.PaintTile(map, originX + x, originY + y);
+							stoneBrush.PaintTile(map, originX + x, originY + y);
+
 							// erase walls to the right of stairs
 							map.ClearTile(originX + x + 1, originY + y);
 							map.ClearTile(originX + x + 2, originY + y);
@@ -400,8 +407,9 @@ public class DungeonBehaviour : CacheBehaviour
 						}
 
 						// backfill stairs by one tile
-						brush.PaintTile(map, originX - 1, originY + y);
-						brush.PaintTile(map, originX - 2, originY + y);
+						stoneBrush.PaintTile(map, originX - 1, originY + y);
+						stoneBrush.PaintTile(map, originX - 2, originY + y);
+
 						break;
 					}
 
@@ -410,7 +418,8 @@ public class DungeonBehaviour : CacheBehaviour
 						if (TileInBounds(originX - x, originY + y))
 						{
 							// build stairs
-							brush.PaintTile(map, originX - x, originY + y);
+							stoneBrush.PaintTile(map, originX - x, originY + y);
+
 							// erase walls to the left of stairs
 							map.ClearTile(originX - x - 1, originY + y);
 							map.ClearTile(originX - x - 2, originY + y);
@@ -419,8 +428,9 @@ public class DungeonBehaviour : CacheBehaviour
 						}
 
 						// backfill stairs by one tile
-						brush.PaintTile(map, originX + 1, originY + y);
-						brush.PaintTile(map, originX + 2, originY + y);
+						stoneBrush.PaintTile(map, originX + 1, originY + y);
+						stoneBrush.PaintTile(map, originX + 2, originY + y);
+
 						break;
 					}
 				}
@@ -447,9 +457,9 @@ public class DungeonBehaviour : CacheBehaviour
 	protected bool TileInBounds(int originX, int originY)
 	{
 		if (originX < (mapColumns - mapMarginX) &&
-			originX > (mapMarginX) &&
-			originY < (mapRows - mapMarginY) &&
-			originY > (mapMarginY))
+				originX > (mapMarginX) &&
+				originY < (mapRows - mapMarginY) &&
+				originY > (mapMarginY))
 		{
 			return true;
 		}
@@ -514,9 +524,9 @@ public class DungeonBehaviour : CacheBehaviour
 				for (int i = 0; i < steps; i++)
 				{
 					x = (int) Rand.Gaussian
-						(room.originX, room.originX / 2, room.originX + 1, room.originX + room.width - 1);
+								(room.originX, room.originX / 2, room.originX + 1, room.originX + room.width - 1);
 					y = (int) Rand.Gaussian
-						(room.originY, room.originY, room.originY + 1, room.originY + room.height - 1);
+								(room.originY, room.originY, room.originY + 1, room.originY + room.height - 1);
 
 					// if (WithinRoomBounds(room, room.originX + x, room.originY - y))
 					// {

@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 using DG.Tweening;
 using Matcha.Dreadful;
+using UnityEngine;
 
 public class DisplayShield : CacheBehaviour
 {
@@ -12,7 +10,7 @@ public class DisplayShield : CacheBehaviour
 
 	void Start()
 	{
-		mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+		mainCamera = Camera.main.GetComponent<Camera>();
 		HUDShield = spriteRenderer;
 		HUDShield.sprite = equippedShield;
 		HUDShield.DOKill();
@@ -23,10 +21,10 @@ public class DisplayShield : CacheBehaviour
 	void PositionHUDElements()
 	{
 		transform.position = mainCamera.ScreenToWorldPoint(new Vector3(
-			Screen.width / 2,
-			Screen.height - HUD_WEAPON_TOP_MARGIN,
-			HUD_Z)
-		);
+							Screen.width / 2,
+							Screen.height - HUD_WEAPON_TOP_MARGIN,
+							HUD_Z)
+						);
 	}
 
 	void FadeInShield()
@@ -48,13 +46,13 @@ public class DisplayShield : CacheBehaviour
 
 	void OnEnable()
 	{
-		Messenger.AddListener<bool>("fade hud", OnFadeHud);
-		Messenger.AddListener<float, float>( "screen size changed", OnScreenSizeChanged);
+		EventKit.Subscribe<bool>("fade hud", OnFadeHud);
+		EventKit.Subscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}
 
 	void OnDestroy()
 	{
-		Messenger.RemoveListener<bool>("fade hud", OnFadeHud);
-		Messenger.RemoveListener<float, float>( "screen size changed", OnScreenSizeChanged);
+		EventKit.Unsubscribe<bool>("fade hud", OnFadeHud);
+		EventKit.Unsubscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}
 }

@@ -1,6 +1,4 @@
 using Rewired;
-using System.Collections;
-using UnityEngine;
 
 public class RewiredInputAdapter : BaseBehaviour
 {
@@ -36,7 +34,7 @@ public class RewiredInputAdapter : BaseBehaviour
 		}
 
 		if (playerControls.GetButtonDown("Next Weapon")) {
-			Messenger.Broadcast<int>("switch weapon", RIGHT);
+			EventKit.Broadcast<int>("switch weapon", RIGHT);
 		}
 	}
 }

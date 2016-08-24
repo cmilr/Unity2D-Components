@@ -1,7 +1,6 @@
 // this script is based on the work of Robert Utter, as found on his blog at
 // https://chicounity3d.wordpress.com/2014/05/23/how-to-lerp-like-a-pro/
 
-using System.Collections;
 using UnityEngine;
 
 public class SmootheLerp : CacheBehaviour

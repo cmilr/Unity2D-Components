@@ -1,12 +1,9 @@
 using Matcha.Unity;
 using Rotorz.Tile;
-using System.Collections;
 using UnityEngine;
 
 public class DontLeaveMap : CacheBehaviour
 {
-	// this class assumes a sprite with a bottom/center pivot point.
-
 	[Tooltip("Amount of sprite allowed to leave the map.")]
 	public float leftOffset;
 	[Tooltip("Amount of sprite allowed to leave the map.")]
@@ -24,11 +21,10 @@ public class DontLeaveMap : CacheBehaviour
 	private float spriteHeight;
 	private TileSystem tileSystem;
 
-	void Start()
+	void Continue()
 	{
-		spriteWidth  = GetComponent<Renderer>().bounds.size.x;
-		spriteHeight = GetComponent<Renderer>().bounds.size.y;
-		tileSystem   = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
+		spriteWidth  = renderer.bounds.size.x;
+		spriteHeight = renderer.bounds.size.y;
 
 		Vector3 tileSystemSize = new Vector3(
 			tileSystem.ColumnCount * tileSystem.CellSize.x,
@@ -46,24 +42,41 @@ public class DontLeaveMap : CacheBehaviour
 	{
 		// check left bound.
 		if (transform.position.x - (spriteWidth / 2 - leftOffset) < leftBound) {
-			transform.SetXPosition(leftBound + (spriteWidth / 2 - leftOffset));
+			transform.SetPositionX(leftBound + (spriteWidth / 2 - leftOffset));
 		}
 
 		// check right bound.
 		if (transform.position.x + (spriteWidth / 2 - rightOffset) > rightBound) {
-			transform.SetXPosition(rightBound - (spriteWidth / 2 - rightOffset));
+			transform.SetPositionX(rightBound - (spriteWidth / 2 - rightOffset));
 		}
 
 		// check upper bound.
 		if (transform.position.y + (spriteHeight - upperOffset) > upperBound) {
-			transform.SetYPosition(upperBound - (spriteHeight - upperOffset));
+			transform.SetPositionY(upperBound - (spriteHeight - upperOffset));
 		}
 
 		// check lower bound.
 		if (transform.position.y - lowerOffset < lowerBound)
 		{
-			transform.SetYPosition(lowerBound - lowerOffset);
-			Messenger.Broadcast<string, Collider2D, int>("player dead", "out of bounds", null, -1);
+			transform.SetPositionY(lowerBound - lowerOffset);
+			EventKit.Broadcast<int, Weapon.WeaponType>("player dead", -1, Weapon.WeaponType.OutOfBounds);
 		}
+	}
+
+	void OnTileSystemAnnounced(TileSystem incomingTileSystem)
+	{
+		tileSystem = incomingTileSystem;
+
+		Continue();
+	}
+
+	void OnEnable()
+	{
+		EventKit.Subscribe<TileSystem>("tilesystem announced", OnTileSystemAnnounced);
+	}
+
+	void OnDestroy()
+	{
+		EventKit.Unsubscribe<TileSystem>("tilesystem announced", OnTileSystemAnnounced);
 	}
 }

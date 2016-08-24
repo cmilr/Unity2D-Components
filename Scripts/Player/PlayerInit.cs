@@ -1,11 +1,11 @@
-﻿using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
-public class PlayerInit : BaseBehaviour {
-
+public class PlayerInit : BaseBehaviour
+{
 	// private _PlayerData player;
 
-	void Start () 
+	void Start()
 	{
 		// player = GameObject.Find("_PlayerData").GetComponent<_PlayerData>();
 	}

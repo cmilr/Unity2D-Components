@@ -90,16 +90,24 @@ public abstract class Entity : CacheBehaviour
 	void OnEnable()
 	{
 		EventKit.Subscribe<bool>("level completed", OnLevelCompleted);
+<<<<<<< HEAD
 		EventKit.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+=======
+		EventKit.Subscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
+>>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
 	}
 
 	void OnDisable()
 	{
 		EventKit.Unsubscribe<bool>("level completed", OnLevelCompleted);
+<<<<<<< HEAD
 		EventKit.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
+=======
+		EventKit.Unsubscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
+>>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
 	}
 
-	void OnPlayerDead(string methodOfDeath, Collider2D coll, int hitFrom)
+	void OnPlayerDead(int hitFrom, Weapon.WeaponType weaponType)
 	{
 		playerDead = true;
 	}

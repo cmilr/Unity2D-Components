@@ -6,7 +6,7 @@ public class BreakableManager : CacheBehaviour
 {
 	private Sprite[] slices;
 
-	// types of disintegrations for the Explode() function
+	//types of disintegrations for the Explode() function
 	enum Type { Explosion, Directional_Explosion, Slump, Directional_Slump, Geyser };
 	Type disintegration;
 
@@ -17,13 +17,13 @@ public class BreakableManager : CacheBehaviour
 
 	void InstantiateBreakablePieces()
 	{
-		// find and load the sprite for this particular creature
+		//find and load the sprite for this particular creature
 		slices = Resources.LoadAll<Sprite>("Sprites/BreakableCreatures/" + transform.parent.name + "_BREAK");
 
-		// find and load the 'BreakablePiece' prefab
+		//find and load the 'BreakablePiece' prefab
 		GameObject prefab = (GameObject)Resources.Load("Prefabs/Misc/BreakablePiece", typeof(GameObject));
 
-		// instantiate the prefab as many times as required via this loop
+		//instantiate the prefab as many times as required via this loop
 		for (int i = 0; i < slices.Length; i++)
 		{
 			GameObject newPiece = Object.Instantiate(prefab, transform.position, Quaternion.identity) as GameObject;
@@ -31,7 +31,7 @@ public class BreakableManager : CacheBehaviour
 			newPiece.GetComponent<BreakablePiece>().Init(i, slices[i]);
 		}
 
-		// deactivate after a delay, so other components have time to cache a reference
+		//deactivate after a delay, so other components have time to cache a reference
 		Invoke("MakeInactive", .5f);
 	}
 
@@ -44,7 +44,7 @@ public class BreakableManager : CacheBehaviour
 	{
 		gameObject.SetActive(true);
 
-		// randomly choose an disintegration type
+		//randomly choose an disintegration type
 		switch (Rand.Range(1, 2))
 		{
 			case 0:
@@ -67,20 +67,20 @@ public class BreakableManager : CacheBehaviour
 			}
 		}
 
-		// cycle through pieces and send them flying
+		//cycle through pieces and send them flying
 		foreach (Transform child in transform)
 		{
 			int direction;
 
-			// activate physics on this piece
+			//activate physics on this piece
 			Rigidbody2D rigidbody2D = child.GetComponent<Rigidbody2D>();
 			rigidbody2D.isKinematic = false;
 
-			// start countdown towards this piece fading out
+			//start countdown towards this piece fading out
 			BreakablePiece piece = child.GetComponent<BreakablePiece>();
 			piece.CountDown();
 
-			// apply disintegrations!
+			//apply disintegrations!
 			switch (disintegration)
 			{
 				case Type.Slump:
@@ -114,7 +114,7 @@ public class BreakableManager : CacheBehaviour
 	{
 		gameObject.SetActive(true);
 
-		// randomly choose an disintegration type
+		//randomly choose an disintegration type
 		switch (Rand.Range(1, 1))
 		{
 			case 0:
@@ -154,20 +154,20 @@ public class BreakableManager : CacheBehaviour
 			}
 		}
 
-		// cycle through pieces and send them flying
+		//cycle through pieces and send them flying
 		foreach (Transform child in transform)
 		{
 			int direction;
 
-			// activate physics on this piece
+			//activate physics on this piece
 			Rigidbody2D rigidbody2D = child.GetComponent<Rigidbody2D>();
 			rigidbody2D.isKinematic = false;
 
-			// start countdown towards this piece fading out
+			//start countdown towards this piece fading out
 			BreakablePiece piece = child.GetComponent<BreakablePiece>();
 			piece.CountDown();
 
-			// apply disintegrations!
+			//apply disintegrations!
 			switch (disintegration)
 			{
 				case Type.Explosion:
@@ -180,7 +180,11 @@ public class BreakableManager : CacheBehaviour
 				{
 					int force = (hitFrom == RIGHT) ? -50 : 50;
 					rigidbody2D.AddForce(new Vector3(force, 50, 50), ForceMode2D.Impulse);
+<<<<<<< HEAD
 					// params for ShakeCamera = duration, strength, vibrato, randomness
+=======
+					//params for ShakeCamera = duration, strength, vibrato, randomness
+>>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
 					EventKit.Broadcast<float, float, int, float>("shake camera", .7f, .4f, 20, 3f);
 					break;
 				}

@@ -3,8 +3,6 @@
 [![Stories in Ready](https://badge.waffle.io/jguarshark/unity2d-components.png?label=ready&title=Ready)](https://waffle.io/jguarshark/unity2d-components)
 # Unity2D Components
 
-**Disclaimer:** I'm a complete noob, and you should use this codebase at your own risk.
-
 This repository holds a varied collection of Unity3D components which I've been building for use in the 2D Platformer/RPG I'm currently developing. **It is very much a work in progress,** but please feel free to take a look around.
 
 The contents herein are by no means an entire game—they are more like puzzle pieces, which I am constantly enhancing, reworking, and adding to. More documentation will be coming, *as time permits.*

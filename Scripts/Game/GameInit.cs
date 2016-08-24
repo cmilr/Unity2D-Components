@@ -1,17 +1,17 @@
-using UnityEngine;
-using System.Collections;
 using DG.Tweening;
 using Matcha.Unity;
-
+using System.Collections;
+using UnityEngine;
 
 public class GameInit : BaseBehaviour
 {
-    void Awake()
-    {
-        // initialize DOTween before first use.
-        DOTween.Init(true, true, LogBehaviour.Verbose).SetCapacity(4000, 4000);
+	void Awake()
+	{
+		// initialize DOTween before first use.
+		DOTween.Init(true, true, LogBehaviour.Verbose).SetCapacity(300, 300);
+		DOTween.showUnityEditorReport = true;
 
-        // seed Rand with current seconds;
-        Rand.Seed();
-    }
+		// seed Rand with current seconds;
+		Rand.Seed();
+	}
 }

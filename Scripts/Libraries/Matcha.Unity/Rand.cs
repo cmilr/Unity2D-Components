@@ -5,8 +5,8 @@
 //        \/_/  \/_/   \/_/\/_/     \/_/   \/_____/   \/_/\/_/   \/_/\/_/
 //         I  N  D  U  S  T  R  I  E  S             www.matcha.industries
 
-using UnityEngine;
 using System;
+using UnityEngine;
 
 namespace Matcha.Unity
 {
@@ -29,7 +29,8 @@ namespace Matcha.Unity
 		public static int RangeDivFour(int min, int max)
 		{
 			int x = UnityEngine.Random.Range(min, max + 1);
-			while (x % 4 != 0) x--;
+			while (x % 4 != 0) { x--; }
+
 			return x;
 		}
 
@@ -38,7 +39,8 @@ namespace Matcha.Unity
 		public static int RangeDivTwo(int min, int max)
 		{
 			int x = UnityEngine.Random.Range(min, max + 1);
-			while (x % 2 != 0) x--;
+			while (x % 2 != 0) { x--; }
+
 			return x;
 		}
 
@@ -56,6 +58,7 @@ namespace Matcha.Unity
 			do {
 				x = (int)Gaussian(mean, standard_deviation);
 			} while (x < min || x > max);
+
 			return x;
 		}
 		// returns a gaussian-distributed random float
@@ -72,6 +75,7 @@ namespace Matcha.Unity
 			do {
 				x = Gaussian(mean, standard_deviation);
 			} while (x < min || x > max);
+
 			return x;
 		}
 
