@@ -1,3 +1,4 @@
+[![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg?maxAge=2592000)]()
 # Unity2D Components
 
 This repository holds a varied collection of Unity3D components which I've been building for use in the 2D Platformer/RPG I'm currently developing. **It is very much a work in progress,** but please feel free to take a look around.
