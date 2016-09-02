@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameData : BaseBehaviour
 {
-	public float DDamageMod   				{ get; set; }		//difficulty damage modifier
+	public int Difficulty   				{ get; set; }
 	public int CurrentScore          	{ get; set; }
 	public int LastSavedScore        	{ get; set; }
 	public int Lives              		{ get; set; }
@@ -14,7 +14,7 @@ public class GameData : BaseBehaviour
 	//only called once since this is a singleton
 	void Awake()
 	{
-		DDamageMod 				= 1f;
+		Difficulty 				= NORMAL;
 		CurrentScore         = 0;
 		LastSavedScore       = 0;
 		Lives                = 3;
@@ -27,7 +27,7 @@ public class GameData : BaseBehaviour
 		FileStream file = File.Create(Application.persistentDataPath + "/GameData.dat");
 		GameDataContainer container = new GameDataContainer();
 
-		container.dDamageMod 			 = DDamageMod;
+		container.difficulty 			 = Difficulty;
 		container.currentScore         = CurrentScore;
 		container.lastSavedScore       = LastSavedScore;
 		container.lives                = Lives;
@@ -46,7 +46,7 @@ public class GameData : BaseBehaviour
 			GameDataContainer container = (GameDataContainer)bf.Deserialize(file);
 			file.Close();
 
-			DDamageMod 			   = container.dDamageMod;
+			Difficulty 			   = container.difficulty;
 			CurrentScore         = container.currentScore;
 			LastSavedScore       = container.lastSavedScore;
 			Lives                = container.lives;
@@ -80,7 +80,7 @@ public class GameData : BaseBehaviour
 [Serializable]
 class GameDataContainer
 {
-	public float 	dDamageMod;
+	public int	 	difficulty;
 	public int 		currentScore;
 	public int 		lastSavedScore;
 	public int 		lives;

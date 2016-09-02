@@ -1,5 +1,4 @@
 using UnityEngine;
-using Rotorz.Tile;
 
 public class TileSystemManager : BaseBehaviour
 {
@@ -7,7 +6,6 @@ public class TileSystemManager : BaseBehaviour
 
 	void Start()
 	{
-		EventKit.Broadcast<TileSystem>("tilesystem announced", GetComponent<TileSystem>());
 		shader = Shader.Find("Sprites/Diffuse");
 		DisableShadows();
 	}

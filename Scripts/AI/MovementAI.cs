@@ -10,13 +10,13 @@ public class MovementAI : CacheBehaviour
 	public enum Style { Sentinel, Scout, HesitantScout, Wanderer };
 	public Style style;
 	public bool movementPaused;
-	public float movementSpeed      	 = 2f;
-	public float walkAnimationSpeed 	 = .5f;
-	public float chanceOfPause      	 = 1f;        // chance of pause during any given interval
+	public float movementSpeed        = 2f;
+	public float walkAnimationSpeed   = .5f;
+	public float chanceOfPause        = 1f;        //chance of pause during any given interval
 
-	private float lookInterval 		 = .3f;
-	private float playerOffset 		 = 3f;        // offset target so enemy doesn't end up exactly where player is
-	private float xAxisOffset  		 = .3f;
+	private float lookInterval        = .3f;
+	private float playerOffset        = 3f;        //offset target so enemy doesn't end up exactly where player is
+	private float xAxisOffset         = .3f;
 	private float movementInterval;
 	private string walkAnimation;
 	private int sideHit;
@@ -57,7 +57,7 @@ public class MovementAI : CacheBehaviour
 		}
 	}
 
-	// MASTER CONTROLLER
+	//master controller
 	void OnBecameVisible()
 	{
 		if (!dead)
@@ -97,7 +97,7 @@ public class MovementAI : CacheBehaviour
 		{
 			if (!enabled) { return; }
 
-			// get the proper direction for the enemy to move, then send him moving
+			//get the proper direction for the enemy to move, then send him moving
 			if (target.position.x > transform.position.x + playerOffset)
 			{
 				walkingDirection = RIGHT;
@@ -116,10 +116,10 @@ public class MovementAI : CacheBehaviour
 			{
 				rigidbody2D.velocity = transform.right * movementSpeed * walkingDirection;
 
-				// ensure that actor is always facing in the direction it is moving
+				//ensure that actor is always facing in the direction it is moving
 				transform.SetLocalScaleX((float)walkingDirection);
 
-				// add some random pauses
+				//add some random pauses
 				if (hesitant && Rand.Range(0f, 100f) <= chanceOfPause)
 				{
 					rigidbody2D.velocity = Vector2.zero;
@@ -162,7 +162,7 @@ public class MovementAI : CacheBehaviour
 					transform.SetPositionX(blockedLeftAt);
 				}
 			}
-			// if enemy and player are on roughly same x axis, movementPaused
+			//if enemy and player are on roughly same x axis, movementPaused
 			else if (transform.position.x.FloatEquals(target.position.x, xAxisOffset))
 			{
 				movementPaused = true;
@@ -194,7 +194,7 @@ public class MovementAI : CacheBehaviour
 		return (new Vector2(toPos.x, toPos.y) - new Vector2(fromPos.x, fromPos.y)) * power;
 	}
 
-	// check for edge blockers
+	//check for edge blockers
 	void OnTriggerEnter2D(Collider2D coll)
 	{
 		if (!dead)
@@ -223,7 +223,7 @@ public class MovementAI : CacheBehaviour
 		}
 	}
 
-	// check if cleared edge blocker
+	//check if cleared edge blocker
 	void OnTriggerExit2D(Collider2D coll)
 	{
 		if (!dead)
@@ -259,7 +259,7 @@ public class MovementAI : CacheBehaviour
 
 	void OnPlayerDead(int hitFrom, Weapon.WeaponType weaponType)
 	{
-		// causes enemy to periodically do a victory dance
+		//causes enemy to periodically do a victory dance
 		xAxisOffset = .005f;
 	}
 

@@ -411,10 +411,7 @@ static internal class EventKit
 	#endregion
 }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
 //This manager will ensure that the messenger's eventTable will be cleaned up upon loading of a new level.
 public sealed class EventKitHelper : BaseBehaviour
 {

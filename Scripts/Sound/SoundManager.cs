@@ -2,6 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
 
+//uses mp3 for music, and ogg for sound effects
 public class SoundManager : CacheBehaviour
 {
 	public AudioClip collectPrize;

@@ -25,6 +25,11 @@ public class BaseBehaviour : MonoBehaviour
 	protected const int LARGE                         = 3;
 	protected const int XLARGE                        = 4;
 
+	//global difficulty
+	protected const int NORMAL								  = 1;
+	protected const int HARD 							     = 2;
+	protected const int KILL_ME_NOW 						  = 3;
+
 	//global pauses
 	protected const float WEAPON_PAUSE_ON_LEVEL_LOAD  = 1.5f;
 	protected const float ENEMY_PAUSE_ON_LEVEL_LOAD   = 3f;
@@ -49,7 +54,8 @@ public class BaseBehaviour : MonoBehaviour
 	protected const int ENEMY_WEAPON                  = 17;
 	protected const int BREAKABLES                    = 18;
 	protected const int EDGE_BLOCKER                  = 24;
-	protected const int PICKUP_LAYER                 = 15;
+	protected const int PICKUP_LAYER                  = 15;
+	protected const int PLATFORM_LAYER                = 21;
 
 	//sorting layer names
 	protected const string PLATFORM_SORTING_LAYER      = "Platforms";
@@ -92,11 +98,4 @@ public class BaseBehaviour : MonoBehaviour
 	//breakable pieces
 	protected const int MIN_BEFORE_FADE               = 5;
 	protected const int MAX_BEFORE_FADE               = 10;
-
-	void Awake()
-	{
-		#if UNITY_EDITOR
-			Debug.Log("Unity Editor");
-		#endif
-	}
 }

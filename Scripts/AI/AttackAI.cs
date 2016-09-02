@@ -7,7 +7,7 @@ public class AttackAI : CacheBehaviour
 {
 	public enum Style { RandomProjectile };
 	public Style style;
-	public float chanceOfAttack	 = 40f;
+	public float chanceOfAttack    = 40f;
 	public float attackWhenInRange = 30f;
 	public bool attackPaused;
 
@@ -20,13 +20,13 @@ public class AttackAI : CacheBehaviour
 
 	void Start()
 	{
-		projectile		= GetComponent<ProjectileManager>();
-		weapon			= GetComponentInChildren<Weapon>();
-		target			= GameObject.Find(PLAYER).transform;
+		projectile     = GetComponent<ProjectileManager>();
+		weapon         = GetComponentInChildren<Weapon>();
+		target         = GameObject.Find(PLAYER).transform;
 		attackInterval = Rand.Range(1.5f, 2.5f);
 	}
 
-	// master controller
+	//master controller
 	void OnBecameVisible()
 	{
 		if (!attackPaused && !dead)
@@ -55,11 +55,11 @@ public class AttackAI : CacheBehaviour
 		{
 			float distance = Vector3.Distance(target.position, transform.position);
 
-			if (distance <= attackWhenInRange && !_attackDisabled)
+			if (distance <= attackWhenInRange && !MDebug.attackDisabled)
 			{
 				if (Rand.Range(1, 100) <= chanceOfAttack)
 				{
-					// only attack if creature is facing the direction of target
+					//only attack if creature is facing the direction of target
 					if ((target.position.x > transform.position.x && transform.localScale.x.FloatEquals(1f)) ||
 							(target.position.x < transform.position.x && transform.localScale.x.FloatEquals(-1f)))
 					{
@@ -111,7 +111,7 @@ public class AttackAI : CacheBehaviour
 
 	void OnLevelLoading(bool status)
 	{
-		// pause attacks and other activities while level loads
+		//pause attacks and other activities while level loads
 		levelLoading = true;
 
 		StartCoroutine(Timer.Start(ENEMY_PAUSE_ON_LEVEL_LOAD, false, () =>
@@ -132,14 +132,14 @@ public class AttackAI : CacheBehaviour
 
 
 
-	// TARGET TESTING SUITE
-	// ####################
+	//TARGET TESTING SUITE
+	//####################
 
 	public bool test;
 	public GameObject[] targets;
-	// testing only
+	//testing only
 
-	IEnumerator LobCompTest()
+	IEnumerator ©LobCompTest()
 	{
 		int i = 0;
 		int j = i - 1;
