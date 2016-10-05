@@ -1,9 +1,8 @@
 using UnityEngine;
 
-public class BodyCollider : CacheBehaviour
+public class BodyCollider : BaseBehaviour
 {
 	public Hit hit;
-
 	private int layer;
 	private bool dead;
 	private bool levelCompleted;
@@ -11,7 +10,7 @@ public class BodyCollider : CacheBehaviour
 	private Weapon enemyWeapon;
 	private CreatureEntity enemy;
 
-	void Start()
+	void Awake()
 	{
 		hit = new Hit();
 	}
@@ -20,33 +19,19 @@ public class BodyCollider : CacheBehaviour
 	{
 		layer = coll.gameObject.layer;
 
-		if (layer == ENEMY_WEAPON)
+		if (layer == ENEMY_WEAPON_COLLIDER)
 		{
 			enemyWeapon = coll.GetComponent<Weapon>();
 
 			if (!enemyWeapon.alreadyCollided && !levelCompleted && !dead)
 			{
-				if (enemyWeapon.weaponType == Weapon.WeaponType.Hammer ||
-						enemyWeapon.weaponType == Weapon.WeaponType.Dagger ||
-						enemyWeapon.weaponType == Weapon.WeaponType.MagicProjectile)
+				if (enemyWeapon.type == Weapon.Type.Hammer ||
+					enemyWeapon.type == Weapon.Type.Dagger ||
+					enemyWeapon.type == Weapon.Type.MagicProjectile)
 				{
 					enemyWeapon.alreadyCollided = true;
-
-					SendMessageUpwards("TakesHit", hit.Args(gameObject, coll));
-				}
-			}
-		}
-		else if (layer == ENEMY_COLLIDER)
-		{
-			enemy = coll.GetComponent<CreatureEntity>();
-
-			if (!enemy.alreadyCollided && !levelCompleted && !dead)
-			{
-				if (enemy.entityType == CreatureEntity.EntityType.Enemy)
-				{
-					enemy.alreadyCollided = true;
-
-					// player.TouchesEnemy("touch", enemy, coll, hitFrom);
+					hit.PackageUp(gameObject, coll);
+					SendMessageUpwards("TakesHit", hit);
 				}
 			}
 		}
@@ -56,13 +41,13 @@ public class BodyCollider : CacheBehaviour
 	{
 		layer = coll.gameObject.layer;
 
-		if (layer == ENEMY_WEAPON)
+		if (layer == ENEMY_WEAPON_COLLIDER)
 		{
 			enemyWeapon = coll.GetComponent<Weapon>();
 
 			enemyWeapon.alreadyCollided = false;
 		}
-		else if (layer == ENEMY_COLLIDER)
+		else if (layer == ENEMY_BODY_COLLIDER)
 		{
 			enemy = coll.GetComponent<CreatureEntity>();
 
@@ -73,24 +58,16 @@ public class BodyCollider : CacheBehaviour
 	void OnEnable()
 	{
 		EventKit.Subscribe<bool>("level completed", OnLevelCompleted);
-<<<<<<< HEAD
-		EventKit.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
-=======
-		EventKit.Subscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
+		EventKit.Subscribe<Hit>("player dead", OnPlayerDead);
 	}
 
 	void OnDisable()
 	{
 		EventKit.Unsubscribe<bool>("level completed", OnLevelCompleted);
-<<<<<<< HEAD
-		EventKit.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
-=======
-		EventKit.Unsubscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
+		EventKit.Unsubscribe<Hit>("player dead", OnPlayerDead);
 	}
 
-	void OnPlayerDead(int hitFrom, Weapon.WeaponType weaponType)
+	void OnPlayerDead(Hit incomingHit)
 	{
 		dead = true;
 	}

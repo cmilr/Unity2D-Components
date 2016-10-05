@@ -1,12 +1,13 @@
 using DG.Tweening;
-using UnityEngine.Assertions;
+using Matcha.Dreadful;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public class MovingPlatform : CacheBehaviour
+public class MovingPlatform : BaseBehaviour
 {
-	public enum Direction { right, left, up, down };
+	public enum Direction { Invalid, Right, Left, Up, Down };
 	public Direction direction;
-
+	
 	[Tooltip("Distance for platform to move, measured in tiles.")]
 	public float distance  = 1.0f;
 	[Tooltip("How many seconds to travel the above distance?")]
@@ -15,103 +16,61 @@ public class MovingPlatform : CacheBehaviour
 	public float pauseTime = .1f;
 
 	private int layer;
+	private new Transform transform;
+	private Sequence movingPlatformTween;
 
+	void Awake()
+	{
+		transform = GetComponent<Transform>();
+		Assert.IsNotNull(transform);
+
+		Assert.IsFalse(direction == Direction.Invalid,
+			("Invalid direction @ " + gameObject));
+	}
+	
 	void Start()
 	{
-		transform.DOKill();
-
+		// cache & pause tweens.
 		switch (direction)
 		{
-			case Direction.right:
-			{
-				DOTween.Sequence().SetLoops(-1, LoopType.Yoyo)
-				.AppendInterval(pauseTime)
-				.Append(transform.DOMoveX(distance, time).SetRelative().SetEase(Ease.InOutQuad))
-				.AppendInterval(pauseTime);
+			case Direction.Right:
+				(movingPlatformTween = MFX.MoveBackAndForthHorizontal(pauseTime, transform, distance, time)).Pause();
 				break;
-			}
-
-			case Direction.left:
-			{
-				DOTween.Sequence().SetLoops(-1, LoopType.Yoyo)
-				.AppendInterval(pauseTime)
-				.Append(transform.DOMoveX(-distance, time).SetRelative().SetEase(Ease.InOutQuad))
-				.AppendInterval(pauseTime);
+			case Direction.Left:
+				(movingPlatformTween = MFX.MoveBackAndForthHorizontal(pauseTime, transform, -distance, time)).Pause();
 				break;
-			}
-
-			case Direction.up:
-			{
-				DOTween.Sequence().SetLoops(-1, LoopType.Yoyo)
-				.AppendInterval(pauseTime)
-				.Append(transform.DOMoveY(distance, time).SetRelative().SetEase(Ease.InOutQuad))
-				.AppendInterval(pauseTime);
+			case Direction.Up:
+				(movingPlatformTween = MFX.MoveBackAndForthVertical(pauseTime, transform, distance, time)).Pause();
 				break;
-			}
-
-			case Direction.down:
-			{
-				DOTween.Sequence().SetLoops(-1, LoopType.Yoyo)
-				.AppendInterval(pauseTime)
-				.Append(transform.DOMoveY(-distance, time).SetRelative().SetEase(Ease.InOutQuad))
-				.AppendInterval(pauseTime);
+			case Direction.Down:
+				(movingPlatformTween = MFX.MoveBackAndForthVertical(pauseTime, transform, -distance, time)).Pause();
 				break;
-			}
-
 			default:
-			{
-				Assert.IsTrue(false, "** Default Case Reached **");
+				Assert.IsTrue(false, ("Direction missing from switch @ " + gameObject));
 				break;
-			}
 		}
+
+		movingPlatformTween.Restart();
 	}
 
 	void OnTriggerEnter2D(Collider2D coll)
 	{
-		layer = coll.gameObject.layer;
-
-		if (layer == PLAYER_COLLIDER)
+		if (coll.gameObject.layer == PLAYER_DEFAULT_LAYER)
 		{
 			coll.transform.parent = gameObject.transform;
 		}
-		else if (layer != PLAYER_COLLIDER)
-		{
-			coll.transform.parent = gameObject.transform;
-		}
-<<<<<<< HEAD
-
-		if (layer == PLAYER_COLLIDER && fastPlatform) {
-			EventKit.Broadcast<bool>("player riding fast platform", true);
-		}
-=======
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
 	}
 
 	void OnTriggerStay2D(Collider2D coll)
 	{
-		layer = coll.gameObject.layer;
-
-<<<<<<< HEAD
-		coll.transform.parent = null;
-
-		if (layer == PLAYER_COLLIDER && fastPlatform) {
-			EventKit.Broadcast<bool>("player riding fast platform", false);
-=======
-		if (layer == PLAYER_COLLIDER)
+		if (coll.gameObject.layer == PLAYER_DEFAULT_LAYER)
 		{
 			coll.transform.parent = gameObject.transform;
-		}
-		else if (layer != PLAYER_COLLIDER)
-		{
-			coll.transform.parent = gameObject.transform;
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
 		}
 	}
 
 	void OnTriggerExit2D(Collider2D coll)
 	{
-		layer = coll.gameObject.layer;
-
 		coll.transform.parent = null;
 	}
 }

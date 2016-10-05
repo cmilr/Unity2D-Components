@@ -1,13 +1,20 @@
+using DG.Tweening;
+using Matcha.Dreadful;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public class Weapon : CacheBehaviour
+public class Weapon : BaseBehaviour
 {
-	public enum WeaponType { Axe, Sword, Hammer, Dagger, MagicProjectile, Ignore, OutOfBounds, Struckdown };
-	public WeaponType weaponType;
-	public int worth;
+	public enum Type { Invalid, Axe, Sword, Hammer, Dagger, MagicProjectile, Touch };
+	public Type type;
 
+	public enum Style { Melee, Ranged }
+	[HideInInspector]
+	public Style style;
 	[HideInInspector]
 	public bool alreadyCollided;
+
+	public int worth;
 
 	[Tooltip("Is this weapon in someone's inventory, or is it just loose on the floor?")]
 	public bool inPlayerInventory;
@@ -16,12 +23,8 @@ public class Weapon : CacheBehaviour
 
 	[Header("SPRITES")]
 	//~~~~~~~~~~~~~~~~~~~~~
-	[Tooltip("This is the pickup/HUD icon.")]       //weapon sprite with black outline
+	[Tooltip("This is the weapon icon.")]
 	public Sprite iconSprite;
-
-	[HideInInspector]
-	[Tooltip("Actual sprite our hero carries.")]    //weapon sprite without outline
-	public Sprite carriedSprite;                    //loaded automatically from Resources/
 
 
 	[Header("ALL WEAPONS")]
@@ -41,6 +44,9 @@ public class Weapon : CacheBehaviour
 
 	[Header("RANGED WEAPONS ONLY")]
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	[Tooltip("Actual sprite that will be fired.")]
+	public Sprite projectileSprite;
+
 	[Range(8, 20)]
 	[Tooltip("How fast should projectile travel?")]
 	public float speed = 12f;
@@ -60,55 +66,102 @@ public class Weapon : CacheBehaviour
 	[Tooltip("If Animated, ProjectileContainer will attempt to load an animation.")]
 	public bool animatedProjectile;
 
+	public SpriteRenderer spriteRenderer;
+
+	// tween sequences and their related variables.
+	private float whenEquippedFadeAfter = 0f;
+	private float whenEquippedFadeOver = .2f;
+	private float whenStashedFadeAfter = 0f;
+	private float whenStashedFadeOver = .2f;
+	private Sequence fadeInOnEquip;
+	private Sequence fadeOutOnDiscard;
+	private Sequence fadeBackInAfterDiscard;
+	private Sequence fadeWhenStashed;
+
 	void Awake()
 	{
+		spriteRenderer = GetComponent<SpriteRenderer>();
+		Assert.IsNotNull(spriteRenderer);
+
+		Assert.IsFalse(type == Type.Invalid,
+   			("Invalid weapon type @ " + gameObject));
+	}
+
+	void Start()
+	{
+		// cache & pause tweens.
+		(fadeInOnEquip = MFX.Fade(spriteRenderer, 1f, whenEquippedFadeAfter, whenEquippedFadeOver)).Pause();
+		(fadeOutOnDiscard = MFX.Fade(spriteRenderer, .2f, 0f, 0f)).Pause();
+		(fadeBackInAfterDiscard = MFX.FadeInWeapon(spriteRenderer, 1f, 2f, 1f)).Pause();
+		(fadeWhenStashed = MFX.Fade(spriteRenderer, 0f, whenStashedFadeAfter, whenStashedFadeOver)).Pause();
+
+		EstablishAttackStyle();
 		Init();
 	}
 
 	void Init()
 	{
-		//all weapons have two sprites: one that's outlined in black (iconSprite), one that's not (carriedSprite.)
-		//this routine automatically loads the  correct sprite (carriedSprite) for the hero's carried weapon.
-		//if instead it's an enemy's magical projectile, we just use the main SpriteRenderer's sprite.
-		if (weaponType == WeaponType.MagicProjectile)
-		{
-			carriedSprite = iconSprite;
-		}
-		else
-		{
-			carriedSprite = (Sprite)(Resources.Load(("Sprites/Pickups/NoOutlines/weapon/" + iconSprite.name), typeof(Sprite)));
-		}
-
-
-		//if weapon is loose on the floor, turn its pickup icon on so it can be seen
 		if (inPlayerInventory)
 		{
-			spriteRenderer.sprite = carriedSprite;
-			spriteRenderer.enabled = false;
+			GetComponent<SpriteRenderer>().enabled = false;
 			gameObject.GetComponentInChildren<Rigidbody2D>().isKinematic = true;
 			gameObject.GetComponentInChildren<PhysicsCollider>().DisablePhysicsCollider();
-			gameObject.GetComponentInChildren<MeleeCollider>().EnableMeleeCollider();
 			gameObject.GetComponentInChildren<WeaponPickupCollider>().DisableWeaponPickupCollider();
 		}
 		else if (inEnemyInventory)
 		{
-			spriteRenderer.enabled = false;
+			GetComponent<SpriteRenderer>().enabled = false;
 			gameObject.GetComponentInChildren<Rigidbody2D>().isKinematic = true;
 			gameObject.GetComponentInChildren<PhysicsCollider>().DisablePhysicsCollider();
 			gameObject.GetComponentInChildren<WeaponPickupCollider>().DisableWeaponPickupCollider();
 		}
-		else if (name != "Projectile(Clone)") //else not a pooled weapon (ie: this weapon is equipped)
-		{
-			spriteRenderer.sprite = carriedSprite;
-			spriteRenderer.enabled = true;
-			gameObject.GetComponentInChildren<Rigidbody2D>().isKinematic = false;
-			gameObject.GetComponentInChildren<PhysicsCollider>().EnablePhysicsCollider();
-			gameObject.GetComponentInChildren<MeleeCollider>().DisableMeleeCollider();
-			gameObject.GetComponentInChildren<WeaponPickupCollider>().EnableWeaponPickupCollider();
+		else // weapon is loose on the floor.
+		{ 
+			GetComponent<SpriteRenderer>().enabled = true;
 		}
-		else //weapon is on the ground, so needs icon sprite (ie: the outlined one)
+	}
+
+	void EstablishAttackStyle()
+	{
+		switch (type)
 		{
-			spriteRenderer.sprite = iconSprite;
+			case Type.Axe:
+				style = Style.Melee;
+				break;
+			case Type.Sword:
+				style = Style.Melee;
+				break;
+			case Type.Hammer:
+				style = Style.Ranged;
+				break;
+			case Type.Dagger:
+				style = Style.Ranged;
+				break;
+			case Type.MagicProjectile:
+				style = Style.Ranged;
+				break;
+			case Type.Touch:
+				style = Style.Melee;
+				break;
+			default:
+				Assert.IsTrue(false, ("Weapon type missing from switch @ " + gameObject));
+				break;
 		}
+	}
+
+	public void OnEquip()
+	{
+		fadeInOnEquip.Restart();
+	}
+
+	public void OnDiscard()
+	{
+		fadeOutOnDiscard.Restart();
+		fadeBackInAfterDiscard.Restart();
+	}
+
+	public void OnStashed()
+	{
+		fadeWhenStashed.Restart();
 	}
 }

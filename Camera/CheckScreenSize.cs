@@ -1,15 +1,20 @@
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public class CheckScreenSize : CacheBehaviour
+public class CheckScreenSize : BaseBehaviour
 {
 	private float vertExtent;
 	private float horizExtent;
 	private int currentScreenWidth;
 	private int currentScreenHeight;
+	private new Camera camera;
 
 	void Start()
 	{
-		vertExtent           = Camera.main.GetComponent<Camera>().orthographicSize;
+		camera = Camera.main.GetComponent<Camera>();
+		Assert.IsNotNull(camera);
+		
+		vertExtent           = camera.orthographicSize;
 		horizExtent          = vertExtent * Screen.width / Screen.height;
 		currentScreenWidth   = Screen.width;
 		currentScreenHeight  = Screen.height;
@@ -21,10 +26,10 @@ public class CheckScreenSize : CacheBehaviour
 	{
 		if (Screen.width != currentScreenWidth || Screen.height != currentScreenHeight)
 		{
-			vertExtent  = Camera.main.GetComponent<Camera>().orthographicSize;
+			vertExtent  = camera.orthographicSize;
 			horizExtent = vertExtent * Screen.width / Screen.height;
 
-			EventKit.Broadcast<float, float>("screen size changed", vertExtent, horizExtent);
+			EventKit.Broadcast("screen size changed", vertExtent, horizExtent);
 		}
 	}
 }

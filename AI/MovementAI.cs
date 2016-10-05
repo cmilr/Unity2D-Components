@@ -1,22 +1,21 @@
 using Matcha.Unity;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public class MovementAI : CacheBehaviour
+public class MovementAI : BaseBehaviour
 {
 	[HideInInspector]
 	public int walkingDirection;
-
-	public enum Style { Sentinel, Scout, HesitantScout, Wanderer };
+	public enum Style { Invalid, Sentinel, Scout, HesitantScout, Wanderer };
 	public Style style;
 	public bool movementPaused;
-	public float movementSpeed        = 2f;
-	public float walkAnimationSpeed   = .5f;
-	public float chanceOfPause        = 1f;        //chance of pause during any given interval
-
-	private float lookInterval        = .3f;
-	private float playerOffset        = 3f;        //offset target so enemy doesn't end up exactly where player is
-	private float xAxisOffset         = .3f;
+	public float movementSpeed          = 2f;
+	public float walkAnimationSpeed     = .5f;
+	public float chanceOfPause          = 1f;	//chance of pause during any given interval
+	private float lookInterval          = .3f;
+	private float playerOffset          = 3f;	//offset target so enemy doesn't end up exactly where player is
+	private float xAxisOffset           = .3f;
 	private float movementInterval;
 	private string walkAnimation;
 	private int sideHit;
@@ -27,18 +26,37 @@ public class MovementAI : CacheBehaviour
 	private float blockedRightAt;
 	private float blockedLeftAt;
 	private Transform target;
+	private new Transform transform;
+	private new Rigidbody2D rigidbody2D;
+	private Animator animator;
 
-	void Start()
+	void Awake()
 	{
-		movementInterval = Rand.Range(.15f, 1f);
-		target           = GameObject.Find(PLAYER).transform;
-		walkAnimation    = name + "_WALK_";
-		animator.speed   = walkAnimationSpeed;
-		animator.Play(Animator.StringToHash(walkAnimation));
+		transform = GetComponent<Transform>();
+		Assert.IsNotNull(transform);
 
-		if (style == Style.HesitantScout) {
-			hesitant = true;
-		}
+		rigidbody2D = GetComponent<Rigidbody2D>();
+		Assert.IsNotNull(transform);
+
+		animator = GetComponent<Animator>();
+		Assert.IsNotNull(transform);
+
+		Assert.IsFalse(style == Style.Invalid, 
+           ("Invalid movement style @ " + gameObject));
+	}
+	
+	void Start()
+	{	
+		target = GameObject.Find(PLAYER).transform;
+		Assert.IsNotNull(target);
+
+		movementInterval = Rand.Range(.15f, 1f);
+		
+		walkAnimation = name + "_WALK_";
+		animator.speed = walkAnimationSpeed;
+		animator.Play(Animator.StringToHash(walkAnimation));
+		
+		hesitant |= style == Style.HesitantScout;
 	}
 
 	void LateUpdate()
@@ -87,7 +105,7 @@ public class MovementAI : CacheBehaviour
 		{
 			int direction = (target.position.x > transform.position.x) ? RIGHT : LEFT;
 
-			transform.SetLocalScaleX((float)direction);
+			transform.SetLocalScaleX(direction);
 		}
 	}
 
@@ -97,11 +115,7 @@ public class MovementAI : CacheBehaviour
 		{
 			if (!enabled) { return; }
 
-<<<<<<< HEAD
-			// get the proper direction for the enemy to move, then send him moving
-=======
 			//get the proper direction for the enemy to move, then send him moving
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
 			if (target.position.x > transform.position.x + playerOffset)
 			{
 				walkingDirection = RIGHT;
@@ -120,17 +134,10 @@ public class MovementAI : CacheBehaviour
 			{
 				rigidbody2D.velocity = transform.right * movementSpeed * walkingDirection;
 
-<<<<<<< HEAD
-				// ensure that actor is always facing in the direction it is moving
-				transform.SetLocalScaleX((float)walkingDirection);
-
-				// add some random pauses
-=======
 				//ensure that actor is always facing in the direction it is moving
-				transform.SetLocalScaleX((float)walkingDirection);
+				transform.SetLocalScaleX(walkingDirection);
 
 				//add some random pauses
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
 				if (hesitant && Rand.Range(0f, 100f) <= chanceOfPause)
 				{
 					rigidbody2D.velocity = Vector2.zero;
@@ -173,11 +180,7 @@ public class MovementAI : CacheBehaviour
 					transform.SetPositionX(blockedLeftAt);
 				}
 			}
-<<<<<<< HEAD
-			// if enemy and player are on roughly same x axis, movementPaused
-=======
 			//if enemy and player are on roughly same x axis, movementPaused
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
 			else if (transform.position.x.FloatEquals(target.position.x, xAxisOffset))
 			{
 				movementPaused = true;
@@ -218,19 +221,19 @@ public class MovementAI : CacheBehaviour
 
 			if (layer == EDGE_BLOCKER)
 			{
-				sideHit = M.HorizSideThatWasHit(gameObject, coll);
+				sideHit = M.HorizontalSideHit(gameObject, coll);
 
 				if (sideHit == RIGHT)
 				{
 					blockedRight   = true;
 					blockedRightAt = transform.position.x;
-					gameObject.BroadcastMessage("SetBlockedRightState", true);
+					gameObject.SendEventDown("SetBlockedRightState", true);
 				}
 				else if (sideHit == LEFT)
 				{
 					blockedLeft   = true;
 					blockedLeftAt = transform.position.x;
-					gameObject.BroadcastMessage("SetBlockedLeftState", true);
+					gameObject.SendEventDown("SetBlockedLeftState", true);
 				}
 
 				rigidbody2D.velocity = Vector2.zero;
@@ -247,17 +250,17 @@ public class MovementAI : CacheBehaviour
 
 			if (layer == EDGE_BLOCKER)
 			{
-				int sideThatWasHit = M.HorizSideThatWasHit(gameObject, coll);
+				int sideThatWasHit = M.HorizontalSideHit(gameObject, coll);
 
 				if (sideThatWasHit == RIGHT)
 				{
 					blockedRight = false;
-					gameObject.BroadcastMessage("SetBlockedRightState", false);
+					gameObject.SendEventDown("SetBlockedRightState", false);
 				}
 				else if (sideThatWasHit == LEFT)
 				{
 					blockedLeft = false;
-					gameObject.BroadcastMessage("SetBlockedLeftState", false);
+					gameObject.SendEventDown("SetBlockedLeftState", false);
 				}
 
 				movementPaused = false;
@@ -267,21 +270,12 @@ public class MovementAI : CacheBehaviour
 
 	void CreatureDead()
 	{
-<<<<<<< HEAD
-		CancelInvoke("FollowTarget");
-		CancelInvoke("LookAtTarget");
-		dead = true;
-	}
-
-	void OnPlayerDead(string causeOfDeath, Collider2D coll, int directionHit)
-=======
 		dead = true;
 		movementPaused = true;
-		this.enabled = false;
+		enabled = false;
 	}
 
-	void OnPlayerDead(int hitFrom, Weapon.WeaponType weaponType)
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
+	void OnPlayerDead(Hit incomingHit)
 	{
 		//causes enemy to periodically do a victory dance
 		xAxisOffset = .005f;
@@ -295,19 +289,11 @@ public class MovementAI : CacheBehaviour
 
 	void OnEnable()
 	{
-<<<<<<< HEAD
-		EventKit.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
-=======
-		EventKit.Subscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
+		EventKit.Subscribe<Hit>("player dead", OnPlayerDead);
 	}
 
 	void OnDestroy()
 	{
-<<<<<<< HEAD
-		EventKit.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
-=======
-		EventKit.Unsubscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
+		EventKit.Unsubscribe<Hit>("player dead", OnPlayerDead);
 	}
 }

@@ -1,23 +1,20 @@
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class WaterEntity : Entity
 {
 	private BoxCollider2D thisCollider;
 
-	void Start()
+	void Awake()
 	{
 		thisCollider = GetComponent<BoxCollider2D>();
+		Assert.IsNotNull(thisCollider);
 	}
 
 	override public void OnBodyCollisionEnter(Collider2D coll)
 	{
 		collidedWithBody = true;
-<<<<<<< HEAD
-		EventKit.Broadcast<string, Collider2D, int>("player dead", "drowned", thisCollider, 0);
-=======
-		EventKit.Broadcast<Collider2D>("player drowned", thisCollider);
-		EventKit.Broadcast<int, Weapon.WeaponType>("player dead", -1, Weapon.WeaponType.Ignore);
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
+		EventKit.Broadcast("player drowned", thisCollider);
 	}
 
 	override public void OnBodyCollisionStay() {}

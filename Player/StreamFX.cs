@@ -1,7 +1,16 @@
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public class StreamFX : CacheBehaviour
+public class StreamFX : BaseBehaviour
 {
+	private new Transform transform;
+
+	void Awake()
+	{
+		transform = GetComponent<Transform>();
+		Assert.IsNotNull(transform);
+	}
+	
 	void OnFacingRight(bool status)
 	{
 		if (status)

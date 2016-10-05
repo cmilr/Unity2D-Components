@@ -1,39 +1,78 @@
+using DG.Tweening;
 using Matcha.Dreadful;
 using Matcha.Unity;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class ProjectileContainer : Weapon
 {
 	private Vector3 origin;
 	private Weapon weapon;
 	private RuntimeAnimatorController anim;
+	private new Transform transform;
+	private new Collider2D collider2D;
+	private new Rigidbody2D rigidbody2D;
+	private SpriteRenderer projSpriteRenderer;
+	private Animator animator;
+	private Sequence projectileFadeIn;
+	private Sequence projectileFadeInInstant;
+	private Sequence projectileFadeOut;
+
+	void Awake()
+	{
+		transform = GetComponent<Transform>();
+		Assert.IsNotNull(transform);
+
+		collider2D = GetComponent<Collider2D>();
+		Assert.IsNotNull(collider2D);
+
+		rigidbody2D = GetComponent<Rigidbody2D>();
+		Assert.IsNotNull(rigidbody2D);
+
+		projSpriteRenderer = GetComponent<SpriteRenderer>();
+		Assert.IsNotNull(projSpriteRenderer);
+
+		animator = GetComponent<Animator>();
+		Assert.IsNotNull(animator);
+	}
+
+	void Start()
+	{
+		// cache & pause tween sequences.
+		(projectileFadeIn = MFX.Fade(projSpriteRenderer, 1f, 0f, .3f)).Pause();
+		(projectileFadeInInstant = MFX.Fade(projSpriteRenderer, 1f, 0f, 0f)).Pause();
+		(projectileFadeOut = MFX.Fade(projSpriteRenderer, 0, 0, .15f)).Pause();
+	}
 
 	// note: ProjectileContainers contain simple dummy values, which are
-	// then replaced by data that's passed-in via projectile objects
+	// replaced by data that's passed-in via projectile objects during init.
 	void Init(Weapon incoming)
 	{
-		weapon                = incoming;
-		weaponType            = incoming.weaponType;
-		alreadyCollided       = false;
-		iconSprite            = incoming.iconSprite;
-		title                 = incoming.title;
-		damage                = incoming.damage;
-		hp                    = incoming.hp;
-		rateOfAttack          = incoming.rateOfAttack;
-		spriteRenderer.sprite = incoming.carriedSprite;
-		speed                 = incoming.speed;
-		maxDistance           = incoming.maxDistance;
-		lob                   = incoming.lob;
-		lobGravity            = incoming.lobGravity;
-		fadeIn                = incoming.fadeIn;
-		collider2D.enabled    = true;
-		origin                = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+		weapon = incoming;
+		type = incoming.type;
+		alreadyCollided = false;
+		iconSprite = incoming.iconSprite;
+		title = incoming.title;
+		damage = incoming.damage;
+		hp = incoming.hp;
+		rateOfAttack = incoming.rateOfAttack;
+		projectileSprite = incoming.projectileSprite;
+		speed = incoming.speed;
+		maxDistance = incoming.maxDistance;
+		lob = incoming.lob;
+		lobGravity = incoming.lobGravity;
+		fadeIn = incoming.fadeIn;
+		collider2D.enabled = true;
+		origin = new Vector3(transform.position.x, transform.position.y, transform.position.z);
 
 		// initialize animation controller if projectile is animated
 		if (incoming.GetComponent<Weapon>().animatedProjectile)
 		{
-			anim = (RuntimeAnimatorController)RuntimeAnimatorController.Instantiate
-						(Resources.Load(("Sprites/Projectiles/" + incoming.name + "_0"), typeof(RuntimeAnimatorController)));
+			anim = (RuntimeAnimatorController)Instantiate(
+				Resources.Load(("Sprites/Projectiles/" + incoming.name + "_0"), 
+                typeof(RuntimeAnimatorController))
+			);
+			Assert.IsNotNull(anim);
 			animator.runtimeAnimatorController = anim;
 			animator.speed = .5f;
 		}
@@ -49,14 +88,16 @@ public class ProjectileContainer : Weapon
 		//player sprite and weapon sprites actually face opposite directions,
 		//this flips the weapon sprite to match that of the player
 		transform.SetLocalScaleX(-direction);
+		projSpriteRenderer.sortingLayerName = PROJECTILE_SORTING_LAYER;
+		projSpriteRenderer.sprite = projectileSprite;
 
 		if (fadeIn)
 		{
-			MFX.Fade(spriteRenderer, 1f, 0f, .3f);
+			projectileFadeIn.Restart();
 		}
 		else
 		{
-			MFX.Fade(spriteRenderer, 1f, 0f, 0f);
+			projectileFadeInInstant.Restart();
 		}
 
 		// lob projectile like a cannon ball
@@ -86,14 +127,16 @@ public class ProjectileContainer : Weapon
 	public void Fire(bool firedByPlayer, Weapon weapon, Transform target)
 	{
 		Init(weapon);
+		projSpriteRenderer.sortingLayerName = PROJECTILE_SORTING_LAYER;
+		projSpriteRenderer.sprite = projectileSprite;
 
 		if (fadeIn)
 		{
-			MFX.Fade(spriteRenderer, 1f, 0f, .3f);
+			projectileFadeIn.Restart();
 		}
 		else
 		{
-			MFX.Fade(spriteRenderer, 1f, 0f, 0f);
+			projectileFadeInInstant.Restart();
 		}
 
 		// lob projectile like a cannon ball
@@ -120,14 +163,12 @@ public class ProjectileContainer : Weapon
 		}
 	}
 
-	// fade and deactivate on impact
 	void OnTriggerEnter2D(Collider2D coll)
 	{
 		int layer = coll.gameObject.layer;
 
-		if (layer == ENEMY_COLLIDER)
-		{
-			MFX.Fade(spriteRenderer, 0, 0, .15f);
+		if (layer == ENEMY_BODY_COLLIDER) {
+			projectileFadeOut.Restart();
 			Invoke("DeactivateEntireObject", .16f);
 		}
 	}
@@ -136,8 +177,7 @@ public class ProjectileContainer : Weapon
 	{
 		float distance = Vector3.Distance(origin, transform.position);
 
-		if (distance > weapon.maxDistance)
-		{
+		if (distance > weapon.maxDistance) {
 			Invoke("DeactivateCollider", .1f);
 			Invoke("DeactivateEntireObject", 1.5f);
 		}
@@ -159,16 +199,16 @@ public class ProjectileContainer : Weapon
 		anim = null;
 		weapon = null;
 		animator.runtimeAnimatorController = null;
-		spriteRenderer.sprite = null;
+		projSpriteRenderer.sprite = null;
 		CancelInvoke();
-		MFX.Fade(spriteRenderer, 0f, 0f, 0f);
+		projectileFadeOut.Restart();
 	}
 
 	public void AllocateMemory()
 	{
 		// at time of instantiation in the pool, allocate memory for GetComponent() calls
 		rigidbody2D.mass = rigidbody2D.mass;
-		spriteRenderer.sprite = spriteRenderer.sprite;
+		projSpriteRenderer.sprite = projSpriteRenderer.sprite;
 		transform.position = transform.position;
 		collider2D.enabled = true;
 	}

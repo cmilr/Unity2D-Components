@@ -3,7 +3,7 @@ using Matcha.Dreadful;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class DisplayEquipped : BaseBehaviour
+public class DisplayStashedRight : BaseBehaviour
 {
 	private Vector3 slideTweenOrigin;
 	private new Transform transform;
@@ -13,7 +13,7 @@ public class DisplayEquipped : BaseBehaviour
 	private Sequence fadeOutHUD;
 	private Sequence fadeToTransparency;
 	private Sequence fadeOutInstant;
-	private Sequence fadeIn;
+	private Sequence fadeInInstant;
 	private Tween slideItem;
 
 	void Awake()
@@ -29,22 +29,22 @@ public class DisplayEquipped : BaseBehaviour
 	{
 		mainCamera = Camera.main.GetComponent<Camera>();
 		Assert.IsNotNull(mainCamera);
-		
-		// cache & pause tween sequences.
-		(fadeInHUD          = MFX.Fade(spriteRenderer, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE)).Pause();
-		(fadeOutHUD         = MFX.Fade(spriteRenderer, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE)).Pause();
-		(fadeOutInstant     = MFX.Fade(spriteRenderer, 0, 0, 0)).Pause();
-		(fadeToTransparency = MFX.Fade(spriteRenderer, STASHED_ITEM_TRANSPARENCY, 0f, 0f)).Pause();
-		(fadeIn             = MFX.Fade(spriteRenderer, 1, 0, .5f)).Pause();
 
+		// cache & pause tween sequences.
+		(fadeInHUD          = MFX.Fade(spriteRenderer, STASHED_ITEM_TRANSPARENCY, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE)).Pause();
+		(fadeOutHUD         = MFX.Fade(spriteRenderer, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE)).Pause();
+		(fadeToTransparency = MFX.Fade(spriteRenderer, STASHED_ITEM_TRANSPARENCY, 0f, .2f)).Pause();
+		(fadeOutInstant     = MFX.Fade(spriteRenderer, 0, 0, 0)).Pause();
+		(fadeInInstant      = MFX.Fade(spriteRenderer, 1, 0, 0)).Pause();
+		
 		Invoke("PositionHUDElements", .001f);
 	}
 
 	void PositionHUDElements()
-	{	
-		// position in top-center of HUD.
+	{
+		// shift item to the right
 		transform.position = mainCamera.ScreenToWorldPoint(new Vector3(
-			Screen.width / 2,
+			Screen.width / 2 + STASHED_ITEM_OFFSET,
 			Screen.height - INVENTORY_Y_POS,
 			HUD_Z)
 		);
@@ -60,21 +60,17 @@ public class DisplayEquipped : BaseBehaviour
 		(slideItem = MFX.SlideStashedItem(transform, slideTweenOrigin, DISTANCE_TO_SLIDE_ITEMS, INVENTORY_SHIFT_SPEED, false)).Pause();
 	}
 
-	void OnInitWeapon(GameObject weapon)
+	void InitStashedWeapon(GameObject weapon)
 	{
 		spriteRenderer.sprite = weapon.GetComponent<Weapon>().iconSprite;
 		fadeOutInstant.Restart();
 		fadeInHUD.Restart();
 	}
-	
-	void OnInitNewWeapon(GameObject weapon)
-	{
-		spriteRenderer.sprite = weapon.GetComponent<Weapon>().iconSprite;
-	}
 
-	void OnChangeWeapon(GameObject weapon)
+	void ChangeStashedWeapon(GameObject weapon)
 	{
 		spriteRenderer.sprite = weapon.GetComponent<Weapon>().iconSprite;
+		Assert.IsNotNull(spriteRenderer.sprite);
 
 		// upon receiving new weapon, instantly relocate it back to its previous location.
 		transform.localPosition = new Vector3(
@@ -83,11 +79,11 @@ public class DisplayEquipped : BaseBehaviour
 			slideTweenOrigin.z
 		);
 
-		// set opacity to the transparency of stashed weapons. 
+		// set opacity to 100%. 
+		fadeInInstant.Restart();
+		
+		// then tween the transparency down to that of stashed weapons.
 		fadeToTransparency.Restart();
-
-		// then tween to 100%.
-		fadeIn.Restart();
 
 		// finally, tween the image to the right, into its final slot position.
 		slideItem.Restart();
@@ -103,20 +99,34 @@ public class DisplayEquipped : BaseBehaviour
 		PositionHUDElements();
 	}
 
+	void OnInitStashedWeapon(GameObject weapon, int weaponSide)
+	{
+		if (weaponSide == RIGHT)
+		{
+			InitStashedWeapon(weapon);
+		}
+	}
+
+	void OnChangeStashedWeapon(GameObject weapon, int weaponSide)
+	{
+		if (weaponSide == RIGHT)
+		{
+			ChangeStashedWeapon(weapon);
+		}
+	}
+
 	void OnEnable()
 	{
-		EventKit.Subscribe<GameObject>("init equipped weapon", OnInitWeapon);
-		EventKit.Subscribe<GameObject>("init new equipped weapon", OnInitNewWeapon);
-		EventKit.Subscribe<GameObject>("change equipped weapon", OnChangeWeapon);
+		EventKit.Subscribe<GameObject, int>("init stashed weapon", OnInitStashedWeapon);
+		EventKit.Subscribe<GameObject, int>("change stashed weapon", OnChangeStashedWeapon);
 		EventKit.Subscribe<bool>("fade hud", OnFadeHud);
 		EventKit.Subscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}
 
 	void OnDestroy()
 	{
-		EventKit.Unsubscribe<GameObject>("init equipped weapon", OnInitWeapon);
-		EventKit.Unsubscribe<GameObject>("init new equipped weapon", OnInitNewWeapon);
-		EventKit.Unsubscribe<GameObject>("change equipped weapon", OnChangeWeapon);
+		EventKit.Unsubscribe<GameObject, int>("init stashed weapon", OnInitStashedWeapon);
+		EventKit.Unsubscribe<GameObject, int>("change stashed weapon", OnChangeStashedWeapon);
 		EventKit.Unsubscribe<bool>("fade hud", OnFadeHud);
 		EventKit.Unsubscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}

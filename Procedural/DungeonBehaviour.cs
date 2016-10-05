@@ -1,13 +1,13 @@
+using System;
+using System.Collections.Generic;
 using Matcha.Unity;
 using Rotorz.Tile;
-using System.Collections.Generic;
-using System;
-using UnityEngine.Assertions;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 // all map and tile operations below make use of the Matcha.Tiles extensions
 // which extend Rotorz.Tile and act as a safeguard against api changes, etc
-public class DungeonBehaviour : CacheBehaviour
+public class DungeonBehaviour : BaseBehaviour
 {
 	public Brush stoneBrush;
 	public Brush boundsBrush;
@@ -45,7 +45,7 @@ public class DungeonBehaviour : CacheBehaviour
 
 	protected void CarveRoom()
 	{
-		ProcSpace roomToDraw = new ProcSpace();
+		var roomToDraw = new ProcSpace();
 
 		GetRoom(roomToDraw);
 		PaintRoomRandomly(roomToDraw, 100000);
@@ -216,7 +216,7 @@ public class DungeonBehaviour : CacheBehaviour
 	{
 		for (int i = 0; i < numberOfRooms; i++)
 		{
-			ProcSpace roomToDraw = new ProcSpace();
+			var roomToDraw = new ProcSpace();
 
 			GetRoom(roomToDraw);
 			PaintRoomRandomly(roomToDraw, 5);
@@ -233,7 +233,7 @@ public class DungeonBehaviour : CacheBehaviour
 
 		foreach (ProcSpace room in roomList)
 		{
-			ProcSpace hall = new ProcSpace();
+			var hall = new ProcSpace();
 
 			// get random direction
 			int rand = Rand.Range(0, 1);
@@ -302,7 +302,7 @@ public class DungeonBehaviour : CacheBehaviour
 
 			if (rand2 == 0)
 			{
-				ProcSpace crawlspace = new ProcSpace();
+				var crawlspace = new ProcSpace();
 
 				direction = RIGHT;
 
@@ -523,9 +523,9 @@ public class DungeonBehaviour : CacheBehaviour
 
 				for (int i = 0; i < steps; i++)
 				{
-					x = (int) Rand.Gaussian
+					x = Rand.Gaussian
 								(room.originX, room.originX / 2, room.originX + 1, room.originX + room.width - 1);
-					y = (int) Rand.Gaussian
+					y = Rand.Gaussian
 								(room.originY, room.originY, room.originY + 1, room.originY + room.height - 1);
 
 					// if (WithinRoomBounds(room, room.originX + x, room.originY - y))

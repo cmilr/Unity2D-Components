@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class ProjectilePool : BaseBehaviour
 {
@@ -7,8 +8,8 @@ public class ProjectilePool : BaseBehaviour
 	public GameObject pooledObject;
 	public int pooledAmount = 20;
 	public bool increaseWhenNeeded = true;
-	List<GameObject> pooledObjects;
-
+	private List<GameObject> pooledObjects;
+	
 	void Awake()
 	{
 		current = this;
@@ -17,9 +18,12 @@ public class ProjectilePool : BaseBehaviour
 	void Start()
 	{
 		pooledObjects = new List<GameObject>();
+		
 		for (int i = 0; i < pooledAmount; i++)
 		{
-			GameObject obj = (GameObject) Instantiate(pooledObject);
+			var obj = Instantiate(pooledObject);
+			Assert.IsNotNull(obj);
+			
 			obj.SetActive(false);
 
 			// allocate memory for references at instantiation
@@ -40,7 +44,9 @@ public class ProjectilePool : BaseBehaviour
 
 		if (increaseWhenNeeded)
 		{
-			GameObject obj = (GameObject) Instantiate(pooledObject);
+			var obj = Instantiate(pooledObject);
+			Assert.IsNotNull(obj);
+			
 			obj.SetActive(false);
 
 			// allocate memory for references at instantiation

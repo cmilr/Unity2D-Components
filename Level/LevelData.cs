@@ -11,9 +11,9 @@ public class LevelData : BaseBehaviour
 
 	public void Save()
 	{
-		BinaryFormatter bf = new BinaryFormatter();
+		var bf = new BinaryFormatter();
 		FileStream file = File.Create(Application.persistentDataPath + "/LevelData.dat");
-		LevelDataContainer container = new LevelDataContainer();
+		var container = new LevelDataContainer();
 
 		container.hp     = HP;
 		container.ac     = AC;
@@ -27,9 +27,9 @@ public class LevelData : BaseBehaviour
 	{
 		if (File.Exists(Application.persistentDataPath + "/LevelData.dat"))
 		{
-			BinaryFormatter bf = new BinaryFormatter();
+			var bf = new BinaryFormatter();
 			FileStream file = File.Open(Application.persistentDataPath + "/LevelData.dat",FileMode.Open);
-			LevelDataContainer container = (LevelDataContainer)bf.Deserialize(file);
+			var container = (LevelDataContainer)bf.Deserialize(file);
 			file.Close();
 
 			HP     = container.hp;

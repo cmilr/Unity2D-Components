@@ -1,21 +1,35 @@
+using DG.Tweening;
 using Matcha.Dreadful;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public class WeaponPickupCollider : CacheBehaviour
+public class WeaponPickupCollider : BaseBehaviour
 {
+	private new Collider2D collider2D;
+	private Sequence pickupWeapon;
+
+	void Awake()
+	{
+		collider2D = GetComponent<Collider2D>();
+		Assert.IsNotNull(collider2D);
+		
+		gameObject.layer = PICKUP_LAYER;
+	}
+	
 	void Start()
 	{
-		gameObject.layer = PICKUP_LAYER;
+		(pickupWeapon = MFX.PickupWeapon(gameObject)).Pause();
 	}
 
 	void OnTriggerEnter2D(Collider2D coll)
 	{
-		if (coll.gameObject.layer == PLAYER_COLLIDER)
+		if (coll.gameObject.layer == PLAYER_DEFAULT_LAYER)
 		{
-			MFX.PickupWeapon(gameObject);
-			EventKit.Broadcast<int>("prize collected", transform.parent.GetComponent<Weapon>().worth);
-			EventKit.Broadcast<GameObject>("equip new weapon", transform.parent.gameObject);
+			pickupWeapon.Restart();
+			EventKit.Broadcast("prize collected", transform.parent.GetComponent<Weapon>().worth);
+			EventKit.Broadcast("equip new weapon", transform.parent.gameObject);
 		}
+
 	}
 
 	public void EnableWeaponPickupCollider()

@@ -1,7 +1,7 @@
 using Matcha.Unity;
 using Rotorz.Tile;
 
-public class DungeonGenerator : CacheBehaviour
+public class DungeonGenerator : BaseBehaviour
 {
 	public Brush stoneBrush;
 	public Brush boundsBrush;

@@ -1,17 +1,15 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using Matcha.Dreadful;
 using Matcha.Unity;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Assertions;
+using UnityEngine.UI;
 
-public class DisplayAC : BaseBehaviour
+public class DisplayWaterDrop : BaseBehaviour
 {
-	private int intToDisplay;
-	private string legend = "AC: ";
-	private Text textComponent;
 	private CanvasScaler canvasScaler;
 	private RectTransform rectTrans;
+	private SpriteRenderer spriteRenderer;
 	private Sequence fadeIn;
 	private Sequence fadeOutInstant;
 	private Sequence fadeOutHUD;
@@ -21,8 +19,8 @@ public class DisplayAC : BaseBehaviour
 		rectTrans = GetComponent<RectTransform>();
 		Assert.IsNotNull(rectTrans);
 
-		textComponent = GetComponent<Text>();
-		Assert.IsNotNull(textComponent);
+		spriteRenderer = GetComponent<SpriteRenderer>();
+		Assert.IsNotNull(spriteRenderer);
 	}
 	
 	void Start()
@@ -31,29 +29,18 @@ public class DisplayAC : BaseBehaviour
 		Assert.IsNotNull(canvasScaler);
 
 		canvasScaler.scaleFactor = PLATFORM_SPECIFIC_CANVAS_SCALE;
-		M.PositionInHUD(rectTrans, textComponent, AC_ALIGNMENT, AC_X_POS, AC_Y_POS);
+		M.PositionInHUD(rectTrans, spriteRenderer, WATER_DROP_ALIGNMENT, WATER_DROP_X_POS, WATER_DROP_Y_POS);
 		
 		// cache & pause tween sequences.
-		(fadeOutInstant = MFX.Fade(textComponent, 0, 0, 0)).Pause();
-		(fadeIn         = MFX.Fade(textComponent, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE)).Pause();
-		(fadeOutHUD     = MFX.Fade(textComponent, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE)).Pause();
+		(fadeOutInstant = MFX.Fade(spriteRenderer, 0, 0, 0)).Pause();
+		(fadeIn         = MFX.Fade(spriteRenderer, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE)).Pause();
+		(fadeOutHUD     = MFX.Fade(spriteRenderer, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE)).Pause();
 	}
 
-	void OnInitAC(int initInt)
-	{
-		textComponent.text = legend + initInt;
-		FadeInText();
-	}
-	
 	void FadeInText()
 	{
 		fadeOutInstant.Restart();
 		fadeIn.Restart();
-	}
-
-	void OnChangeInteger(int newInt)
-	{
-		textComponent.text = legend + newInt;
 	}
 
 	void OnFadeHud(bool status)
@@ -63,13 +50,11 @@ public class DisplayAC : BaseBehaviour
 
 	void OnEnable()
 	{
-		EventKit.Subscribe<int>("init ac", OnInitAC);
 		EventKit.Subscribe<bool>("fade hud", OnFadeHud);
 	}
 
 	void OnDestroy()
 	{
-		EventKit.Unsubscribe<int>("init ac", OnInitAC);
 		EventKit.Unsubscribe<bool>("fade hud", OnFadeHud);
 	}
 }

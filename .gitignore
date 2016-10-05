@@ -1,22 +1,16 @@
 [Ll]ibrary/
+[Ll]ibraries/
 [Tt]emp/
 [Oo]bj/
 [Bb]uild/
 [Ii]OSBuild/
-
-Add-Ons/
 [Aa]dd-Ons/
 [Uu]tilities/
+[Ww]Websites/
 [Xx]_Add-Ons/
 [Xx]_Archive/
-[Xx]_docs/
-
-Add-Ons.meta
-[Aa]dd-Ons.meta
-[Uu]tilities.meta
-[Xx]_Add-Ons.meta
-[Xx]_Archive.meta
-[Xx]_docs.meta
+[Xx]_Docs/
+[Xx]_Deprecated/
 *Build/
 *Build.app/
 
@@ -35,7 +29,7 @@ Add-Ons.meta
 
 # Unity3D generated meta files
 # ~~~~~~~~~~~~
-*.pidb.meta
+*.meta
 
 
 # Unity3D Generated File On Crash Reports
@@ -57,8 +51,6 @@ Thumbs.db
 # Open Source
 # ~~~~~~~~~~~
 CameraFollow.cs
-CameraFollow.cs.meta
 CharacterController2D.cs
-CharacterController2D.cs.meta
 SortingLayerExposed.cs
-SortingLayerExposed.cs.meta
+ColorizePixels.cs

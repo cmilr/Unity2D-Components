@@ -1,19 +1,28 @@
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public class ProjectileManager : CacheBehaviour
+public class ProjectileManager : BaseBehaviour
 {
 	private GameObject pooledProjectile;
 	private Transform projectileSpawnPoint;
 	private bool firedByPlayer;
 	private float fireRate;
 	private float nextFire;
+	private new Transform transform;
 
+	void Awake()
+	{
+		transform = GetComponent<Transform>();
+		Assert.IsNotNull(transform);
+	}
+	
 	void Start()
 	{
 		projectileSpawnPoint = GetComponentInChildren<SpawnPointTrace>().transform;
+		Assert.IsNotNull(projectileSpawnPoint);
 
 		// check if this is the player or an enemy
-		firedByPlayer = (gameObject.layer == PLAYER_LAYER) ? true : false;
+		firedByPlayer = (gameObject.layer == PLAYER_DEFAULT_LAYER);
 	}
 
 	// fire in direction actor is facing
@@ -64,6 +73,6 @@ public class ProjectileManager : CacheBehaviour
 		pooledProjectile.transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z);
 
 		// set weapon to proper collider layer——enemy or player
-		pooledProjectile.layer = (firedByPlayer) ? WEAPON_COLLIDER : ENEMY_WEAPON;
+		pooledProjectile.layer = (firedByPlayer) ? PLAYER_WEAPON_COLLIDER : ENEMY_WEAPON_COLLIDER;
 	}
 }

@@ -2,23 +2,27 @@
 // https://chicounity3d.wordpress.com/2014/05/23/how-to-lerp-like-a-pro/
 
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public class SmootheLerp : CacheBehaviour
+public class SmootheLerp : BaseBehaviour
 {
 	public float lerpTime = 5f;
 	public float moveDistance = 5f;
+	private float currentLerpTime;
+	private Vector3 startPos;
+	private Vector3 endPos;
+	private new Transform transform;
 
-	float currentLerpTime;
-	Vector3 startPos;
-	Vector3 endPos;
-
-	protected void Start()
+	void Awake()
 	{
+		transform = GetComponent<Transform>();
+		Assert.IsNotNull(transform);
+		
 		startPos = transform.position;
 		endPos   = transform.position + transform.up * moveDistance;
 	}
 
-	protected void Update()
+	void Update()
 	{
 		//reset when we press spacebar
 		if (Input.GetKeyDown(KeyCode.Space))

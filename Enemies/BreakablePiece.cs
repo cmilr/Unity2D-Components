@@ -1,22 +1,41 @@
+using DG.Tweening;
 using Matcha.Dreadful;
 using Matcha.Unity;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public class BreakablePiece : CacheBehaviour
+public class BreakablePiece : BaseBehaviour
 {
 	private float originX;
 	private float originY;
 	private float newX;
 	private float newY;
-	private bool alreadyCollided;
-	private bool levelCompleted;
-	private bool playerDead;
+	private new Transform transform;
+	private new Rigidbody2D rigidbody2D;
+	private SpriteRenderer spriteRenderer;
+	private Sequence fadeInInstant;
+	private Sequence fadeOut;
+
+	void Awake()
+	{
+		transform = GetComponent<Transform>();
+		Assert.IsNotNull(transform);
+
+		spriteRenderer = GetComponent<SpriteRenderer>();
+		Assert.IsNotNull(spriteRenderer);
+	}
 
 	void Start()
 	{
-		Rigidbody2D rigidbody = gameObject.GetComponent<Rigidbody2D>();
-		rigidbody.mass        = Rand.Range(.5f, 20f);
-		rigidbody.drag        = Rand.Range(0f, .5f);
+		rigidbody2D = GetComponent<Rigidbody2D>();
+		Assert.IsNotNull(rigidbody2D);
+
+		rigidbody2D.mass = Rand.Range(.5f, 20f);
+		rigidbody2D.drag = Rand.Range(0f, .5f);
+
+		// cache & pause tween sequences.
+		(fadeInInstant   = MFX.Fade(spriteRenderer, 1f, 0f, 0f)).Pause();
+		(fadeOut         = MFX.Fade(spriteRenderer, 0f, 0f, 3f)).Pause();
 	}
 
 	public void Init(int index, Sprite breakableSprite)
@@ -36,68 +55,13 @@ public class BreakablePiece : CacheBehaviour
 
 	public void CountDown()
 	{
+		fadeInInstant.Restart();
+
 		Invoke("FadeOut", Rand.Range(MIN_BEFORE_FADE, MAX_BEFORE_FADE));
 	}
 
-	// used when fading naturally
 	void FadeOut()
 	{
-		MFX.Fade(spriteRenderer, 0f, 0f, 3f);
-	}
-
-	// use when picked up by player
-	void FadeOutFast()
-	{
-		MFX.Fade(spriteRenderer, 0f, 0f, .15f);
-	}
-
-	void OnTriggerEnter2D(Collider2D coll)
-	{
-		if (!alreadyCollided && !levelCompleted && !playerDead)
-		{
-			int layer = coll.gameObject.layer;
-
-			if (layer == BODY_COLLIDER)
-			{
-				alreadyCollided = true;
-
-				EventKit.Broadcast<int>("prize collected", 5);
-
-				FadeOutFast();
-			}
-		}
-	}
-
-	void OnEnable()
-	{
-		EventKit.Subscribe<bool>("level completed", OnLevelCompleted);
-<<<<<<< HEAD
-		EventKit.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
-=======
-		EventKit.Subscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
-	}
-
-	void OnDisable()
-	{
-		EventKit.Unsubscribe<bool>("level completed", OnLevelCompleted);
-<<<<<<< HEAD
-		EventKit.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
-	}
-
-	void OnPlayerDead(string methodOfDeath, Collider2D coll, int hitFrom)
-=======
-		EventKit.Unsubscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
-	}
-
-	void OnPlayerDead(int hitFrom, Weapon.WeaponType weaponType)
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
-	{
-		playerDead = true;
-	}
-
-	void OnLevelCompleted(bool status)
-	{
-		levelCompleted = status;
+		fadeOut.Restart();
 	}
 }

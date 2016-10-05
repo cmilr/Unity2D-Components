@@ -4,17 +4,17 @@ public class WallEntity : Entity
 {
 	override public void OnBodyCollisionEnter(Collider2D coll)
 	{
-		EventKit.Broadcast<bool>("player touching wall", true);
+		EventKit.Broadcast("player touching wall", true);
 	}
 
 	override public void OnBodyCollisionStay()
 	{
-		EventKit.Broadcast<bool>("player touching wall", true);
+		EventKit.Broadcast("player touching wall", true);
 	}
 
 	override public void OnBodyCollisionExit()
 	{
-		EventKit.Broadcast<bool>("player touching wall", false);
+		EventKit.Broadcast("player touching wall", false);
 	}
 
 	override public void OnWeaponCollisionEnter(Collider2D coll) {}

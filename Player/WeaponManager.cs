@@ -1,6 +1,6 @@
 using UnityEngine.Assertions;
 
-public class WeaponManager : CacheBehaviour
+public class WeaponManager : BaseBehaviour
 {
 	private ProjectileManager projectile;
 	private MeleeManager melee;
@@ -8,42 +8,34 @@ public class WeaponManager : CacheBehaviour
 
 	void Start()
 	{
-		melee      = transform.parent.GetComponent<MeleeManager>();
+		melee = transform.parent.GetComponent<MeleeManager>();
+		Assert.IsNotNull(melee);
+		
 		projectile = transform.parent.GetComponent<ProjectileManager>();
+		Assert.IsNotNull(projectile);
 	}
 
 	public void Attack()
 	{
-		switch (equippedWeapon.weaponType)
+		switch (equippedWeapon.type)
 		{
 			// swinging weapons
-			case Weapon.WeaponType.Axe:
-			case Weapon.WeaponType.Sword:
-			{
+			case Weapon.Type.Axe:
+			case Weapon.Type.Sword:
 				melee.Attack(equippedWeapon);
 				break;
-			}
-
 			// hurled weapons
-			case Weapon.WeaponType.Hammer:
-			case Weapon.WeaponType.Dagger:
-			{
+			case Weapon.Type.Hammer:
+			case Weapon.Type.Dagger:
 				projectile.Fire(equippedWeapon);
 				break;
-			}
-
 			// magic projectile weapons
-			case Weapon.WeaponType.MagicProjectile:
-			{
+			case Weapon.Type.MagicProjectile:
 				projectile.Fire(equippedWeapon);
 				break;
-			}
-
 			default:
-			{
 				Assert.IsTrue(false, "** Default Case Reached **");
 				break;
-			}
 		}
 	}
 

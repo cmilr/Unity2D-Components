@@ -1,92 +1,95 @@
+using DG.Tweening;
 using Matcha.Dreadful;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 
-public class LevelManager : CacheBehaviour
+public class LevelManager : BaseBehaviour
 {
-	public float groundLine             = 0f;
-	private float timeToFade            = 2f;
-	private float fadeInAfter           = 2f;
-	private float fadeOutAfter          = 0f;
-	private float timeBeforeLevelReload = 3.2f;
+	public float groundLine = 0f;
+
+	private float fadeInAfter = 0f;
+	private float timeToFadeIn = 2f;
+	private float fadeOutAfter = 1f;
+	private float timeToFadeOut = 2f;
 	private float playerPositionY;
 	private bool playerAboveGround;
 	private Transform player;
+	private SpriteRenderer spriteRenderer;
+	private Sequence fadeInViewport;
+	private Sequence fadeOutViewport;
+
+	void Awake()
+	{
+		spriteRenderer = GetComponent<SpriteRenderer>();
+		Assert.IsNotNull(spriteRenderer);
+	}
 
 	void Start()
 	{
 		player = GameObject.Find(PLAYER).GetComponent<Transform>();
+		Assert.IsNotNull(player);
+
+		(fadeInViewport = MFX.FadeInViewport(spriteRenderer, fadeInAfter, timeToFadeIn)).Pause();
+		(fadeOutViewport = MFX.FadeOutViewport(spriteRenderer, fadeOutAfter, timeToFadeOut)).Pause();
+
 		spriteRenderer.enabled = true;
 		FadeInNewLevel();
 		GetPlayerPosition();
 	}
 
-	void FadeInNewLevel()
+	void OnLoadLevel(int newLevel)
 	{
-		MFX.FadeInLevel(spriteRenderer, fadeOutAfter, timeToFade);
-		EventKit.Broadcast<bool>("level loading", true);
+		// load level async in the background, but don't activate.
+		var backgroundLoadedScene = SceneManager.LoadSceneAsync("Level" + newLevel);
+		backgroundLoadedScene.allowSceneActivation = false;
+
+		// fade camera to black.
+		fadeOutViewport.Restart();
+
+		// wait a few seconds, then kill all tweens and load new level.
+		StartCoroutine(Timer.Start((fadeOutAfter + timeToFadeOut), false, () =>
+		{
+			DOTween.KillAll();
+			backgroundLoadedScene.allowSceneActivation = true;
+		}));
 	}
 
-	void FadeOutCurrentLevel()
+	void FadeInNewLevel()
 	{
-		MFX.FadeOutLevel(spriteRenderer, fadeInAfter, timeToFade);
+		fadeInViewport.Restart();
+		Invoke("ExplicitGarbageCollection", 1f);
+		EventKit.Broadcast("level loading", true);
+	}
+
+	void ExplicitGarbageCollection()
+	{
+		System.GC.Collect();
 	}
 
 	void GetPlayerPosition()
 	{
-		InvokeRepeating("CheckIfAboveGround", 0f, 0.5F);
+		InvokeRepeating("CheckIfAboveGround", 0f, 1F);
 	}
 
 	void CheckIfAboveGround()
 	{
 		if (player.position.y > groundLine)
 		{
-			// if player is not ALREADY above ground, broadcast message "player above ground"
-			if (!playerAboveGround) {
+			if (!playerAboveGround)
+			{
 				playerAboveGround = true;
-				EventKit.Broadcast<bool>("player above ground", true);
+				EventKit.Broadcast("player above ground", true);
 			}
 		}
 		else
 		{
-			// if player is not ALREADY below ground, broadcast message !"player above ground"
-			if (playerAboveGround) {
+			if (playerAboveGround)
+			{
 				playerAboveGround = false;
-				EventKit.Broadcast<bool>("player above ground", false);
+				EventKit.Broadcast("player above ground", false);
 			}
 		}
-	}
-
-<<<<<<< HEAD
-	void OnEnable()
-	{
-		EventKit.Subscribe<int>("load level", OnLoadLevel);
-		EventKit.Subscribe<float, float>("player position", OnPlayerPosition);
-	}
-
-	void OnDestroy()
-	{
-		EventKit.Unsubscribe<int>("load level", OnLoadLevel);
-		EventKit.Unsubscribe<float, float>("player position", OnPlayerPosition);
-	}
-
-=======
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
-	void OnLoadLevel(int newLevel)
-	{
-		FadeOutCurrentLevel();
-
-		//load next level
-		StartCoroutine(Timer.Start(timeBeforeLevelReload, false, () =>
-		{
-			SceneManager.LoadScene("Level" + newLevel);
-		}));
-	}
-
-	void OnLevelWasLoaded()
-	{
-		//trigger garbage collection
-		System.GC.Collect();
 	}
 
 	void OnEnable()

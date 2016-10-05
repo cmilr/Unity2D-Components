@@ -1,29 +1,43 @@
 using Matcha.Unity;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public class FlickeringFireLerp : CacheBehaviour
+public class FlickeringFireLerp : BaseBehaviour
 {
 	public float minIntensity = 1f;
 	public float maxIntensity = 12f;
+	private float lerpTime       = 1f;
+	private float startIntensity = 1f;
+	private float endIntensity   = 5f;
+	private float currentLerpTime;
+	private float distance;
+	private bool disabled;
+	private Transform player;
+	private new Transform transform;
+	private new Light light;
 
-	float lerpTime       = 1f;
-	float startIntensity = 1f;
-	float endIntensity   = 5f;
-	float currentLerpTime;
-	bool disabled;
-	Transform player;
-
+	void Awake()
+	{
+		transform = GetComponent<Transform>();
+		Assert.IsNotNull(transform);
+		
+		light = GetComponent<Light>();
+		Assert.IsNotNull(light);
+	}
+	
 	void Start()
 	{
 		player = GameObject.Find(PLAYER).GetComponent<Transform>();
-		InvokeRepeating("CullingCheck", 0f, .2f);
+		Assert.IsNotNull(player);
+		
+		InvokeRepeating("CullingCheck", 0f, 1f);
 	}
 
 	void Update()
 	{
 		if (!disabled)
 		{
-			//increment timer once per frame
+			// increment timer once per frame.
 			currentLerpTime += Time.deltaTime;
 
 			if (currentLerpTime > lerpTime)
@@ -34,16 +48,16 @@ public class FlickeringFireLerp : CacheBehaviour
 				endIntensity = Rand.Range(minIntensity, maxIntensity);
 			}
 
-			//lerp!
+			// lerp!
 			float perc = currentLerpTime / lerpTime;
 			light.intensity = Mathf.Lerp(startIntensity, endIntensity, perc);
 		}
 	}
 
-	// disable if far from player
+	// disable if far from player.
 	void CullingCheck()
 	{
-		float distance = Vector3.Distance(player.position, transform.position);
-		disabled = (distance > CULL_DISTANCE ? true : false);
+		distance = Vector3.Distance(player.position, transform.position);
+		disabled = (distance > CULL_DISTANCE);
 	}
 }

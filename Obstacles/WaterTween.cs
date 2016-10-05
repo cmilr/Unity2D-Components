@@ -1,18 +1,25 @@
 using DG.Tweening;
+using Matcha.Dreadful;
+using UnityEngine;
+using UnityEngine.Assertions;
 
-public class WaterTween : CacheBehaviour
+public class WaterTween : BaseBehaviour
 {
 	private float distance = 2f;
-	private float time     = 1.5f;
-
+	private float time = 1.5f;
+	private new Transform transform;
+	private Sequence waterMovement;
+	
+	void Awake()
+	{
+		transform = GetComponent<Transform>();
+		Assert.IsNotNull(transform);
+	}
+	
 	void Start()
 	{
-		transform.DOKill();
+		(waterMovement = MFX.ContinualWaterMovement(transform, distance, time)).Pause();
 
-		DOTween.Sequence().SetLoops(-1, LoopType.Restart)
-		.Append(transform.DOMoveX(distance, time)
-				.SetRelative()
-				.SetEase(Ease.Linear)
-				);
+		waterMovement.Restart();
 	}
 }

@@ -1,8 +1,9 @@
 using Matcha.Unity;
 using Rotorz.Tile;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public class DontLeaveMap : CacheBehaviour
+public class DontLeaveMap : BaseBehaviour
 {
 	[Tooltip("Amount of sprite allowed to leave the map.")]
 	public float leftOffset;
@@ -20,18 +21,31 @@ public class DontLeaveMap : CacheBehaviour
 	private float spriteWidth;
 	private float spriteHeight;
 	private TileSystem tileSystem;
+	private new Transform transform;
+	private new Renderer renderer;
 
-	void Start()
+	void Awake()
 	{
-		tileSystem   = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
+		transform = GetComponent<Transform>();
+		Assert.IsNotNull(transform);
+
+		renderer = GetComponent<Renderer>();
+		Assert.IsNotNull(renderer);
+	}
+	
+	void Start()
+	{		
+		tileSystem = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
+		Assert.IsNotNull(tileSystem);
+		
 		spriteWidth  = renderer.bounds.size.x;
 		spriteHeight = renderer.bounds.size.y;
 
-		Vector3 tileSystemSize = new Vector3(
+		var tileSystemSize = new Vector3(
 			tileSystem.ColumnCount * tileSystem.CellSize.x,
 			tileSystem.RowCount * tileSystem.CellSize.y,
 			tileSystem.CellSize.z
-			);
+		);
 
 		leftBound  = 0f;
 		rightBound = tileSystemSize.x;
@@ -60,11 +74,6 @@ public class DontLeaveMap : CacheBehaviour
 		if (transform.position.y - lowerOffset < lowerBound)
 		{
 			transform.SetPositionY(lowerBound - lowerOffset);
-<<<<<<< HEAD
-			EventKit.Broadcast<string, Collider2D, int>("player dead", "out of bounds", null, -1);
-=======
-			EventKit.Broadcast<int, Weapon.WeaponType>("player dead", -1, Weapon.WeaponType.OutOfBounds);
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
 		}
 	}
 }

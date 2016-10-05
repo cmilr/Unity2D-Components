@@ -1,20 +1,20 @@
+using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System;
 using UnityEngine;
 
 public class GameData : BaseBehaviour
 {
-	public int Difficulty   				{ get; set; }
+	public int Difficulty   			{ get; set; }
 	public int CurrentScore          	{ get; set; }
 	public int LastSavedScore        	{ get; set; }
 	public int Lives              		{ get; set; }
 	public int CurrentLevel          	{ get; set; }
 
-	//only called once since this is a singleton
+	// only called once since this is a singleton.
 	void Awake()
 	{
-		Difficulty 				= NORMAL;
+		Difficulty 			 = NORMAL;
 		CurrentScore         = 0;
 		LastSavedScore       = 0;
 		Lives                = 3;
@@ -23,11 +23,11 @@ public class GameData : BaseBehaviour
 
 	public void Save()
 	{
-		BinaryFormatter bf = new BinaryFormatter();
+		var bf = new BinaryFormatter();
 		FileStream file = File.Create(Application.persistentDataPath + "/GameData.dat");
-		GameDataContainer container = new GameDataContainer();
+		var container = new GameDataContainer();
 
-		container.difficulty 			 = Difficulty;
+		container.difficulty 		   = Difficulty;
 		container.currentScore         = CurrentScore;
 		container.lastSavedScore       = LastSavedScore;
 		container.lives                = Lives;
@@ -41,12 +41,12 @@ public class GameData : BaseBehaviour
 	{
 		if(File.Exists(Application.persistentDataPath + "/GameData.dat"))
 		{
-			BinaryFormatter bf = new BinaryFormatter();
+			var bf = new BinaryFormatter();
 			FileStream file = File.Open(Application.persistentDataPath + "/GameData.dat", FileMode.Open);
-			GameDataContainer container = (GameDataContainer)bf.Deserialize(file);
+			var container = (GameDataContainer)bf.Deserialize(file);
 			file.Close();
 
-			Difficulty 			   = container.difficulty;
+			Difficulty 			 = container.difficulty;
 			CurrentScore         = container.currentScore;
 			LastSavedScore       = container.lastSavedScore;
 			Lives                = container.lives;

@@ -11,11 +11,6 @@ public class PlayerData : BaseBehaviour
 	public int XP              { get; set; }
 	public int LVL             { get; set; }
 	[HideInInspector]
-<<<<<<< HEAD:Player/_PlayerData.cs
-	public _PlayerData data;
-	[HideInInspector]
-=======
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700:Player/PlayerData.cs
 	public GameObject equippedWeapon;
 	[HideInInspector]
 	public GameObject leftWeapon;
@@ -25,7 +20,7 @@ public class PlayerData : BaseBehaviour
 	//called whenever awake() is called
 	void SingletonAwake()
 	{
-		HP             = 25;
+		HP             = 50;
 		AC             = 10;
 		XP             = 0;
 		LVL            = 1;
@@ -36,9 +31,9 @@ public class PlayerData : BaseBehaviour
 
 	public void Save()
 	{
-		BinaryFormatter bf = new BinaryFormatter();
+		var bf = new BinaryFormatter();
 		FileStream file = File.Create(Application.persistentDataPath + "/PlayerData.dat");
-		PlayerDataContainer container = new PlayerDataContainer();
+		var container = new PlayerDataContainer();
 
 		container.character = Character;
 		container.hp        = HP;
@@ -54,9 +49,9 @@ public class PlayerData : BaseBehaviour
 	{
 		if (File.Exists(Application.persistentDataPath + "/PlayerData.dat"))
 		{
-			BinaryFormatter bf = new BinaryFormatter();
+			var bf = new BinaryFormatter();
 			FileStream file = File.Open(Application.persistentDataPath + "/PlayerData.dat",FileMode.Open);
-			PlayerDataContainer container = (PlayerDataContainer)bf.Deserialize(file);
+			var container = (PlayerDataContainer)bf.Deserialize(file);
 			file.Close();
 
 			Character = container.character;
@@ -79,20 +74,14 @@ public class PlayerData : BaseBehaviour
 
 	void OnEnable()
 	{
-<<<<<<< HEAD:Player/_PlayerData.cs
-=======
 		EventKit.Subscribe("wake singletons", SingletonAwake);
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700:Player/PlayerData.cs
 		EventKit.Subscribe<bool>("save player data", OnSavePlayerData);
 		EventKit.Subscribe<bool>("load player data", OnLoadPlayerData);
 	}
 
 	void OnDestroy()
 	{
-<<<<<<< HEAD:Player/_PlayerData.cs
-=======
 		EventKit.Unsubscribe("wake singletons", SingletonAwake);
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700:Player/PlayerData.cs
 		EventKit.Unsubscribe<bool>("save player data", OnSavePlayerData);
 		EventKit.Unsubscribe<bool>("load player data", OnLoadPlayerData);
 	}

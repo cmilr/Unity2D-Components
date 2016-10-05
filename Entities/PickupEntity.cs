@@ -1,65 +1,58 @@
+using DG.Tweening;
 using Matcha.Dreadful;
-using UnityEngine.Assertions;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class PickupEntity : Entity
 {
-	public enum EntityType { prize, levelUp, save, load };
-	public EntityType entityType;
+	public enum Type { Invalid, Prize, LevelUp, Save, Load };
+	public Type type;
 	private Light glow;
+	private Sequence pickupPrize;
+	private Sequence extinguishLight;
 
 	void Start()
 	{
-		glow = gameObject.GetComponent<Light>() as Light;
+		glow = gameObject.GetComponentInChildren<Light>() as Light;
 
-		if ((entityType == EntityType.prize || entityType == EntityType.levelUp) && autoAlign) {
+		Assert.IsFalse(type == Type.Invalid,
+	   		("Invalid pickup type @ " + gameObject));
+		
+		(pickupPrize = MFX.PickupPrize(gameObject)).Pause();
+		(extinguishLight = MFX.ExtinguishLight(glow, 0, .1f)).Pause();
+		
+		if ((type == Type.Prize || type == Type.LevelUp) && autoAlign) {
 			AutoAlign();
 		}
 	}
 
 	override public void OnBodyCollisionEnter(Collider2D coll)
 	{
-		collidedWithBody = true;
-
 		if (!levelCompleted && !playerDead)
 		{
-			switch (entityType)
+			switch (type)
 			{
-				case EntityType.prize:
-				{
-					MFX.PickupPrize(gameObject);
-					MFX.ExtinguishLight(glow, 0, .1f);
-					EventKit.Broadcast<int>("prize collected", worth);
-					break;
-				}
-
-				case EntityType.levelUp:
-				{
-					MFX.PickupPrize(gameObject);
-					MFX.ExtinguishLight(glow, 0, .1f);
+				case Type.Prize:
+					pickupPrize.Restart();
+					if (glow != null) extinguishLight.Restart();
+					EventKit.Broadcast("prize collected", worth);
+					break;	
+				case Type.LevelUp:
+					pickupPrize.Restart();
+					if (glow != null) extinguishLight.Restart();
 					levelCompleted = true;
-					EventKit.Broadcast<int>("prize collected", worth);
-					EventKit.Broadcast<bool>("level completed", true);
+					EventKit.Broadcast("prize collected", worth);
+					EventKit.Broadcast("level completed", true);
 					break;
-				}
-
-				case EntityType.save:
-				{
-					EventKit.Broadcast<bool>("save player data", true);
+				case Type.Save:
+					EventKit.Broadcast("save player data", true);
 					break;
-				}
-
-				case EntityType.load:
-				{
-					EventKit.Broadcast<bool>("load player data", true);
+				case Type.Load:
+					EventKit.Broadcast("load player data", true);
 					break;
-				}
-
 				default:
-				{
-					Assert.IsTrue(false, "** Default Case Reached **");
+					Assert.IsTrue(false, ("Pickup type missing from switch @ " + gameObject));
 					break;
-				}
 			}
 		}
 	}

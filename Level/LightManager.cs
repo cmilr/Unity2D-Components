@@ -1,15 +1,17 @@
+using DG.Tweening;
 using Matcha.Dreadful;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public class LightManager : CacheBehaviour
+public class LightManager : BaseBehaviour
 {
 	private Light playerLight;
 	private Light creatureLight;
 	private Light pickupLight;
 	private Light tileLight;
-	private float fadeAfter                    = 0f;
+	private float fadeAfter 				   = 0f;
 	private float timeToFade                   = 1f;
-
+       
 	// above ground light intensity
 	private float playerAboveGround            = 1.95f;
 	private float creatureAboveGround          = 1.95f;
@@ -22,29 +24,59 @@ public class LightManager : CacheBehaviour
 	private float tileBelowGround              = 1.4f;
 	private float pickupBelowGround            = 1.55f;
 
+	private Sequence playerAboveGroundTween;
+	private Sequence creatureAboveGroundTween;
+	private Sequence tileAboveGroundTween;
+	private Sequence pickupAboveGroundTween;
+	
+	private Sequence playerBelowGroundTween;
+	private Sequence creatureBelowGroundTween;
+	private Sequence tileBelowGroundTween;
+	private Sequence pickupBelowGroundTween;
+
 	void Start()
 	{
-		playerLight            = GameObject.Find("PlayerLight").GetComponent<Light>();
-		creatureLight          = GameObject.Find("CreatureLight").GetComponent<Light>();
-		tileLight              = GameObject.Find("TileLight").GetComponent<Light>();
-		pickupLight            = GameObject.Find("PickupLight").GetComponent<Light>();
+		playerLight = GameObject.Find("PlayerLight").GetComponent<Light>();
+		Assert.IsNotNull(playerLight);
+		
+		creatureLight = GameObject.Find("CreatureLight").GetComponent<Light>();
+		Assert.IsNotNull(creatureLight);
+		
+		tileLight = GameObject.Find("TileLight").GetComponent<Light>();
+		Assert.IsNotNull(tileLight);
+		
+		pickupLight = GameObject.Find("PickupLight").GetComponent<Light>();
+		Assert.IsNotNull(pickupLight);
+
+		// cache & pause tweens.
+		(playerAboveGroundTween = MFX.FadeIntensity(playerLight, playerAboveGround, fadeAfter, timeToFade)).Pause();
+		(creatureAboveGroundTween = MFX.FadeIntensity(creatureLight, creatureAboveGround, fadeAfter, timeToFade)).Pause();
+		(tileAboveGroundTween = MFX.FadeIntensity(tileLight, tileAboveGround, fadeAfter, timeToFade)).Pause();
+		(pickupAboveGroundTween = MFX.FadeIntensity(pickupLight, pickupAboveGround, fadeAfter, timeToFade)).Pause();
+
+		(playerBelowGroundTween = MFX.FadeIntensity(playerLight, playerBelowGround, fadeAfter, timeToFade)).Pause();
+		(creatureBelowGroundTween = MFX.FadeIntensity(creatureLight, creatureBelowGround, fadeAfter, timeToFade)).Pause();
+		(tileBelowGroundTween = MFX.FadeIntensity(tileLight, tileBelowGround, fadeAfter, timeToFade)).Pause();
+		(pickupBelowGroundTween = MFX.FadeIntensity(pickupLight, pickupBelowGround, fadeAfter, timeToFade)).Pause();
+
 	}
 
 	void OnPlayerAboveGround(bool aboveGround)
 	{
 		if (aboveGround)
 		{
-			MFX.FadeIntensity(playerLight, playerAboveGround, fadeAfter, timeToFade);
-			MFX.FadeIntensity(creatureLight, creatureAboveGround, fadeAfter, timeToFade);
-			MFX.FadeIntensity(tileLight, tileAboveGround, fadeAfter, timeToFade);
-			MFX.FadeIntensity(pickupLight, pickupAboveGround, fadeAfter, timeToFade);
+			playerAboveGroundTween.Restart();
+			creatureAboveGroundTween.Restart();
+			tileAboveGroundTween.Restart();
+			pickupAboveGroundTween.Restart();
+			
 		}
 		else
 		{
-			MFX.FadeIntensity(playerLight, playerBelowGround, fadeAfter, timeToFade);
-			MFX.FadeIntensity(creatureLight, creatureBelowGround, fadeAfter, timeToFade);
-			MFX.FadeIntensity(tileLight, tileBelowGround, fadeAfter, timeToFade);
-			MFX.FadeIntensity(pickupLight, pickupBelowGround, fadeAfter, timeToFade);
+			playerBelowGroundTween.Restart();
+			creatureBelowGroundTween.Restart();
+			tileBelowGroundTween.Restart();
+			pickupBelowGroundTween.Restart();
 		}
 	}
 

@@ -55,7 +55,7 @@ Shader "Sprites/Custom"  	// A modified version of the Unity 5 Standard Shader,
 
 	SubShader
 	{
-		Tags { "RenderType"="Opaque" "PerformanceChecks"="False" }
+		Tags { "RenderType"="Opaque" "PerformanceChecks"="False" "CanUseSpriteAtlas"="True"}
 		LOD 300
 
 
@@ -218,7 +218,7 @@ Shader "Sprites/Custom"  	// A modified version of the Unity 5 Standard Shader,
 
 	SubShader
 	{
-		Tags { "RenderType"="Opaque" "PerformanceChecks"="False" }
+		Tags { "RenderType"="Opaque" "PerformanceChecks"="False" "CanUseSpriteAtlas"="True"}
 		LOD 150
 
 		// ------------------------------------------------------------------

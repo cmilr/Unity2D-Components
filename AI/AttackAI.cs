@@ -1,32 +1,43 @@
-using Matcha.Dreadful;
 using Matcha.Unity;
-using System.Collections;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public class AttackAI : CacheBehaviour
+public class AttackAI : BaseBehaviour
 {
-	public enum Style { RandomProjectile };
+	public enum Style { Invalid, RandomProjectile };
 	public Style style;
-<<<<<<< HEAD
-	public float chanceOfAttack	 = 40f;
-=======
-	public float chanceOfAttack    = 40f;
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
-	public float attackWhenInRange = 30f;
+	public float chanceOfAttack      = 40f;
+	public float attackWhenInRange   = 30f;
 	public bool attackPaused;
-
-	private ProjectileManager projectile;
-	private Weapon weapon;
-	private Transform target;
+	
 	private float attackInterval;
 	private bool levelLoading;
 	private bool dead;
+	private ProjectileManager projectile;
+	private Weapon weapon;
+	private Transform target;
+	private new Transform transform;
 
-	void Start()
+	void Awake()
 	{
-		projectile     = GetComponent<ProjectileManager>();
-		weapon         = GetComponentInChildren<Weapon>();
-		target         = GameObject.Find(PLAYER).transform;
+		transform = GetComponent<Transform>();
+		Assert.IsNotNull(transform);
+
+		projectile = GetComponent<ProjectileManager>();
+		Assert.IsNotNull(projectile);
+
+		Assert.IsFalse(style == Style.Invalid,
+	   		("Invalid attack style @ " + gameObject));
+	}
+	
+	void Start()
+	{		
+		weapon = GetComponentInChildren<Weapon>();
+		Assert.IsNotNull(weapon);
+		
+		target = GameObject.Find(PLAYER).transform;
+		Assert.IsNotNull(target);
+		
 		attackInterval = Rand.Range(1.5f, 2.5f);
 	}
 
@@ -35,21 +46,16 @@ public class AttackAI : CacheBehaviour
 	{
 		if (!attackPaused && !dead)
 		{
-			if (test)
+			switch (style)
 			{
-				StartCoroutine(LobCompTest());
+				case Style.RandomProjectile:
+					InvokeRepeating("AttackRandomly", 2f, attackInterval);
+					break;
+				default:
+					Assert.IsTrue(false, ("Attack style missing from switch @ " + gameObject));
+					break;
 			}
-			else
-			{
-				switch (style)
-				{
-					case Style.RandomProjectile:
-					{
-						InvokeRepeating("AttackRandomly", 2f, attackInterval);
-						break;
-					}
-				}
-			}
+
 		}
 	}
 
@@ -63,11 +69,7 @@ public class AttackAI : CacheBehaviour
 			{
 				if (Rand.Range(1, 100) <= chanceOfAttack)
 				{
-<<<<<<< HEAD
-					// only attack if creature is facing the direction of target
-=======
 					//only attack if creature is facing the direction of target
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
 					if ((target.position.x > transform.position.x && transform.localScale.x.FloatEquals(1f)) ||
 							(target.position.x < transform.position.x && transform.localScale.x.FloatEquals(-1f)))
 					{
@@ -98,28 +100,13 @@ public class AttackAI : CacheBehaviour
 	void CreatureDead()
 	{
 		dead = true;
-<<<<<<< HEAD
-	}
-	
-=======
 		attackPaused = true;
-		this.enabled = false;
-	}
-
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
-	void OnBecameInvisible()
-	{
-		if (!test && !dead)
-		{
-			CancelInvoke("AttackRandomly");
-			StopCoroutine(LobCompTest());
-		}
+		enabled = false;
 	}
 
 	void OnDisable()
 	{
 		CancelInvoke();
-		StopCoroutine(LobCompTest());
 	}
 
 	void OnLevelLoading(bool status)
@@ -148,35 +135,35 @@ public class AttackAI : CacheBehaviour
 	//TARGET TESTING SUITE
 	//####################
 
-	public bool test;
-	public GameObject[] targets;
-	//testing only
+	//public bool test;
+	//public GameObject[] targets;
+	////testing only
 
-	IEnumerator LobCompTest()
-	{
-		int i = 0;
-		int j = i - 1;
+	//IEnumerator LobCompTest()
+	//{
+	//	int i = 0;
+	//	int j = i - 1;
 
-		while (true)
-		{
-			if (i >= targets.Length) {
-				i = 0;
-			}
+	//	while (true)
+	//	{
+	//		if (i >= targets.Length) {
+	//			i = 0;
+	//		}
 
-			if (j >= targets.Length) {
-				j = 0;
-			}
+	//		if (j >= targets.Length) {
+	//			j = 0;
+	//		}
 
-			if (j < 0) {
-				j = 10;
-			}
+	//		if (j < 0) {
+	//			j = 10;
+	//		}
 
-			targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MCLR.orange);
-			targets[j].GetComponent<SpriteRenderer>().material.SetColor("_Color", MCLR.white);
-			projectile.FireAtTarget(weapon, targets[i].transform);
-			i++;
-			j++;
-			yield return new WaitForSeconds(2);
-		}
-	}
+	//		targets[i].GetComponent<SpriteRenderer>().material.SetColor("_Color", MCLR.orange);
+	//		targets[j].GetComponent<SpriteRenderer>().material.SetColor("_Color", MCLR.white);
+	//		projectile.FireAtTarget(weapon, targets[i].transform);
+	//		i++;
+	//		j++;
+	//		yield return new WaitForSeconds(2);
+	//	}
+	//}
 }

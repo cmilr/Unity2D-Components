@@ -1,19 +1,23 @@
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class PixelArtCamera : BaseBehaviour
 {
 	private float baseOrthographicSize;
+	private new Camera camera;
 
-	void Start()
+	void Awake()
 	{
+		camera = gameObject.GetComponent<Camera>();
+		Assert.IsNotNull(camera);
+		
 		SetOrthographicSize();
 	}
 
 	void SetOrthographicSize()
 	{
-		//experiment with: 32, 48, 64, 96.
-		baseOrthographicSize = Screen.height / 64.0f / 2.0f;
-		Camera.main.orthographicSize = baseOrthographicSize;
+		baseOrthographicSize = Screen.height / PLATFORM_SPECIFIC_ORTHOGRAPHIC_FACTOR / 2.0f;
+		camera.orthographicSize = baseOrthographicSize;
 	}
 
 	void OnScreenSizeChanged(float vExtent, float hExtent)

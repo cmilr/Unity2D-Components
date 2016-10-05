@@ -1,12 +1,5 @@
-//       __    __     ______     ______   ______     __  __     ______
-//      /\ "-./  \   /\  __ \   /\__  _\ /\  ___\   /\ \_\ \   /\  __ \
-//      \ \ \-./\ \  \ \  __ \  \/_/\ \/ \ \ \____  \ \  __ \  \ \  __ \
-//       \ \_\ \ \_\  \ \_\ \_\    \ \_\  \ \_____\  \ \_\ \_\  \ \_\ \_\
-//        \/_/  \/_/   \/_/\/_/     \/_/   \/_____/   \/_/\/_/   \/_/\/_/
-//         I  N  D  U  S  T  R  I  E  S             www.matcha.industries
-
 // This set of methods extends the most excellent Rotorz api. I built this set because,
-// while I love Rotorz, I find their method paramaters frustrating to use. Specifically,
+// while I love Rotorz, I find its method paramaters frustrating to use. Specifically,
 // I tend to send x coordinates first in my params, followed by y coordinates; while
 // Rotorz transposes this. It has lead to many crazy-making bugs in my code.
 //
@@ -62,8 +55,8 @@ namespace Matcha.Unity
 			// x = 0, y = 0 will get you the tile the transform occupies
 			// plus or minus x or y will get you tiles backwards, forwards, up or down
 
-			int convertedX = (int) Math.Floor(transform.position.x);
-			int convertedY = (int) Math.Ceiling(Math.Abs(transform.position.y));
+			var convertedX = (int) Math.Floor(transform.position.x);
+			var convertedY = (int) Math.Ceiling(Math.Abs(transform.position.y));
 
 			TileData tile = tileSystem.GetTile(convertedY + yDirection, convertedX + xDirection);
 
@@ -77,8 +70,8 @@ namespace Matcha.Unity
 
 		public static GameObject GetTileBelow(this Transform transform, TileSystem tileSystem, int direction)
 		{
-			int convertedX = (int) Math.Floor(transform.position.x);
-			int convertedY = (int) Math.Floor(Math.Abs(transform.position.y));
+			var convertedX = (int) Math.Floor(transform.position.x);
+			var convertedY = (int) Math.Floor(Math.Abs(transform.position.y));
 
 			TileData tile = tileSystem.GetTile(convertedY, convertedX + direction);
 

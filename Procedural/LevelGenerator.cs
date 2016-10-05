@@ -3,8 +3,9 @@ using Rotorz.Tile;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public class LevelGenerator : CacheBehaviour
+public class LevelGenerator : BaseBehaviour
 {
 	public Brush brush;
 	public Brush testBrush;
@@ -21,13 +22,15 @@ public class LevelGenerator : CacheBehaviour
 	private int roomMarginY   = 4;
 	private int numberOfRooms = 50;
 	private int direction     = RIGHT;
-	List<ProcRoom> rooms;
-	List<ProcHall> halls;
-	List<ProcHall> crawlways;
+	private List<ProcRoom> rooms;
+	private List<ProcHall> halls;
+	private List<ProcHall> crawlways;
 
 	void Start()
 	{
-		map        = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
+		map = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
+		Assert.IsNotNull(map);
+		
 		mapColumns = map.ColumnCount;
 		mapRows    = map.RowCount;
 		rooms      = new List<ProcRoom>();
@@ -66,7 +69,7 @@ public class LevelGenerator : CacheBehaviour
 	{
 		for (int i = 0; i < numberOfRooms; i++)
 		{
-			ProcRoom roomToDraw = new ProcRoom();
+			var roomToDraw = new ProcRoom();
 
 			GetRoom(roomToDraw);
 			PaintRoomRandomly(roomToDraw);
@@ -75,8 +78,8 @@ public class LevelGenerator : CacheBehaviour
 
 	void GetRoom(ProcRoom room)
 	{
-		room.width  = (int) Rand.GaussianDivFour(8, 8, 2, 50);
-		room.height = (int) Rand.GaussianDivFour(4, 8, 8, 20);
+		room.width  = Rand.GaussianDivFour(8, 8, 2, 50);
+		room.height = Rand.GaussianDivFour(4, 8, 8, 20);
 	}
 
 	void PaintRoomRandomly(ProcRoom room)
@@ -128,7 +131,7 @@ public class LevelGenerator : CacheBehaviour
 
 		foreach (ProcRoom room in rooms)
 		{
-			ProcHall hall = new ProcHall();
+			var hall = new ProcHall();
 
 			// get random direction
 			int rand = Rand.Range(0, 1);
@@ -197,7 +200,7 @@ public class LevelGenerator : CacheBehaviour
 
 			if (rand2 == 0)
 			{
-				ProcHall crawlway = new ProcHall();
+				var crawlway = new ProcHall();
 
 				direction = RIGHT;
 
@@ -412,10 +415,8 @@ public class LevelGenerator : CacheBehaviour
 
 				for (int i = 0; i < steps; i++)
 				{
-					x = (int) Rand.Gaussian
-								(room.originX, room.originX / 2, room.originX + 1, room.originX + room.width - 1);
-					y = (int) Rand.Gaussian
-								(room.originY, room.originY, room.originY + 1, room.originY + room.height - 1);
+					x = Rand.Gaussian(room.originX, room.originX / 2, room.originX + 1, room.originX + room.width - 1);
+					y = Rand.Gaussian(room.originY, room.originY, room.originY + 1, room.originY + room.height - 1);
 
 					// if (WithinRoomBounds(room, room.originX + x, room.originY - y))
 					// {

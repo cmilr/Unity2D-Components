@@ -1,62 +1,81 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using Matcha.Dreadful;
+using Matcha.Unity;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Assertions;
 
-public class DisplayHearts : CacheBehaviour
+public class DisplayHearts : BaseBehaviour
 {
-	public Sprite threeHearts;
-	public Sprite twoHearts;
-	public Sprite oneHearts;
-	private Camera mainCamera;
-	private SpriteRenderer HUDHearts;
+	public bool pulse;
+	private CanvasScaler canvasScaler;
+	private RectTransform rectTrans;
+	private SpriteRenderer spriteRenderer;
+	private Sequence fadeIn;
+	private Sequence fadeOutInstant;
+	private Sequence fadeOutHUD;
+	private Sequence pulsingHeart;
 
+	void Awake()
+	{
+		rectTrans = GetComponent<RectTransform>();
+		Assert.IsNotNull(rectTrans);
+
+		spriteRenderer = GetComponent<SpriteRenderer>();
+		Assert.IsNotNull(spriteRenderer);
+	}
+	
 	void Start()
 	{
-		mainCamera = Camera.main.GetComponent<Camera>();
+		canvasScaler = gameObject.GetComponentInParent<CanvasScaler>();
+		Assert.IsNotNull(canvasScaler);
 
-		HUDHearts = spriteRenderer;
-		HUDHearts.sprite = threeHearts;
-		HUDHearts.DOKill();
-		FadeInShield();
+		canvasScaler.scaleFactor = PLATFORM_SPECIFIC_CANVAS_SCALE;
+		
+		switch (name)
+		{
+			case "Heart_1":
+				M.PositionInHUD(rectTrans, spriteRenderer, HEART_ALIGNMENT, HEART_X_POS, HEART_Y_POS);
+				break;
+			case "Heart_2":
+				M.PositionInHUD(rectTrans, spriteRenderer, HEART_ALIGNMENT, HEART_X_POS + HEART_OFFSET, HEART_Y_POS);
+				break;
+			case "Heart_3":
+				M.PositionInHUD(rectTrans, spriteRenderer, HEART_ALIGNMENT, HEART_X_POS + (HEART_OFFSET * 2), HEART_Y_POS);
+				break;
+			default:
+				Assert.IsTrue(false, "Default case reached @ " + gameObject);
+				break;
+		}
+		
+		// cache & pause tween sequences.
+		(fadeOutInstant = MFX.Fade(spriteRenderer, 0, 0, 0)).Pause();
+		(fadeIn         = MFX.Fade(spriteRenderer, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE)).Pause();
+		(fadeOutHUD     = MFX.Fade(spriteRenderer, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE)).Pause();
+		(pulsingHeart   = MFX.Pulse(gameObject)).Pause();
 
-		Invoke("PositionHUDElements", .001f);
-	}
-
-	void PositionHUDElements()
-	{
-		transform.position = mainCamera.ScreenToWorldPoint(new Vector3(
-							Screen.width - 112,
-							Screen.height - 70,
-							HUD_Z)
-						);
-	}
-
-	void FadeInShield()
-	{
-		// fade to zero instantly, then fade up slowly
-		MFX.Fade(HUDHearts, 0, 0, 0);
-		MFX.Fade(HUDHearts, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE);
+		if (pulse)
+		{
+			pulsingHeart.Restart();
+			pulsingHeart.timeScale = 2f;
+		}
+		
+		fadeOutInstant.Restart();
+		fadeIn.Restart();
 	}
 
 	void OnFadeHud(bool status)
 	{
-		MFX.Fade(HUDHearts, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE);
-	}
-
-	void OnScreenSizeChanged(float vExtent, float hExtent)
-	{
-		PositionHUDElements();
+		fadeOutHUD.Restart();
 	}
 
 	void OnEnable()
 	{
 		EventKit.Subscribe<bool>("fade hud", OnFadeHud);
-		EventKit.Subscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}
 
 	void OnDestroy()
 	{
 		EventKit.Unsubscribe<bool>("fade hud", OnFadeHud);
-		EventKit.Unsubscribe<float, float>("screen size changed", OnScreenSizeChanged);
 	}
 }

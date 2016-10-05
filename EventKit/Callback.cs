@@ -1,5 +1,4 @@
-﻿
-// This version of Callback.cs was modified by C.Miller.
+﻿// This version of Callback.cs was modified by Cary Miller.
 
 public delegate void Callback();
 public delegate void Callback<T>(T arg1);

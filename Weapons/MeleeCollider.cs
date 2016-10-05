@@ -1,19 +1,43 @@
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public class MeleeCollider : CacheBehaviour
+public class MeleeCollider : BaseBehaviour
 {
-	void Start()
+	private new Collider2D collider2D;
+	private Collider2D entity;
+
+	void Awake()
 	{
-		// only enable MeleeCollider during attacks
-		collider2D.enabled = false;
-		gameObject.layer = WEAPON_COLLIDER;
+		collider2D = GetComponent<Collider2D>();
+		Assert.IsNotNull(collider2D);
+
+		gameObject.layer = PLAYER_WEAPON_COLLIDER;
 	}
 
 	void OnTriggerEnter2D(Collider2D coll)
 	{
-		if (coll.gameObject.layer == ENEMY_COLLIDER)
+		if (coll.gameObject.layer == ENEMY_BODY_COLLIDER )
 		{
-			collider2D.enabled = false;
+			entity = coll;
+		}
+		else
+		{
+			entity = null;
+		}
+	}
+
+	void OnTriggerExit2D(Collider2D coll)
+	{
+		entity = null;
+	}
+
+	public void AttemptAttack(Weapon weapon)
+	{
+		Assert.IsNotNull(weapon);
+
+		if (entity != null)
+		{
+			entity.gameObject.GetComponent<CreatureEntity>().TakesMeleeHit(weapon, collider2D);
 		}
 	}
 

@@ -1,9 +1,15 @@
-using Matcha.Unity;
 using System;
 using UnityEngine;
 
-public abstract class Entity : CacheBehaviour
+public abstract class Entity : BaseBehaviour
 {
+	public abstract void OnBodyCollisionEnter(Collider2D coll);
+	public abstract void OnBodyCollisionStay();
+	public abstract void OnBodyCollisionExit();
+	public abstract void OnWeaponCollisionEnter(Collider2D coll);
+	public abstract void OnWeaponCollisionStay();
+	public abstract void OnWeaponCollisionExit();
+
 	[HideInInspector]
 	public bool alreadyCollided;
 	public int worth;
@@ -17,27 +23,15 @@ public abstract class Entity : CacheBehaviour
 	protected bool playerDead;
 	protected bool levelCompleted;
 
-	public abstract void OnBodyCollisionEnter(Collider2D coll);
-	public abstract void OnBodyCollisionStay();
-	public abstract void OnBodyCollisionExit();
-	public abstract void OnWeaponCollisionEnter(Collider2D coll);
-	public abstract void OnWeaponCollisionStay();
-	public abstract void OnWeaponCollisionExit();
-
 	protected void AutoAlign()
 	{
-		float targetY = (float)(Math.Round(transform.position.y) - ALIGN_ENTITY_TO);
+		var targetY = (float)(Math.Round(transform.position.y) - ALIGN_ENTITY_TO);
 		transform.SetPositionY(targetY);
-	}
-
-	protected void LifecycleOver()
-	{
-		gameObject.SetActive(false);
 	}
 
 	public void OnTweenCompleted()
 	{
-		LifecycleOver();
+		gameObject.SetActive(false);
 	}
 
 	void OnBecameVisible()
@@ -56,16 +50,14 @@ public abstract class Entity : CacheBehaviour
 	{
 		layer = coll.gameObject.layer;
 
-		if (layer == BODY_COLLIDER && !collidedWithBody)
+		if (layer == PLAYER_BODY_COLLIDER && !collidedWithBody)
 		{
 			OnBodyCollisionEnter(coll);
 			collidedWithBody = true;
 		}
 
-		if (layer == WEAPON_COLLIDER)
+		if (layer == PLAYER_WEAPON_COLLIDER)
 		{
-			// doesn't check for previous collision because player weapon colliders
-			// are automatically turned offer after each successful hit
 			OnWeaponCollisionEnter(coll);
 		}
 	}
@@ -74,13 +66,13 @@ public abstract class Entity : CacheBehaviour
 	{
 		layer = coll.gameObject.layer;
 
-		if (layer == BODY_COLLIDER)
+		if (layer == PLAYER_BODY_COLLIDER)
 		{
 			OnBodyCollisionExit();
 			collidedWithBody = false;
 		}
 
-		if (layer == WEAPON_COLLIDER)
+		if (layer == PLAYER_WEAPON_COLLIDER)
 		{
 			OnWeaponCollisionExit();
 			collidedWithWeapon = false;
@@ -90,24 +82,16 @@ public abstract class Entity : CacheBehaviour
 	void OnEnable()
 	{
 		EventKit.Subscribe<bool>("level completed", OnLevelCompleted);
-<<<<<<< HEAD
-		EventKit.Subscribe<string, Collider2D, int>("player dead", OnPlayerDead);
-=======
-		EventKit.Subscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
+		EventKit.Subscribe<Hit>("player dead", OnPlayerDead);
 	}
 
 	void OnDisable()
 	{
 		EventKit.Unsubscribe<bool>("level completed", OnLevelCompleted);
-<<<<<<< HEAD
-		EventKit.Unsubscribe<string, Collider2D, int>("player dead", OnPlayerDead);
-=======
-		EventKit.Unsubscribe<int, Weapon.WeaponType>("player dead", OnPlayerDead);
->>>>>>> 6fa29b194fdad24bff4588056e6116fd14b7a700
+		EventKit.Unsubscribe<Hit>("player dead", OnPlayerDead);
 	}
 
-	void OnPlayerDead(int hitFrom, Weapon.WeaponType weaponType)
+	void OnPlayerDead(Hit incomginHit)
 	{
 		playerDead = true;
 	}

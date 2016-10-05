@@ -1,20 +1,30 @@
-using DG.Tweening;
-using Matcha.Dreadful;
-using Matcha.Unity;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public class InventoryManager : CacheBehaviour
+public class InventoryManager : BaseBehaviour
 {
 	private Weapon equippedWeapon;
 	private Weapon leftWeapon;
 	private Weapon rightWeapon;
-
 	private int left = 0;
 	private int equipped = 1;
 	private int right = 2;
 	private bool levelLoading;
 	private GameObject[] weaponBelt;
 	private GameObject outgoingWeapon;
+	private new Transform transform;
+
+	void Awake()
+	{
+		transform = GetComponent<Transform>();
+		Assert.IsNotNull(transform);
+	}
+
+	// input method used by touch controls.
+	public void SwitchWeaponOnTouch()
+	{
+		OnSwitchWeapon(RIGHT);
+	}
 
 	void OnInitWeapons(GameObject eWeapon, GameObject lWeapon, GameObject rWeapon)
 	{
@@ -23,9 +33,9 @@ public class InventoryManager : CacheBehaviour
 			weaponBelt = new GameObject[3];
 		}
 
-		weaponBelt[left]     = lWeapon;
+		weaponBelt[left] = lWeapon;
 		weaponBelt[equipped] = eWeapon;
-		weaponBelt[right]    = rWeapon;
+		weaponBelt[right] = rWeapon;
 
 		InitNewEquippedWeapon(eWeapon);
 		PassInitialWeaponsToHUD();
@@ -41,29 +51,36 @@ public class InventoryManager : CacheBehaviour
 	void DiscardWeapon()
 	{
 		outgoingWeapon = weaponBelt[equipped];
-		outgoingWeapon.layer = PICKUP_LAYER;
+
+		var outgoingTransform = outgoingWeapon.GetComponent<Transform>();
+		var outgoingSpriteRenderer = outgoingWeapon.GetComponent<SpriteRenderer>();
+		var outgoingRigidbody2D = outgoingWeapon.GetComponent<Rigidbody2D>();
+
+		outgoingTransform.SetLocalPositionXY(0f, .5f);
+		outgoingTransform.SetAbsLocalScaleX(1f);
+		outgoingTransform.parent = null;
+		outgoingSpriteRenderer.enabled = true;
+		outgoingSpriteRenderer.sortingLayerName = PICKUP_SORTING_LAYER;
+		outgoingRigidbody2D.isKinematic = false;
+		outgoingWeapon.layer = PICKUP_PHYSICS_LAYER;
 		outgoingWeapon.GetComponentInChildren<PhysicsCollider>().EnablePhysicsCollider();
 		outgoingWeapon.GetComponentInChildren<MeleeCollider>().DisableMeleeCollider();
-		outgoingWeapon.GetComponentInChildren<Rigidbody2D>().isKinematic = false;
-		outgoingWeapon.GetComponent<SpriteRenderer>().enabled = true;
-		outgoingWeapon.GetComponent<SpriteRenderer>().sortingLayerName = PICKUP_SORTING_LAYER;
-		outgoingWeapon.transform.SetLocalPositionXY(0f, .5f);
-		outgoingWeapon.transform.SetAbsLocalScaleX(1f);
-		outgoingWeapon.transform.parent = null;
 		equippedWeapon.inPlayerInventory = false;
 		equippedWeapon.inEnemyInventory = false;
-		TossOutgoingWeapon();
-		Invoke("EnablePickupCollider", 1f);
+		TossOutgoingWeapon(outgoingRigidbody2D);
+		Invoke("EnablePickupCollider", 3f);
 	}
 
 	void InitNewEquippedWeapon(GameObject newWeapon)
 	{
 		weaponBelt[equipped] = newWeapon;
-		weaponBelt[equipped].layer = PLAYER_LAYER;
-		weaponBelt[equipped].transform.parent = gameObject.transform;
-		weaponBelt[equipped].transform.localPosition = new Vector3(0f, 0f, .1f);
-		weaponBelt[equipped].transform.SetLocalScaleXYZ(-1f, 1f, 1f);
-		weaponBelt[equipped].GetComponent<SpriteRenderer>().enabled = true;
+
+		var equippedTransform = weaponBelt[equipped].GetComponent<Transform>();
+
+		equippedTransform.parent = gameObject.transform;
+		equippedTransform.localPosition = new Vector3(.625f, .5625f, 0f);
+		equippedTransform.SetLocalScaleXYZ(-1f, 1f, 1f);
+		weaponBelt[equipped].layer = PLAYER_DEFAULT_LAYER;
 		weaponBelt[equipped].GetComponentInChildren<PhysicsCollider>().DisablePhysicsCollider();
 		weaponBelt[equipped].GetComponentInChildren<MeleeCollider>().EnableMeleeCollider();
 		weaponBelt[equipped].GetComponentInChildren<WeaponPickupCollider>().DisableWeaponPickupCollider();
@@ -81,46 +98,37 @@ public class InventoryManager : CacheBehaviour
 		outgoingWeapon.GetComponentInChildren<WeaponPickupCollider>().EnableWeaponPickupCollider();
 	}
 
-	void TossOutgoingWeapon()
+	void TossOutgoingWeapon(Rigidbody2D rb)
 	{
 		if (transform.lossyScale.x > 0f) {
-			outgoingWeapon.GetComponent<Rigidbody2D>().AddForce(new Vector3(-5, 5, 1), ForceMode2D.Impulse);
+			rb.AddForce(new Vector3(-5, 5, 1), ForceMode2D.Impulse);
 		}
-		else
-		{
-			outgoingWeapon.GetComponent<Rigidbody2D>().AddForce(new Vector3(5, 5, 1), ForceMode2D.Impulse);
+		else {
+			rb.AddForce(new Vector3(5, 5, 1), ForceMode2D.Impulse);
 		}
+
+		outgoingWeapon.GetComponent<Weapon>().OnDiscard();
 	}
 
 	void OnSwitchWeapon(int shiftDirection)
 	{
-		if (!levelLoading)
-		{
-			switch (equipped)
-			{
+		if (!levelLoading) {
+			switch (equipped) {
 				case 0:
-				{
 					left = 1;
 					equipped = 2;
 					right = 0;
 					break;
-				}
-
 				case 1:
-				{
 					left = 2;
 					equipped = 0;
 					right = 1;
 					break;
-				}
-
 				case 2:
-				{
 					left = 0;
 					equipped = 1;
 					right = 2;
 					break;
-				}
 			}
 
 			CacheAndSetupWeapons();
@@ -131,15 +139,13 @@ public class InventoryManager : CacheBehaviour
 
 	void CacheAndSetupWeapons()
 	{
-		Profiler.BeginSample("CacheAndSetupWeapons >> InventoryManager.cs");
-
 		// WEAPON GAMEOBJECT'S 'WEAPON' COMPONENT
 		// ~~~~~~~~~~~~~~~~~~~~~~~~
 		// cache specific weapons (Sword, Hammer, etc) via parent class 'Weapon'
 		// use to call currently equipped weapon animations
-		leftWeapon       = weaponBelt[left].GetComponent<Weapon>();
-		equippedWeapon   = weaponBelt[equipped].GetComponent<Weapon>();
-		rightWeapon      = weaponBelt[right].GetComponent<Weapon>();
+		leftWeapon = weaponBelt[left].GetComponent<Weapon>();
+		equippedWeapon = weaponBelt[equipped].GetComponent<Weapon>();
+		rightWeapon = weaponBelt[right].GetComponent<Weapon>();
 
 		// set correct names for weapon gameObjects
 		weaponBelt[left].name = "Left";
@@ -147,9 +153,9 @@ public class InventoryManager : CacheBehaviour
 		weaponBelt[right].name = "Right";
 
 		// set weapons to correct layers
-		weaponBelt[left].layer = PLAYER_LAYER;
-		weaponBelt[equipped].layer = PLAYER_LAYER;
-		weaponBelt[right].layer = PLAYER_LAYER;
+		weaponBelt[left].layer = PLAYER_DEFAULT_LAYER;
+		weaponBelt[equipped].layer = PLAYER_DEFAULT_LAYER;
+		weaponBelt[right].layer = PLAYER_DEFAULT_LAYER;
 
 		// set weapons to correct sorting layers;
 		weaponBelt[left].GetComponent<SpriteRenderer>().sortingLayerName = HERO_WEAPON_SORTING_LAYER;
@@ -157,74 +163,79 @@ public class InventoryManager : CacheBehaviour
 		weaponBelt[right].GetComponent<SpriteRenderer>().sortingLayerName = HERO_WEAPON_SORTING_LAYER;
 
 		// set weapon colliders to correct layers
-		weaponBelt[left].transform.Find("MeleeCollider").gameObject.layer = WEAPON_COLLIDER;
-		weaponBelt[equipped].transform.Find("MeleeCollider").gameObject.layer = WEAPON_COLLIDER;
-		weaponBelt[right].transform.Find("MeleeCollider").gameObject.layer = WEAPON_COLLIDER;
+		SetWeaponColliders();
 
 		// set pickup colliders to correct layers
 		weaponBelt[left].transform.Find("PickupCollider").gameObject.layer = PICKUP_LAYER;
 		weaponBelt[equipped].transform.Find("PickupCollider").gameObject.layer = PICKUP_LAYER;
 		weaponBelt[right].transform.Find("PickupCollider").gameObject.layer = PICKUP_LAYER;
 
-		// disable SpriteRenderer for weapons that are not equipped
+		// disable SpriteRenderer for all weapon icons
 		leftWeapon.spriteRenderer.enabled = false;
-		equippedWeapon.spriteRenderer.enabled = true;
+		equippedWeapon.spriteRenderer.enabled = false;
 		rightWeapon.spriteRenderer.enabled = false;
 
-		// disable colliders for all weapons - they are only enabled during attacks
-		leftWeapon.GetComponent<BoxCollider2D>().enabled = false;
-		equippedWeapon.GetComponent<BoxCollider2D>().enabled = false;
-		rightWeapon.GetComponent<BoxCollider2D>().enabled = false;
+		// disable colliders for stashed weapons
+		leftWeapon.GetComponentInChildren<MeleeCollider>().DisableMeleeCollider();
+		equippedWeapon.GetComponentInChildren<MeleeCollider>().EnableMeleeCollider();
+		rightWeapon.GetComponentInChildren<MeleeCollider>().DisableMeleeCollider();
 
 		// fade in newly equipped weapon
-		float fadeAfter = 0f;
-		float fadeTime  = .2f;
-
-		SpriteRenderer equippedSprite  = weaponBelt[equipped].GetComponent<SpriteRenderer>();
-		equippedSprite.DOKill();
-		MFX.Fade(equippedSprite, 1f, fadeAfter, fadeTime);
+		equippedWeapon.GetComponent<Weapon>().OnEquip();
 
 		// fade out newly stashed weapons
-		FadeOutStashedWeapons(leftWeapon);
-		FadeOutStashedWeapons(rightWeapon);
+		leftWeapon.GetComponent<Weapon>().OnStashed();
+		rightWeapon.GetComponent<Weapon>().OnStashed();
 
-		SendMessageUpwards("NewWeaponEquipped", equippedWeapon.weaponType);
-
-		Profiler.EndSample();
+		SendMessageUpwards("NewWeaponEquipped", equippedWeapon.type);
 	}
 
-	void FadeOutStashedWeapons(Weapon stashedWeapon)
+	void SetWeaponColliders()
 	{
-		float fadeAfter = 0f;
-		float fadeTime  = .2f;
+		if (leftWeapon.style == Weapon.Style.Melee) {
+			weaponBelt[left].transform.Find("MeleeCollider").gameObject.layer = PLAYER_WEAPON_COLLIDER;
+		}
+		else {
+			weaponBelt[left].transform.Find("MeleeCollider").gameObject.layer = NO_COLLISION_LAYER;
+		}
 
-		SpriteRenderer stashedSprite  = stashedWeapon.GetComponent<SpriteRenderer>();
-		stashedSprite.DOKill();
-		MFX.Fade(stashedSprite, 0f, fadeAfter, fadeTime);
+		if (equippedWeapon.style == Weapon.Style.Melee) {
+			weaponBelt[equipped].transform.Find("MeleeCollider").gameObject.layer = PLAYER_WEAPON_COLLIDER;
+		}
+		else {
+			weaponBelt[equipped].transform.Find("MeleeCollider").gameObject.layer = NO_COLLISION_LAYER;
+		}
+
+		if (rightWeapon.style == Weapon.Style.Melee) {
+			weaponBelt[right].transform.Find("MeleeCollider").gameObject.layer = PLAYER_WEAPON_COLLIDER;
+		}
+		else {
+			weaponBelt[right].transform.Find("MeleeCollider").gameObject.layer = NO_COLLISION_LAYER;
+		}
 	}
 
 	void PassInitialWeaponsToHUD()
 	{
-		EventKit.Broadcast<GameObject, int>("init stashed weapon", weaponBelt[left], LEFT);
-		EventKit.Broadcast<GameObject>("init equipped weapon", weaponBelt[equipped]);
-		EventKit.Broadcast<GameObject, int>("init stashed weapon", weaponBelt[right], RIGHT);
+		EventKit.Broadcast("init stashed weapon", weaponBelt[left], LEFT);
+		EventKit.Broadcast("init equipped weapon", weaponBelt[equipped]);
+		EventKit.Broadcast("init stashed weapon", weaponBelt[right], RIGHT);
 	}
 
 	void PassNewWeaponsToHUD()
 	{
-		EventKit.Broadcast<GameObject, int>("change stashed weapon", weaponBelt[left], LEFT);
-		EventKit.Broadcast<GameObject>("change equipped weapon", weaponBelt[equipped]);
-		EventKit.Broadcast<GameObject, int>("change stashed weapon", weaponBelt[right], RIGHT);
+		EventKit.Broadcast("change stashed weapon", weaponBelt[left], LEFT);
+		EventKit.Broadcast("change equipped weapon", weaponBelt[equipped]);
+		EventKit.Broadcast("change stashed weapon", weaponBelt[right], RIGHT);
 	}
 
 	void PassEquippedWeaponToHUD()
 	{
-		EventKit.Broadcast<GameObject>("init new equipped weapon", weaponBelt[equipped]);
+		EventKit.Broadcast("init new equipped weapon", weaponBelt[equipped]);
 	}
 
 	void PassEquippedWeaponToWeaponManager()
 	{
-		EventKit.Broadcast<Weapon>("new equipped weapon", equippedWeapon);
+		EventKit.Broadcast("new equipped weapon", equippedWeapon);
 	}
 
 	void OnLevelLoading(bool status)

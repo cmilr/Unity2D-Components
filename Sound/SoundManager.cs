@@ -1,14 +1,19 @@
 using UnityEngine;
+using UnityEngine.Assertions;
 
 [RequireComponent(typeof(AudioSource))]
 
 //uses mp3 for music, and ogg for sound effects
-public class SoundManager : CacheBehaviour
+public class SoundManager : BaseBehaviour
 {
 	public AudioClip collectPrize;
+	private new AudioSource audio;
 
-	void Start()
+	void Awake()
 	{
+		audio = GetComponent<AudioSource>();
+		Assert.IsNotNull(audio);
+		
 		AudioListener.volume = 1F;
 	}
 
