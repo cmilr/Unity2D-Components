@@ -7,7 +7,7 @@ The contents herein are by no means an entire game—they are more like puzzle p
 
 ## Installation
 
-Hey hey! No installation required! This codebase is probably most useful as a collection of C# scripts you can peruse for examples and usage.
+Hey hey—no installation required! This codebase is probably most useful as a collection of C# scripts you can peruse for examples and usage.
 
 ##On The Shoulders Of Giants...
 Besides the components included here, within this collection you will find reference to a number of other great software bundles, including the most excellent [**CharacterController2D**] (https://github.com/prime31/CharacterController2D), by Prime31, the incredibly useful [**Advanced C# Messenger**] (http://wiki.unity3d.com/index.php?title=Advanced_CSharp_Messenger), by Ilya Suzdalnitski, and perhaps my favorite add-on, [**DOTween**] (http://dotween.demigiant.com/), by Demigiant. All of these packages have been instrumental in the development of my current project.
