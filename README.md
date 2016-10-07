@@ -1,6 +1,3 @@
-[![apm](https://img.shields.io/apm/l/vim-mode.svg?maxAge=2592000?style=flat-square)](https://github.com/cmilr/Unity2D-Components/blob/master/LICENSE)
-[![apm](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&maxAge=2592000)](https://twitter.com/vintageD18)
-
 # Unity2D Components
 
 This repository holds a varied collection of Unity3D components that I've been building for use in the 2D Platformer/RPG I'm currently developing. It's a work in progress, but please feel free to take a look around.
