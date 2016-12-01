@@ -11,12 +11,15 @@ Hey hey—no installation required! This codebase is probably most useful as a c
 ## Kudos
 Besides the components included here, within this collection you will find reference to a number of other great software bundles, including the most excellent [**CharacterController2D**] (https://github.com/prime31/CharacterController2D), by Prime31, the incredibly useful [**Advanced C# Messenger**] (http://wiki.unity3d.com/index.php?title=Advanced_CSharp_Messenger), by Ilya Suzdalnitski, and perhaps my favorite add-on, [**DOTween**] (http://dotween.demigiant.com/), by Demigiant. All of these packages have been instrumental in the development of my current project.
 
-Thanks for stopping by.
-
 ## Meta
 
-Cary Miller – [@vintageD18](https://twitter.com/vintageD18) – cary.a.miller@gmail.com
+### Contact
+cary.a.miller@gmail.com
 
+### Social Media
+- Twitter: [@vintageD18](https://twitter.com/vintageD18)
+- GitHub: [https://github.com/cmilr/](https://github.com/cmilr/)
+
+### License
 Distributed under the MIT license. See ``LICENSE`` for more information.
-
-[https://github.com/cmilr/](https://github.com/cmilr/)
+# Thanks for using Unity2D Components!
