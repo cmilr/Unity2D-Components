@@ -14,7 +14,7 @@ Besides the components included here, within this collection you will find refer
 ## Meta
 
 ### Contact
-cary.a.miller@gmail.com
+- Email: cary.a.miller@gmail.com
 
 ### Social Media
 - Twitter: [@vintageD18](https://twitter.com/vintageD18)
