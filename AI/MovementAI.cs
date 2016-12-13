@@ -18,7 +18,7 @@ public class MovementAI : BaseBehaviour
 	private float xAxisOffset           = .3f;
 	private float movementInterval;
 	private string walkAnimation;
-	private int sideHit;
+	private Side sideHit;
 	private bool hesitant;
 	private bool blockedLeft;
 	private bool blockedRight;
@@ -29,6 +29,8 @@ public class MovementAI : BaseBehaviour
 	private new Transform transform;
 	private new Rigidbody2D rigidbody2D;
 	private Animator animator;
+    private const int RIGHT = 1;
+    private const int LEFT = -1;
 
 	void Awake()
 	{
@@ -111,7 +113,7 @@ public class MovementAI : BaseBehaviour
 
 	void FollowTarget()
 	{
-		if (!dead)
+		if (!dead && !debug_MovementDisabled)
 		{
 			if (!enabled) { return; }
 
@@ -223,13 +225,13 @@ public class MovementAI : BaseBehaviour
 			{
 				sideHit = M.HorizontalSideHit(gameObject, coll);
 
-				if (sideHit == RIGHT)
+				if (sideHit == Side.Right)
 				{
 					blockedRight   = true;
 					blockedRightAt = transform.position.x;
 					gameObject.SendEventDown("SetBlockedRightState", true);
 				}
-				else if (sideHit == LEFT)
+				else if (sideHit == Side.Left)
 				{
 					blockedLeft   = true;
 					blockedLeftAt = transform.position.x;
@@ -250,14 +252,14 @@ public class MovementAI : BaseBehaviour
 
 			if (layer == EDGE_BLOCKER)
 			{
-				int sideThatWasHit = M.HorizontalSideHit(gameObject, coll);
+				Side sideThatWasHit = M.HorizontalSideHit(gameObject, coll);
 
-				if (sideThatWasHit == RIGHT)
+				if (sideThatWasHit == Side.Right)
 				{
 					blockedRight = false;
 					gameObject.SendEventDown("SetBlockedRightState", false);
 				}
-				else if (sideThatWasHit == LEFT)
+				else if (sideThatWasHit == Side.Left)
 				{
 					blockedLeft = false;
 					gameObject.SendEventDown("SetBlockedLeftState", false);

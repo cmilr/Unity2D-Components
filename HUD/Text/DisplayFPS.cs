@@ -9,6 +9,7 @@ public class DisplayFPS : BaseBehaviour
 	private CanvasScaler canvasScaler;
 	private RectTransform rectTrans;
 	private Text text;
+	private float canvasScale;
 
 	void Awake()
 	{
@@ -30,8 +31,26 @@ public class DisplayFPS : BaseBehaviour
 	{
 		canvasScaler = gameObject.GetComponentInParent<CanvasScaler>();
 		Assert.IsNotNull(canvasScaler);
-		
-		canvasScaler.scaleFactor = PLATFORM_SPECIFIC_CANVAS_SCALE;
+
+		canvasScale = Camera.main.GetComponent<PixelArtCamera>().CanvasScale;
+		Assert.AreNotApproximatelyEqual(0.0f, canvasScale);
+
+		PositionHUDElements();
+	}
+
+	void PositionHUDElements()
+	{
+		canvasScaler.scaleFactor = canvasScale;
 		M.PositionInHUD(rectTrans, text, FPS_ALIGNMENT, FPS_X_POS, FPS_Y_POS);
+	}
+
+	void OnEnable()
+	{
+		EventKit.Subscribe("reposition hud elements", PositionHUDElements);
+	}
+
+	void OnDestroy()
+	{
+		EventKit.Unsubscribe("reposition hud elements", PositionHUDElements);
 	}
 }

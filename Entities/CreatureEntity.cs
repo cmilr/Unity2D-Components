@@ -1,22 +1,21 @@
-using Matcha.Unity;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 public class CreatureEntity : Entity
 {
-	//TODO: convert collisions to Hits.
 	public enum Type { Invalid, Enemy };
 	public Type type;
 	public int hp;
 	public int ac;
 	public int touchDamage;
 
+    private Hit cachedHit;
 	private bool dead;
 	private bool blockedRight;
 	private bool blockedLeft;
 	private BoxCollider2D thisCollider;
 	private Weapon playerWeapon;
-	private BreakableManager breakable;
+    private BreakableManager breakableManager;
 	private new Transform transform;
 	private new Collider2D collider2D;
 	private new Rigidbody2D rigidbody2D;
@@ -38,12 +37,14 @@ public class CreatureEntity : Entity
 
 		Assert.IsFalse(type == Type.Invalid,
    			("Invalid creature type @ " + gameObject));
+
+		cachedHit = new Hit();
 	}
 
 	void Start()
 	{
-		breakable = gameObject.GetComponentInChildren<BreakableManager>();
-		Assert.IsNotNull(breakable);
+        breakableManager = GetComponentInChildren<BreakableManager>();
+        Assert.IsNotNull(breakableManager);
 
 		if (type == Type.Enemy)
 			AutoAlign();
@@ -59,19 +60,17 @@ public class CreatureEntity : Entity
 		blockedLeft = status;
 	}
 
-	public void TakesMeleeHit(Weapon incomingWeapon, Collider2D coll)
+	public void TakesMeleeHit(Hit hit)
 	{
 		if (!dead)
 		{
-			var hitSide = M.HorizontalSideHit(gameObject, coll);
+			hp -= (hit.weapon.damage);
 
-			hp -= (incomingWeapon.damage);
-
-			if (hitSide == RIGHT && !blockedLeft)
+			if (hit.horizontalSide == Side.Right && !blockedLeft)
 			{
 
 			}
-			else if (hitSide == LEFT && !blockedRight)
+			else if (hit.horizontalSide == Side.Left && !blockedRight)
 			{
 
 			}
@@ -83,24 +82,22 @@ public class CreatureEntity : Entity
 			if (hp <= 0)
 			{
 				EventKit.Broadcast("prize collected", worth);
-				KillSelf(hitSide, MELEE);
+				KillSelf(hit);
 			}
 		}
 	}
 
-	public void TakesProjectileHit(Weapon incomingWeapon, Collider2D coll)
+	public void TakesProjectileHit(Hit hit)
 	{
 		if (!dead)
 		{
-			var hitSide = M.HorizontalSideHit(gameObject, coll);
+			hp -= (hit.weapon.damage);
 
-			hp -= (incomingWeapon.damage);
-
-			if (hitSide == RIGHT && !blockedLeft)
+			if (hit.horizontalSide == Side.Right && !blockedLeft)
 			{
 
 			}
-			else if (hitSide == LEFT && !blockedRight)
+			else if (hit.horizontalSide == Side.Left && !blockedRight)
 			{
 
 			}
@@ -112,49 +109,40 @@ public class CreatureEntity : Entity
 			if (hp <= 0)
 			{
 				EventKit.Broadcast("prize collected", worth);
-				KillSelf(hitSide, PROJECTILE);
+				KillSelf(hit);
 			}
 		}
 	}
 
 	override public void OnWeaponCollisionEnter(Collider2D coll)
 	{
-		playerWeapon = coll.GetComponentInParent<Weapon>();
+		playerWeapon = coll.GetComponentInParent<Weapon>() ?? coll.GetComponentInParent<ProjectileContainer>().weapon;
 
 		if (playerWeapon.type == Weapon.Type.Hammer ||
 			playerWeapon.type == Weapon.Type.Dagger ||
 			playerWeapon.type == Weapon.Type.MagicProjectile) 
 		{
-			TakesProjectileHit(playerWeapon, coll);
+			cachedHit.Create(gameObject, coll);
+			TakesProjectileHit(cachedHit);
 		}
 	}
 
 
-	void KillSelf(int hitSide, int weaponType)
+	void KillSelf(Hit hit)
 	{
 		if (!dead)
 		{
-			// activate and kill breakable sprite
-			if (weaponType == MELEE)
-			{
-				breakable.DirectionalSlump(hitSide);
-			}
-			else if (weaponType == PROJECTILE)
-			{
-				breakable.Explode(hitSide);
-			}
+            // activate and kill breakable sprite.
+            breakableManager.MakeActive();
+            gameObject.SendEventDown("ExplodeCreature", hit);
 
-			// deactivate and fade solid sprite
-			rigidbody2D.isKinematic = true;
-			collider2D.enabled = false;
-
-			spriteRenderer.enabled = false;
-
-			dead = true;
-
-			gameObject.SendMessage("CreatureDead");
-
-			Invoke("DeactivateObject", MAX_BEFORE_FADE + 5f);
+            // fade solid sprite & deactivate gameObject.
+            dead                      = true;
+			rigidbody2D.isKinematic   = true;
+			collider2D.enabled        = false;
+			spriteRenderer.enabled    = false;
+			gameObject.SendEvent("CreatureDead");
+			Invoke("DeactivateObject", 5f);
 		}
 	}
 

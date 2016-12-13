@@ -15,6 +15,8 @@ public abstract class Entity : BaseBehaviour
 	public int worth;
 	public bool autoAlign = true;
 
+	protected const float ALIGN_ENTITY_TO = .124f;
+
 	protected int layer;
 	protected int hitFrom;
 	protected bool collidedWithBody;
@@ -36,13 +38,13 @@ public abstract class Entity : BaseBehaviour
 
 	void OnBecameVisible()
 	{
-		enabled = true;
+		//enabled = true;
 		onScreen = true;
 	}
 
 	void OnBecameInvisible()
 	{
-		enabled = false;
+		//enabled = false;
 		onScreen = false;
 	}
 

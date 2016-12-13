@@ -61,19 +61,22 @@ public class AttackAI : BaseBehaviour
 
 	void AttackRandomly()
 	{
-		if (!attackPaused && !levelLoading && !dead)
+		if (!debug_AttackDisabled)
 		{
-			float distance = Vector3.Distance(target.position, transform.position);
-
-			if (distance <= attackWhenInRange && !MDebug.attackDisabled)
+			if (!attackPaused && !levelLoading && !dead)
 			{
-				if (Rand.Range(1, 100) <= chanceOfAttack)
+				float distance = Vector3.Distance(target.position, transform.position);
+
+				if (distance <= attackWhenInRange)
 				{
-					//only attack if creature is facing the direction of target
-					if ((target.position.x > transform.position.x && transform.localScale.x.FloatEquals(1f)) ||
-							(target.position.x < transform.position.x && transform.localScale.x.FloatEquals(-1f)))
+					if (Rand.Range(1, 100) <= chanceOfAttack)
 					{
-						projectile.FireAtTarget(weapon, target);
+						//only attack if creature is facing the direction of target
+						if ((target.position.x > transform.position.x && transform.localScale.x.FloatEquals(1f)) ||
+								(target.position.x < transform.position.x && transform.localScale.x.FloatEquals(-1f)))
+						{
+							projectile.FireAtTarget(weapon, target);
+						}
 					}
 				}
 			}
@@ -114,7 +117,7 @@ public class AttackAI : BaseBehaviour
 		//pause attacks and other activities while level loads
 		levelLoading = true;
 
-		StartCoroutine(Timer.Start(ENEMY_PAUSE_ON_LEVEL_LOAD, false, () =>
+		StartCoroutine(Timer.Start(PAUSE_ENEMIES_WHILE_LVL_LOADS, false, () =>
 		{
 			levelLoading = false;
 		}));

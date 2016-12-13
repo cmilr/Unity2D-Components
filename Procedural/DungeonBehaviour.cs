@@ -15,6 +15,8 @@ public class DungeonBehaviour : BaseBehaviour
 	public Brush hallOriginBrush;
 	public Brush roomOriginBrush;
 
+    private const int RIGHT      = 1;
+    private const int LEFT       = -1;
 	protected TileSystem map;
 	protected int mapColumns;
 	protected int mapRows;

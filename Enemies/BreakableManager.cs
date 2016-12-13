@@ -43,12 +43,30 @@ public class BreakableManager : BaseBehaviour
 		Invoke("MakeInactive", .5f);
 	}
 
+    public void MakeActive()
+    {
+        gameObject.SetActive(true);
+    }
+
 	void MakeInactive()
 	{
 		gameObject.SetActive(false);
 	}
 
-	public void DirectionalSlump(int hitFrom)
+    void ExplodeCreature(Hit hit)
+    {
+        switch (hit.weapon.style)
+        {
+            case Weapon.Style.Melee:
+                DirectionalSlump(hit);
+                break;
+            case Weapon.Style.Ranged:
+                Explode(hit);
+                break;
+        }
+    }
+
+	void DirectionalSlump(Hit hit)
 	{
 		gameObject.SetActive(true);
 
@@ -87,7 +105,7 @@ public class BreakableManager : BaseBehaviour
 					childRigidbody2D.AddExplosionForce(250, transform.position, 3);
 					break;
 				case Type.Directional_Slump:
-					direction = (hitFrom == RIGHT) ? 1 : -1;
+					direction = (hit.horizontalSide == Side.Right) ? 1 : -1;
 					childRigidbody2D.AddForce(new Vector3(0, -100, 0));
 					childRigidbody2D.AddExplosionForce(2000, new Vector3(
 						transform.position.x + direction,
@@ -102,7 +120,7 @@ public class BreakableManager : BaseBehaviour
 		}
 	}
 
-	public void Explode(int hitFrom)
+	void Explode(Hit hit)
 	{
 		gameObject.SetActive(true);
 
@@ -149,16 +167,16 @@ public class BreakableManager : BaseBehaviour
 					childRigidbody2D.AddExplosionForce(2000, transform.position, 20);
 					break;
 				case Type.Directional_Explosion:
-					int force = (hitFrom == RIGHT) ? -50 : 50;
+					int force = (hit.horizontalSide == Side.Right) ? -50 : 50;
 					childRigidbody2D.AddForce(new Vector3(force, 50, 50), ForceMode2D.Impulse);
-					// params for ShakeCamera = duration, strength, vibrato, randomness.
-					EventKit.Broadcast("shake camera", .7f, .4f, 20, 3f);
+					// params = duration, strength, vibrato, randomness.
+					EventKit.Broadcast("shake camera", .3f, .3f, 10, 3f);
 					break;
 				case Type.Slump:
 					childRigidbody2D.AddExplosionForce(250, transform.position, 3);
 					break;
 				case Type.Directional_Slump:
-					direction = (hitFrom == RIGHT) ? 1 : -1;
+					direction = (hit.horizontalSide == Side.Right) ? 1 : -1;
 					childRigidbody2D.AddForce(new Vector3(0, -100, 0));
 					childRigidbody2D.AddExplosionForce(800, new Vector3(
 						transform.position.x + direction,

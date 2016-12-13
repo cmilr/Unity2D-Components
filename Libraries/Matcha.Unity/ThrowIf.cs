@@ -1,7 +1,7 @@
 using System;
 
-//namespace Matcha.Unity
-//{
+namespace Matcha.Unity
+{
 	static class ThrowIf
 	{
 		public static class Argument
@@ -14,7 +14,7 @@ using System;
 				}
 			}
 		}
-		
+
 		public static class Reference
 		{
 			public static void IsNull(object reference)
@@ -26,4 +26,5 @@ using System;
 			}
 		}
 	}
-//}
+}
+

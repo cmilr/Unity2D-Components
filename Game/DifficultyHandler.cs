@@ -3,11 +3,9 @@ public class DifficultyHandler : BaseBehaviour {
 
 	private int difficultyLevel;
 
-	void OnSetDifficulty(int incoming)
+	void OnSetDifficulty(int difficulty)
 	{
-		difficultyLevel = incoming;
-
-		switch (difficultyLevel)
+		switch (difficulty)
 		{
 			case NORMAL:
 				EventKit.Broadcast("set difficulty damage modifier", 1);
@@ -15,7 +13,7 @@ public class DifficultyHandler : BaseBehaviour {
 			case HARD:
 				EventKit.Broadcast("set difficulty damage modifier", 2);
 				break;
-			case KILL_ME_NOW:
+			case EPIC:
 				EventKit.Broadcast("set difficulty damage modifier", 3);
 				break;
 		}

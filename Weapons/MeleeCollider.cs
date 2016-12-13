@@ -3,6 +3,7 @@ using UnityEngine.Assertions;
 
 public class MeleeCollider : BaseBehaviour
 {
+    private Hit cachedHit;
 	private new Collider2D collider2D;
 	private Collider2D entity;
 
@@ -12,6 +13,8 @@ public class MeleeCollider : BaseBehaviour
 		Assert.IsNotNull(collider2D);
 
 		gameObject.layer = PLAYER_WEAPON_COLLIDER;
+
+		cachedHit = new Hit();
 	}
 
 	void OnTriggerEnter2D(Collider2D coll)
@@ -26,7 +29,7 @@ public class MeleeCollider : BaseBehaviour
 		}
 	}
 
-	void OnTriggerExit2D(Collider2D coll)
+	void OnTriggerExit2D()
 	{
 		entity = null;
 	}
@@ -37,7 +40,8 @@ public class MeleeCollider : BaseBehaviour
 
 		if (entity != null)
 		{
-			entity.gameObject.GetComponent<CreatureEntity>().TakesMeleeHit(weapon, collider2D);
+			cachedHit.Create(entity.gameObject, collider2D);
+			entity.gameObject.GetComponent<CreatureEntity>().TakesMeleeHit(cachedHit);
 		}
 	}
 

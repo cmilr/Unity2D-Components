@@ -9,7 +9,15 @@ public class TileSystemManager : BaseBehaviour
 	{
 		shader = Shader.Find("Sprites/Diffuse");
 		Assert.IsNotNull(shader);
+
+		SetChunksToStatic();
 		DisableShadows();
+	}
+
+	void SetChunksToStatic()
+	{
+		foreach (Transform child in transform)
+			child.gameObject.isStatic = true;
 	}
 
 	void DisableShadows()
@@ -24,6 +32,9 @@ public class TileSystemManager : BaseBehaviour
 			child.receiveShadows        = false;
 			child.lightProbeUsage       = 0;
 			child.reflectionProbeUsage  = 0;
+
+			if (debug_TileMapDisabled)
+				child.enabled = false;
 		}
 	}
 }

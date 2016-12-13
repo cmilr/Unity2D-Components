@@ -21,14 +21,7 @@ public class ProjectilePool : BaseBehaviour
 		
 		for (int i = 0; i < pooledAmount; i++)
 		{
-			var obj = Instantiate(pooledObject);
-			Assert.IsNotNull(obj);
-			
-			obj.SetActive(false);
-
-			// allocate memory for references at instantiation
-			obj.GetComponent<ProjectileContainer>().AllocateMemory();
-			pooledObjects.Add(obj);
+			InstantiateNewGameObject();
 		}
 	}
 
@@ -44,18 +37,24 @@ public class ProjectilePool : BaseBehaviour
 
 		if (increaseWhenNeeded)
 		{
-			var obj = Instantiate(pooledObject);
-			Assert.IsNotNull(obj);
-			
-			obj.SetActive(false);
-
-			// allocate memory for references at instantiation
-			obj.GetComponent<ProjectileContainer>().AllocateMemory();
-			pooledObjects.Add(obj);
-
-			return obj;
+			return InstantiateNewGameObject();
 		}
 
 		return null;
+	}
+
+	GameObject InstantiateNewGameObject()
+	{
+		var obj = Instantiate(pooledObject);
+		Assert.IsNotNull(obj);
+
+		obj.GetComponent<ProjectileContainer>().CacheRefsThenDisable();
+		obj.GetComponent<Rigidbody2D>().isKinematic = true;
+
+		// allocate memory for references at instantiation
+		obj.GetComponent<ProjectileContainer>().AllocateMemory();
+		pooledObjects.Add(obj);
+
+		return obj;
 	}
 }

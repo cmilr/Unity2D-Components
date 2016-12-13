@@ -6,6 +6,8 @@ using UnityEngine.Assertions;
 
 public class BreakablePiece : BaseBehaviour
 {
+	private const float MIN_BEFORE_FADE = 1f;
+	private const float MAX_BEFORE_FADE = 2f;
 	private float originX;
 	private float originY;
 	private float newX;
@@ -13,8 +15,8 @@ public class BreakablePiece : BaseBehaviour
 	private new Transform transform;
 	private new Rigidbody2D rigidbody2D;
 	private SpriteRenderer spriteRenderer;
-	private Sequence fadeInInstant;
-	private Sequence fadeOut;
+	private Tween fadeInInstant;
+	private Tween fadeOut;
 
 	void Awake()
 	{
@@ -23,6 +25,10 @@ public class BreakablePiece : BaseBehaviour
 
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		Assert.IsNotNull(spriteRenderer);
+
+		// cache & pause tween sequences.
+		(fadeInInstant = MFX.FadeTween(spriteRenderer, 1f, 0f)).Pause();
+		(fadeOut = MFX.FadeTween(spriteRenderer, 0f, .5f)).Pause();
 	}
 
 	void Start()
@@ -32,10 +38,6 @@ public class BreakablePiece : BaseBehaviour
 
 		rigidbody2D.mass = Rand.Range(.5f, 20f);
 		rigidbody2D.drag = Rand.Range(0f, .5f);
-
-		// cache & pause tween sequences.
-		(fadeInInstant   = MFX.Fade(spriteRenderer, 1f, 0f, 0f)).Pause();
-		(fadeOut         = MFX.Fade(spriteRenderer, 0f, 0f, 3f)).Pause();
 	}
 
 	public void Init(int index, Sprite breakableSprite)
@@ -55,13 +57,13 @@ public class BreakablePiece : BaseBehaviour
 
 	public void CountDown()
 	{
-		fadeInInstant.Restart();
+		fadeInInstant.Play();
 
 		Invoke("FadeOut", Rand.Range(MIN_BEFORE_FADE, MAX_BEFORE_FADE));
 	}
 
 	void FadeOut()
 	{
-		fadeOut.Restart();
+		fadeOut.Play();
 	}
 }

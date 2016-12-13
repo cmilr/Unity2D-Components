@@ -8,31 +8,31 @@ public class InputAdapter : BaseBehaviour
 	//private Player playerControls;
 	private ICreatureController creature;
 
+	#if UNITY_EDITOR
 	void Start()
 	{
-		
-	#if UNITY_EDITOR
 		CacheReferences();
-	#endif
-			
-	#if UNITY_STANDALONE
-		CacheReferences();
-	#endif
-		
 	}
 
 	void Update()
 	{
-		
-	#if UNITY_EDITOR
 		PlatformSpecificUpdate();
-	#endif
-	
-	#if UNITY_STANDALONE
-		PlatformSpecificUpdate();
+	}
 	#endif
 
+	#if !UNITY_EDITOR
+	#if UNITY_STANDALONE
+	void Start()
+	{
+		CacheReferences();
 	}
+
+	void Update()
+	{
+		PlatformSpecificUpdate();
+	}
+	#endif
+	#endif
 
 	void CacheReferences()
 	{
@@ -67,7 +67,7 @@ public class InputAdapter : BaseBehaviour
 
 		if (Input.GetButtonDown("Switch"))
 		{
-			EventKit.Broadcast("switch weapon", RIGHT);
+			EventKit.Broadcast("switch weapon", Side.Right);
 		}
 	}
 }

@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.Assertions;
 
 public class WeaponManager : BaseBehaviour
@@ -5,6 +6,13 @@ public class WeaponManager : BaseBehaviour
 	private ProjectileManager projectile;
 	private MeleeManager melee;
 	private Weapon equippedWeapon;
+	private SpriteRenderer spriteRenderer;
+
+	void Awake()
+	{
+		spriteRenderer = GetComponent<SpriteRenderer>();
+		Assert.IsNotNull(spriteRenderer);
+	}
 
 	void Start()
 	{
@@ -37,6 +45,13 @@ public class WeaponManager : BaseBehaviour
 				Assert.IsTrue(false, "** Default Case Reached **");
 				break;
 		}
+	}
+
+	// swap out animation sprite references in LateUpdate.
+	void LateUpdate()
+	{
+		Assert.IsNotNull(equippedWeapon.actualSprite, "Weapon is missing a sprite_actual.");
+		spriteRenderer.sprite = equippedWeapon.actualSprite;
 	}
 
 	void OnNewEquippedWeapon(Weapon newEquippedWeapon)

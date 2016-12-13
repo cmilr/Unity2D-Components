@@ -20,7 +20,7 @@ namespace Matcha.Unity
 		}
 
 		// returns an int constant describing which side the GameObject has been hit on
-		public static int HorizontalSideHit(GameObject currentGo, Collider2D coll)
+		public static Side HorizontalSideHit(GameObject currentGo, Collider2D coll)
 		{
 			Vector3 relativePosition = currentGo.transform.InverseTransformPoint(coll.transform.position);
 
@@ -29,27 +29,22 @@ namespace Matcha.Unity
 			{
 				if (relativePosition.x > 0)
 				{
-					return RIGHT;
+					return Side.Right;
 				}
 				
-				return LEFT;
+				return Side.Left;
 			}
 
-			if (currentGo.transform.lossyScale.x <= -1)
+			if (relativePosition.x < 0)
 			{
-				if (relativePosition.x < 0)
-				{
-					return RIGHT;
-				}
-
-				return LEFT;
+				return Side.Right;
 			}
-			
-			return ERROR;
+
+			return Side.Left;
 		}
 
 		// same as above, but returns the vertical side that was hit
-		public static int VerticalSideHit(GameObject currentGo, Collider2D coll)
+		public static Side VerticalSideHit(GameObject currentGo, Collider2D coll)
 		{
 			Vector3 relativePosition = currentGo.transform.InverseTransformPoint(coll.transform.position);
 
@@ -58,23 +53,18 @@ namespace Matcha.Unity
 			{
 				if (relativePosition.y > 0)
 				{
-					return TOP;
+					return Side.Top;
 				}
 				
-				return BOTTOM;
+				return Side.Bottom;
 			}
 
-			if (currentGo.transform.lossyScale.y <= -1)
+			if (relativePosition.y < 0)
 			{
-				if (relativePosition.y < 0)
-				{
-					return TOP;
-				}
-
-				return BOTTOM;
+				return Side.Top;
 			}
-			
-			return ERROR;
+
+			return Side.Bottom;
 		}
 
 		// HexToColor was written by Danny Lawrence, and appears here unmodified.
@@ -184,137 +174,63 @@ namespace Matcha.Unity
 							 (float)Math.Sin(angleToPoint + angleCorrection) * speed);
 		}
 
-		public static void PositionInHUD(RectTransform rectTrans, Text text, int anchor, float x, float y)
+		public static void PositionInHUD(RectTransform rectTrans, Text text, Position anchor, float x, float y)
 		{
 			switch (anchor)
 			{
-				case TOP_LEFT:
-					y = -y;
+				case Position.TopLeft:
 					rectTrans.anchorMin = new Vector2(0, 1);
 					rectTrans.anchorMax = new Vector2(0, 1);
-					rectTrans.anchoredPosition = new Vector3(x, y + 38f, 0f);
+					//rectTrans.anchoredPosition = new Vector3(x, y, 0f);
 					text.alignment = TextAnchor.UpperLeft;
 					break;
-				case TOP_CENTER:
-					y = -y;
+				case Position.TopCenter:
 					rectTrans.anchorMin = new Vector2(0.5f, 1);
 					rectTrans.anchorMax = new Vector2(0.5f, 1);
-					rectTrans.anchoredPosition = new Vector3(x - (rectTrans.sizeDelta.x / 2), y + 38f, 0f);
+					//rectTrans.anchoredPosition = new Vector3(x, y, 0f);
 					text.alignment = TextAnchor.UpperCenter;
 					break;
-				case TOP_RIGHT:
-					y = -y;
+				case Position.TopRight:
 					rectTrans.anchorMin = new Vector2(1, 1);
 					rectTrans.anchorMax = new Vector2(1, 1);
-					rectTrans.anchoredPosition = new Vector3(-(rectTrans.sizeDelta.x + x - 6f), y + 38f, 0f);
+					//rectTrans.anchoredPosition = new Vector3(transform.position.x, y, 0f);
 					text.alignment = TextAnchor.UpperRight;
 					break;
-				case MIDDLE_LEFT:
+				case Position.MiddleLeft:
 					rectTrans.anchorMin = new Vector2(0, 0.5f);
 					rectTrans.anchorMax = new Vector2(0, 0.5f);
-					rectTrans.anchoredPosition = new Vector3(x, y + 62f, 0f);
+					//rectTrans.anchoredPosition = new Vector3(x, y + 62f, 0f);
 					text.alignment = TextAnchor.MiddleLeft;
 					break;
-				case MIDDLE_CENTER:
+				case Position.MiddleCenter:
 					rectTrans.anchorMin = new Vector2(0.5f, 0.5f);
 					rectTrans.anchorMax = new Vector2(0.5f, 0.5f);
-					rectTrans.anchoredPosition = new Vector3(x - (rectTrans.sizeDelta.x / 2), y + 62f, 0f);
+					//rectTrans.anchoredPosition = new Vector3(x - (rectTrans.sizeDelta.x / 2), y + 62f, 0f);
 					text.alignment = TextAnchor.MiddleCenter;
 					break;
-				case MIDDLE_RIGHT:
+				case Position.MiddleRight:
 					rectTrans.anchorMin = new Vector2(1, 0.5f);
 					rectTrans.anchorMax = new Vector2(1, 0.5f);
-					rectTrans.anchoredPosition = new Vector3(-(rectTrans.sizeDelta.x + x - 6f), y + 62f, 0f);
+					//rectTrans.anchoredPosition = new Vector3(-(rectTrans.sizeDelta.x + x - 6f), y + 62f, 0f);
 					text.alignment = TextAnchor.MiddleRight;
 					break;
-				case BOTTOM_LEFT:
+				case Position.BottomLeft:
 					rectTrans.anchorMin = new Vector2(0, 0);
 					rectTrans.anchorMax = new Vector2(0, 0);
-					rectTrans.anchoredPosition = new Vector3(x, y + 87f, 0f);
+					//rectTrans.anchoredPosition = new Vector3(x, y + 87f, 0f);
 					text.alignment = TextAnchor.LowerLeft;
 					break;
-				case BOTTOM_CENTER:
+				case Position.BottomCenter:
 					rectTrans.anchorMin = new Vector2(0.5f, 0);
 					rectTrans.anchorMax = new Vector2(0.5f, 0);
-					rectTrans.anchoredPosition = new Vector3(x - (rectTrans.sizeDelta.x / 2), y + 87f, 0f);
+					//rectTrans.anchoredPosition = new Vector3(x - (rectTrans.sizeDelta.x / 2), y + 87f, 0f);
 					text.alignment = TextAnchor.LowerCenter;
 					break;
-				case BOTTOM_RIGHT:
+				case Position.BottomRight:
 					rectTrans.anchorMin = new Vector2(1, 0);
 					rectTrans.anchorMax = new Vector2(1, 0);
-					rectTrans.anchoredPosition = new Vector3(-(rectTrans.sizeDelta.x + x - 6f), y + 87f, 0f);
+					//rectTrans.anchoredPosition = new Vector3(-(rectTrans.sizeDelta.x + x - 6f), y + 87f, 0f);
 					text.alignment = TextAnchor.LowerRight;
-					break;
-				default:
-					Assert.IsTrue(false, "** Default Case Reached **");
-					break;
-			}
-		}
-
-		public static void PositionInHUD(RectTransform rectTrans, SpriteRenderer spriteRenderer, int anchor, float x, float y)
-		{
-			// Beware: here be platform-specific magic numbers! 
-			// they are offsets to help zero-out all coordinates.
-
-		#if UNITY_STANDALONE_OS
-			float platformSpecificFudgeFactor = 58f;
-		#endif
-
-		#if UNITY_IOS
-			float platformSpecificFudgeFactor = 225f;
-		#endif
-
-			float xOffset = spriteRenderer.bounds.size.x / 2 * platformSpecificFudgeFactor;
-			float yOffset = spriteRenderer.bounds.size.y * platformSpecificFudgeFactor;
-			switch (anchor)
-			{
-				case TOP_LEFT:
-					y = -y;
-					rectTrans.anchorMin = new Vector2(0, 1);
-					rectTrans.anchorMax = new Vector2(0, 1);
-					rectTrans.anchoredPosition = new Vector3(x + xOffset, y - yOffset, 0f);
-					break;
-				case TOP_CENTER:
-					y = -y;
-					rectTrans.anchorMin = new Vector2(0.5f, 1);
-					rectTrans.anchorMax = new Vector2(0.5f, 1);
-					rectTrans.anchoredPosition = new Vector3(x - (rectTrans.sizeDelta.x / 2), y - yOffset, 0f);
-					break;
-				case TOP_RIGHT:
-					y = -y;
-					rectTrans.anchorMin = new Vector2(1, 1);
-					rectTrans.anchorMax = new Vector2(1, 1);
-					rectTrans.anchoredPosition = new Vector3(-(rectTrans.sizeDelta.x + x) - xOffset, y - yOffset, 0f);
-					break;
-				case MIDDLE_LEFT:
-					rectTrans.anchorMin = new Vector2(0, 0.5f);
-					rectTrans.anchorMax = new Vector2(0, 0.5f);
-					rectTrans.anchoredPosition = new Vector3(x + xOffset, y - (yOffset / 2), 0f);
-					break;
-				case MIDDLE_CENTER:
-					rectTrans.anchorMin = new Vector2(0.5f, 0.5f);
-					rectTrans.anchorMax = new Vector2(0.5f, 0.5f);
-					rectTrans.anchoredPosition = new Vector3(x - (rectTrans.sizeDelta.x / 2), y - (yOffset / 2), 0f);
-					break;
-				case MIDDLE_RIGHT:
-					rectTrans.anchorMin = new Vector2(1, 0.5f);
-					rectTrans.anchorMax = new Vector2(1, 0.5f);
-					rectTrans.anchoredPosition = new Vector3(-(rectTrans.sizeDelta.x + x) - xOffset, y - (yOffset / 2), 0f);
-					break;
-				case BOTTOM_LEFT:
-					rectTrans.anchorMin = new Vector2(0, 0);
-					rectTrans.anchorMax = new Vector2(0, 0);
-					rectTrans.anchoredPosition = new Vector3(x + xOffset, y, 0f);
-					break;
-				case BOTTOM_CENTER:
-					rectTrans.anchorMin = new Vector2(0.5f, 0);
-					rectTrans.anchorMax = new Vector2(0.5f, 0);
-					rectTrans.anchoredPosition = new Vector3(x - (rectTrans.sizeDelta.x / 2), y, 0f);
-					break;
-				case BOTTOM_RIGHT:
-					rectTrans.anchorMin = new Vector2(1, 0);
-					rectTrans.anchorMax = new Vector2(1, 0);
-					rectTrans.anchoredPosition = new Vector3(-(rectTrans.sizeDelta.x + x) - xOffset, y, 0f);
 					break;
 				default:
 					Assert.IsTrue(false, "** Default Case Reached **");

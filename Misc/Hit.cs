@@ -7,16 +7,17 @@ public class Hit
 	public Collider2D coll;
 	public Weapon weapon;
 	public Weapon.Type weaponType;
-	public int hitSideHoriz;
-	public int hitSideVert;
+	public Side horizontalSide;
+	public Side verticalSide;
 
-	public object PackageUp(GameObject objectThatWasHit, Collider2D wasHitBy)
+	public object Create(GameObject objectThatWasHit, Collider2D wasHitBy)
 	{
-		weapon       = wasHitBy.GetComponent<Weapon>();
+		weapon = wasHitBy.GetComponentInParent<Weapon>() ?? wasHitBy.GetComponentInParent<ProjectileContainer>().weapon;
 		Assert.IsNotNull(weapon);
-		weaponType   = weapon.type;
-		hitSideHoriz = M.HorizontalSideHit(objectThatWasHit, wasHitBy);
-		hitSideVert  = M.VerticalSideHit(objectThatWasHit, wasHitBy);
+
+		weaponType     = weapon.type;
+		horizontalSide = M.HorizontalSideHit(objectThatWasHit, wasHitBy);
+		verticalSide   = M.VerticalSideHit(objectThatWasHit, wasHitBy);
 
 		return this;
 	}

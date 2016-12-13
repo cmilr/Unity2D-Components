@@ -13,6 +13,8 @@ public class LevelGenerator : BaseBehaviour
 	public Brush hallOriginBrush;
 	public Brush roomOriginBrush;
 
+    private const int RIGHT   = 1;
+    private const int LEFT    = -1;
 	private TileSystem map;
 	private int mapColumns;
 	private int mapRows;

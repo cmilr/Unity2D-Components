@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BodyCollider : BaseBehaviour
 {
-	public Hit hit;
+    public Hit cachedHit;
 	private int layer;
 	private bool dead;
 	private bool levelCompleted;
@@ -12,7 +12,7 @@ public class BodyCollider : BaseBehaviour
 
 	void Awake()
 	{
-		hit = new Hit();
+		cachedHit = new Hit();
 	}
 
 	void OnTriggerEnter2D(Collider2D coll)
@@ -21,7 +21,7 @@ public class BodyCollider : BaseBehaviour
 
 		if (layer == ENEMY_WEAPON_COLLIDER)
 		{
-			enemyWeapon = coll.GetComponent<Weapon>();
+			enemyWeapon = coll.GetComponent<Weapon>() ?? coll.GetComponentInParent<ProjectileContainer>().weapon;
 
 			if (!enemyWeapon.alreadyCollided && !levelCompleted && !dead)
 			{
@@ -30,8 +30,8 @@ public class BodyCollider : BaseBehaviour
 					enemyWeapon.type == Weapon.Type.MagicProjectile)
 				{
 					enemyWeapon.alreadyCollided = true;
-					hit.PackageUp(gameObject, coll);
-					SendMessageUpwards("TakesHit", hit);
+					cachedHit.Create(gameObject, coll);
+					SendMessageUpwards("TakesHit", cachedHit);
 				}
 			}
 		}
@@ -43,7 +43,7 @@ public class BodyCollider : BaseBehaviour
 
 		if (layer == ENEMY_WEAPON_COLLIDER)
 		{
-			enemyWeapon = coll.GetComponent<Weapon>();
+			enemyWeapon = coll.GetComponent<Weapon>() ?? coll.GetComponentInParent<ProjectileContainer>().weapon;
 
 			enemyWeapon.alreadyCollided = false;
 		}

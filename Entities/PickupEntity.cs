@@ -18,7 +18,7 @@ public class PickupEntity : Entity
 		Assert.IsFalse(type == Type.Invalid,
 	   		("Invalid pickup type @ " + gameObject));
 		
-		(pickupPrize = MFX.PickupPrize(gameObject)).Pause();
+		(pickupPrize 	 = MFX.PickupPrize(gameObject)).Pause();
 		(extinguishLight = MFX.ExtinguishLight(glow, 0, .1f)).Pause();
 		
 		if ((type == Type.Prize || type == Type.LevelUp) && autoAlign) {

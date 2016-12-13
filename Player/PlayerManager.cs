@@ -40,10 +40,10 @@ public class PlayerManager : BaseBehaviour
 		player.HP -= (hit.weapon.damage * diffDamageModifier);
 
 		//params for ShakeCamera = duration, strength, vibrato, randomness
-		EventKit.Broadcast("shake camera", .5f, .3f, 20, 5f);
+		EventKit.Broadcast("shake camera", .2f, .1f, 10, 3f);
 		EventKit.Broadcast("reduce hp", player.HP);
 
-		if (hit.hitSideHoriz == RIGHT)
+		if (hit.horizontalSide == Side.Right)
 		{
 			gameObject.SendEventDown("RepulseToLeft", 5.0F);
 		}
@@ -70,24 +70,26 @@ public class PlayerManager : BaseBehaviour
 
 	void OnPlayerDead(Hit incomingHit)
 	{
-		Debug.Log("player killed by " + incomingHit);
+		spriteRenderer.enabled = false;
 	}
 
 	void OnPlayerDrowned(Collider2D incomingColl)
 	{
-		Debug.Log("player drowned");
+		spriteRenderer.enabled = false;
 	}
 
 	void OnEnable()
 	{
 		EventKit.Subscribe<int>("set difficulty damage modifier", OnSetDiffDamageModifier);
 		EventKit.Subscribe<Collider2D>("player drowned", OnPlayerDrowned);
+		EventKit.Subscribe<Hit>("player dead", OnPlayerDead);
 	}
 
 	void OnDestroy()
 	{
 		EventKit.Unsubscribe<int>("set difficulty damage modifier", OnSetDiffDamageModifier);
 		EventKit.Unsubscribe<Collider2D>("player drowned", OnPlayerDrowned);
+		EventKit.Unsubscribe<Hit>("player dead", OnPlayerDead);
 	}
 }
 

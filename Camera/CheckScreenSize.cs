@@ -29,7 +29,7 @@ public class CheckScreenSize : BaseBehaviour
 			vertExtent  = camera.orthographicSize;
 			horizExtent = vertExtent * Screen.width / Screen.height;
 
-			EventKit.Broadcast("screen size changed", vertExtent, horizExtent);
+			EventKit.Broadcast("screen size changed");
 		}
 	}
 }

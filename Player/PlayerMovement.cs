@@ -5,15 +5,16 @@ using UnityEngine.Assertions;
 
 public class PlayerMovement : BaseBehaviour, ICreatureController
 {
-	private float gravity = -35f; // set gravity for player.
-	private float runSpeed = 7f; // set player's run speed.
-	private float groundDamping = 20f; // how fast do we change direction? higher means faster.
-	private float inAirDamping = 5f; // how fast do we change direction mid-air?
-	private float jumpHeight = 3.50f; // player's jump height.
-	private float maxFallingSpeed = 100f; // max falling speed, for throttling falls, etc.
-	private float jumpModifier = 30f; // increase jump height if traveling upwards on platforms etc.
-	private float multiClickBuffer = .2f;
-	private float nextAttack = 0f;
+	private float gravity               = -35f;     // set gravity for player.
+	private float runSpeed              = 7f;       // set player's run speed.
+	private float groundDamping         = 20f;      // how fast do we change direction? higher means faster.
+	private float inAirDamping          = 5f;       // how fast do we change direction mid-air?
+	private float jumpHeight            = 2.25f;    // player's jump height.
+	private float maxFallingSpeed       = 100f;     // max falling speed, for throttling falls, etc.
+	private float jumpModifier          = 30f;      // increase jump height if traveling upwards on platforms etc.
+	private float multiClickBuffer      = .2f;
+	private float nextAttack            = 0f;
+	private float aboutfaceOffset 		= .25f;
 	private float yVelocity;
 	private float normalizedHorizontalSpeed;
 	private float repulseVelocity;
@@ -47,20 +48,20 @@ public class PlayerMovement : BaseBehaviour, ICreatureController
 		
 		controller = GetComponent<CharacterController2D>();
 		Assert.IsNotNull(controller);
-		
-		animState = GetComponent<AnimationState>();
-		Assert.IsNotNull(animState);
 	}
 	
 	void Start()
 	{
 		weaponManager = GetComponentInChildren<WeaponManager>();
 		Assert.IsNotNull(weaponManager);
+
+		animState = GetComponentInChildren<AnimationState>();
+		Assert.IsNotNull(animState);
 	}
 
 	// main movement loop — keep in LateUpdate() to prevent player
 	// falling through edge colliders, bouncing, etc.
-	void LateUpdate()
+	void Update()
 	{
 		GetYVelocity();
 		InitializeVelocity();
@@ -140,7 +141,7 @@ public class PlayerMovement : BaseBehaviour, ICreatureController
 		if (transform.localScale.x < 0f)
 		{
 			transform.SetLocalScaleX(-transform.localScale.x);
-			transform.SetPositionX(transform.position.x - ABOUTFACE_OFFSET);
+			transform.SetPositionX(transform.position.x - aboutfaceOffset);
 		}
 
 		if (!facingRight)
@@ -161,7 +162,7 @@ public class PlayerMovement : BaseBehaviour, ICreatureController
 		if (transform.localScale.x > 0f)
 		{
 			transform.SetLocalScaleX(-transform.localScale.x);
-			transform.SetPositionX(transform.position.x + ABOUTFACE_OFFSET);
+			transform.SetPositionX(transform.position.x + aboutfaceOffset);
 		}
 
 		if (facingRight)

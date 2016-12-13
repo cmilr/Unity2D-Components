@@ -41,23 +41,23 @@ static class EventKit
 
 	static public void OnListenerRemoving(string eventType, Delegate listenerBeingRemoved)
 	{
-		if (eventTable.ContainsKey(eventType)) {
-			Delegate d = eventTable[eventType];
+		//if (eventTable.ContainsKey(eventType)) {
+		//	Delegate d = eventTable[eventType];
 
-			if (d == null) 
-			{
-				throw new ListenerException(string.Format("Attempting to remove listener with for event type \"{0}\" but current listener is null.", eventType));
-			}
+		//	if (d == null) 
+		//	{
+		//		throw new ListenerException(string.Format("Attempting to remove listener with for event type \"{0}\" but current listener is null.", eventType));
+		//	}
 			
-			if (d.GetType() != listenerBeingRemoved.GetType())
-			{
-				throw new ListenerException(string.Format("Attempting to remove listener with inconsistent signature for event type {0}. Current listeners have type {1} and listener being removed has type {2}", eventType, d.GetType().Name, listenerBeingRemoved.GetType().Name));
-			}
-		}
-		else
-		{
-			throw new ListenerException(string.Format("Attempting to remove listener for type \"{0}\" but Messenger doesn't know about this event type.", eventType));
-		}
+		//	if (d.GetType() != listenerBeingRemoved.GetType())
+		//	{
+		//		throw new ListenerException(string.Format("Attempting to remove listener with inconsistent signature for event type {0}. Current listeners have type {1} and listener being removed has type {2}", eventType, d.GetType().Name, listenerBeingRemoved.GetType().Name));
+		//	}
+		//}
+		//else
+		//{
+		//	throw new ListenerException(string.Format("Attempting to remove listener for type \"{0}\" but Messenger doesn't know about this event type.", eventType));
+		//}
 	}
 
 	static public void OnListenerRemoved(string eventType)

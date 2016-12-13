@@ -4,33 +4,38 @@ using UnityEngine.Assertions;
 
 public class FlickeringFireLerp : BaseBehaviour
 {
-	public float minIntensity = 1f;
-	public float maxIntensity = 12f;
-	private float lerpTime       = 1f;
-	private float startIntensity = 1f;
-	private float endIntensity   = 5f;
+	public float minIntensity 		= 1f;
+	public float maxIntensity 		= 1f;
+	private float lerpTime       	= 1f;
+	private float startIntensity;
+	private float endIntensity;
 	private float currentLerpTime;
 	private float distance;
 	private bool disabled;
 	private Transform player;
 	private new Transform transform;
-	private new Light light;
+	private Light foregroundLight;
+	private Light backgroundLight;
 
 	void Awake()
 	{
 		transform = GetComponent<Transform>();
 		Assert.IsNotNull(transform);
-		
-		light = GetComponent<Light>();
-		Assert.IsNotNull(light);
 	}
 	
 	void Start()
 	{
 		player = GameObject.Find(PLAYER).GetComponent<Transform>();
 		Assert.IsNotNull(player);
+
+		foregroundLight = transform.Find("Foreground_Light").GetComponent<Light>();
+		Assert.IsNotNull(foregroundLight);
+
+		backgroundLight = transform.Find("Background_Light").GetComponent<Light>();
+		Assert.IsNotNull(backgroundLight);
 		
 		InvokeRepeating("CullingCheck", 0f, 1f);
+		//InvokeRepeating("FlickerUpdate", 0f, .05f);
 	}
 
 	void Update()
@@ -42,15 +47,18 @@ public class FlickeringFireLerp : BaseBehaviour
 
 			if (currentLerpTime > lerpTime)
 			{
-				lerpTime = Rand.Range(.05f, .3f);
+				lerpTime = Rand.Range(.1f, .3f);
 				currentLerpTime = 0f;
 				startIntensity = endIntensity;
 				endIntensity = Rand.Range(minIntensity, maxIntensity);
 			}
 
 			// lerp!
-			float perc = currentLerpTime / lerpTime;
-			light.intensity = Mathf.Lerp(startIntensity, endIntensity, perc);
+			var perc = currentLerpTime / lerpTime;
+			var intensity = Mathf.Lerp(startIntensity, endIntensity, perc);
+
+			foregroundLight.intensity = intensity + .5f;
+			backgroundLight.intensity = intensity;
 		}
 	}
 

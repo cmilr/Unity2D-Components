@@ -13,18 +13,17 @@ public class Weapon : BaseBehaviour
 	public Style style;
 	[HideInInspector]
 	public bool alreadyCollided;
+	[HideInInspector]
+	public Sprite iconSprite;
+	[HideInInspector]
+	public Sprite projectileSprite;
+	public Sprite actualSprite;
 
 	public int worth;
 
 	[Tooltip("Is this weapon in someone's inventory, or is it just loose on the floor?")]
 	public bool inPlayerInventory;
 	public bool inEnemyInventory;
-
-
-	[Header("SPRITES")]
-	//~~~~~~~~~~~~~~~~~~~~~
-	[Tooltip("This is the weapon icon.")]
-	public Sprite iconSprite;
 
 
 	[Header("ALL WEAPONS")]
@@ -44,8 +43,8 @@ public class Weapon : BaseBehaviour
 
 	[Header("RANGED WEAPONS ONLY")]
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	[Tooltip("Actual sprite that will be fired.")]
-	public Sprite projectileSprite;
+	[Tooltip("If animated — Animator Controller .")]
+	public RuntimeAnimatorController animController;
 
 	[Range(8, 20)]
 	[Tooltip("How fast should projectile travel?")]
@@ -63,9 +62,7 @@ public class Weapon : BaseBehaviour
 	[Tooltip("Should projectile fade-in when thrown?")]
 	public bool fadeIn;
 
-	[Tooltip("If Animated, ProjectileContainer will attempt to load an animation.")]
-	public bool animatedProjectile;
-
+	[HideInInspector]
 	public SpriteRenderer spriteRenderer;
 
 	// tween sequences and their related variables.
@@ -85,15 +82,18 @@ public class Weapon : BaseBehaviour
 
 		Assert.IsFalse(type == Type.Invalid,
    			("Invalid weapon type @ " + gameObject));
+
+		iconSprite = spriteRenderer.sprite;
+		projectileSprite = spriteRenderer.sprite;
 	}
 
 	void Start()
 	{
 		// cache & pause tweens.
-		(fadeInOnEquip = MFX.Fade(spriteRenderer, 1f, whenEquippedFadeAfter, whenEquippedFadeOver)).Pause();
-		(fadeOutOnDiscard = MFX.Fade(spriteRenderer, .2f, 0f, 0f)).Pause();
+		(fadeInOnEquip 			= MFX.Fade(spriteRenderer, 1f, whenEquippedFadeAfter, whenEquippedFadeOver)).Pause();
+		(fadeOutOnDiscard 		= MFX.Fade(spriteRenderer, .2f, 0f, 0f)).Pause();
 		(fadeBackInAfterDiscard = MFX.FadeInWeapon(spriteRenderer, 1f, 2f, 1f)).Pause();
-		(fadeWhenStashed = MFX.Fade(spriteRenderer, 0f, whenStashedFadeAfter, whenStashedFadeOver)).Pause();
+		(fadeWhenStashed 		= MFX.Fade(spriteRenderer, 0f, whenStashedFadeAfter, whenStashedFadeOver)).Pause();
 
 		EstablishAttackStyle();
 		Init();
@@ -144,10 +144,15 @@ public class Weapon : BaseBehaviour
 				style = Style.Melee;
 				break;
 			default:
-				Assert.IsTrue(false, ("Weapon type missing from switch @ " + gameObject));
+				Assert.IsTrue(false, ("Error @ " + gameObject));
 				break;
 		}
 	}
+
+	//public Weapon Clone()
+	//{
+	//	return (Weapon)this.MemberwiseClone();
+	//}
 
 	public void OnEquip()
 	{

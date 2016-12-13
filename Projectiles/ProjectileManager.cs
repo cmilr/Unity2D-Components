@@ -56,11 +56,7 @@ public class ProjectileManager : BaseBehaviour
 	void GetPooledProjectile(Weapon equippedWeapon)
 	{
 		pooledProjectile = ProjectilePool.current.Spawn();
-
-		if (pooledProjectile == null)
-		{
-			Debug.Log("ERROR in ProjectileManager.Fire()");
-		}
+		Assert.IsNotNull(pooledProjectile);
 	}
 
 	void InitPooledProjectile()
@@ -73,6 +69,6 @@ public class ProjectileManager : BaseBehaviour
 		pooledProjectile.transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z);
 
 		// set weapon to proper collider layer——enemy or player
-		pooledProjectile.layer = (firedByPlayer) ? PLAYER_WEAPON_COLLIDER : ENEMY_WEAPON_COLLIDER;
+		pooledProjectile.layer = firedByPlayer ? PLAYER_WEAPON_COLLIDER : ENEMY_WEAPON_COLLIDER;
 	}
 }

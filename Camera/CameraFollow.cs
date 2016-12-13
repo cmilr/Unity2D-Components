@@ -7,11 +7,14 @@ public class CameraFollow : BaseBehaviour
 	// margin and speed settings have been migrated to
 	// BaseBehaviour.cs, for ease of cross-platform setup.
 
+	// lock z to prevent overlap glitches during screen shakes.
+	private float constantZ = -10f;
+	private enum Edge : byte { Right, Left, Upper, Lower };
 	private float camSmooth = .04f;
 	private float tileSysRightBound;
-	private float tileSysLefBound;
-	private float tileSysTopBound;
-	private float tileSysBottomBound;
+	private float tileSysLeftBound;
+    private float tileSysUpperBound;
+    private float tileSysLowerBound;
 	private float vertExtent;
 	private float horizExtent;
 	private Vector3 tileSystemSize;
@@ -59,10 +62,10 @@ public class CameraFollow : BaseBehaviour
 
 	void CalculateScreenBounds()
 	{
-		tileSysLefBound   = (horizExtent);
+		tileSysLeftBound   = (horizExtent);
 		tileSysRightBound  = (tileSystemSize.x - horizExtent);
-		tileSysBottomBound = (-tileSystemSize.y + vertExtent);
-		tileSysTopBound    = (vertExtent);
+		tileSysLowerBound = (-tileSystemSize.y + vertExtent);
+		tileSysUpperBound    = (vertExtent);
 	}
 
 	void CalculateStartingPosition()
@@ -75,7 +78,12 @@ public class CameraFollow : BaseBehaviour
 
 	void LateUpdate()
 	{
-		TrackPlayer();
+		if (player != null)
+		{
+			TrackPlayer();
+		}
+
+		transform.SetPositionZ(constantZ);
 	}
 
 	void TrackPlayer()
@@ -89,49 +97,51 @@ public class CameraFollow : BaseBehaviour
 		}
 
 		//keep a margin between player and bottom of screen
-		if (DistanceFromEdge(BOTTOM) <= MIN_BOTTOM_SCREEN_MARGIN) {
+		if (DistanceFromEdge(Edge.Lower) <= MIN_BOTTOM_SCREEN_MARGIN) {
 			targetY = player.position.y - MIN_BOTTOM_SCREEN_MARGIN + vertExtent;
 		}
 		//keep a margin between player and top of screen,
-		else if (DistanceFromEdge(TOP) <= MIN_TOP_SCREEN_MARGIN)
+		else if (DistanceFromEdge(Edge.Upper) <= MIN_TOP_SCREEN_MARGIN)
 		{
 			targetY = Mathf.Lerp(transform.position.y, player.position.y + MIN_TOP_SCREEN_MARGIN - vertExtent, CAM_Y_SPEED_TO_FOLLOW * Time.deltaTime);
 		}
 
 		//keep camera from leaving the tileSystem.
-		targetX = Mathf.Clamp(targetX, tileSysLefBound, tileSysRightBound);
-		targetY = Mathf.Clamp(targetY, tileSysBottomBound, tileSysTopBound);
+        targetX = Mathf.Clamp(targetX, tileSysLeftBound, tileSysRightBound);
+		targetY = Mathf.Clamp(targetY, tileSysLowerBound, tileSysUpperBound);
 
 		//move camera.
 		transform.position = Vector3.SmoothDamp(transform.position,
-						new Vector3(targetX, targetY, transform.position.z), ref velocity, camSmooth);
+			new Vector3(targetX, targetY, constantZ), ref velocity, camSmooth);
 	}
 
 	bool PlayerAtXMargin()
 	{
-		return Mathf.Abs(transform.position.x - player.position.x) > PLAYER_X_MOVEMENT_BEFORE_CAM_FOLLOWS;
+
+		return Mathf.Abs(transform.position.x - player.position.x) > PLYR_X_MOVE_BEFORE_CAM_FOLLOWS;
+
 	}
 
 	//returns the distance from a gameObject to the edge of the screen on 2D orthographic cameras.
-	float DistanceFromEdge(int screenEdge)
+	float DistanceFromEdge(Edge screenEdge)
 	{
 		switch (screenEdge)
 		{
-			case TOP:
+            case Edge.Upper:
 				return Mathf.Abs(transform.position.y + vertExtent - player.position.y);
-			case BOTTOM:
+			case Edge.Lower:
 				return Mathf.Abs(transform.position.y - vertExtent - player.position.y);
-			case LEFT:
+			case Edge.Left:
 				return Mathf.Abs(transform.position.x - horizExtent - player.position.x);
-			case RIGHT:
+			case Edge.Right:
 				return Mathf.Abs(transform.position.x + horizExtent - player.position.x);
 			default:
 				Assert.IsTrue(false, "** Default Case Reached **");
-				return ERROR;
+				return 0;
 		}
 	}
 
-	void OnScreenSizeChanged(float vExtent, float hExtent)
+	void OnScreenSizeChanged()
 	{
 		CalculateExtents();
 		CalculateScreenBounds();
@@ -146,12 +156,12 @@ public class CameraFollow : BaseBehaviour
 	{
 		Start();
 		EventKit.Subscribe<Hit>("player dead", OnPlayerDead);
-		EventKit.Subscribe<float, float>("screen size changed", OnScreenSizeChanged);
+		EventKit.Subscribe("screen size changed", OnScreenSizeChanged);
 	}
 
 	void OnDestroy()
 	{
 		EventKit.Unsubscribe<Hit>("player dead", OnPlayerDead);
-		EventKit.Unsubscribe<float, float>("screen size changed", OnScreenSizeChanged);
+		EventKit.Unsubscribe("screen size changed", OnScreenSizeChanged);
 	}
 }

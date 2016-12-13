@@ -9,12 +9,16 @@ public class AnimationState : BaseBehaviour
 	public bool airborne;
 	[HideInInspector]
 	public bool attacking;
-	AnimationHandler anim;
+	Animator_Base playerAnimator;
+	Animator_Weapon weaponAnimator;
 
-	void Awake()
+	void Start()
 	{
-		anim = GetComponent<AnimationHandler>();
-		Assert.IsNotNull(anim);
+		playerAnimator = GetComponent<Animator_Base>();
+		Assert.IsNotNull(playerAnimator);
+
+		weaponAnimator = GetComponent<Animator_Weapon>();
+		Assert.IsNotNull(weaponAnimator);
 	}
 
 	void Update()
@@ -22,32 +26,38 @@ public class AnimationState : BaseBehaviour
 		// IDLE STATE
 		if (!moving && !airborne && !attacking)
 		{
-			anim.PlayIdleAnimation();
+			playerAnimator.PlayIdleAnimation();
+			weaponAnimator.PlayIdleAnimation();
 		}
 		// ATTACKING STATE
 		else if (!moving && !airborne && attacking)
 		{
-			anim.PlayAttackAnimation();
+			playerAnimator.PlayAttackAnimation();
+			weaponAnimator.PlayAttackAnimation();
 		}
 		// RUNNING STATE
 		else if (moving && !airborne && !attacking)
 		{
-			anim.PlayRunAnimation();
+			playerAnimator.PlayRunAnimation();
+			weaponAnimator.PlayRunAnimation();
 		}
 		// RUNNING ATTACK STATE
 		else if (moving && !airborne && attacking)
 		{
-			anim.PlayRunAttackAnimation();
+			playerAnimator.PlayRunAttackAnimation();
+			weaponAnimator.PlayRunAttackAnimation();
 		}
 		// JUMPING STATE
 		else if (airborne && !attacking)
 		{
-			anim.PlayJumpAnimation();
+			playerAnimator.PlayJumpAnimation();
+			weaponAnimator.PlayJumpAnimation();
 		}
 		// JUMPING ATTACK STATE
 		else if (airborne && attacking)
 		{
-			anim.PlayJumpAttackAnimation();
+			playerAnimator.PlayJumpAttackAnimation();
+			weaponAnimator.PlayJumpAttackAnimation();
 		}
 	}
 }

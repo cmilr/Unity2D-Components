@@ -12,6 +12,7 @@ public class InventoryManager : BaseBehaviour
 	private bool levelLoading;
 	private GameObject[] weaponBelt;
 	private GameObject outgoingWeapon;
+	private GameObject pickups;
 	private new Transform transform;
 
 	void Awake()
@@ -20,16 +21,23 @@ public class InventoryManager : BaseBehaviour
 		Assert.IsNotNull(transform);
 	}
 
+	void Start()
+	{
+		pickups = GameObject.Find(PICKUPS);
+		Assert.IsNotNull(pickups);
+	}
+
 	// input method used by touch controls.
 	public void SwitchWeaponOnTouch()
 	{
-		OnSwitchWeapon(RIGHT);
+		OnSwitchWeapon(Side.Right);
 	}
 
 	void OnInitWeapons(GameObject eWeapon, GameObject lWeapon, GameObject rWeapon)
 	{
 		// WEAPON GAMEOBJECTS — keep track of weapon GameObjects as they're equipped/stashed
-		if (weaponBelt == null) {
+		if (weaponBelt == null) 
+		{
 			weaponBelt = new GameObject[3];
 		}
 
@@ -56,11 +64,11 @@ public class InventoryManager : BaseBehaviour
 		var outgoingSpriteRenderer = outgoingWeapon.GetComponent<SpriteRenderer>();
 		var outgoingRigidbody2D = outgoingWeapon.GetComponent<Rigidbody2D>();
 
-		outgoingTransform.SetLocalPositionXY(0f, .5f);
+		outgoingTransform.parent = pickups.transform;
+		outgoingTransform.SetLocalPosition(outgoingTransform.position.x, outgoingTransform.position.y, 0f);
 		outgoingTransform.SetAbsLocalScaleX(1f);
-		outgoingTransform.parent = null;
 		outgoingSpriteRenderer.enabled = true;
-		outgoingSpriteRenderer.sortingLayerName = PICKUP_SORTING_LAYER;
+		outgoingSpriteRenderer.sortingOrder = PICKUP_ORDER;
 		outgoingRigidbody2D.isKinematic = false;
 		outgoingWeapon.layer = PICKUP_PHYSICS_LAYER;
 		outgoingWeapon.GetComponentInChildren<PhysicsCollider>().EnablePhysicsCollider();
@@ -79,7 +87,7 @@ public class InventoryManager : BaseBehaviour
 
 		equippedTransform.parent = gameObject.transform;
 		equippedTransform.localPosition = new Vector3(.625f, .5625f, 0f);
-		equippedTransform.SetLocalScaleXYZ(-1f, 1f, 1f);
+		equippedTransform.SetLocalScale(-1f, 1f, 1f);
 		weaponBelt[equipped].layer = PLAYER_DEFAULT_LAYER;
 		weaponBelt[equipped].GetComponentInChildren<PhysicsCollider>().DisablePhysicsCollider();
 		weaponBelt[equipped].GetComponentInChildren<MeleeCollider>().EnableMeleeCollider();
@@ -110,7 +118,7 @@ public class InventoryManager : BaseBehaviour
 		outgoingWeapon.GetComponent<Weapon>().OnDiscard();
 	}
 
-	void OnSwitchWeapon(int shiftDirection)
+	void OnSwitchWeapon(Side shiftDirection)
 	{
 		if (!levelLoading) {
 			switch (equipped) {
@@ -158,9 +166,9 @@ public class InventoryManager : BaseBehaviour
 		weaponBelt[right].layer = PLAYER_DEFAULT_LAYER;
 
 		// set weapons to correct sorting layers;
-		weaponBelt[left].GetComponent<SpriteRenderer>().sortingLayerName = HERO_WEAPON_SORTING_LAYER;
-		weaponBelt[equipped].GetComponent<SpriteRenderer>().sortingLayerName = HERO_WEAPON_SORTING_LAYER;
-		weaponBelt[right].GetComponent<SpriteRenderer>().sortingLayerName = HERO_WEAPON_SORTING_LAYER;
+		weaponBelt[left].GetComponent<SpriteRenderer>().sortingOrder = PLAYER_WEAPON_ORDER;
+		weaponBelt[equipped].GetComponent<SpriteRenderer>().sortingOrder = PLAYER_WEAPON_ORDER;
+		weaponBelt[right].GetComponent<SpriteRenderer>().sortingOrder = PLAYER_WEAPON_ORDER;
 
 		// set weapon colliders to correct layers
 		SetWeaponColliders();
@@ -187,7 +195,7 @@ public class InventoryManager : BaseBehaviour
 		leftWeapon.GetComponent<Weapon>().OnStashed();
 		rightWeapon.GetComponent<Weapon>().OnStashed();
 
-		SendMessageUpwards("NewWeaponEquipped", equippedWeapon.type);
+		gameObject.SendEventToParentAndDown("NewWeaponEquipped", equippedWeapon.type);
 	}
 
 	void SetWeaponColliders()
@@ -216,16 +224,16 @@ public class InventoryManager : BaseBehaviour
 
 	void PassInitialWeaponsToHUD()
 	{
-		EventKit.Broadcast("init stashed weapon", weaponBelt[left], LEFT);
+		EventKit.Broadcast("init stashed weapon", weaponBelt[left], Side.Left);
 		EventKit.Broadcast("init equipped weapon", weaponBelt[equipped]);
-		EventKit.Broadcast("init stashed weapon", weaponBelt[right], RIGHT);
+		EventKit.Broadcast("init stashed weapon", weaponBelt[right], Side.Right);
 	}
 
 	void PassNewWeaponsToHUD()
 	{
-		EventKit.Broadcast("change stashed weapon", weaponBelt[left], LEFT);
+		EventKit.Broadcast("change stashed weapon", weaponBelt[left], Side.Left);
 		EventKit.Broadcast("change equipped weapon", weaponBelt[equipped]);
-		EventKit.Broadcast("change stashed weapon", weaponBelt[right], RIGHT);
+		EventKit.Broadcast("change stashed weapon", weaponBelt[right], Side.Right);
 	}
 
 	void PassEquippedWeaponToHUD()
@@ -243,7 +251,7 @@ public class InventoryManager : BaseBehaviour
 		// pause weapon changes while level loading
 		levelLoading = true;
 
-		StartCoroutine(Timer.Start(WEAPON_PAUSE_ON_LEVEL_LOAD, false, () => {
+		StartCoroutine(Timer.Start(PAUSE_WPN_SWITCH_WHILE_LVL_LOADS, false, () => {
 			levelLoading = false;
 		}));
 	}
@@ -252,7 +260,7 @@ public class InventoryManager : BaseBehaviour
 	{
 		EventKit.Subscribe<GameObject, GameObject, GameObject>("init weapons", OnInitWeapons);
 		EventKit.Subscribe<GameObject>("equip new weapon", OnEquipNewWeapon);
-		EventKit.Subscribe<int>("switch weapon", OnSwitchWeapon);
+		EventKit.Subscribe<Side>("switch weapon", OnSwitchWeapon);
 		EventKit.Subscribe<bool>("level loading", OnLevelLoading);
 	}
 
@@ -260,7 +268,7 @@ public class InventoryManager : BaseBehaviour
 	{
 		EventKit.Unsubscribe<GameObject, GameObject, GameObject>("init weapons", OnInitWeapons);
 		EventKit.Unsubscribe<GameObject>("equip new weapon", OnEquipNewWeapon);
-		EventKit.Unsubscribe<int>("switch weapon", OnSwitchWeapon);
+		EventKit.Unsubscribe<Side>("switch weapon", OnSwitchWeapon);
 		EventKit.Unsubscribe<bool>("level loading", OnLevelLoading);
 	}
 }

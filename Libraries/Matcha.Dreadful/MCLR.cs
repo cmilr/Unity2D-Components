@@ -16,6 +16,7 @@ namespace Matcha.Dreadful
 		public static Color32 undergroundBrown  = M.HexToColor("311800");
 		public static Color32 deepBrightBlue    = M.HexToColor("0d04c8");
 		public static Color32 deepPurple        = M.HexToColor("6c07ac");
+		public static Color32 gray				= M.HexToColor("777777");
 
 		// default sword
 		public static Color32 defaultGrayBlade  = M.HexToColor("ffffff");

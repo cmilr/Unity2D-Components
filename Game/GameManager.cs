@@ -3,7 +3,6 @@ using UnityEngine.Assertions;
 
 public class GameManager : BaseBehaviour
 {
-	public bool disableAttack;
 	private GameData gameData;
 
 	void Awake()
@@ -13,8 +12,6 @@ public class GameManager : BaseBehaviour
 
 	void Start()
 	{
-		MDebug.attackDisabled = disableAttack;
-		
 		gameData = GameObject.Find(_DATA).GetComponent<GameData>();
 		Assert.IsNotNull(gameData);
 		

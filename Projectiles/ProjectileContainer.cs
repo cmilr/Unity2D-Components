@@ -1,24 +1,24 @@
+
 using DG.Tweening;
 using Matcha.Dreadful;
 using Matcha.Unity;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class ProjectileContainer : Weapon
+public class ProjectileContainer : BaseBehaviour
 {
+	public Weapon weapon;
 	private Vector3 origin;
-	private Weapon weapon;
-	private RuntimeAnimatorController anim;
 	private new Transform transform;
 	private new Collider2D collider2D;
 	private new Rigidbody2D rigidbody2D;
-	private SpriteRenderer projSpriteRenderer;
+	private SpriteRenderer spriteRenderer;
 	private Animator animator;
-	private Sequence projectileFadeIn;
-	private Sequence projectileFadeInInstant;
-	private Sequence projectileFadeOut;
+	private Tween projectileFadeIn;
+	private Tween projectileFadeInInstant;
+	private Tween projectileFadeOut;
 
-	void Awake()
+	public void CacheRefsThenDisable()
 	{
 		transform = GetComponent<Transform>();
 		Assert.IsNotNull(transform);
@@ -29,85 +29,57 @@ public class ProjectileContainer : Weapon
 		rigidbody2D = GetComponent<Rigidbody2D>();
 		Assert.IsNotNull(rigidbody2D);
 
-		projSpriteRenderer = GetComponent<SpriteRenderer>();
-		Assert.IsNotNull(projSpriteRenderer);
+		spriteRenderer = GetComponent<SpriteRenderer>();
+		Assert.IsNotNull(spriteRenderer);
 
 		animator = GetComponent<Animator>();
 		Assert.IsNotNull(animator);
+
+		(projectileFadeIn 			= MFX.FadeTween(spriteRenderer, 1f, .3f)).Pause();
+		(projectileFadeInInstant 	= MFX.FadeTween(spriteRenderer, 1f, 0f)).Pause();
+		(projectileFadeOut 			= MFX.FadeTween(spriteRenderer, 0, .1f)).Pause();
+
+		gameObject.SetActive(false);
 	}
 
-	void Start()
-	{
-		// cache & pause tween sequences.
-		(projectileFadeIn = MFX.Fade(projSpriteRenderer, 1f, 0f, .3f)).Pause();
-		(projectileFadeInInstant = MFX.Fade(projSpriteRenderer, 1f, 0f, 0f)).Pause();
-		(projectileFadeOut = MFX.Fade(projSpriteRenderer, 0, 0, .15f)).Pause();
-	}
-
-	// note: ProjectileContainers contain simple dummy values, which are
-	// replaced by data that's passed-in via projectile objects during init.
 	void Init(Weapon incoming)
 	{
 		weapon = incoming;
-		type = incoming.type;
-		alreadyCollided = false;
-		iconSprite = incoming.iconSprite;
-		title = incoming.title;
-		damage = incoming.damage;
-		hp = incoming.hp;
-		rateOfAttack = incoming.rateOfAttack;
-		projectileSprite = incoming.projectileSprite;
-		speed = incoming.speed;
-		maxDistance = incoming.maxDistance;
-		lob = incoming.lob;
-		lobGravity = incoming.lobGravity;
-		fadeIn = incoming.fadeIn;
-		collider2D.enabled = true;
-		origin = new Vector3(transform.position.x, transform.position.y, transform.position.z);
 
-		// initialize animation controller if projectile is animated
-		if (incoming.GetComponent<Weapon>().animatedProjectile)
+		weapon.alreadyCollided = false;
+
+		// assign animation controller if projectile is animated
+		if (weapon.animController != null)
 		{
-			anim = (RuntimeAnimatorController)Instantiate(
-				Resources.Load(("Sprites/Projectiles/" + incoming.name + "_0"), 
-                typeof(RuntimeAnimatorController))
-			);
-			Assert.IsNotNull(anim);
-			animator.runtimeAnimatorController = anim;
+			animator.runtimeAnimatorController = weapon.animController;
 			animator.speed = .5f;
 		}
 
-		InvokeRepeating("CheckDistanceTraveled", 1, 0.3F);
+		collider2D.enabled = true;
+		origin = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+		rigidbody2D.isKinematic = false;
+
+		InvokeRepeating("CheckDistanceTraveled", 1, 1F);
 	}
 
 	// fire directionally
 	public void Fire(bool firedByPlayer, Weapon weapon, float direction)
 	{
 		Init(weapon);
-
+		spriteRenderer.sprite = weapon.actualSprite;
 		//player sprite and weapon sprites actually face opposite directions,
 		//this flips the weapon sprite to match that of the player
 		transform.SetLocalScaleX(-direction);
-		projSpriteRenderer.sortingLayerName = PROJECTILE_SORTING_LAYER;
-		projSpriteRenderer.sprite = projectileSprite;
-
-		if (fadeIn)
-		{
-			projectileFadeIn.Restart();
-		}
-		else
-		{
-			projectileFadeInInstant.Restart();
-		}
+		SetSortOrderAndFadeIn(firedByPlayer, weapon);
 
 		// lob projectile like a cannon ball
-		if (lob)
+		if (weapon.lob)
 		{
 			// if fired by the player, use the custom gravity supplied by the weapon (lobGravity,)
 			// otherwise, for projectiles fired by an enemy, use the default gravity of .5f
 			if (firedByPlayer)
 			{
-				rigidbody2D.gravityScale = lobGravity;
+				rigidbody2D.gravityScale = weapon.lobGravity;
 			}
 			else
 			{
@@ -127,26 +99,17 @@ public class ProjectileContainer : Weapon
 	public void Fire(bool firedByPlayer, Weapon weapon, Transform target)
 	{
 		Init(weapon);
-		projSpriteRenderer.sortingLayerName = PROJECTILE_SORTING_LAYER;
-		projSpriteRenderer.sprite = projectileSprite;
-
-		if (fadeIn)
-		{
-			projectileFadeIn.Restart();
-		}
-		else
-		{
-			projectileFadeInInstant.Restart();
-		}
+		spriteRenderer.sprite = weapon.actualSprite;
+		SetSortOrderAndFadeIn(firedByPlayer, weapon);
 
 		// lob projectile like a cannon ball
-		if (lob)
+		if (weapon.lob)
 		{
 			// if fired by the player, use the custom gravity supplied by the weapon (lobGravity,)
 			// otherwise, for projectiles fired by an enemy, use the default gravity of .5f
 			if (firedByPlayer)
 			{
-				rigidbody2D.gravityScale = lobGravity;
+				rigidbody2D.gravityScale = weapon.lobGravity;
 			}
 			else
 			{
@@ -163,13 +126,35 @@ public class ProjectileContainer : Weapon
 		}
 	}
 
+	void SetSortOrderAndFadeIn(bool firedByPlayer, Weapon theWeapon)
+	{
+		if (firedByPlayer)
+		{
+			transform.SetPositionZ(BEHIND_PLAYER_Z);
+			spriteRenderer.sortingOrder = PLAYER_PROJECTILE_ORDER;
+		}
+		else
+		{
+			transform.SetPositionZ(IN_FRONT_OF_PLAYER_Z);
+			spriteRenderer.sortingOrder = ENEMY_PROJECTILE_ORDER;
+		}
+
+		if (theWeapon.fadeIn)
+		{
+			projectileFadeIn.Restart();
+		}
+		else
+		{
+			projectileFadeInInstant.Restart();
+		}
+	}
+
 	void OnTriggerEnter2D(Collider2D coll)
 	{
 		int layer = coll.gameObject.layer;
 
 		if (layer == ENEMY_BODY_COLLIDER) {
-			projectileFadeOut.Restart();
-			Invoke("DeactivateEntireObject", .16f);
+			DisableProjectile();
 		}
 	}
 
@@ -178,37 +163,36 @@ public class ProjectileContainer : Weapon
 		float distance = Vector3.Distance(origin, transform.position);
 
 		if (distance > weapon.maxDistance) {
-			Invoke("DeactivateCollider", .1f);
-			Invoke("DeactivateEntireObject", 1.5f);
+			DisableProjectile();
 		}
 	}
 
-	void DeactivateCollider()
+	// upon recycling, clear previous references and fade gameObject to zero
+	void DisableProjectile()
 	{
 		collider2D.enabled = false;
-	}
-
-	void DeactivateEntireObject()
-	{
-		gameObject.SetActive(false);
-	}
-
-	// upon recycling, clear previous references and fade gameObject to zero
-	void OnDisable()
-	{
-		anim = null;
-		weapon = null;
-		animator.runtimeAnimatorController = null;
-		projSpriteRenderer.sprite = null;
-		CancelInvoke();
 		projectileFadeOut.Restart();
+		Invoke("DisableRenderer", .1f);
+		Invoke("RecycleProjectile", .5f);
+	}
+
+	void DisableRenderer()
+	{
+		spriteRenderer.enabled = false;
+	}
+
+	void RecycleProjectile()
+	{
+		transform.position = new Vector3(0f, 0f, 0f);
+		rigidbody2D.isKinematic = true;
+		CancelInvoke();
 	}
 
 	public void AllocateMemory()
 	{
 		// at time of instantiation in the pool, allocate memory for GetComponent() calls
 		rigidbody2D.mass = rigidbody2D.mass;
-		projSpriteRenderer.sprite = projSpriteRenderer.sprite;
+		spriteRenderer.sprite = spriteRenderer.sprite;
 		transform.position = transform.position;
 		collider2D.enabled = true;
 	}

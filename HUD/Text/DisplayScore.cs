@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 
-public class DisplayScoreFX : BaseBehaviour
+public class DisplayScore : BaseBehaviour
 {
 	private Text textComponent;
 	private CanvasScaler canvasScaler;
@@ -13,7 +13,8 @@ public class DisplayScoreFX : BaseBehaviour
 	private Sequence fadeIn;
 	private Sequence fadeOutInstant;
 	private Sequence fadeOutHUD;
-	private Sequence displayScoreFX;
+	private Sequence displayScore;
+	private float canvasScale;
 
 	void Awake()
 	{
@@ -29,20 +30,28 @@ public class DisplayScoreFX : BaseBehaviour
 		canvasScaler = gameObject.GetComponentInParent<CanvasScaler>();
 		Assert.IsNotNull(canvasScaler);
 
-		canvasScaler.scaleFactor = PLATFORM_SPECIFIC_CANVAS_SCALE;
-		M.PositionInHUD(rectTrans, textComponent, SCORE_ALIGNMENT, SCORE_X_POS, SCORE_Y_POS);
+		canvasScale = Camera.main.GetComponent<PixelArtCamera>().CanvasScale;
+		Assert.AreNotApproximatelyEqual(0.0f, canvasScale);
+
+		PositionHUDElements();
 
 		// cache & pause tween sequences.
 		(fadeOutInstant = MFX.Fade(textComponent, 0, 0, 0)).Pause();
-		(fadeIn         = MFX.Fade(textComponent, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_TIME_TO_FADE)).Pause();
-		(fadeOutHUD     = MFX.Fade(textComponent, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_TIME_TO_FADE)).Pause();
-		(displayScoreFX = MFX.DisplayScoreFX(gameObject)).Pause();
+		(fadeIn         = MFX.Fade(textComponent, 1, HUD_FADE_IN_AFTER, HUD_INITIAL_FADE_LENGTH)).Pause();
+		(fadeOutHUD     = MFX.Fade(textComponent, 0, HUD_FADE_OUT_AFTER, HUD_INITIAL_FADE_LENGTH)).Pause();
+		(displayScore   = MFX.DisplayScore(gameObject, textComponent)).Pause();
 	}
 
 	void OnInitScore(int initScore)
 	{
 		textComponent.text = initScore.ToString();
 		FadeInScore();
+	}
+
+	void PositionHUDElements()
+	{
+		canvasScaler.scaleFactor = canvasScale;
+		M.PositionInHUD(rectTrans, textComponent, SCORE_ALIGNMENT, SCORE_X_POS, SCORE_Y_POS);
 	}
 
 	void FadeInScore()
@@ -54,7 +63,7 @@ public class DisplayScoreFX : BaseBehaviour
 	void OnChangeScore(int newScore)
 	{
 		textComponent.text = newScore.ToString();
-		displayScoreFX.Restart();
+		displayScore.Restart();
 	}
 
 	void OnFadeHud(bool status)
@@ -67,6 +76,7 @@ public class DisplayScoreFX : BaseBehaviour
 		EventKit.Subscribe<int>("init score", OnInitScore);
 		EventKit.Subscribe<int>("change score", OnChangeScore);
 		EventKit.Subscribe<bool>("fade hud", OnFadeHud);
+		EventKit.Subscribe("reposition hud elements", PositionHUDElements);
 	}
 
 	void OnDestroy()
@@ -74,5 +84,6 @@ public class DisplayScoreFX : BaseBehaviour
 		EventKit.Unsubscribe<int>("init score", OnInitScore);
 		EventKit.Unsubscribe<int>("change score", OnChangeScore);
 		EventKit.Unsubscribe<bool>("fade hud", OnFadeHud);
+		EventKit.Unsubscribe("reposition hud elements", PositionHUDElements);
 	}
 }
