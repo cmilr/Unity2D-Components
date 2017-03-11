@@ -1,0 +1,15 @@
+GIT
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Remove a tracked file
+
+git rm --cached Actor/DeathHandler.cs
+
+
+UNITY
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This error is almost always caused by a problem with Message System Listeners.
+Not enabling them in the right place, etc.
+
+	>> MissingReferenceException: The object of type 'DeathHandler' has been destroyed but you are still trying to access it.
+	Your script should either check if it is null or you should not destroy the object. <<
+
