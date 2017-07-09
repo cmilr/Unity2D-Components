@@ -14,10 +14,10 @@ Besides the components included here, within this collection you will find refer
 # Thanks for using Unity2D Components!
 
 ### Contact
-- Email: cmilr.soft@gmail.com
+- Email: cary.a.miller@gmail.com
 
 ### Social Media
-- Twitter: [@vintageD18](https://twitter.com/vintageD18)
+- Twitter: [@cmilr_](https://twitter.com/cmilr_)
 - GitHub: [https://github.com/cmilr/](https://github.com/cmilr/)
 
 ### License
