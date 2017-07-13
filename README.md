@@ -1,4 +1,3 @@
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/cmilr/Unity2D-Components/blob/master/LICENSE)
 # Unity2D Components
 
 This repository holds a varied collection of Unity3D components that I've been building for use in the 2D Platformer/RPG I'm currently developing. It's a work in progress, but please feel free to take a look around.
