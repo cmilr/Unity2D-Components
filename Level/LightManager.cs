@@ -10,29 +10,28 @@ public class LightManager : BaseBehaviour
 	private Light pickupLight;
 	private Light tileLight;
 	private Light decorationLight;
-	private float fadeAfter 				   	= 0f;
-	private float timeToFade                   	= 1f;
-       
+	private float fadeAfter							= 0f;
+	private float timeToFade						= 1f;
 	// above ground light intensity
-	private float playerAboveGround            	= 1.95f;
-	private float creatureAboveGround          	= 1.95f;
-	private float tileAboveGround              	= 1.44f;
-	private float pickupAboveGround            	= 1.95f;
-	private float decorationAboveGround 		= 1.95f;
+	private float playerAboveGround					= 1.95f;
+	private float creatureAboveGround				= 1.95f;
+	private float tileAboveGround					= 1.44f;
+	private float pickupAboveGround					= 1.95f;
+	private float decorationAboveGround				= 1.95f;
 
 	// below ground light intensity
-	private float playerBelowGround            	= 1.56f;
-	private float creatureBelowGround          	= 2f;
-	private float tileBelowGround              	= 1.4f;
-	private float pickupBelowGround            	= 1.55f;
-	private float decorationBelowGround 		= 1.65f;
+	private float playerBelowGround					= 1.56f;
+	private float creatureBelowGround				= 2f;
+	private float tileBelowGround					= 1.4f;
+	private float pickupBelowGround					= 1.55f;
+	private float decorationBelowGround				= 1.65f;
 
 	private Sequence playerAboveGroundTween;
 	private Sequence creatureAboveGroundTween;
 	private Sequence tileAboveGroundTween;
 	private Sequence pickupAboveGroundTween;
 	private Sequence decorationAboveGroundTween;
-	
+
 	private Sequence playerBelowGroundTween;
 	private Sequence creatureBelowGroundTween;
 	private Sequence tileBelowGroundTween;
@@ -43,13 +42,13 @@ public class LightManager : BaseBehaviour
 	{
 		playerLight = GameObject.Find("PlayerLight").GetComponent<Light>();
 		Assert.IsNotNull(playerLight);
-		
+
 		creatureLight = GameObject.Find("CreatureLight").GetComponent<Light>();
 		Assert.IsNotNull(creatureLight);
-		
+
 		tileLight = GameObject.Find("TileLight").GetComponent<Light>();
 		Assert.IsNotNull(tileLight);
-		
+
 		pickupLight = GameObject.Find("PickupLight").GetComponent<Light>();
 		Assert.IsNotNull(pickupLight);
 
@@ -80,7 +79,7 @@ public class LightManager : BaseBehaviour
 			tileAboveGroundTween.Restart();
 			pickupAboveGroundTween.Restart();
 			decorationAboveGroundTween.Restart();
-			
+
 		}
 		else
 		{

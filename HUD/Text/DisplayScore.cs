@@ -1,39 +1,33 @@
 using DG.Tweening;
 using Matcha.Dreadful;
-using Matcha.Unity;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
 
-public class DisplayScore : BaseBehaviour
+public class DisplayScore : HudTextBehaviour
 {
 	private Text textComponent;
-	private CanvasScaler canvasScaler;
-	private RectTransform rectTrans;
 	private Sequence fadeIn;
 	private Sequence fadeOutInstant;
 	private Sequence fadeOutHUD;
 	private Sequence displayScore;
-	private float canvasScale;
 
 	void Awake()
 	{
-		rectTrans = GetComponent<RectTransform>();
-		Assert.IsNotNull(rectTrans);
-
 		textComponent = GetComponent<Text>();
 		Assert.IsNotNull(textComponent);
+
+		legend = "SC: ";
+		anchorPosition = SCORE_ALIGNMENT;
+		targetXPos = SCORE_X_POS;
+		targetYPos = SCORE_Y_POS;
+
+		BaseAwake();
 	}
 
 	void Start()
 	{
-		canvasScaler = gameObject.GetComponentInParent<CanvasScaler>();
-		Assert.IsNotNull(canvasScaler);
-
-		canvasScale = Camera.main.GetComponent<PixelArtCamera>().CanvasScale;
-		Assert.AreNotApproximatelyEqual(0.0f, canvasScale);
-
-		PositionHUDElements();
+		BaseStart();
 
 		// cache & pause tween sequences.
 		(fadeOutInstant = MFX.Fade(textComponent, 0, 0, 0)).Pause();
@@ -46,12 +40,6 @@ public class DisplayScore : BaseBehaviour
 	{
 		textComponent.text = initScore.ToString();
 		FadeInScore();
-	}
-
-	void PositionHUDElements()
-	{
-		canvasScaler.scaleFactor = canvasScale;
-		M.PositionInHUD(rectTrans, textComponent, SCORE_ALIGNMENT, SCORE_X_POS, SCORE_Y_POS);
 	}
 
 	void FadeInScore()
@@ -76,7 +64,6 @@ public class DisplayScore : BaseBehaviour
 		EventKit.Subscribe<int>("init score", OnInitScore);
 		EventKit.Subscribe<int>("change score", OnChangeScore);
 		EventKit.Subscribe<bool>("fade hud", OnFadeHud);
-		EventKit.Subscribe("reposition hud elements", PositionHUDElements);
 	}
 
 	void OnDestroy()
@@ -84,6 +71,5 @@ public class DisplayScore : BaseBehaviour
 		EventKit.Unsubscribe<int>("init score", OnInitScore);
 		EventKit.Unsubscribe<int>("change score", OnChangeScore);
 		EventKit.Unsubscribe<bool>("fade hud", OnFadeHud);
-		EventKit.Unsubscribe("reposition hud elements", PositionHUDElements);
 	}
 }

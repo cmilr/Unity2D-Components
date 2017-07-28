@@ -2,12 +2,12 @@
 using UnityEngine.Assertions;
 
 [ExecuteInEditMode]
-public class AutoEnableTouchControls : BaseBehaviour 
+public class AutoEnableTouchControls : BaseBehaviour
 {
 	private GameObject canvasGo;
 	private GameObject eventSystem;
 
-	void Start() 
+	void Start()
 	{
 		canvasGo = gameObject.transform.Find("Canvas").gameObject;
 		Assert.IsNotNull(canvasGo);

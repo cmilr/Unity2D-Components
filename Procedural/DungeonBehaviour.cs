@@ -15,15 +15,15 @@ public class DungeonBehaviour : BaseBehaviour
 	public Brush hallOriginBrush;
 	public Brush roomOriginBrush;
 
-    private const int RIGHT      = 1;
-    private const int LEFT       = -1;
+	private const int RIGHT = 1;
+	private const int LEFT = -1;
 	protected TileSystem map;
 	protected int mapColumns;
 	protected int mapRows;
-	protected int mapMarginX     = 12;
-	protected int mapMarginY     = 12;
-	protected int roomMarginX    = 4;
-	protected int roomMarginY    = 4;
+	protected int mapMarginX = 12;
+	protected int mapMarginY = 12;
+	protected int roomMarginX = 4;
+	protected int roomMarginY = 4;
 	protected int direction;
 	protected List<ProcSpace> roomList;
 	protected List<ProcSpace> hallList;
@@ -59,28 +59,28 @@ public class DungeonBehaviour : BaseBehaviour
 		switch (Rand.Range(0, 1))
 		{
 			case 0:
-			{
-				AssessForStairsOffRoom();
-				break;
-			}
+				{
+					AssessForStairsOffRoom();
+					break;
+				}
 
 			case 1:
-			{
-				AssessForStairsOffRoom();
-				break;
-			}
+				{
+					AssessForStairsOffRoom();
+					break;
+				}
 
 			default:
-			{
-				Assert.IsTrue(false, "** Default Case Reached **");
-				break;
-			}
+				{
+					Assert.IsTrue(false, "** Default Case Reached **");
+					break;
+				}
 		}
 	}
 
 	protected void GetRoom(ProcSpace room)
 	{
-		room.width  = Rand.GaussianDivFour(8, 8, 2, 50);
+		room.width = Rand.GaussianDivFour(8, 8, 2, 50);
 		room.height = Rand.GaussianDivFour(4, 8, 8, 20);
 	}
 
@@ -162,44 +162,44 @@ public class DungeonBehaviour : BaseBehaviour
 					switch (buildDirection)
 					{
 						case RIGHT:
-						{
-							if (TileInBounds(originX + x, originY + y))
 							{
-								// build stairs
-								if (map.GetTileInfo(originX, originY + y) != null)
+								if (TileInBounds(originX + x, originY + y))
 								{
-									stoneBrush.PaintTile(map, originX + x, originY + y);
+									// build stairs
+									if (map.GetTileInfo(originX, originY + y) != null)
+									{
+										stoneBrush.PaintTile(map, originX + x, originY + y);
+									}
+
+									// erase walls to the right of stairs
+									map.ClearTile(originX + x + 1, originY + y);
+									map.ClearTile(originX + x + 2, originY + y);
+									map.ClearTile(originX + x + 3, originY + y);
+									map.ClearTile(originX + x + 4, originY + y);
 								}
 
-								// erase walls to the right of stairs
-								map.ClearTile(originX + x + 1, originY + y);
-								map.ClearTile(originX + x + 2, originY + y);
-								map.ClearTile(originX + x + 3, originY + y);
-								map.ClearTile(originX + x + 4, originY + y);
+								break;
 							}
-
-							break;
-						}
 
 						case LEFT:
-						{
-							if (TileInBounds(originX - x, originY + y))
 							{
-								// build stairs
-								if (map.GetTileInfo(originX, originY + y) != null)
+								if (TileInBounds(originX - x, originY + y))
 								{
-									stoneBrush.PaintTile(map, originX - x, originY + y);
+									// build stairs
+									if (map.GetTileInfo(originX, originY + y) != null)
+									{
+										stoneBrush.PaintTile(map, originX - x, originY + y);
+									}
+
+									// erase walls to the left of stairs
+									map.ClearTile(originX - x - 1, originY + y);
+									map.ClearTile(originX - x - 2, originY + y);
+									map.ClearTile(originX - x - 3, originY + y);
+									map.ClearTile(originX - x - 4, originY + y);
 								}
 
-								// erase walls to the left of stairs
-								map.ClearTile(originX - x - 1, originY + y);
-								map.ClearTile(originX - x - 2, originY + y);
-								map.ClearTile(originX - x - 3, originY + y);
-								map.ClearTile(originX - x - 4, originY + y);
+								break;
 							}
-
-							break;
-						}
 					}
 				}
 
@@ -279,8 +279,8 @@ public class DungeonBehaviour : BaseBehaviour
 			}
 
 			// with hall succesfully placed, set its origin, width, and height, then add to List
-			hall.width   = Math.Abs(x) - 1;
-			hall.height  = i;
+			hall.width = Math.Abs(x) - 1;
+			hall.height = i;
 			hall.originY = originY - (i - 1);
 			hall.originX = (direction == RIGHT ? originX + 1 : originX - hall.width);
 
@@ -337,8 +337,8 @@ public class DungeonBehaviour : BaseBehaviour
 				}
 
 				// with hall succesfully placed, set its origin, width, and height, then add to List
-				crawlspace.width   = Math.Abs(x) - 1;
-				crawlspace.height  = i;
+				crawlspace.width = Math.Abs(x) - 1;
+				crawlspace.height = i;
 				crawlspace.originY = originY - (i - 1);
 				crawlspace.originX = (direction == RIGHT ? originX + 1 : originX - crawlspace.width);
 
@@ -395,46 +395,46 @@ public class DungeonBehaviour : BaseBehaviour
 				switch (buildDirection)
 				{
 					case RIGHT:
-					{
-						if (TileInBounds(originX + x, originY + y))
 						{
-							// build stairs
-							stoneBrush.PaintTile(map, originX + x, originY + y);
+							if (TileInBounds(originX + x, originY + y))
+							{
+								// build stairs
+								stoneBrush.PaintTile(map, originX + x, originY + y);
 
-							// erase walls to the right of stairs
-							map.ClearTile(originX + x + 1, originY + y);
-							map.ClearTile(originX + x + 2, originY + y);
-							map.ClearTile(originX + x + 3, originY + y);
-							map.ClearTile(originX + x + 4, originY + y);
+								// erase walls to the right of stairs
+								map.ClearTile(originX + x + 1, originY + y);
+								map.ClearTile(originX + x + 2, originY + y);
+								map.ClearTile(originX + x + 3, originY + y);
+								map.ClearTile(originX + x + 4, originY + y);
+							}
+
+							// backfill stairs by one tile
+							stoneBrush.PaintTile(map, originX - 1, originY + y);
+							stoneBrush.PaintTile(map, originX - 2, originY + y);
+
+							break;
 						}
-
-						// backfill stairs by one tile
-						stoneBrush.PaintTile(map, originX - 1, originY + y);
-						stoneBrush.PaintTile(map, originX - 2, originY + y);
-
-						break;
-					}
 
 					case LEFT:
-					{
-						if (TileInBounds(originX - x, originY + y))
 						{
-							// build stairs
-							stoneBrush.PaintTile(map, originX - x, originY + y);
+							if (TileInBounds(originX - x, originY + y))
+							{
+								// build stairs
+								stoneBrush.PaintTile(map, originX - x, originY + y);
 
-							// erase walls to the left of stairs
-							map.ClearTile(originX - x - 1, originY + y);
-							map.ClearTile(originX - x - 2, originY + y);
-							map.ClearTile(originX - x - 3, originY + y);
-							map.ClearTile(originX - x - 4, originY + y);
+								// erase walls to the left of stairs
+								map.ClearTile(originX - x - 1, originY + y);
+								map.ClearTile(originX - x - 2, originY + y);
+								map.ClearTile(originX - x - 3, originY + y);
+								map.ClearTile(originX - x - 4, originY + y);
+							}
+
+							// backfill stairs by one tile
+							stoneBrush.PaintTile(map, originX + 1, originY + y);
+							stoneBrush.PaintTile(map, originX + 2, originY + y);
+
+							break;
 						}
-
-						// backfill stairs by one tile
-						stoneBrush.PaintTile(map, originX + 1, originY + y);
-						stoneBrush.PaintTile(map, originX + 2, originY + y);
-
-						break;
-					}
 				}
 			}
 
@@ -511,9 +511,9 @@ public class DungeonBehaviour : BaseBehaviour
 
 	protected void PlaceRandomSteps()
 	{
-		int steps          = 0;
-		int x              = 0;
-		int y              = 0;
+		int steps = 0;
+		int x = 0;
+		int y = 0;
 
 		map.BulkEditBegin();
 
@@ -521,7 +521,7 @@ public class DungeonBehaviour : BaseBehaviour
 		{
 			if (room.height > 4)
 			{
-				steps = (int) Rand.Gaussian(5f, 3f);
+				steps = (int)Rand.Gaussian(5f, 3f);
 
 				for (int i = 0; i < steps; i++)
 				{

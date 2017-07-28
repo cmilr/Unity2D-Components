@@ -14,8 +14,6 @@ public class Animator_Base : AnimatorBehaviour, IPlayerAnimator
 
 	// T R A N S I T I O N S
 	// ~~~~~~~~~~~~~~~~~~~~~
-
-
 	#region Cache References
 	private int clip;
 	private int currentlyPlaying;

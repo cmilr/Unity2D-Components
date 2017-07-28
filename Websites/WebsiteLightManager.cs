@@ -9,31 +9,31 @@ public class WebsiteLightManager : BaseBehaviour
 	private Light illuminatedPickupLight;
 	private Light tileLight;
 	private Light planeLight;
-	private float fadeAfter                    = 0f;
-	private float timeToFade                   = 1f;
+	private float fadeAfter						= 0f;
+	private float timeToFade					= 1f;
 	// above ground light intensity
-	private float playerAboveGround            = 1.95f;
-	private float creatureAboveGround          = 1.95f;
-	private float tileAboveGround              = 1.44f;
-	private float planeAboveGround             = .13f;
-	private float pickupAboveGround            = 1.95f;
-	private float illuminatedPickupAboveGround = 1.95f;
+	private float playerAboveGround				= 1.95f;
+	private float creatureAboveGround			= 1.95f;
+	private float tileAboveGround				= 1.44f;
+	private float planeAboveGround				= .13f;
+	private float pickupAboveGround				= 1.95f;
+	private float illuminatedPickupAboveGround	= 1.95f;
 	// below ground light intensity
-	private float playerBelowGround            = 1.52f;
-	private float creatureBelowGround          = 1.17f;
-	private float tileBelowGround              = .92f;
-	private float planeBelowGround             = .13f;
-	private float pickupBelowGround            = 1.1f;
-	private float illuminatedPickupBelowGround = 1.55f;
+	private float playerBelowGround				= 1.52f;
+	private float creatureBelowGround			= 1.17f;
+	private float tileBelowGround				= .92f;
+	private float planeBelowGround				= .13f;
+	private float pickupBelowGround				= 1.1f;
+	private float illuminatedPickupBelowGround	= 1.55f;
 
 	void Start()
 	{
-		playerLight            = GameObject.Find("PlayerLight").GetComponent<Light>();
-		creatureLight          = GameObject.Find("CreatureLight").GetComponent<Light>();
-		tileLight              = GameObject.Find("TileLight").GetComponent<Light>();
-		planeLight             = GameObject.Find("PlaneLight").GetComponent<Light>();
-		pickupLight            = GameObject.Find("PickupLight").GetComponent<Light>();
-		illuminatedPickupLight = GameObject.Find("IlluminatedPickupLight").GetComponent<Light>();
+		playerLight				= GameObject.Find("PlayerLight").GetComponent<Light>();
+		creatureLight			= GameObject.Find("CreatureLight").GetComponent<Light>();
+		tileLight				= GameObject.Find("TileLight").GetComponent<Light>();
+		planeLight				= GameObject.Find("PlaneLight").GetComponent<Light>();
+		pickupLight				= GameObject.Find("PickupLight").GetComponent<Light>();
+		illuminatedPickupLight	= GameObject.Find("IlluminatedPickupLight").GetComponent<Light>();
 	}
 
 	void OnPlayerAboveGround(bool aboveGround)

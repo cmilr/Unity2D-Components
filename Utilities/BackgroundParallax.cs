@@ -1,23 +1,21 @@
-using System.Collections;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public class BackgroundParallax : CacheBehaviour
+public class BackgroundParallax : BaseBehaviour
 {
-	public Transform[] backgrounds;        // Array of all the backgrounds to be parallaxed.
-	public float parallaxScale;            // The proportion of the camera's movement to move the backgrounds by.
-	public float parallaxReductionFactor;  // How much less each successive layer should parallax.
-	public float smoothing;                // How smooth the parallax effect should be.
+	public Transform[] backgrounds;			// Array of all the backgrounds to be parallaxed.
+	public float parallaxScale;				// The proportion of the camera's movement to move the backgrounds by.
+	public float parallaxReductionFactor;	// How much less each successive layer should parallax.
+	public float smoothing;					// How smooth the parallax effect should be.
 
-	private Transform cam;                 // Shorter reference to the main camera's transform.
-	private Vector3 previousCamPos;        // The postion of the camera in the previous frame.
-
-	void Awake()
-	{
-		cam = Camera.main.transform;
-	}
+	private Transform cam;					// Shorter reference to the main camera's transform.
+	private Vector3 previousCamPos;			// The postion of the camera in the previous frame.
 
 	void Start()
 	{
+		cam = Camera.main.transform;
+		Assert.IsNotNull(cam);
+
 		previousCamPos = cam.position;
 	}
 
@@ -33,7 +31,7 @@ public class BackgroundParallax : CacheBehaviour
 			float backgroundTargetPosX = backgrounds[i].position.x + parallax * (i * parallaxReductionFactor + 1);
 
 			// Create a target position which is the background's current position but with it's target x position.
-			Vector3 backgroundTargetPos = new Vector3(backgroundTargetPosX, backgrounds[i].position.y, backgrounds[i].position.z);
+			var backgroundTargetPos = new Vector3(backgroundTargetPosX, backgrounds[i].position.y, backgrounds[i].position.z);
 
 			// Lerp the background's position between itself and it's target position.
 			backgrounds[i].position = Vector3.Lerp(backgrounds[i].position, backgroundTargetPos, smoothing * Time.deltaTime);

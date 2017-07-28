@@ -13,11 +13,11 @@ public class CheckScreenSize : BaseBehaviour
 	{
 		camera = Camera.main.GetComponent<Camera>();
 		Assert.IsNotNull(camera);
-		
-		vertExtent           = camera.orthographicSize;
-		horizExtent          = vertExtent * Screen.width / Screen.height;
-		currentScreenWidth   = Screen.width;
-		currentScreenHeight  = Screen.height;
+
+		vertExtent			= camera.orthographicSize;
+		horizExtent			= vertExtent * Screen.width / Screen.height;
+		currentScreenWidth	= Screen.width;
+		currentScreenHeight	= Screen.height;
 
 		InvokeRepeating("CheckForSizeChange", 0f, 0.3F);
 	}
@@ -26,7 +26,7 @@ public class CheckScreenSize : BaseBehaviour
 	{
 		if (Screen.width != currentScreenWidth || Screen.height != currentScreenHeight)
 		{
-			vertExtent  = camera.orthographicSize;
+			vertExtent = camera.orthographicSize;
 			horizExtent = vertExtent * Screen.width / Screen.height;
 
 			EventKit.Broadcast("screen size changed");

@@ -20,29 +20,29 @@ static class ExtensionMethods
 	// G A M E - O B J E C T   E X T E N S I O N S
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	static public void SendEvent(this GameObject go, string eventType)
-    {
-        go.SendMessage(eventType);
-    }
+	{
+		go.SendMessage(eventType);
+	}
 
 	static public void SendEvent<T>(this GameObject go, string eventType, T arg1)
 	{
 		go.SendMessage(eventType, arg1);
 	}
 
-    static public void SendEventUp(this GameObject go, string eventType)
-    {
-        go.SendMessageUpwards(eventType);
-    }
+	static public void SendEventUp(this GameObject go, string eventType)
+	{
+		go.SendMessageUpwards(eventType);
+	}
 
 	static public void SendEventUp<T>(this GameObject go, string eventType, T arg1)
 	{
 		go.SendMessageUpwards(eventType, arg1);
 	}
 
-    static public void SendEventDown(this GameObject go, string eventType)
-    {
-        go.BroadcastMessage(eventType);
-    }
+	static public void SendEventDown(this GameObject go, string eventType)
+	{
+		go.BroadcastMessage(eventType);
+	}
 
 	static public void SendEventDown<T>(this GameObject go, string eventType, T arg1)
 	{
@@ -165,16 +165,16 @@ static class ExtensionMethods
 		return (thisAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime % 1 < .80f);
 	}
 
-    public static int GetNameHash(this Animator thisAnimator)
-    {
-        return (thisAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash);
-    }
+	public static int GetNameHash(this Animator thisAnimator)
+	{
+		return (thisAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash);
+	}
 
-    public static void PlayClip(this Animator thisAnimator, int clip, float speed)
-    {
-        thisAnimator.Play(clip);
-        thisAnimator.SetFloat("VariableSpeed", speed);
-    }
+	public static void PlayClip(this Animator thisAnimator, int clip, float speed)
+	{
+		thisAnimator.Play(clip);
+		thisAnimator.SetFloat("VariableSpeed", speed);
+	}
 
 
 	// F L O A T I N G   P O I N T   E X T E N S I O N S

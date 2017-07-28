@@ -65,58 +65,58 @@ public class BaseBehaviour : MonoBehaviour
 
 	// pause while loading a level
 	protected const float PAUSE_WPN_SWITCH_WHILE_LVL_LOADS	= 1.5f;
-	protected const float PAUSE_ENEMIES_WHILE_LVL_LOADS 	= 3f;
+	protected const float PAUSE_ENEMIES_WHILE_LVL_LOADS 	= 3;
 
 
-    // C A M E R A   &   H U D  
-    // ~~~~~~~~~~~~~~~~~~~~~~~
+	// C A M E R A   &   H U D  
+	// ~~~~~~~~~~~~~~~~~~~~~~~
 	// CAMERA
 	protected const float MIN_TOP_SCREEN_MARGIN 			= 4.25f;
-	protected const float MIN_BOTTOM_SCREEN_MARGIN 			= 2.5f;
-	protected const float PLYR_X_MOVE_BEFORE_CAM_FOLLOWS	= .5f;
-	protected const float CAM_X_SPEED_TO_FOLLOW 			= 10f;
-	protected const float CAM_Y_SPEED_TO_FOLLOW 			= 5f;
-	protected const float CAM_STARTING_X_POSITION 			= 0f;
-	protected const float CAM_STARTING_Y_POSITION 			= 0f;
+	protected const float MIN_BOTTOM_SCREEN_MARGIN 			= 3f;
+	protected const float PLYR_X_MOVE_BEFORE_CAM_FOLLOWS	= 0;
+	protected const float CAM_X_SPEED_TO_FOLLOW 			= 20f;
+	protected const float CAM_Y_SPEED_TO_FOLLOW 			= 5;
+	protected const float CAM_STARTING_X_POSITION 			= 0;
+	protected const float CAM_STARTING_Y_POSITION 			= 0;
 
 	// HUD
 	protected const float HUD_Z 							= 10f;
 	protected const float HUD_FADE_IN_AFTER 				= .75f;
 	protected const float HUD_FADE_OUT_AFTER 				= .25f;
-	protected const float HUD_INITIAL_FADE_LENGTH 			= 2f;
+	protected const float HUD_INITIAL_FADE_LENGTH 			= 2;
 
 
 	// T E X T - B A S E D   H U D   E L E M E N T S
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// HUD ITEM TITLE
 	protected const Position ITEM_TITLE_ALIGNMENT 			= Position.TopCenter;
-	protected const float    ITEM_TITLE_X_POS 				= 0f;
-	protected const float    ITEM_TITLE_Y_POS 				= 1f;
+	protected const float    ITEM_TITLE_X_POS 				= 0;
+	protected const float    ITEM_TITLE_Y_POS 				= 1;
 
 	// HUD XP
 	protected const Position XP_ALIGNMENT 					= Position.TopLeft;
-	protected const float    XP_X_POS 						= 0f;
-	protected const float    XP_Y_POS 						= 0f;
+	protected const float    XP_X_POS 						= 0;
+	protected const float    XP_Y_POS 						= 0;
 
 	// HUD LEVEL
-	protected const Position LEVEL_ALIGNMENT 				= Position.TopLeft;
-	protected const float    LEVEL_X_POS 					= 0f;
-	protected const float    LEVEL_Y_POS 					= 0f;
+	protected const Position LEVEL_ALIGNMENT 				= Position.BottomLeft;
+	protected const float    LEVEL_X_POS 					= 0;
+	protected const float    LEVEL_Y_POS 					= 0;
 
 	// HUD HP
 	protected const Position HP_ALIGNMENT 					= Position.TopRight;
-	protected const float    HP_X_POS 						= 0f;
-	protected const float    HP_Y_POS 						= 0f;
+	protected const float    HP_X_POS 						= 0;
+	protected const float    HP_Y_POS 						= 0;
 
 	// HUD AC
 	protected const Position AC_ALIGNMENT 					= Position.TopRight;
-	protected const float    AC_X_POS 						= 0f;
-	protected const float    AC_Y_POS 						= 0f;
+	protected const float    AC_X_POS 						= 0;
+	protected const float    AC_Y_POS 						= 0;
 
 	// HUD SCORE
-	protected const Position SCORE_ALIGNMENT 				= Position.TopLeft;
-	protected const float    SCORE_X_POS 					= 0f;
-	protected const float    SCORE_Y_POS 					= 0f;
+	protected const Position SCORE_ALIGNMENT 				= Position.BottomCenter;
+	protected const float    SCORE_X_POS 					= 0;
+	protected const float 	 SCORE_Y_POS 					= .25f;
 
 
 	// S P R I T E - B A S E D   H U D   E L E M E N T S
@@ -124,21 +124,21 @@ public class BaseBehaviour : MonoBehaviour
 	// HUD INVENTORY
 	protected const Position INVENTORY_ALIGNMENT			= Position.TopCenter;
 	protected const float    INVENTORY_X_POS 				=  0.0f;
-	protected const float    INVENTORY_Y_POS 				= -0.5f;
-	protected const float    STASHED_ITEM_OFFSET 			=  1.125f;
+	protected const float    INVENTORY_Y_POS 				=  -.25f;
+	protected const float    STASHED_ITEM_OFFSET 			=  1.0f;
 	protected const float    INVENTORY_SHIFT_SPEED 			=  0.15f;
 	protected const float    ITEM_CHANGE_FADE 				=  0.0f;
 
 	// HUD HEARTS
 	protected const Position HEART_ALIGNMENT 				= Position.TopRight;
-	protected const float    HEART_X_POS 					= -0.25f;
-	protected const float    HEART_Y_POS 					= -1.0f;
+	protected const float    HEART_X_POS 					= -.15f;
+	protected const float    HEART_Y_POS 					= -.15f;
 	protected const float    HEART_OFFSET 					=  0.5f;
 
 	// HUD WATER DROP
 	protected const Position WATER_DROP_ALIGNMENT 			= Position.TopRight;
 	protected const float    WATER_DROP_X_POS 				= -0.25f;
-	protected const float    WATER_DROP_Y_POS 				= -1.75f;               
+	protected const float    WATER_DROP_Y_POS 				= -1.75f;
 
 	// DEBUG FPS COUNTER
 	protected const Position FPS_ALIGNMENT 					= Position.TopRight;

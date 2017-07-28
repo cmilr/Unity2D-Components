@@ -16,7 +16,7 @@ public class PickupEntity : Entity
 		glow = gameObject.GetComponentInChildren<Light>() as Light;
 
 		Assert.IsFalse(type == Type.Invalid,
-	   		("Invalid pickup type @ " + gameObject));
+			("Invalid pickup type @ " + gameObject));
 		
 		(pickupPrize 	 = MFX.PickupPrize(gameObject)).Pause();
 		(extinguishLight = MFX.ExtinguishLight(glow, 0, .1f)).Pause();

@@ -35,7 +35,6 @@ public class FlickeringFireLerp : BaseBehaviour
 		Assert.IsNotNull(backgroundLight);
 		
 		InvokeRepeating("CullingCheck", 0f, 1f);
-		//InvokeRepeating("FlickerUpdate", 0f, .05f);
 	}
 
 	void Update()

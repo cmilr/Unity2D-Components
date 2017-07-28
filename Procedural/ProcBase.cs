@@ -1,8 +1,8 @@
 public class ProcBase
 {
-	public int originX  { get; set; }
-	public int originY  { get; set; }
-	public int width	= 1;
+	public int originX { get; set; }
+	public int originY { get; set; }
+	public int width = 1;
 	public int height = 1;
 
 	public int TopLeftX()

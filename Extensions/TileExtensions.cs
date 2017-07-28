@@ -55,8 +55,8 @@ namespace Matcha.Unity
 			// x = 0, y = 0 will get you the tile the transform occupies
 			// plus or minus x or y will get you tiles backwards, forwards, up or down
 
-			var convertedX = (int) Math.Floor(transform.position.x);
-			var convertedY = (int) Math.Ceiling(Math.Abs(transform.position.y));
+			var convertedX = (int)Math.Floor(transform.position.x);
+			var convertedY = (int)Math.Ceiling(Math.Abs(transform.position.y));
 
 			TileData tile = tileSystem.GetTile(convertedY + yDirection, convertedX + xDirection);
 
@@ -70,8 +70,8 @@ namespace Matcha.Unity
 
 		public static GameObject GetTileBelow(this Transform transform, TileSystem tileSystem, int direction)
 		{
-			var convertedX = (int) Math.Floor(transform.position.x);
-			var convertedY = (int) Math.Floor(Math.Abs(transform.position.y));
+			var convertedX = (int)Math.Floor(transform.position.x);
+			var convertedY = (int)Math.Floor(Math.Abs(transform.position.y));
 
 			TileData tile = tileSystem.GetTile(convertedY, convertedX + direction);
 

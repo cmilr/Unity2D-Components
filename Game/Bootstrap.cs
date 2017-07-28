@@ -14,13 +14,5 @@ public class Bootstrap : BaseBehaviour
 			instance.AddComponent<PlayerData>();
 			DontDestroyOnLoad(instance);
 		}
-
-		// instantiate new _HUD.
-		//if (FindObjectOfType(typeof(DisplayEquipped)) == null)
-		//{
-		//	var hud = (GameObject)Instantiate(Resources.Load("Prefabs/Misc/HUD"));
-		//	hud.transform.parent = Camera.main.transform;
-		//	Debug.Log("HUD Built");
-		//}
 	}
 }

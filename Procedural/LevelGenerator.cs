@@ -13,17 +13,17 @@ public class LevelGenerator : BaseBehaviour
 	public Brush hallOriginBrush;
 	public Brush roomOriginBrush;
 
-    private const int RIGHT   = 1;
-    private const int LEFT    = -1;
+	private const int RIGHT = 1;
+	private const int LEFT = -1;
 	private TileSystem map;
 	private int mapColumns;
 	private int mapRows;
-	private int mapMarginX    = 10;
-	private int mapMarginY    = 10;
-	private int roomMarginX   = 4;
-	private int roomMarginY   = 4;
+	private int mapMarginX = 10;
+	private int mapMarginY = 10;
+	private int roomMarginX = 4;
+	private int roomMarginY = 4;
 	private int numberOfRooms = 50;
-	private int direction     = RIGHT;
+	private int direction = RIGHT;
 	private List<ProcRoom> rooms;
 	private List<ProcHall> halls;
 	private List<ProcHall> crawlways;
@@ -32,12 +32,12 @@ public class LevelGenerator : BaseBehaviour
 	{
 		map = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
 		Assert.IsNotNull(map);
-		
+
 		mapColumns = map.ColumnCount;
-		mapRows    = map.RowCount;
-		rooms      = new List<ProcRoom>();
-		halls      = new List<ProcHall>();
-		crawlways  = new List<ProcHall>();
+		mapRows = map.RowCount;
+		rooms = new List<ProcRoom>();
+		halls = new List<ProcHall>();
+		crawlways = new List<ProcHall>();
 
 		GenerateRandomDungeons();
 	}
@@ -80,7 +80,7 @@ public class LevelGenerator : BaseBehaviour
 
 	void GetRoom(ProcRoom room)
 	{
-		room.width  = Rand.GaussianDivFour(8, 8, 2, 50);
+		room.width = Rand.GaussianDivFour(8, 8, 2, 50);
 		room.height = Rand.GaussianDivFour(4, 8, 8, 20);
 	}
 
@@ -177,8 +177,8 @@ public class LevelGenerator : BaseBehaviour
 			}
 
 			// with hall succesfully placed, set its origin, width, and height, then add to List
-			hall.width   = Math.Abs(x) - 1;
-			hall.height  = i;
+			hall.width = Math.Abs(x) - 1;
+			hall.height = i;
 			hall.originY = originY - (i - 1);
 			hall.originX = (direction == RIGHT ? originX + 1 : originX - hall.width);
 
@@ -227,16 +227,14 @@ public class LevelGenerator : BaseBehaviour
 					{
 						map.ClearTile(originX + x, originY);
 						map.ClearTile(originX + x, originY - 1);
-						// map.ClearTile(originX + x, originY - 2);
-						// map.ClearTile(originX + x, originY - 3);
 					}
 
 					x = (direction == RIGHT ? x + 1 : x - 1);
 				}
 
 				// with hall succesfully placed, set its origin, width, and height, then add to List
-				crawlway.width   = Math.Abs(x) - 1;
-				crawlway.height  = i;
+				crawlway.width = Math.Abs(x) - 1;
+				crawlway.height = i;
 				crawlway.originY = originY - (i - 1);
 				crawlway.originX = (direction == RIGHT ? originX + 1 : originX - crawlway.width);
 
@@ -291,42 +289,42 @@ public class LevelGenerator : BaseBehaviour
 				switch (buildDirection)
 				{
 					case RIGHT:
-					{
-						if (TileInBounds(originX + x, originY + y))
 						{
-							// build stairs
-							brush.PaintTile(map, originX + x, originY + y);
-							// erase walls to the right of stairs
-							map.ClearTile(originX + x + 1, originY + y);
-							map.ClearTile(originX + x + 2, originY + y);
-							map.ClearTile(originX + x + 3, originY + y);
-							map.ClearTile(originX + x + 4, originY + y);
-						}
+							if (TileInBounds(originX + x, originY + y))
+							{
+								// build stairs
+								brush.PaintTile(map, originX + x, originY + y);
+								// erase walls to the right of stairs
+								map.ClearTile(originX + x + 1, originY + y);
+								map.ClearTile(originX + x + 2, originY + y);
+								map.ClearTile(originX + x + 3, originY + y);
+								map.ClearTile(originX + x + 4, originY + y);
+							}
 
-						// backfill stairs by one tile
-						brush.PaintTile(map, originX - 1, originY + y);
-						brush.PaintTile(map, originX - 2, originY + y);
-						break;
-					}
+							// backfill stairs by one tile
+							brush.PaintTile(map, originX - 1, originY + y);
+							brush.PaintTile(map, originX - 2, originY + y);
+							break;
+						}
 
 					case LEFT:
-					{
-						if (TileInBounds(originX - x, originY + y))
 						{
-							// build stairs
-							brush.PaintTile(map, originX - x, originY + y);
-							// erase walls to the left of stairs
-							map.ClearTile(originX - x - 1, originY + y);
-							map.ClearTile(originX - x - 2, originY + y);
-							map.ClearTile(originX - x - 3, originY + y);
-							map.ClearTile(originX - x - 4, originY + y);
-						}
+							if (TileInBounds(originX - x, originY + y))
+							{
+								// build stairs
+								brush.PaintTile(map, originX - x, originY + y);
+								// erase walls to the left of stairs
+								map.ClearTile(originX - x - 1, originY + y);
+								map.ClearTile(originX - x - 2, originY + y);
+								map.ClearTile(originX - x - 3, originY + y);
+								map.ClearTile(originX - x - 4, originY + y);
+							}
 
-						// backfill stairs by one tile
-						brush.PaintTile(map, originX + 1, originY + y);
-						brush.PaintTile(map, originX + 2, originY + y);
-						break;
-					}
+							// backfill stairs by one tile
+							brush.PaintTile(map, originX + 1, originY + y);
+							brush.PaintTile(map, originX + 2, originY + y);
+							break;
+						}
 				}
 			}
 
@@ -403,9 +401,9 @@ public class LevelGenerator : BaseBehaviour
 
 	void PlaceRandomSteps()
 	{
-		int steps          = 0;
-		int x              = 0;
-		int y              = 0;
+		int steps = 0;
+		int x = 0;
+		int y = 0;
 
 		map.BulkEditBegin();
 
@@ -413,7 +411,7 @@ public class LevelGenerator : BaseBehaviour
 		{
 			if (room.height > 4)
 			{
-				steps = (int) Rand.Gaussian(5f, 3f);
+				steps = (int)Rand.Gaussian(5f, 3f);
 
 				for (int i = 0; i < steps; i++)
 				{

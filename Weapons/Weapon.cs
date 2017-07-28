@@ -81,7 +81,7 @@ public class Weapon : BaseBehaviour
 		Assert.IsNotNull(spriteRenderer);
 
 		Assert.IsFalse(type == Type.Invalid,
-   			("Invalid weapon type @ " + gameObject));
+			("Invalid weapon type @ " + gameObject));
 
 		iconSprite = spriteRenderer.sprite;
 		projectileSprite = spriteRenderer.sprite;
@@ -148,11 +148,6 @@ public class Weapon : BaseBehaviour
 				break;
 		}
 	}
-
-	//public Weapon Clone()
-	//{
-	//	return (Weapon)this.MemberwiseClone();
-	//}
 
 	public void OnEquip()
 	{

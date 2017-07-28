@@ -3,14 +3,14 @@ using UnityEngine.Assertions;
 
 public class PixelArtCamera : BaseBehaviour
 {
-	public float OrthoSize 			{ get { return orthoSize; } }
-	public float FinalUnitSize 		{ get { return finalUnitSize; } }
-	public float CanvasScale 		{ get { return canvasScale; } }
-	public int 	 PixelsPerUnit 		{ get { return pixelsPerUnit; } }
-	public int	 VertUnitsOnScreen  { get { return verticalUnitsOnScreen; } }
+	public float OrthoSize			{ get { return orthoSize; } }
+	public float FinalUnitSize		{ get { return finalUnitSize; } }
+	public float CanvasScale		{ get { return canvasScale; } }
+	public int   PixelsPerUnit		{ get { return pixelsPerUnit; } }
+	public int   VertUnitsOnScreen	{ get { return verticalUnitsOnScreen; } }
 
 	[SerializeField]
-    private int pixelsPerUnit;
+	private int pixelsPerUnit;
 	[SerializeField]
 	private int verticalUnitsOnScreen;
 	private float orthoSize;
@@ -19,15 +19,15 @@ public class PixelArtCamera : BaseBehaviour
 	private new Camera camera;
 
 	void Awake()
-    {
-        camera = gameObject.GetComponent<Camera>();
-        Assert.IsNotNull(camera);
+	{
+		camera = gameObject.GetComponent<Camera>();
+		Assert.IsNotNull(camera);
 
-        SetOrthographicSize(verticalUnitsOnScreen);
-    }
+		SetOrthographicSize(verticalUnitsOnScreen);
+	}
 
 	void SetOrthographicSize(int unitsOnScreen)
-    {
+	{
 		// get device's screen height and divide by the number of units 
 		// that we want to fit on the screen vertically. this gets us
 		// the basic size of a unit on the the current device's screen.
@@ -52,13 +52,13 @@ public class PixelArtCamera : BaseBehaviour
 		canvasScale = finalUnitSize * .0078125f;
 	}
 
-    void OnEnable()
-    {
-        EventKit.Subscribe<int>("set screen size", SetOrthographicSize);
-    }
+	void OnEnable()
+	{
+		EventKit.Subscribe<int>("set screen size", SetOrthographicSize);
+	}
 
-    void OnDestroy()
-    {
-        EventKit.Unsubscribe<int>("set screen size", SetOrthographicSize);
-    }
+	void OnDestroy()
+	{
+		EventKit.Unsubscribe<int>("set screen size", SetOrthographicSize);
+	}
 }

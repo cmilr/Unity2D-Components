@@ -13,15 +13,15 @@ public class CameraFollow : BaseBehaviour
 	private float camSmooth = .04f;
 	private float tileSysRightBound;
 	private float tileSysLeftBound;
-    private float tileSysUpperBound;
-    private float tileSysLowerBound;
+	private float tileSysUpperBound;
+	private float tileSysLowerBound;
 	private float vertExtent;
 	private float horizExtent;
 	private Vector3 tileSystemSize;
 	private TileSystem tileSystem;
 	private Transform player;
 	private new Transform transform;
-	
+
 	//unused Vector3 for SmoothDamp function.
 	private Vector3 velocity = Vector3.zero;
 
@@ -30,12 +30,12 @@ public class CameraFollow : BaseBehaviour
 		transform = GetComponent<Transform>();
 		Assert.IsNotNull(transform);
 	}
-	
+
 	void Start()
-	{		
+	{
 		player = GameObject.Find(PLAYER).GetComponent<Transform>();
 		Assert.IsNotNull(player);
-		
+
 		tileSystem = GameObject.Find(TILE_MAP).GetComponent<TileSystem>();
 		Assert.IsNotNull(tileSystem);
 
@@ -47,7 +47,7 @@ public class CameraFollow : BaseBehaviour
 
 	void CalculateExtents()
 	{
-		vertExtent  = Camera.main.GetComponent<Camera>().orthographicSize;
+		vertExtent = Camera.main.GetComponent<Camera>().orthographicSize;
 		horizExtent = vertExtent * Screen.width / Screen.height;
 	}
 
@@ -62,10 +62,10 @@ public class CameraFollow : BaseBehaviour
 
 	void CalculateScreenBounds()
 	{
-		tileSysLeftBound   = (horizExtent);
-		tileSysRightBound  = (tileSystemSize.x - horizExtent);
+		tileSysLeftBound = (horizExtent);
+		tileSysRightBound = (tileSystemSize.x - horizExtent);
 		tileSysLowerBound = (-tileSystemSize.y + vertExtent);
-		tileSysUpperBound    = (vertExtent);
+		tileSysUpperBound = (vertExtent);
 	}
 
 	void CalculateStartingPosition()
@@ -92,12 +92,14 @@ public class CameraFollow : BaseBehaviour
 		float targetY = transform.position.y;
 
 		//follow player once he moves beyond xMargin.
-		if (PlayerAtXMargin()) {
+		if (PlayerAtXMargin())
+		{
 			targetX = Mathf.Lerp(transform.position.x, player.position.x, CAM_X_SPEED_TO_FOLLOW * Time.deltaTime);
 		}
 
 		//keep a margin between player and bottom of screen
-		if (DistanceFromEdge(Edge.Lower) <= MIN_BOTTOM_SCREEN_MARGIN) {
+		if (DistanceFromEdge(Edge.Lower) <= MIN_BOTTOM_SCREEN_MARGIN)
+		{
 			targetY = player.position.y - MIN_BOTTOM_SCREEN_MARGIN + vertExtent;
 		}
 		//keep a margin between player and top of screen,
@@ -107,7 +109,7 @@ public class CameraFollow : BaseBehaviour
 		}
 
 		//keep camera from leaving the tileSystem.
-        targetX = Mathf.Clamp(targetX, tileSysLeftBound, tileSysRightBound);
+		targetX = Mathf.Clamp(targetX, tileSysLeftBound, tileSysRightBound);
 		targetY = Mathf.Clamp(targetY, tileSysLowerBound, tileSysUpperBound);
 
 		//move camera.
@@ -117,9 +119,7 @@ public class CameraFollow : BaseBehaviour
 
 	bool PlayerAtXMargin()
 	{
-
 		return Mathf.Abs(transform.position.x - player.position.x) > PLYR_X_MOVE_BEFORE_CAM_FOLLOWS;
-
 	}
 
 	//returns the distance from a gameObject to the edge of the screen on 2D orthographic cameras.
@@ -127,7 +127,7 @@ public class CameraFollow : BaseBehaviour
 	{
 		switch (screenEdge)
 		{
-            case Edge.Upper:
+			case Edge.Upper:
 				return Mathf.Abs(transform.position.y + vertExtent - player.position.y);
 			case Edge.Lower:
 				return Mathf.Abs(transform.position.y - vertExtent - player.position.y);

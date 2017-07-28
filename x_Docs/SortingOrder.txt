@@ -1,5 +1,0 @@
-SORTING LAYER: Default
-~~~~~~~~~~~~~~~~~~~~~~
-0:		Tiles
--10:		Water
--10000:		Sky

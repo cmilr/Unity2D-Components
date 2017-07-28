@@ -15,9 +15,9 @@ public class DungeonGenerator : BaseBehaviour
 
 	void SetTileMapSpecs(TileSystem mapGo)
 	{
-		map            = mapGo;
-		mapColumns     = mapGo.ColumnCount;
-		mapRows        = mapGo.RowCount;
+		map				= mapGo;
+		mapColumns		= mapGo.ColumnCount;
+		mapRows			= mapGo.RowCount;
 	}
 
 	public void FillTileMapWithStone(TileSystem mapGo)

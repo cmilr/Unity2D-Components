@@ -14,9 +14,9 @@ public class BreakableManager : BaseBehaviour
 		transform = GetComponent<Transform>();
 		Assert.IsNotNull(transform);
 	}
-	
+
 	void Start()
-	{	
+	{
 		InstantiateBreakablePieces();
 	}
 
@@ -43,28 +43,28 @@ public class BreakableManager : BaseBehaviour
 		Invoke("MakeInactive", .5f);
 	}
 
-    public void MakeActive()
-    {
-        gameObject.SetActive(true);
-    }
+	public void MakeActive()
+	{
+		gameObject.SetActive(true);
+	}
 
 	void MakeInactive()
 	{
 		gameObject.SetActive(false);
 	}
 
-    void ExplodeCreature(Hit hit)
-    {
-        switch (hit.weapon.style)
-        {
-            case Weapon.Style.Melee:
-                DirectionalSlump(hit);
-                break;
-            case Weapon.Style.Ranged:
-                Explode(hit);
-                break;
-        }
-    }
+	void ExplodeCreature(Hit hit)
+	{
+		switch (hit.weapon.style)
+		{
+			case Weapon.Style.Melee:
+				DirectionalSlump(hit);
+				break;
+			case Weapon.Style.Ranged:
+				Explode(hit);
+				break;
+		}
+	}
 
 	void DirectionalSlump(Hit hit)
 	{
@@ -170,7 +170,7 @@ public class BreakableManager : BaseBehaviour
 					int force = (hit.horizontalSide == Side.Right) ? -50 : 50;
 					childRigidbody2D.AddForce(new Vector3(force, 50, 50), ForceMode2D.Impulse);
 					// params = duration, strength, vibrato, randomness.
-					EventKit.Broadcast("shake camera", .3f, .3f, 10, 3f);
+					EventKit.Broadcast("shake camera", .4f, .1f, 10, 3f);
 					break;
 				case Type.Slump:
 					childRigidbody2D.AddExplosionForce(250, transform.position, 3);

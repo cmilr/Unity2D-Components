@@ -228,17 +228,6 @@ public class PlayerMovement : BaseBehaviour, ICreatureController
 		}
 	}
 
-	//void AttackWhileJumpingBUG()
-	//{
-	//velocity.y = Mathf.Sqrt(2f * jumpHeight * -gravity);
-
-	//action = Action.JumpAttack;
-
-	//jump = false;
-
-	//attack = false;
-	//}
-
 	void InitializeVelocity()
 	{
 		velocity = controller.velocity;

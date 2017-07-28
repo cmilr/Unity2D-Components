@@ -2,7 +2,6 @@
 using UnityEngine;
 
 // allows Unity to pre-load assets for first actual level.
-
 public class LoadFirstLevel : BaseBehaviour {
 
 	void Start() 

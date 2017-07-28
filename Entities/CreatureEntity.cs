@@ -9,13 +9,13 @@ public class CreatureEntity : Entity
 	public int ac;
 	public int touchDamage;
 
-    private Hit cachedHit;
+	private Hit cachedHit;
 	private bool dead;
 	private bool blockedRight;
 	private bool blockedLeft;
 	private BoxCollider2D thisCollider;
 	private Weapon playerWeapon;
-    private BreakableManager breakableManager;
+	private BreakableManager breakableManager;
 	private new Transform transform;
 	private new Collider2D collider2D;
 	private new Rigidbody2D rigidbody2D;
@@ -36,15 +36,15 @@ public class CreatureEntity : Entity
 		Assert.IsNotNull(spriteRenderer);
 
 		Assert.IsFalse(type == Type.Invalid,
-   			("Invalid creature type @ " + gameObject));
+			("Invalid creature type @ " + gameObject));
 
 		cachedHit = new Hit();
 	}
 
 	void Start()
 	{
-        breakableManager = GetComponentInChildren<BreakableManager>();
-        Assert.IsNotNull(breakableManager);
+		breakableManager = GetComponentInChildren<BreakableManager>();
+		Assert.IsNotNull(breakableManager);
 
 		if (type == Type.Enemy)
 			AutoAlign();
@@ -74,7 +74,7 @@ public class CreatureEntity : Entity
 			{
 
 			}
-			else 
+			else
 			{
 				rigidbody2D.velocity = Vector2.zero;
 			}
@@ -120,7 +120,7 @@ public class CreatureEntity : Entity
 
 		if (playerWeapon.type == Weapon.Type.Hammer ||
 			playerWeapon.type == Weapon.Type.Dagger ||
-			playerWeapon.type == Weapon.Type.MagicProjectile) 
+			playerWeapon.type == Weapon.Type.MagicProjectile)
 		{
 			cachedHit.Create(gameObject, coll);
 			TakesProjectileHit(cachedHit);
@@ -132,15 +132,15 @@ public class CreatureEntity : Entity
 	{
 		if (!dead)
 		{
-            // activate and kill breakable sprite.
-            breakableManager.MakeActive();
-            gameObject.SendEventDown("ExplodeCreature", hit);
+			// activate and kill breakable sprite.
+			breakableManager.MakeActive();
+			gameObject.SendEventDown("ExplodeCreature", hit);
 
-            // fade solid sprite & deactivate gameObject.
-            dead                      = true;
-			rigidbody2D.isKinematic   = true;
-			collider2D.enabled        = false;
-			spriteRenderer.enabled    = false;
+			// fade solid sprite & deactivate gameObject.
+			dead = true;
+			rigidbody2D.isKinematic = true;
+			collider2D.enabled = false;
+			spriteRenderer.enabled = false;
 			gameObject.SendEvent("CreatureDead");
 			Invoke("DeactivateObject", 5f);
 		}
