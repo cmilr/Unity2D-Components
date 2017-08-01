@@ -18,12 +18,12 @@ The components here are by no means an entire game—they're more like puzzle pi
 ## Credit
 Within the components included here you'll find reference to a number of great software packages, including the most excellent [CharacterController2D](https://github.com/prime31/CharacterController2D), the incredibly useful [Advanced C# Messenger](http://wiki.unity3d.com/index.php?title=Advanced_CSharp_Messenger), and perhaps my favorite Unity add-on of all, [DOTween](http://dotween.demigiant.com/). All of these packages have been instrumental in the development of my current project.
 
+## Questions? Drop Us a Line!
+
 ### Contact
 - Email: cary.a.miller@gmail.com
-
-### Social Media
 - Twitter: [@cmilr_](https://twitter.com/cmilr_)
-- GitHub: [https://github.com/cmilr/](https://github.com/cmilr/)
+- GitHub: [cmilr](https://github.com/cmilr/)
 
 ### License
 Distributed under the MIT license. See ``LICENSE`` for more information.
