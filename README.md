@@ -22,7 +22,6 @@ Within the components included here you'll find reference to a number of great s
 
 ### Contact
 - Email: cary.a.miller@gmail.com
-- Twitter: [@cmillerco](https://twitter.com/cmillerco)
 - GitHub: [cmilr](https://github.com/cmilr/)
 
 ### License
